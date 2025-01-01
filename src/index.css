@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "Pretendard-Regular";
+  src: url("https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff")
+    format("woff");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@layer base {
+  * {
+    @apply box-border font-[Pretendard-Regular];
+  }
+
+  body {
+    @apply w-full max-w-content bg-white font-sans overflow-hidden m-0 mx-auto;
+  }
+
+  #root {
+    @apply absolute overflow-hidden h-screen w-full max-w-content;
+    @apply bg-gray-50;
+    @apply px-sideGap;
+    padding-top: calc(theme(spacing.header) + 0.5rem);
+    padding-bottom: calc(theme(spacing.navbar) + 0.5rem);
+  }
+
+  h1,
+  h2,
+  span,
+  div {
+    @apply select-none;
+  }
+
+  button {
+    @apply cursor-pointer text-inherit border-0 bg-transparent;
+  }
+}
