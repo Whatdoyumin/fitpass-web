@@ -2,10 +2,8 @@ import { useState } from "react";
 import ProfileModal from "./ProfileModal";
 
 const MyProfile = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [profileImage, setProfileImage] = useState(
-    "/src/assets/images/profile.svg"
-  );
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [profileImage, setProfileImage] = useState<string>("/src/assets/images/profile.svg");
 
   const handleCameraClick = () => {
     setIsModalOpen(true);
@@ -21,7 +19,7 @@ const MyProfile = () => {
 
   return (
     <div className="w-full h-[127px] px-[25px] flex justify-between items-center bg-white box-border mx-auto">
-      <span className="text-22px font-bold">000님</span>
+      <span className="text-22px font-bold">000 님</span>
       <div className="relative w-[75px] h-[75px]">
         <img
           src={profileImage}
