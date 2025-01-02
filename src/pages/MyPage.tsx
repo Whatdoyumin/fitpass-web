@@ -2,26 +2,34 @@ import MyCoin from "../components/MyPage/MyCoin";
 import MyProfile from "../components/MyPage/MyProfile";
 import SectionComponent from "../components/MyPage/SectionComponent";
 
+// 이미지 파일 import
+import PassIcon from "../assets/svg/Pass";
+import FitnessIcon from "../assets/svg/Fitness";
+import SearchGrayIcon from "../assets/svg/SearchGray";
+import MyIcon from "../assets/svg/My";
+import ProfileIcon from "../assets/svg/Profile";
+
 interface PaymentItem {
-  icon: string;
+  icon: (props: React.SVGProps<SVGSVGElement>) => JSX.Element; 
   name: string;
   path: string;
 }
 
+// 수정된 데이터
 const paymentItems: PaymentItem[] = [
-  { icon: "/src/assets/images/pass.svg", name: "구독하기", path: "/subscribe" },
-  { icon: "/src/assets/images/fitness.svg", name: "코인 구매하기", path: "/buy-coins" },
+  { icon: PassIcon, name: "구독하기", path: "/subscribe" },
+  { icon: FitnessIcon, name: "코인 구매하기", path: "/buy-coins" },
 ];
 
 const settingsItems: PaymentItem[] = [
-  { icon: "/src/assets/images/search_gray.svg", name: "공지사항", path: "/notices" },
-  { icon: "/src/assets/images/my.svg", name: "개인정보 수정", path: "/my/edit-profile" },
-  { icon: "/src/assets/images/profile.svg", name: "로그아웃", path: "/logout" },
+  { icon: SearchGrayIcon, name: "공지사항", path: "/notices" },
+  { icon: MyIcon, name: "개인정보 수정", path: "/my/edit-profile" },
+  { icon: ProfileIcon, name: "로그아웃", path: "/logout" },
 ];
 
 const MyPage = () => {
   return (
-    <div className="w-full p-0">
+    <div className="w-full p-0 bg-gray-300">
       <MyProfile />
       <MyCoin coinAmount={123} />
       <SectionComponent title="결제" items={paymentItems} />
