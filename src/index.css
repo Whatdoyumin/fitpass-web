@@ -21,7 +21,6 @@
 
   #root {
     @apply absolute overflow-hidden h-screen w-full max-w-content;
-    @apply bg-gray-50;
     @apply px-sideGap;
     padding-top: calc(theme(spacing.header) + 0.5rem);
     padding-bottom: calc(theme(spacing.navbar) + 0.5rem);
