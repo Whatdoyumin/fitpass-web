@@ -18,7 +18,7 @@ const MyProfile = () => {
   };
 
   return (
-    <div className="w-full h-[127px] px-[25px] flex justify-between items-center bg-white box-border mx-auto">
+    <div className="w-full h-[127px] px-[5px] flex justify-between items-center bg-white box-border mx-auto">
       <span className="text-22px font-bold">000 님</span>
       <div className="relative w-[75px] h-[75px]">
         <img

@@ -7,8 +7,8 @@ interface SectionProps {
 
 const SectionComponent = ({ title, items }: SectionProps) => {
   return (
-    <div className="w-full bg-white px-[25px] py-[26px] mt-4">
-      <h2 className="text-18px font-bold mb-4">{title}</h2>
+    <div className="w-full bg-white px-[5px] py-[26px] mt-2">
+      <h2 className="text-18px font-bold mb-[11px]">{title}</h2>
       {items.map((item) => (
         <ListItem
           key={item.name}

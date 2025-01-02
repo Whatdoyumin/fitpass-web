@@ -8,10 +8,10 @@ interface ListItemProps {
 
 const ListItem = ({ icon, name, path }: ListItemProps) => {
   return (
-    <div className="flex items-center py-2">
+    <div className="flex items-center py-[14px]">
       <Link to={path} className="flex justify-between items-center w-full">
         <div className="flex items-center">
-          <img src={icon} alt={name} className="w-[24px] h-[24px] mr-[15px]" />
+          <img src={icon} alt={''} className="w-[24px] h-[24px] mr-[15px]" />
           <span className="text-16px">{name}</span>
         </div>
         <span className="ml-auto">{'>'}</span>
