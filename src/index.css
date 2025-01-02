@@ -16,12 +16,11 @@
   }
 
   body {
-    @apply w-full max-w-content bg-white font-sans overflow-hidden m-0 mx-auto;
+    @apply w-full max-w-content bg-white-100 font-sans overflow-hidden m-0 mx-auto;
   }
 
   #root {
     @apply absolute overflow-hidden h-screen w-full max-w-content;
-    @apply bg-gray-50;
     @apply px-sideGap;
     padding-top: calc(theme(spacing.header) + 0.5rem);
     padding-bottom: calc(theme(spacing.navbar) + 0.5rem);
