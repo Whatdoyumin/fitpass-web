@@ -11,7 +11,7 @@ import PurchasePass from "./PurchasePass";
 import UsePass from "./UsePass";
 import UploadReview from "./UploadReview";
 import EditProfile from "./EditProfile";
-import ChangePssword from "./ChangePassword";
+import ChangePassword from "./ChangePassword";
 import Subscribe from "./Subscribe";
 import Payment from "./Payment";
 import BuyCoins from "./BuyCoins";
@@ -31,7 +31,7 @@ export {
   UsePass,
   UploadReview,
   EditProfile,
-  ChangePssword,
+  ChangePassword,
   Subscribe,
   Payment,
   BuyCoins,
