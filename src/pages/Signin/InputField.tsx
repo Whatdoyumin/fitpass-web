@@ -1,13 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
+import { PasswordEye, PasswordEyeView } from "../../assets/svg";
 
 interface InputFieldProps {
   type: string;
   placeholder: string;
   icon: React.ReactNode;
-  trailingIcon?: React.ReactNode; // 오른쪽 아이콘(예: 눈 아이콘)
+  isPassword?: boolean; // 비밀번호 입력창 여부
+  trailingIcon?: React.ReactNode;
 }
 
-function InputField({ type, placeholder, icon, trailingIcon }: InputFieldProps) {
+function InputField({ type, placeholder, icon, isPassword = false, trailingIcon }: InputFieldProps) {
+  const [inputType, setInputType] = useState(type); // 입력 타입 상태 관리
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false); // 비밀번호 표시 여부
+
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible(!isPasswordVisible);
+    setInputType(isPasswordVisible ? "password" : "text"); // 타입 변경
+  };
+
   return (
     <div
       className="
@@ -30,7 +40,7 @@ function InputField({ type, placeholder, icon, trailingIcon }: InputFieldProps) 
 
       {/* 입력 필드 */}
       <input
-        type={type}
+        type={inputType}
         placeholder={placeholder}
         className="
           flex-grow
@@ -44,11 +54,24 @@ function InputField({ type, placeholder, icon, trailingIcon }: InputFieldProps) 
         "
       />
 
-      {/* 오른쪽 아이콘 (옵션) */}
-      {trailingIcon && (
-        <div className="w-[19px] h-[14px] flex justify-center items-center">
-          {trailingIcon}
+      {/* 오른쪽 아이콘 (비밀번호 표시/숨김 토글) */}
+      {isPassword ? (
+        <div
+          className="w-[25px] h-[25px] flex justify-center items-center cursor-pointer"
+          onClick={togglePasswordVisibility}
+        >
+          {isPasswordVisible ? (
+            <PasswordEyeView className="w-[19px] h-[20px]" />
+          ) : (
+            <PasswordEye className="w-[19px] h-[20px]" />
+          )}
         </div>
+      ) : (
+        trailingIcon && (
+          <div className="w-[25px] h-[25px] flex justify-center items-center">
+            {trailingIcon}
+          </div>
+        )
       )}
     </div>
   );

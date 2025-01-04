@@ -1,4 +1,4 @@
-import { FitpassLogo, Password, User, PasswordEye } from "../../assets/svg";
+import { FitpassLogo, Password, User, PasswordEye, PlatformGoogle,PlatformKaKao,PlatformNaver } from "../../assets/svg";
 import InputField from "./InputField";
 
 function Signin() {
@@ -21,7 +21,7 @@ function Signin() {
           type="password"
           placeholder="비밀번호 입력"
           icon={<Password className="w-[19px] h-[20px] text-gray-400" />}
-          trailingIcon={<PasswordEye className="w-[19px] h-[14px] text-gray-400 cursor-pointer" />}
+          isPassword={true}
         />
       </div>
 
@@ -44,11 +44,9 @@ function Signin() {
         로그인
       </button>
 
-      {/* 옵션 & 링크 */}
       <div className="flex justify-between w-[321px] text-12px text-gray-450 mt-[30px]">
         {/* 자동 로그인 */}
         <div className="inline-flex items-center gap-[12px]">
-          {/* 체크박스 */}
           <input
             type="checkbox"
             className="
@@ -62,7 +60,6 @@ function Signin() {
               checked:border-blue-500
             "
           />
-          {/* 텍스트 */}
           <span className="text-gray-500 text-[12px] leading-none">
             자동 로그인
           </span>
@@ -79,10 +76,10 @@ function Signin() {
       </div>
 
       {/* 소셜 로그인 */}
-      <div className="flex gap-4 mt-4">
-        <button className="w-12 h-12 rounded-full bg-yellow-400">K</button>
-        <button className="w-12 h-12 rounded-full bg-green-500">N</button>
-        <button className="w-12 h-12 rounded-full bg-blue-500">G</button>
+      <div className="flex gap-[35px] mt-[45.5px]">
+        <PlatformKaKao className="w-[60px] h-[60px]" />
+        <PlatformNaver className="w-[60px] h-[60px]" />
+        <PlatformGoogle className="w-[60px] h-[60px]" />
       </div>
 
       {/* 회원가입 */}
@@ -105,7 +102,7 @@ function Signin() {
           border-blue-500
           rounded-[5px]
           hover:bg-blue-100
-          mt-4
+          mt-[29px]
         "
       >
         계정이 없으신가요? 간편 가입하기
