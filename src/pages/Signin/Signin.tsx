@@ -1,4 +1,4 @@
-import { FitpassLogo, Password, User, PasswordEye, PlatformGoogle,PlatformKaKao,PlatformNaver } from "../../assets/svg";
+import { FitpassLogo, Password, User, PasswordFocus, UserFocus, PlatformGoogle,PlatformKaKao,PlatformNaver } from "../../assets/svg";
 import InputField from "./InputField";
 
 function Signin() {
@@ -13,14 +13,16 @@ function Signin() {
         <InputField
           type="text"
           placeholder="아이디 입력"
-          icon={<User className="w-[25px] h-[25px] text-gray-400" />}
+          icon={<User />}
+          iconFocus={<UserFocus />}
         />
 
         {/* 비밀번호 입력창 */}
         <InputField
           type="password"
           placeholder="비밀번호 입력"
-          icon={<Password className="w-[19px] h-[20px] text-gray-400" />}
+          icon={<Password />}
+          iconFocus={<PasswordFocus />}
           isPassword={true}
         />
       </div>
