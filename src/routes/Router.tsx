@@ -13,12 +13,12 @@ import {
   PurchasePass,
   SearchFitness,
   SetLocation,
-  Signup,
   Subscribe,
   UploadReview,
   UsePass,
 } from "../pages/index";
 import Signin from "../pages/Signin";
+import Signup from "../pages/Signup";
 import NotFound from "../pages/NotFound";
 
 const Router = createBrowserRouter([
