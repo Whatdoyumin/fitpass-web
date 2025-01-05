@@ -4,10 +4,10 @@ import SectionComponent from "../components/MyPage/SectionComponent";
 
 // 이미지 파일 import
 import PassIcon from "../assets/svg/Pass";
-import FitnessIcon from "../assets/svg/Fitness";
-import SearchGrayIcon from "../assets/svg/SearchGray";
+import IcFillDollar from "../assets/svg/IcFillDollar";
+import IcNotice from "../assets/svg/IcNotice";
 import MyIcon from "../assets/svg/My";
-import ProfileIcon from "../assets/svg/Profile";
+import IcMyLogout from "../assets/svg/IcMyLogout";
 
 interface PaymentItem {
   icon: (props: React.SVGProps<SVGSVGElement>) => JSX.Element; 
@@ -18,13 +18,13 @@ interface PaymentItem {
 // 수정된 데이터
 const paymentItems: PaymentItem[] = [
   { icon: PassIcon, name: "구독하기", path: "/subscribe" },
-  { icon: FitnessIcon, name: "코인 구매하기", path: "/buy-coins" },
+  { icon: IcFillDollar, name: "코인 구매하기", path: "/buy-coins" },
 ];
 
 const settingsItems: PaymentItem[] = [
-  { icon: SearchGrayIcon, name: "공지사항", path: "/notices" },
+  { icon: IcNotice, name: "공지사항", path: "/notices" },
   { icon: MyIcon, name: "개인정보 수정", path: "/my/edit-profile" },
-  { icon: ProfileIcon, name: "로그아웃", path: "/logout" },
+  { icon: IcMyLogout, name: "로그아웃", path: "/logout" },
 ];
 
 const MyPage = () => {

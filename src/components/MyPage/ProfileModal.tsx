@@ -42,8 +42,8 @@ const ProfileModal = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white max-w-[90%] w-[300px] sm:w-[315px] rounded-lg p-3">
+    <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white-100 max-w-[90%] w-[300px] sm:w-[315px] rounded-lg p-3">
         {content === "default" ? (
           <div className="relative bg-white w-full rounded-lg">
             <button onClick={onClose} className="text-gray-500">

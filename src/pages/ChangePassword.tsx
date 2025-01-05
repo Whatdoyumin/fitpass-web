@@ -39,7 +39,7 @@ function ChangePassword({
           />
         </div>
         {/* 변경하기 버튼 */}
-        <button className="w-full max-w-[350px] h-[51px] bg-blue-500 text-white rounded-lg text-[15px] font-bold">
+        <button className="w-full max-w-[350px] h-[51px] bg-blue-500 text-white-100 rounded-lg text-[15px] font-bold">
           변경하기
         </button>
       </div>
