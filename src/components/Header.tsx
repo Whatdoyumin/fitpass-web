@@ -5,22 +5,29 @@ import { PATH_NAMES } from "../constants/nav-menu";
 const Header = () => {
   const location = useLocation();
 
-  const getPageName = (pathname: string): string => {
+  const getPageName = (pathname: string): string | undefined => {
     for (const [path, name] of PATH_NAMES) {
       if (matchPath(path, pathname)) {
         return name;
       }
     }
-    return "";
+    return undefined;
   };
 
-  const isMainHeader = ["/", "/fitness", "/fitness/:id", "/upload-review", "/my"].some((path) =>
-    matchPath(path, location.pathname)
-  );
+  const isMainHeader = (): boolean =>
+    ["/", "/fitness", "/fitness/:id", "/upload-review", "/my"].some((path) =>
+      matchPath(path, location.pathname)
+    );
+
+  const pageName = getPageName(location.pathname);
+
+  if (!pageName && !isMainHeader()) {
+    return null;
+  }
 
   return (
     <div className="w-full max-w-content top-0 h-header bg-white-100 fixed flex items-end z-50">
-      {isMainHeader ? <MainHeader /> : <PageHeader pageName={getPageName(location.pathname)} />}
+      {isMainHeader() ? <MainHeader /> : <PageHeader pageName={pageName} />}
     </div>
   );
 };
