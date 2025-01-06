@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import InputField from "./InputField";
+import { useNavigate } from "react-router-dom";
 
 function Signup() {
   const [username, setUsername] = useState("");
@@ -9,6 +10,8 @@ function Signup() {
   const [usernameError, setUsernameError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
+
+  const navigate = useNavigate();
 
   // 유효성 검사 함수
   const validateUsername = (value: string) => {
@@ -47,6 +50,13 @@ function Signup() {
     username.trim() !== "" &&
     password.trim() !== "" &&
     confirmPassword.trim() !== "";
+
+     /** 다음 단계 이동 함수 */
+  const handleNextStep = () => {
+    if (isFormValid) {
+      navigate("/signup/step2");
+    }
+  };
 
   return (
     <div className="w-full max-w-content flex flex-col items-center gap-[25px]">
@@ -95,9 +105,10 @@ function Signup() {
         }`}
       >
         <button
+          onClick={handleNextStep}
           disabled={!isFormValid}
           className={`w-full h-full text-[20px] font-medium text-white-100 ${
-            isFormValid ? "hover:bg-blue-400" : "cursor-not-allowed"
+            isFormValid && "hover:bg-blue-400"
           }`}
         >
           입력하기 (1/2)

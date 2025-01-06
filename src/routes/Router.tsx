@@ -16,6 +16,7 @@ import {
   Subscribe,
   UploadReview,
   UsePass,
+  SignupStep2,
 } from "../pages/index";
 import Signin from "../pages/Signin";
 import Signup from "../pages/Signup";
@@ -34,6 +35,10 @@ const Router = createBrowserRouter([
       {
         path: "/signup",
         element: <Signup />,
+      },
+      {
+        path: "/signup/step2",
+        element: <SignupStep2 />,
       },
       {
         path: "/signin",
