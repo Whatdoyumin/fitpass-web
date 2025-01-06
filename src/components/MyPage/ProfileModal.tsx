@@ -1,24 +1,24 @@
 import { useState, useEffect } from "react";
+import IcCloseBtn from "../../assets/svg/IcCloseBtn";
+import ImgUser from "../../assets/img/ImgUser.png"; // Profile 아이콘 임포트
 
-const ProfileModal = ({
-  onClose,
-  onImageUpload,
-}: {
+interface ProfileModalProps {
   onClose: () => void;
-  onImageUpload: (image: string) => void;
-  currentImage: string;
-}) => {
+  onImageUpload: (image: string | React.ReactNode) => void; // 문자열 또는 JSX
+}
+
+const ProfileModal = ({ onClose, onImageUpload }: ProfileModalProps) => {
   const [isMobile, setIsMobile] = useState(false);
   const [content, setContent] = useState("default");
 
   useEffect(() => {
-    setIsMobile(window.innerWidth <= 768); // 모바일에서만 되도록...?
+    setIsMobile(window.innerWidth <= 768); // 모바일에서만 되도록
   }, []);
 
   const handleOptionClick = (option: string) => {
     if (option === "basic") {
       setContent("updated");
-      onImageUpload("/src/assets/images/profile.svg"); // 기본 프로필로 설정
+      onImageUpload(ImgUser); // 기본 이미지로 설정정
     } else if (option === "album") {
       if (isMobile) {
         setContent("mobileUpload");
@@ -33,7 +33,7 @@ const ProfileModal = ({
       const reader = new FileReader();
       reader.onload = () => {
         if (typeof reader.result === "string") {
-          onImageUpload(reader.result);
+          onImageUpload(reader.result); // 이미지 URL 전달
           setContent("updated");
         }
       };
@@ -46,11 +46,13 @@ const ProfileModal = ({
       <div className="bg-white-100 max-w-[90%] w-[300px] sm:w-[315px] rounded-lg p-3">
         {content === "default" ? (
           <div className="relative bg-white w-full rounded-lg">
-            <button onClick={onClose} className="text-gray-500">
-              &times;
+            <button
+              onClick={onClose}
+              className="absolute top-[20px] left-[15px]"
+            >
+              <IcCloseBtn className="w-[12px] h-[12px]" />
             </button>
 
-            {/* 모달 내용 - 중앙 정렬 */}
             <div className="flex flex-col items-center">
               <button
                 onClick={() => handleOptionClick("basic")}
@@ -73,7 +75,7 @@ const ProfileModal = ({
             </p>
             <button
               onClick={onClose}
-              className="w-[270px] h-[46px] bg-blue-500 text-white rounded-lg"
+              className="w-[270px] h-[46px] bg-blue-500 text-white-100 rounded-lg"
             >
               확인
             </button>
@@ -84,7 +86,7 @@ const ProfileModal = ({
               onClick={onClose}
               className="absolute left-2 text-gray-500 text-lg"
             >
-              &times;
+              <IcCloseBtn className="w-[12px] h-[12px]" />
             </button>
             <p className="text-center text-gray-800 mb-4 text-18px">
               업로드할 사진을 골라주세요.
@@ -96,7 +98,6 @@ const ProfileModal = ({
               className="block mx-auto mb-4"
             />
             <div className="mt-4">
-              {/* 12개 사진을 그리드 형태로 3개씩 4줄로 표시 */}
               <div className="grid grid-cols-3">
                 {Array.from({ length: 12 }).map((_, index) => (
                   <div
@@ -107,7 +108,6 @@ const ProfileModal = ({
               </div>
             </div>
           </div>
-
         ) : (
           <div className="flex flex-col items-center space-y-5 mt-5">
             <p className="text-center text-gray-800 text-18px">
@@ -115,7 +115,7 @@ const ProfileModal = ({
             </p>
             <button
               onClick={onClose}
-              className="w-[270px] h-[46px] bg-blue-500 text-white rounded-lg"
+              className="w-[270px] h-[46px] bg-blue-500 text-white-100 rounded-lg"
             >
               확인
             </button>

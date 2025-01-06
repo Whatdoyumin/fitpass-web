@@ -2,8 +2,11 @@ import { Link } from "react-router-dom";
 
 function EditProfile() {
   return (
-    <div className="h-full bg-gray-300 flex justify-center items-start pt-[29px]">
-      <div className="w-[360px] h-[270px] p-5 bg-white-100 rounded-lg shadow-md flex flex-col justify-center items-center">
+    <div className="h-full bg-white-200 flex justify-center items-start pt-[29px]">
+      <div
+        className="w-[360px] h-[270px] p-5 bg-white-100 rounded-lg flex flex-col justify-center items-center"
+        style={{ boxShadow: '0px 4px 20px 0px #EAEAEA' }}
+      >        
         <div className="flex flex-col">
           <div>
             <p className="text-gray-800 text-[16px] font-bold">비밀번호 변경</p>

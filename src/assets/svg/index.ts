@@ -13,6 +13,8 @@ export { default as IcMycoinRectangle } from "./IcMycoinRectangle";
 export { default as IcMyLogout } from "./IcMyLogout";
 export { default as IcNotice } from "./IcNotice";
 export { default as IcRightArrow } from "./IcRightArrow";
+export { default as IcSubscribe } from "./IcSubscribe";
+export { default as IcUser } from "./IcUser";
 export { default as LikeEmpty } from "./LikeEmpty";
 export { default as LikeFilled } from "./LikeFilled";
 export { default as Location } from "./Location";

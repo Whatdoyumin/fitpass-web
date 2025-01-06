@@ -10,32 +10,32 @@ function ChangePassword({
   confirmNewPassword
 }: ChangePasswordProps) {
   return (
-      <div className="bg-white p-6">
+      <div className="bg-white-100 px-[20px] py-[29px]">
         {/* 기존 비밀번호 */}
         <div className="mb-[10px]">
-          <label className="text-gray-800 text-[16px] font-bold">기존 비밀번호</label>
+          <label className="text-gray-800 text-[16px] font-medium">기존 비밀번호</label>
           <input
-            type="password"
-            value={currentPassword}
-            placeholder="비밀번호를 입력해주세요"
-            className="w-full p-3 border border-gray-300 rounded-md mt-[10px] text-[14px] font-bold"
-          />
+              type="password"
+              value={currentPassword}
+              placeholder="비밀번호를 입력해주세요"
+              className="w-full p-3 border border-gray-300 rounded-md mt-[10px] text-[14px]"
+            />
         </div>
 
         {/* 새로운 비밀번호 */}
         <div className="mb-[227px]">
-          <label className="text-gray-800 text-[16px] font-bold">새로운 비밀번호</label>
+          <label className="text-gray-800 text-[16px] font-medium">새로운 비밀번호</label>
           <input
             type="password"
             value={newPassword}
             placeholder="새로운 비밀번호를 입력해주세요"
-            className="w-full p-3 border border-gray-300 rounded-md mt-[10px] text-[14px] font-bold"
+            className="w-full p-3 border border-gray-300 rounded-md mt-[10px] text-[14px]"
           />
           <input
             type="password"
             value={confirmNewPassword}
             placeholder="새로운 비밀번호를 재확인해주세요"
-            className="w-full p-3 border border-gray-300 rounded-md mt-[10px] text-[14px] font-bold"
+            className="w-full p-3 border border-gray-300 rounded-md mt-[10px] text-[14px] "
           />
         </div>
         {/* 변경하기 버튼 */}
