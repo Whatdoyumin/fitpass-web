@@ -1,4 +1,4 @@
-import Home from "./Home";
+import Home from "./Home/Home";
 import Signin from "./Signin";
 import Signup from "./Signup";
 import FindId from "./FindId";
