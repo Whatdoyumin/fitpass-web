@@ -55,4 +55,8 @@
   .test-css li.slick-active button {
     @apply bg-white-100;
   }
+
+  .blueButton {
+    @apply bg-blue-500 text-white-100 text-15px rounded-5 inline-flex justify-center items-center;
+  }
 }
