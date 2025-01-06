@@ -16,6 +16,7 @@ import Subscribe from "./Subscribe";
 import Payment from "./Payment";
 import BuyCoins from "./BuyCoins";
 import MyPage from "./MyPage";
+import ChangePhone from "./ChangePhone";
 
 export {
   Home,
@@ -36,4 +37,5 @@ export {
   Payment,
   BuyCoins,
   MyPage,
+  ChangePhone,
 };
