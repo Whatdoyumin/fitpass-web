@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import RootLayout from "../layout/RootLayout";
 import {
   BuyCoins,
-  ChangePssword,
+  ChangePassword,
   EditProfile,
   ExploreFitness,
   FindId,
@@ -13,12 +13,13 @@ import {
   PurchasePass,
   SearchFitness,
   SetLocation,
-  Signin,
   Signup,
   Subscribe,
   UploadReview,
   UsePass,
+  ChangePhone,
 } from "../pages/index";
+import Signin from "../pages/Signin";
 import NotFound from "../pages/NotFound";
 
 const Router = createBrowserRouter([
@@ -85,7 +86,7 @@ const Router = createBrowserRouter([
       },
       {
         path: "/my/change-password",
-        element: <ChangePssword />,
+        element: <ChangePassword />,
       },
       {
         path: "/subscribe",
@@ -94,6 +95,10 @@ const Router = createBrowserRouter([
       {
         path: "/buy-coins",
         element: <BuyCoins />,
+      },
+      {
+        path: "/my/change-phone",
+        element: <ChangePhone />,
       },
     ],
   },
