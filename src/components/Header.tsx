@@ -19,7 +19,7 @@ const Header = () => {
   );
 
   return (
-    <div className="w-full max-w-content top-0 h-header bg-white-100 fixed flex items-end mb-4">
+    <div className="w-full max-w-content top-0 h-header bg-white-100 fixed flex items-end">
       {isMainHeader ? <MainHeader /> : <PageHeader pageName={getPageName(location.pathname)} />}
     </div>
   );
@@ -29,7 +29,7 @@ const MainHeader = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="w-full flex justify-start gap-4 px-4">
+    <div className="w-full flex justify-center gap-6 border-b-2 border-gray-300 pb-4">
       <Logo width={"47px"} onClick={() => navigate("/")} />
       <div className="w-[219px] h-10 bg-gray-200 flex gap-4 rounded-5 px-3 py-2">
         <Location width={"16px"} />
@@ -51,10 +51,10 @@ interface PageHeaderProps {
 
 const PageHeader = ({ pageName }: PageHeaderProps) => {
   return (
-    <div className="w-full h-[27px] flex items-center justify-center relative">
+    <div className="w-full h-[27px] flex items-center justify-center relative border-b-2 border-gray-300 pb-8">
       <BackIcon
         width={"11px"}
-        className="absolute left-0 cursor-pointer"
+        className="absolute left-0 cursor-pointer ml-3"
         onClick={() => window.history.back()}
       />
       <p className="text-18px text-black-700 font-bold">{pageName}</p>
