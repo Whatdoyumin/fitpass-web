@@ -19,7 +19,7 @@ const Header = () => {
   );
 
   return (
-    <div className="w-full max-w-content top-0 h-header bg-white-100 fixed flex items-end">
+    <div className="w-full max-w-content top-0 h-header bg-white-100 fixed flex items-end z-50">
       {isMainHeader ? <MainHeader /> : <PageHeader pageName={getPageName(location.pathname)} />}
     </div>
   );
