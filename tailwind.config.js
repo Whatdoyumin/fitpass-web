@@ -44,7 +44,7 @@ export default {
         sideGap: "20px",
       },
       maxWidth: {
-        content: "394px",
+        content: "390px",
       },
       borderRadius: {
         3: "3px",
