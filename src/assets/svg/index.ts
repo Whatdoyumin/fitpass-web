@@ -1,4 +1,6 @@
+export { default as BackIcon } from "./BackIcon";
 export { default as Camera } from "./Camera";
+export { default as CloseIcon } from "./CloseIcon";
 export { default as CoinWrapper } from "./CoinWrapper";
 export { default as EmptyPass } from "./EmptyPass";
 export { default as Fitness } from "./Fitness";
