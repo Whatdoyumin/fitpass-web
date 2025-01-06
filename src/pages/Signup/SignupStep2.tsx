@@ -118,13 +118,29 @@ function SignupStep2() {
           휴대폰 번호
         </label>
         <div className="flex items-center gap-[12px]">
-          <InputField
-            type="text"
-            placeholder="휴대폰 번호를 -없이 입력해주세요"
-            value={phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
-            hasError={!validatePhoneNumber() && phoneNumber !== ""}
-          />
+          {/* 휴대폰 입력창 */}
+          <div
+            className="
+              flex
+              items-center
+              h-[50px]
+              px-[20px]
+              border
+              border-gray-400
+              rounded-[5px]
+              flex-1
+              gap-[20px]
+              relative
+            "
+          >
+            <input
+              type="text"
+              placeholder="휴대폰 번호를 -없이 입력해주세요"
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
+              className="w-full outline-none text-[14px] font-medium placeholder-gray-400"
+            />
+          </div>
           <button
             onClick={handleSendCode}
             disabled={!validatePhoneNumber()}
@@ -209,6 +225,7 @@ function SignupStep2() {
           type="checkbox"
           checked={agreements.all}
           onChange={handleAllAgreement}
+            className="w-[15px] h-[15px]"
         />
         <span className="text-[14px] text-gray-500 font-medium leading-[19px] tracking-[-0.28px]">
           전체 약관에 동의합니다
@@ -241,6 +258,7 @@ function SignupStep2() {
             type="checkbox"
             checked={agreements.terms}
             onChange={() => handleAgreementChange("terms")}
+            className="w-[15px] h-[15px]"
           />
           [필수] 이용 약관 동의
         </label>
@@ -249,6 +267,7 @@ function SignupStep2() {
             type="checkbox"
             checked={agreements.location}
             onChange={() => handleAgreementChange("location")}
+            className="w-[15px] h-[15px]"
           />
           [필수] 위치 정보 서비스 이용약관 동의
         </label>
@@ -257,6 +276,7 @@ function SignupStep2() {
             type="checkbox"
             checked={agreements.thirdParty}
             onChange={() => handleAgreementChange("thirdParty")}
+            className="w-[15px] h-[15px]"
           />
           [필수] 제3자 정보 제공 동의
         </label>
@@ -265,6 +285,7 @@ function SignupStep2() {
             type="checkbox"
             checked={agreements.marketing}
             onChange={() => handleAgreementChange("marketing")}
+            className="w-[15px] h-[15px]"
           />
           [선택] 마케팅 정보 제공 동의
         </label>
