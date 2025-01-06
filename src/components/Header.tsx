@@ -1,12 +1,12 @@
 import { matchPath, useLocation, useNavigate } from "react-router-dom";
 import { BackIcon, Location, Logo, SearchBlue } from "../assets/svg";
-import { pathNames } from "../constants/header-menu";
+import { PATH_NAMES } from "../constants/nav-menu";
 
 const Header = () => {
   const location = useLocation();
 
   const getPageName = (pathname: string): string => {
-    for (const [path, name] of pathNames) {
+    for (const [path, name] of PATH_NAMES) {
       if (matchPath(path, pathname)) {
         return name;
       }
