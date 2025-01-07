@@ -4,7 +4,8 @@ import ImgUser from "../../assets/img/ImgUser.png"; // Profile 아이콘 임포�
 
 interface ProfileModalProps {
   onClose: () => void;
-  onImageUpload: (image: string | React.ReactNode) => void; // 문자열 또는 JSX
+  onImageUpload: (image: string) => void;
+  currentImage:string;
 }
 
 const ProfileModal = ({ onClose, onImageUpload }: ProfileModalProps) => {
@@ -42,7 +43,7 @@ const ProfileModal = ({ onClose, onImageUpload }: ProfileModalProps) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-gray-700 bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white-100 max-w-[90%] w-[300px] sm:w-[315px] rounded-lg p-3">
         {content === "default" ? (
           <div className="relative bg-white w-full rounded-lg">

@@ -4,8 +4,8 @@ import Profile from "../../assets/svg/Profile";
 import Camera from "../../assets/svg/Camera";
 
 const MyProfile = () => {
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [profileImage, setProfileImage] = useState<string>("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [profileImage, setProfileImage] = useState("");
 
   const handleCameraClick = () => {
     setIsModalOpen(true);

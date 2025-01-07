@@ -8,7 +8,7 @@ interface MyCoinProps {
 const MyCoin = ({ coinAmount }: MyCoinProps) => {
   return (
     <div className="w-full bg-white-100 px-[25px] py-[26px] mt-2 relative">
-      <h2 className="text-18px font-bold mb-[15px]">내 코인</h2>
+      <h2 className="text-18px font-bold mb-[15px]" style={{ lineHeight: '21px' }}>내 코인</h2>
 
       {/* IcMycoinRectangle 배경 */}
       <div className="relative max-w-[21.25rem] h-[4.375rem]">
@@ -23,7 +23,7 @@ const MyCoin = ({ coinAmount }: MyCoinProps) => {
 
           {/* 오른쪽 영역 - 텍스트 오른쪽에 padding 23px 추가 */}
           <div className="flex justify-end items-center w-[252.24px] pr-[1.4375rem]">
-            <span className="text-white-100 text-15px sm:text-base lg:text-lg">
+            <span className="text-white-100 text-15px sm:text-base lg:text-lg" style={{ lineHeight: '30px' }}>
               {coinAmount}만개
             </span>
           </div>

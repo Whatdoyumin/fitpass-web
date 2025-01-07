@@ -1,3 +1,6 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import MyCoin from "../components/MyPage/MyCoin";
 import MyProfile from "../components/MyPage/MyProfile";
 import SectionComponent from "../components/MyPage/SectionComponent";
@@ -7,7 +10,8 @@ import IcNotice from "../assets/svg/IcNotice";
 import IcMyLogout from "../assets/svg/IcMyLogout";
 import IcSubscribe from "../assets/svg/IcSubscribe";
 import IcUser from "../assets/svg/IcUser";
-import { useNavigate } from "react-router-dom";
+
+import LogoutModal from "../components/MyPage/LogoutModal";
 
 // 로그아웃 처리 함수 (로컬 스토리지 초기화)
 const handleLogout = () => {
@@ -30,6 +34,15 @@ const paymentItems: MyPageItem[] = [
 
 const MyPage = () => {
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // 모달 상태
+
+  const openLogoutModal = () => {
+    setIsModalOpen(true); // 모달 열기
+  };
+
+  const closeLogoutModal = () => {
+    setIsModalOpen(false); // 모달 닫기
+  };
 
   const handleLogoutAndNavigate = () => {
     handleLogout();
@@ -43,7 +56,7 @@ const MyPage = () => {
       icon: IcMyLogout,
       name: "로그아웃",
       path: "#",
-      onClick: handleLogoutAndNavigate,
+      onClick: openLogoutModal ,
     },
   ];
 
@@ -53,6 +66,12 @@ const MyPage = () => {
       <MyCoin coinAmount={123} />
       <SectionComponent title="결제" items={paymentItems} />
       <SectionComponent title="고객센터 및 설정" items={settingsItems} />
+      {/* 로그아웃 확인 모달 */}
+      <LogoutModal
+        isOpen={isModalOpen}
+        onClose={closeLogoutModal}
+        onLogout={handleLogoutAndNavigate}
+      />
     </div>
   );
 };
