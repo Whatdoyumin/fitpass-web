@@ -1,4 +1,4 @@
-import Home from "./Home";
+import Home from "./Home/Home";
 import Signin from "./Signin";
 import Signup from "./Signup";
 import SignupStep2 from "./Signup/SignupStep2";
@@ -17,6 +17,7 @@ import Subscribe from "./Subscribe";
 import Payment from "./Payment";
 import BuyCoins from "./BuyCoins";
 import MyPage from "./MyPage";
+import ChangePhone from "./ChangePhone";
 
 export {
   Home,
@@ -38,4 +39,5 @@ export {
   Payment,
   BuyCoins,
   MyPage,
+  ChangePhone,
 };

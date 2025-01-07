@@ -16,12 +16,11 @@
   }
 
   body {
-    @apply w-full max-w-content bg-white-100 font-sans overflow-hidden m-0 mx-auto;
+    @apply w-full max-w-content bg-white-100 font-sans m-0 mx-auto;
   }
 
   #root {
-    @apply absolute overflow-hidden h-screen w-full max-w-content;
-    @apply px-sideGap;
+    @apply absolute h-screen w-full max-w-content;
     padding-top: calc(theme(spacing.header) + 0.5rem);
     padding-bottom: calc(theme(spacing.navbar) + 0.5rem);
   }
@@ -35,5 +34,25 @@
 
   button {
     @apply cursor-pointer text-inherit border-0 bg-transparent;
+  }
+}
+
+@layer components {
+  .test-css {
+    @apply absolute bottom-[20px] w-full text-center;
+  }
+
+  .test-css li {
+    @apply relative inline-block p-1 cursor-pointer;
+  }
+
+  .test-css li button {
+    @apply text-transparent rounded-full border-0 outline-0 bg-none block w-2 h-2 p-1 cursor-pointer bg-gray-400;
+    font-size: 0;
+    line-height: 0;
+  }
+
+  .test-css li.slick-active button {
+    @apply bg-white-100;
   }
 }

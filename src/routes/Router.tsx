@@ -17,6 +17,7 @@ import {
   UploadReview,
   UsePass,
   SignupStep2,
+  ChangePhone,
 } from "../pages/index";
 import Signin from "../pages/Signin";
 import Signup from "../pages/Signup";
@@ -99,6 +100,10 @@ const Router = createBrowserRouter([
       {
         path: "/buy-coins",
         element: <BuyCoins />,
+      },
+      {
+        path: "/my/change-phone",
+        element: <ChangePhone />,
       },
     ],
   },
