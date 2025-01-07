@@ -36,3 +36,23 @@
     @apply cursor-pointer text-inherit border-0 bg-transparent;
   }
 }
+
+@layer components {
+  .test-css {
+    @apply absolute bottom-[20px] w-full text-center;
+  }
+
+  .test-css li {
+    @apply relative inline-block p-1 cursor-pointer;
+  }
+
+  .test-css li button {
+    @apply text-transparent rounded-full border-0 outline-0 bg-none block w-2 h-2 p-1 cursor-pointer bg-gray-400;
+    font-size: 0;
+    line-height: 0;
+  }
+
+  .test-css li.slick-active button {
+    @apply bg-white-100;
+  }
+}
