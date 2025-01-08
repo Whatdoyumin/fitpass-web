@@ -16,11 +16,11 @@ import {
   Subscribe,
   UploadReview,
   UsePass,
+  Signin,
+  Signup,
   SignupStep2,
   ChangePhone,
 } from "../pages/index";
-import Signin from "../pages/Signin";
-import Signup from "../pages/Signup";
 import NotFound from "../pages/NotFound";
 
 const Router = createBrowserRouter([

@@ -1,9 +1,26 @@
-import { FitpassLogo, Password, User, PasswordFocus, UserFocus, PlatformGoogle,PlatformKaKao,PlatformNaver } from "../../assets/svg";
+import { 
+  FitpassLogo, 
+  Password, 
+  User, 
+  PasswordFocus, 
+  UserFocus, 
+  PlatformGoogle, 
+  PlatformKaKao, 
+  PlatformNaver 
+} from "../../assets/svg";
 import InputField from "./InputField";
+import { useNavigate } from "react-router-dom";
 
 function Signin() {
+  const navigate = useNavigate(); // 페이지 이동을 위한 useNavigate 훅 사용
+
+  /** 회원가입 페이지로 이동 */
+  const handleSignupRedirect = () => {
+    navigate("/signup");
+  };
+
   return (
-    <div className="w-full max-w-content flex flex-col items-center px-sideGap">
+    <div className="w-full max-w-content flex flex-col items-center">
       {/* 제목 */}
       <FitpassLogo className="w-[176px] h-[48px] mb-[40px]" />
 
@@ -85,8 +102,8 @@ function Signin() {
       </div>
 
       {/* 회원가입 */}
-      <a
-        href="#"
+      <button
+        onClick={handleSignupRedirect}
         className="
           flex
           justify-center
@@ -108,7 +125,7 @@ function Signin() {
         "
       >
         계정이 없으신가요? 간편 가입하기
-      </a>
+      </button>
     </div>
   );
 }
