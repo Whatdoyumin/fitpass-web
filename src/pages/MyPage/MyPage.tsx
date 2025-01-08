@@ -1,17 +1,17 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import MyCoin from "../components/MyPage/MyCoin";
-import MyProfile from "../components/MyPage/MyProfile";
-import SectionComponent from "../components/MyPage/SectionComponent";
+import MyCoin from "../MyPage/MyCoin";
+import MyProfile from "../MyPage/MyProfile";
+import SectionComponent from "../MyPage/SectionComponent";
 
-import IcFillDollar from "../assets/svg/IcFillDollar";
-import IcNotice from "../assets/svg/IcNotice";
-import IcMyLogout from "../assets/svg/IcMyLogout";
-import IcSubscribe from "../assets/svg/IcSubscribe";
-import IcUser from "../assets/svg/IcUser";
+import IcFillDollar from "../../assets/svg/IcFillDollar";
+import IcNotice from "../../assets/svg/IcNotice";
+import IcMyLogout from "../../assets/svg/IcMyLogout";
+import IcSubscribe from "../../assets/svg/IcSubscribe";
+import IcUser from "../../assets/svg/IcUser";
 
-import LogoutModal from "../components/MyPage/LogoutModal";
+import LogoutModal from "../MyPage/LogoutModal";
 
 // 로그아웃 처리 함수 (로컬 스토리지 초기화)
 const handleLogout = () => {
@@ -34,14 +34,14 @@ const paymentItems: MyPageItem[] = [
 
 const MyPage = () => {
   const navigate = useNavigate();
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // 모달 상태
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const openLogoutModal = () => {
-    setIsModalOpen(true); // 모달 열기
+    setIsModalOpen(true);
   };
 
   const closeLogoutModal = () => {
-    setIsModalOpen(false); // 모달 닫기
+    setIsModalOpen(false);
   };
 
   const handleLogoutAndNavigate = () => {
@@ -61,7 +61,7 @@ const MyPage = () => {
   ];
 
   return (
-    <div className="w-full min-h-screen p-0 bg-white-200 overflow-y-auto">
+    <div className="w-full h-full p-0 bg-white-200 overflow-y-auto">
       <MyProfile />
       <MyCoin coinAmount={123} />
       <SectionComponent title="결제" items={paymentItems} />
