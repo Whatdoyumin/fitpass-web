@@ -21,6 +21,7 @@ const handleLogout = () => {
 };
 
 interface MyPageItem {
+  id: number;
   icon: (props: React.SVGProps<SVGSVGElement>) => JSX.Element;
   name: string;
   path: string;
@@ -28,8 +29,8 @@ interface MyPageItem {
 }
 
 const paymentItems: MyPageItem[] = [
-  { icon: IcSubscribe, name: "구독하기", path: "/subscribe" },
-  { icon: IcFillDollar, name: "코인 구매하기", path: "/buy-coins" },
+  { id:1, icon: IcSubscribe, name: "구독하기", path: "/subscribe" },
+  { id:2, icon: IcFillDollar, name: "코인 구매하기", path: "/buy-coins" },
 ];
 
 const MyPage = () => {
@@ -50,9 +51,10 @@ const MyPage = () => {
   };
 
   const settingsItems: MyPageItem[] = [
-    { icon: IcNotice, name: "공지사항", path: "/notices" },
-    { icon: IcUser, name: "개인정보 수정", path: "/my/edit-profile" },
+    { id: 1, icon: IcNotice, name: "공지사항", path: "/notices" },
+    { id: 2, icon: IcUser, name: "개인정보 수정", path: "/my/edit-profile" },
     {
+      id: 3,
       icon: IcMyLogout,
       name: "로그아웃",
       path: "#",
