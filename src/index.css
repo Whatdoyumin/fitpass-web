@@ -21,8 +21,8 @@
 
   #root {
     @apply absolute h-screen w-full max-w-content;
-    padding-top: calc(theme(spacing.header) + 0.5rem);
-    padding-bottom: calc(theme(spacing.navbar) + 0.5rem);
+    padding-top: calc(theme(spacing.header));
+    padding-bottom: calc(theme(spacing.navbar));
   }
 
   h1,
