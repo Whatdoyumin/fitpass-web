@@ -292,21 +292,20 @@ function SignupStep2() {
       </div>
 
       {/* 가입하기 버튼 */}
-      <div
-        className={`fixed bottom-0 left-0 w-full h-[86px] flex ${
-          isFormValid ? "bg-blue-500" : "bg-gray-400"
-        }`}
-      >
         <button
           onClick={handleNextStep}
           disabled={!isFormValid}
-          className={`w-full h-full text-[20px] font-medium text-white-100 py-[17px] px-[39px] ${
-            isFormValid && "hover:bg-blue-400"
+          className={`fixed bottom-0 left-0 w-full h-[86px] text-[20px] font-medium text-white-100 ${
+            isFormValid ? "bg-blue-500 hover:bg-blue-400" : "bg-gray-400"
           }`}
+          style={{
+            paddingTop: "17px",
+            paddingBottom: "39px",
+            height: "86px",
+          }}
         >
           동의하고 가입하기
         </button>
-      </div>
     </div>
   );
 }
