@@ -13,6 +13,7 @@ export { default as LikeFilled } from "./LikeFilled";
 export { default as Location } from "./Location";
 export { default as Logo } from "./Logo";
 export { default as MaskGroup } from "./MaskGroup";
+export { default as MoreTerms } from "./MoreTerms";
 export { default as My } from "./My";
 export { default as MyFilled } from "./MyFilled";
 export { default as Pass } from "./Pass";
