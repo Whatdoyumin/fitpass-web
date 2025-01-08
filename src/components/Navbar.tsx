@@ -5,8 +5,12 @@ const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  if (location.pathname === "/signup") {
+    return null;
+  }
+
   return (
-    <div className="w-full max-w-content bottom-0 h-navbar bg-white-100 border-t-2 border-gray-300 fixed">
+    <div className="w-full max-w-content bottom-0 h-navbar bg-white-100 border-t-2 border-gray-300 fixed z-20">
       <div className="w-full h-[45px] mt-3 px-6 flex justify-between items-center">
         {NAV_MENU.map((item) => {
           const isActive = item.path.some((path) =>
