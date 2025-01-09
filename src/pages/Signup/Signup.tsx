@@ -59,7 +59,7 @@ function Signup() {
   };
 
   return (
-    <div className="w-full max-w-content flex flex-col items-center gap-[25px] p-[20px]">
+    <div className="w-full max-w-content flex flex-col items-center gap-[25px] p-[20px] pt-[84px]">
       {/* 아이디 입력창 */}
       <div className="w-full flex flex-col gap-[10px]">
         <label htmlFor="username" className="text-[16px] font-medium text-black-700">

@@ -99,7 +99,7 @@ function SignupStep2() {
   };
 
   return (
-    <div className="w-full max-w-content flex flex-col items-center h-screen relative px-[20px]">
+    <div className="w-full max-w-content flex flex-col items-center h-screen relative px-[20px] pt-[84px]">
       {/* 스크롤 가능 영역 */}
       <div className="flex-grow w-full overflow-auto flex flex-col gap-[20px]">
         {/* 이름 입력창 */}
@@ -172,7 +172,11 @@ function SignupStep2() {
               </button>
             </div>
           )}
-        </div>
+
+{isCodeConfirmed && (
+          <span className="text-[15px] text-green-500 mt-[10px]">확인되었습니다.</span>
+        )}
+      </div>
       </div>
 
       {/* 약관 동의 섹션 */}
