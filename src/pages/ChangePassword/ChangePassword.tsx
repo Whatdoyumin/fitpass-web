@@ -130,11 +130,11 @@ function ChangePassword({ currentPassword, newPassword, confirmNewPassword }: Ch
       </div>
 
       <div className="mb-[29px] fixed bottom-[86px] left-[50%] transform -translate-x-[50%] w-full px-[20px] flex justify-center">
-      <Button
-        onClick={handleNavigate}
-        type="button"
-        text="변경하기"
-      />
+        <Button
+          onClick={handleNavigate}
+          type="button"
+          text="변경하기"
+        />
       </div>
     </form>
   );
