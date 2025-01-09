@@ -8,6 +8,8 @@ export { default as FitnessFilled } from "./FitnessFilled";
 export { default as FitpassLogo } from "./FitpassLogo";
 export { default as Home } from "./Home";
 export { default as HomeFilled } from "./HomeFilled";
+export { default as IcCloseEye } from "./IcCloseEye";
+export { default as IcOpenEye } from "./IcOpenEye";
 export { default as LikeEmpty } from "./LikeEmpty";
 export { default as LikeFilled } from "./LikeFilled";
 export { default as Location } from "./Location";
