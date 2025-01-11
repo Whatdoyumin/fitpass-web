@@ -15,7 +15,7 @@ import ChangePassword from "./ChangePassword";
 import Subscribe from "./Subscribe";
 import Payment from "./Payment";
 import BuyCoins from "./BuyCoins";
-import MyPage from "./MyPage";
+import MyPage from "./MyPage/MyPage";
 import ChangePhone from "./ChangePhone";
 
 export {
