@@ -87,7 +87,7 @@ function ChangePassword({ currentPassword, newPassword, confirmNewPassword }: Ch
 
   return (
     <form
-      className="h-full bg-white-100 px-[20px] py-[29px] text-gray-400"
+      className="h-full bg-white-100 px-[20px] py-[29px] text-gray-400 overflow-y-auto"
       onSubmit={handleNavigate}
     >
       <div className="mb-[25px]">
@@ -116,7 +116,7 @@ function ChangePassword({ currentPassword, newPassword, confirmNewPassword }: Ch
         />
       </div>
 
-      <div className="">
+      <div className="mb-[266px]">
         <InputField
           type="password"
           value={confirmNewPassword}
@@ -129,7 +129,7 @@ function ChangePassword({ currentPassword, newPassword, confirmNewPassword }: Ch
         />
       </div>
 
-      <div className="mb-[29px] fixed bottom-[86px] left-[50%] transform -translate-x-[50%] w-full px-[20px] flex justify-center">
+      <div className="button-container w-full flex justify-center">
         <Button
           onClick={handleNavigate}
           type="button"

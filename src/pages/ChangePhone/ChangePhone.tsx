@@ -100,7 +100,7 @@ function ChangePhone() {
   };
 
   return (
-    <div className="w-full bg-white-100 px-[20px] pt-[29px] flex flex-col justify-between overflow-y-auto">
+    <div className="w-full bg-white-100 px-[20px] py-[29px] flex flex-col overflow-y-auto">
       {/* 이름 입력 */}
       <div className="mb-[25px]">
         <label className="text-gray-800 text-[16px] font-medium" style={{ lineHeight: "19px" }}>
@@ -117,7 +117,7 @@ function ChangePhone() {
       </div>
 
       {/* 비밀번호 입력 */}
-      <div className="mb-[25px]">
+      <form className="mb-[25px]">
         <label className="text-gray-800 text-[16px] font-medium" style={{ lineHeight: "19px" }}>
           비밀번호
         </label>
@@ -129,14 +129,14 @@ function ChangePhone() {
           isValid={!errors.password}
           errorMessage={errors.password}
         />
-      </div>
+      </form>
 
-      <div className="mb-[18vh]">
+      <div className="mb-[146px]">
       {/* 휴대폰 번호 입력 */}
       <label className="text-gray-800 text-[16px] font-medium" style={{ lineHeight: "19px" }}>
         휴대폰 번호
       </label>
-      <div className="flex items-center gap-[12px] mt-[10px] h-[50px] relative">
+      <div className="flex items-center gap-[12px] mt-[8px] h-[50px] relative">
         <div className="relative flex-1">
           <input
             type="text"
@@ -161,7 +161,7 @@ function ChangePhone() {
       {errors.phone && <p className="text-red-500 text-[13px] mt-[9px]">{errors.phone}</p>}
 
     {/* 인증번호 입력 */}
-    <div className="flex items-center gap-[12px] mt-[10px] h-[50px] relative">
+    <div className="flex items-center gap-[12px] mt-[23px] h-[50px] relative">
       <div className="relative flex-1">
         <input
             type="text"
@@ -202,7 +202,7 @@ function ChangePhone() {
 
 
     {/* 버튼 */}
-    <div className="button-container w-full flex justify-center mb-[29px]">
+    <div className="button-container w-full flex justify-center">
       <Button
         onClick={handleSubmit}
         type="button"
