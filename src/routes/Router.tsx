@@ -18,6 +18,7 @@ import {
   UploadReview,
   UsePass,
   ChangePhone,
+  Payment,
 } from "../pages/index";
 import Signin from "../pages/Signin";
 import NotFound from "../pages/NotFound";
@@ -95,6 +96,10 @@ const Router = createBrowserRouter([
       {
         path: "/buy-coins",
         element: <BuyCoins />,
+      },
+      {
+        path: "/buy-coins/payment",
+        element: <Payment type="buy-coins" />,
       },
       {
         path: "/my/change-phone",
