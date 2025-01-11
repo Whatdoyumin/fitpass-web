@@ -44,7 +44,7 @@ function ChangePassword({ currentPassword, newPassword, confirmNewPassword }: Ch
       setCurrentPasswordError("");
     } else {
       setIsCurrentPasswordValid(false);
-      setCurrentPasswordError("올바르지 않은 정보입니다");
+      setCurrentPasswordError("올바르지 않은 정보입니다.");
     }
   };
 

@@ -39,12 +39,12 @@ function ChangePhone() {
     };
 
     if (name !== "한밤식") {
-      newErrors.name = "올바르지 않은 이름입니다.";
+      newErrors.name = "올바르지 않은 정보입니다.";
       hasError = true;
     }
 
     if (password !== "aaaaaa456") {
-      newErrors.password = "올바르지 않은 비밀번호입니다.";
+      newErrors.password = "올바르지 않은 정보입니다.";
       hasError = true;
     }
 
@@ -71,7 +71,7 @@ function ChangePhone() {
   const handleVerifyCode = () => {
     if (verificationCode !== "1234") {
       // 인증번호 불일치 처리
-      setErrors({ ...errors, verification: "인증번호가 일치하지 않습니다." });
+      setErrors({ ...errors, verification: "올바르지 않습니다. 다시 인증해주세요." });
       setIsVerified(false);
     } else {
       // 인증번호 일치 처리
