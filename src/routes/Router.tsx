@@ -18,6 +18,7 @@ import {
   UploadReview,
   UsePass,
   ChangePhone,
+  Notice,
 } from "../pages/index";
 import Signin from "../pages/Signin";
 import NotFound from "../pages/NotFound";
@@ -99,6 +100,10 @@ const Router = createBrowserRouter([
       {
         path: "/my/change-phone",
         element: <ChangePhone />,
+      },
+      {
+        path: "/my/notices",
+        element: <Notice />,
       },
     ],
   },
