@@ -60,6 +60,10 @@
     @apply bg-blue-500 text-white-100 text-15px rounded-5 inline-flex justify-center items-center;
   }
 
+  .skyBlueButton {
+    @apply bg-blue-250 text-white-100 text-15px rounded-5 inline-flex justify-center items-center;
+  }
+
   .payOptionButton {
     @apply w-full h-[50px] flex justify-center items-center rounded-7 border;
   }
