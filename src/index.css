@@ -55,4 +55,20 @@
   .test-css li.slick-active button {
     @apply bg-white-100;
   }
+
+  .blueButton {
+    @apply bg-blue-500 text-white-100 text-15px rounded-5 inline-flex justify-center items-center;
+  }
+
+  .payOptionButton {
+    @apply w-full h-[50px] flex justify-center items-center rounded-7 border;
+  }
+
+  .unSelectedPayOption {
+    @apply border-gray-400 text-16px text-black-700;
+  }
+
+  .selectedPayOption {
+    @apply border-blue-500 text-blue-500;
+  }
 }
