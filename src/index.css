@@ -39,7 +39,7 @@
 
 @layer components {
   .test-css {
-    @apply absolute bottom-[20px] w-full text-center;
+    @apply absolute bottom-[-7px] w-full text-center;
   }
 
   .test-css li {
