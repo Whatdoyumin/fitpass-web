@@ -60,42 +60,46 @@ function Home() {
   ]);
 
   return (
-    <div className="flex flex-col bg-white-100">
-      <div className="flex justify-center w-[390px]">
-        <Slider {...adSettings} className="bg-black-700 mb-sideGap w-[390px] h-[219px]">
+    <div className="flex flex-col">
+      <div className="flex justify-center w-[390px] h-[250px] bg-black-700 relative ">
+        <Slider {...adSettings} className="mb-sideGap w-[390px] h-[219px]">
           <div>
-            <img src={imageUrl} alt="광고 이미지1" className="w-[290px] h-[219px] mx-auto"/>
+            <img src={imageUrl} alt="광고 이미지1" className="w-[294px] h-[240px] mx-auto"/>
           </div>
           <div>
-            <img src={imageUrl2} alt="광고 이미지2" className="w-[290px] h-[219px] mx-auto" />
+            <img src={imageUrl2} alt="광고 이미지2" className="w-[290px] h-[240px] mx-auto" />
           </div>
           <div className="text-white-100">광고 이미지3</div>
         </Slider>
       </div>
-      {/* 추천 운동시설 */}
-      <div className="w-[390px] h-[177px] overflow-hidden pl-3">
-        <p className="h-[19px] mb-[15px] font-bold text-[16px]"><span className="text-blue-500">추천</span> 운동 시설</p>
-        <Slider {...fitSettings} className="h-[143px] mb-1 mr-[-120px]" >
-          {datas.map((data, index) => (
-            <CardCol key={index} data={data} />
-          ))}
-        </Slider>
-      </div>
-      {/* 구분선 */}
-      <div className="border-b-4 border-gray-300 py-3 w-[390px]"></div>
-      {/* 최근 본 운동 시설 -> 로그인 여부 추가 예정 */}
-      <div className="w-[390px] h-[177px] my-4 bg-white-100 overflow-hidden pl-3">
-        <p className="h-[19px] mb-[15px] font-bold text-[16px]"><span className="text-blue-500">최근 본</span> 운동 시설</p>
-
-        {/* 로그아웃 시 */}
-        {/* <LoginHome /> */}
-
-        {/* 로그인 시 */}
-          <Slider {...fitSettings} className="h-[143px] mb-1 mr-[-120px]">
+      
+      <div className="w-[390px] h-[500px] rounded-t-[15px] bg-white-200 absolute top-[370px] z-10 ">
+        {/* 추천 운동시설 */}
+        <div className="w-[390px] h-[177px] pl-4 overflow-hidden mt-6">
+        {/* <div className="overflow-hidden pl-3 rounded-t-[15px] absolute"> */}
+          <p className="h-[19px] mb-[15px] font-bold text-[16px]"><span className="text-blue-500">추천</span> 운동 시설</p>
+          <Slider {...fitSettings} className="h-[143px] mr-[-120px]" >
             {datas.map((data, index) => (
-                <CardCol key={index} data={data} />
+              <CardCol key={index} data={data} />
             ))}
           </Slider>
+        </div>
+        {/* 구분선 */}
+        <div className="border-b-4 border-gray-300 py-3 w-[390px]"></div>
+        {/* 최근 본 운동 시설 -> 로그인 여부 추가 예정 */}
+        <div className="w-[390px] h-[177px] pl-4 my-6 overflow-hidden">
+          <p className="h-[19px] mb-[15px] font-bold text-[16px]"><span className="text-blue-500">최근 본</span> 운동 시설</p>
+
+          {/* 로그아웃 시 */}
+          {/* <LoginHome /> */}
+
+          {/* 로그인 시 */}
+            <Slider {...fitSettings} className="h-[143px] mr-[-120px]">
+              {datas.map((data, index) => (
+                  <CardCol key={index} data={data} />
+              ))}
+            </Slider>
+        </div>
       </div>
     </div>
   );

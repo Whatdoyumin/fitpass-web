@@ -47,7 +47,7 @@ function ExploreFitness() {
 
   return (
     <div className="bg-white-200 px-5 py-6 h-full">
-      <div className="flex justify-between mb-3 px-1">
+      <div className="flex justify-between mb-3 mt-5 px-1">
         <span className="text-[25px] font-extrabold">피트니스 시설</span>
         <div className="relative z-10">
           <Dropdown dropdown={dropdown} onSortChange={setSelectedSort} />
