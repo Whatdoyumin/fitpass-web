@@ -29,7 +29,7 @@ const PaymentInfo = ({ isChecked, setIsChecked }: IPaymentInfoProps) => {
             <div className="w-full h-[150px] bg-white-200 px-5 py-6 rounded-7 border border-gray-400"></div>
           </div>
 
-          <div className="w-full flex gap-2 pb-4">
+          <label className="w-full flex gap-2 pb-4">
             <input
               type="checkBox"
               onClick={() => setIsChecked((prev) => !prev)}
@@ -38,7 +38,7 @@ const PaymentInfo = ({ isChecked, setIsChecked }: IPaymentInfoProps) => {
             <p className="text-14px text-gray-500">
               [필수] 위 구매 조건을 확인, 결제 진행 동의합니다.
             </p>
-          </div>
+          </label>
         </div>
       )}
     </div>
