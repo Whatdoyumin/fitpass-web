@@ -4,7 +4,7 @@ import Navbar from "../components/Navbar";
 
 function RootLayout() {
   return (
-    <div className="h-screen flex flex-col">
+    <div className="h-full flex flex-col">
       <Header />
       <Outlet />
       <Navbar />

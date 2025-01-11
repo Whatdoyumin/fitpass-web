@@ -1,3 +1,5 @@
+export { default as ArrowDropDown } from "./ArrowDropDown";
+export { default as ArrowDropUp } from "./ArrowDropUp";
 export { default as BackIcon } from "./BackIcon";
 export { default as Camera } from "./Camera";
 export { default as CloseIcon } from "./CloseIcon";
@@ -44,3 +46,6 @@ export { default as SearchBlue } from "./SearchBlue";
 export { default as SearchGray } from "./SearchGray";
 export { default as User } from "./User";
 export { default as UserFocus } from "./UserFocus";
+// export { default as PassPayment } from "./PassPayment";
+// export { default as Phonecall } from "./Phonecall";
+// export { default as ShareIcon } from "./ShareIcon";
