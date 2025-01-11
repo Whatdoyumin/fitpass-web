@@ -18,7 +18,8 @@ export const PATH_NAMES = new Map<string, string>([
   ["/my/change-password", "비밀번호 변경"],
   ["/subscribe", "요금제 안내"],
   ["/buy-coins", "코인 안내"],
-  ["/my/change-phone", "전화번호 변경"]
+  ["/buy-coins/payment", "코인 구매하기"],
+  ["/my/change-phone", "전화번호 변경"],
 ]);
 
 export const NAV_MENU = [
