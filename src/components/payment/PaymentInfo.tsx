@@ -1,8 +1,13 @@
 import { useState } from "react";
 import { ArrowDown, ArrowUp } from "../../assets/svg";
 
-const PaymentInfo = () => {
-  const [isOpen, setIsOpen] = useState(false);
+interface IPaymentInfoProps {
+  isChecked: boolean;
+  setIsChecked: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const PaymentInfo = ({ isChecked, setIsChecked }: IPaymentInfoProps) => {
+  const [isOpen, setIsOpen] = useState(true);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -19,13 +24,17 @@ const PaymentInfo = () => {
         {isOpen ? <ArrowUp width={"15px"} /> : <ArrowDown width={"15px"} />}
       </div>
       {isOpen && (
-        <div className="flex flex-col gap-1 pb-4 mb-4">
+        <div className="flex flex-col gap-1 pb-4">
           <div className="w-full border-t-2 border-white-200 py-4">
             <div className="w-full h-[150px] bg-white-200 px-5 py-6 rounded-7 border border-gray-400"></div>
           </div>
 
           <div className="w-full flex gap-2 pb-4">
-            <input type="checkBox" />
+            <input
+              type="checkBox"
+              onClick={() => setIsChecked((prev) => !prev)}
+              checked={isChecked}
+            />
             <p className="text-14px text-gray-500">
               [필수] 위 구매 조건을 확인, 결제 진행 동의합니다.
             </p>
