@@ -10,7 +10,6 @@ import "slick-carousel/slick/slick-theme.css";
 import SvgLocation from "../assets/svg/Location";
 import { CoinRightRounded, Phonecall } from "../assets/svg";
 import Share from "../components/Share";
-import PassPaymentSuccess from "../components/PassPaymentSuccess";
 
 function FitnessDetails() {
   
