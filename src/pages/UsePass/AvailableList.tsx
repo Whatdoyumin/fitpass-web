@@ -30,7 +30,7 @@ function AvailableList() {
   useEffect(() => {
     if (passStartTime) {
       const timer = setInterval(() => {
-        if (Date.now() - passStartTime >= 5000) { // 1시간(3600000ms)이 경과했으면
+        if (Date.now() - passStartTime >= 5000) { // 5초로 임시 설정
           setIsPassExpired(true); // 패스 만료 상태로 변경
           clearInterval(timer); // 타이머 종료
         }
