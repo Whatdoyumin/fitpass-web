@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import InputField from "./InputField";
 import { useNavigate } from "react-router-dom";
+import Portal from "../../components/Portal";
 
 function Signup() {
   const [username, setUsername] = useState("");
@@ -59,6 +60,7 @@ function Signup() {
   };
 
   return (
+    <Portal>
     <div className="w-full max-w-content flex flex-col items-center gap-[25px] p-[20px] pt-[84px]">
       {/* 아이디 입력창 */}
       <div className="w-full flex flex-col gap-[10px]">
@@ -118,6 +120,7 @@ function Signup() {
         입력하기 (1/2)
       </button>
     </div>
+    </Portal>
   );
 }
 

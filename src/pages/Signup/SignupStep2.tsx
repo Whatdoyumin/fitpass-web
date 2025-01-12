@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import InputField from "./InputField";
 import { useNavigate } from "react-router-dom";
 import { MoreTerms } from "../../assets/svg";
+import Portal from "../../components/Portal";
 
 function SignupStep2() {
   const [name, setName] = useState("");
@@ -99,7 +100,8 @@ function SignupStep2() {
   };
 
   return (
-    <div className="w-full max-w-content flex flex-col items-center h-screen relative px-[20px] pt-[84px]">
+    <Portal>
+      <div className="w-full max-w-content flex flex-col items-center h-screen relative px-[20px] pt-[84px]">
       {/* 스크롤 가능 영역 */}
       <div className="flex-grow w-full overflow-auto flex flex-col gap-[20px]">
         {/* 이름 입력창 */}
@@ -253,6 +255,7 @@ function SignupStep2() {
         동의하고 가입하기
       </button>
     </div>
+    </Portal>
   );
 }
 

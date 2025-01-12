@@ -25,6 +25,10 @@
     padding-bottom: calc(theme(spacing.navbar));
   }
 
+  #portal {
+    @apply absolute z-10 w-full;
+  }
+
   h1,
   h2,
   span,
