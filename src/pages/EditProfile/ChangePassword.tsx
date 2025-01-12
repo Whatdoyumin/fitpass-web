@@ -1,18 +1,15 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import InputField from "../EditProfile/common/InputField";
-import Button from "../EditProfile/common/Button";
+import InputField from "./common/InputField";
+import Button from "./common/Button";
 
-interface ChangePasswordProps {
-  currentPassword: string;
-  newPassword: string;
-  confirmNewPassword: string;
-}
-
-function ChangePassword({ currentPassword, newPassword, confirmNewPassword }: ChangePasswordProps) {
+function ChangePassword() {
   const navigate = useNavigate();
 
-  const [newPasswordState, setNewPasswordState] = useState(newPassword);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState("");
+
   const [isNewPasswordVisible, setIsNewPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
 
@@ -34,7 +31,7 @@ function ChangePassword({ currentPassword, newPassword, confirmNewPassword }: Ch
 
   const validateCurrentPassword = (value: string) => {
     const validPassword = "currentpassword123";
-    setCurrentPasswordError("");
+    setCurrentPassword(value);
 
     if (value === "") {
       setIsCurrentPasswordValid(true);
@@ -50,28 +47,36 @@ function ChangePassword({ currentPassword, newPassword, confirmNewPassword }: Ch
 
   const handleNewPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setPasswordError("");
-    setNewPasswordState(value);
-
+    setNewPassword(value);
+  
+    const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)[A-Za-z\d]{8,20}$/;
+  
+    // 비밀번호가 빈 값일 경우 에러 제거
     if (value === "") {
       setIsPasswordValid(true);
-      setPasswordError("");
+      setPasswordError(""); 
+      return; 
+    }
+  
+    // 비밀번호 유효성 검사
+    if (!passwordRegex.test(value)) {
+      setPasswordError("영어와 숫자를 사용하여 8-20자로 입력해주세요.");
+      setIsPasswordValid(false);
     } else {
-      const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)[A-Za-z\d]{8,20}$/;
-      if (!passwordRegex.test(value)) {
-        setPasswordError("영어와 숫자를 사용하여 8-20자로 입력해주세요.");
-        setIsPasswordValid(false);
-      } else {
+      // 유효한 비밀번호일 경우 에러 메시지 제거
+      if (!isPasswordValid) {
         setIsPasswordValid(true);
+        setPasswordError("");
       }
     }
   };
+  
 
   const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setConfirmPasswordError("");
+    setConfirmNewPassword(value);
 
-    if (value === newPasswordState && value !== "") {
+    if (value === newPassword && value !== "") {
       setIsConfirmPasswordValid(true);
       setConfirmPasswordError("");
     } else {
@@ -88,7 +93,10 @@ function ChangePassword({ currentPassword, newPassword, confirmNewPassword }: Ch
   return (
     <form
       className="w-full min-h-screen bg-white-100 px-[20px] py-[29px] flex flex-col text-gray-400"
-      onSubmit={handleNavigate}
+      onSubmit={(e) => {
+        e.preventDefault();
+        handleNavigate();
+      }}
     >
       <div className="mb-[25px]">
         <label className="text-gray-800 text-[16px] font-medium">기존 비밀번호</label>
