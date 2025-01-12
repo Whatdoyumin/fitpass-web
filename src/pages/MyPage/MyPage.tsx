@@ -51,7 +51,7 @@ const MyPage = () => {
   };
 
   const settingsItems: MyPageItem[] = [
-    { id: 1, icon: IcNotice, name: "공지사항", path: "/notices" },
+    { id: 1, icon: IcNotice, name: "공지사항", path: "/my/notices" },
     { id: 2, icon: IcUser, name: "개인정보 수정", path: "/my/edit-profile" },
     {
       id: 3,

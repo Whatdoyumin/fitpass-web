@@ -14,7 +14,7 @@ const EditProfileCommon = ({ text, linkTo }: EditProfileCommonProps) => {
       <div className="h-[15px]" />
       <Link to={linkTo}>
         <button className="w-[320px] h-[51px] bg-blue-500 text-white-100 rounded-lg text-[15px] font-bold">
-          {text} 하기
+          {text}하기
         </button>
       </Link>
     </div>

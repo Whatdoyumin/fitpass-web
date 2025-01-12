@@ -11,12 +11,13 @@ import PurchasePass from "./PurchasePass";
 import UsePass from "./UsePass";
 import UploadReview from "./UploadReview";
 import EditProfile from "./EditProfile/EditProfile";
-import ChangePassword from "./ChangePassword";
+import ChangePassword from "./ChangePassword/ChangePassword";
 import Subscribe from "./Subscribe";
 import Payment from "./Payment";
 import BuyCoins from "./BuyCoins";
 import MyPage from "./MyPage/MyPage";
-import ChangePhone from "./ChangePhone";
+import ChangePhone from "./ChangePhone/ChangePhone";
+import Notice from "./Notice/Notice";
 
 export {
   Home,
@@ -38,4 +39,5 @@ export {
   BuyCoins,
   MyPage,
   ChangePhone,
+  Notice,
 };
