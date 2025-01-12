@@ -13,15 +13,16 @@ import {
   PurchasePass,
   SearchFitness,
   SetLocation,
-  Signup,
   Subscribe,
   UploadReview,
   UsePass,
+  Signin,
+  Signup,
+  SignupStep2,
   ChangePhone,
   Payment,
   Notice,
 } from "../pages/index";
-import Signin from "../pages/Signin";
 import NotFound from "../pages/NotFound";
 import NoticeDetail from "../pages/Notice/NoticeDetail";
 
@@ -38,6 +39,10 @@ const Router = createBrowserRouter([
       {
         path: "/signup",
         element: <Signup />,
+      },
+      {
+        path: "/signup/step2",
+        element: <SignupStep2 />,
       },
       {
         path: "/signin",
