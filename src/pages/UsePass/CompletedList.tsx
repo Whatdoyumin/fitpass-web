@@ -14,7 +14,7 @@ function CompletedList() {
       distance: "3.5km",
     },
     {
-      name: "동국대 헬스장장",
+      name: "동국대 헬스장",
       address: "서울특별시 중구 올림픽로 789",
       distance: "5km",
     },
@@ -22,7 +22,7 @@ function CompletedList() {
   ];
 
   return (
-    <div className="bg-gray-300 px-[25px] pt-[23px] pb-[117px]">
+    <div className="bg-gray-300 px-[25px] pt-[23px] pb-[117px] z-10">
       <h1 className="text-[18px] font-bold pb-[11px]">이용 완료 패스</h1>
       <div className="">
         <CompletedItem fitness={fitnessData} />
