@@ -1,5 +1,7 @@
 import { useState } from "react";
-import PassPaymentSuccess from "../components/PassPaymentSuccess";
+import PassPaymentSuccess from "./PassPaymentSuccess";
+import Modal from "../components/Modal";
+import { useNavigate } from "react-router-dom";
 
 function PurchasePass() {
 
@@ -12,6 +14,12 @@ function PurchasePass() {
 
   const handleModalClose = () => {
     setIsModal(false);
+  }
+
+  const navigate = useNavigate();
+
+  const handlePurchaseDone = () => {
+    navigate(`/purchase-pass/1/done`)
   }
 
   const imgurl: string = "https://s3-alpha-sig.figma.com/img/9771/3785/008387989af4aead9a0b02db565f1ca0?Expires=1736726400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=keikTmna2x6G2RNM~AJfZPEQ8GLIRVkUj8uV39FdgmBSNhPtcCsbYmx4TUtHSc45mqkkUK9Kme6sCAsytIzjSXFm1yVf0Xdwn1z6MjcNpd6jUQ4zU3YJwiuU9lTQ~ka74kZiU5WHriQQATmPMe1Wl3yRmWXTWMHxM-He9TpQot-gIi944ECLqOM7p0D3mZQeg8-BSFFoiXybxXYMUCQSPcAhY587xbNAgHwXeZog23iWpVYN1PRIiGV3Ba4G1PcQTPB1SJVgL6fDyEEh31DiSvaR6TR4rZ9mZMD8~WKluhc2XekN2W1OzCT~An0H1d0HtInNcGaAV4PDeCi1-IOfLQ__"
@@ -50,7 +58,14 @@ function PurchasePass() {
           </div>
         </div>
       </div>
-      {isModal && <Modal onClose={handleModalClose} />}
+      {isModal && <Modal
+        isOpen={isModal}
+        onClose={handleModalClose}
+        onSuccess={handlePurchaseDone}
+        title="패스를 구매하시겠습니까?"
+        btn1Text="아니요"
+        btn2Text="확인"/>}
+      {/* {isModal && <Modal onClose={handleModalClose} />} */}
     </>
   );
 }
@@ -58,18 +73,18 @@ function PurchasePass() {
 export default PurchasePass;
 
 
-const Modal = ({ onClose }) => {
+// const Modal = ({ onClose }) => {
 
-  return (
-    <div className="w-[390px] h-[736px] z-50 fixed bg-black-700/60 flex flex-col justify-center items-center">
-      <div className="bg-white-100 w-[300px] h-[152px] rounded-[10px] flex flex-col justify-evenly">
-        <p className="flex text-[18px] font-medium flex justify-center">패스를 구매하시겠습니까?</p>
-        <div className="flex justify-around">
-          <button onClick={() => onClose()} className="w-[130px] h-[46px] bg-blue-250 text-white-100 text-[14px] font-medium rounded-[5px]" >아니요</button>
-          <button className="w-[130px] h-[46px] bg-blue-500 text-white-100 text-[14px] font-medium rounded-[5px]"
-            >확인</button>
-        </div>
-      </div>
-    </div>
-  );
-}
+//   return (
+//     <div className="w-[390px] h-[736px] z-50 fixed bg-black-700/60 flex flex-col justify-center items-center">
+//       <div className="bg-white-100 w-[300px] h-[152px] rounded-[10px] flex flex-col justify-evenly">
+//         <p className="flex text-[18px] font-medium flex justify-center">패스를 구매하시겠습니까?</p>
+//         <div className="flex justify-around">
+//           <button onClick={() => onClose()} className="w-[130px] h-[46px] bg-blue-250 text-white-100 text-[14px] font-medium rounded-[5px]" >아니요</button>
+//           <button className="w-[130px] h-[46px] bg-blue-500 text-white-100 text-[14px] font-medium rounded-[5px]"
+//             >확인</button>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }

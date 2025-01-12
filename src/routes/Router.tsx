@@ -22,6 +22,7 @@ import {
   ChangePhone,
   Payment,
   Notice,
+  PassPaymentSuccess,
 } from "../pages/index";
 import NotFound from "../pages/NotFound";
 import NoticeDetail from "../pages/Notice/NoticeDetail";
@@ -75,6 +76,10 @@ const Router = createBrowserRouter([
       {
         path: "/purchase-pass/:id",
         element: <PurchasePass />,
+      },
+      {
+        path: "/purchase-pass/:id/done",
+        element: <PassPaymentSuccess />
       },
       {
         path: "/use-pass",
