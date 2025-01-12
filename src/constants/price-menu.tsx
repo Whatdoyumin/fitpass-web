@@ -1,0 +1,51 @@
+export const COIN_PRICE = [
+  {
+    id: 1,
+    coinAmount: 1,
+    coinPrice: "550",
+    coinExp: 30,
+    isBgBlue: false,
+  },
+  {
+    id: 2,
+    coinAmount: 5,
+    coinPrice: "2,750",
+    coinExp: 30,
+    isBgBlue: false,
+  },
+  {
+    id: 3,
+    coinAmount: 10,
+    coinPrice: "5,500",
+    coinExp: 30,
+    isBgBlue: false,
+  },
+  {
+    id: 4,
+    coinAmount: 20,
+    coinPrice: "11,000",
+    coinExp: 30,
+    isBgBlue: false,
+  },
+  {
+    id: 5,
+    coinAmount: 30,
+    coinPrice: "16,500",
+    coinExp: 30,
+    isBgBlue: false,
+  },
+  {
+    id: 6,
+    coinAmount: 180,
+    coinPrice: "99,000",
+    coinExp: 90,
+    isBgBlue: true,
+  },
+  {
+    id: 7,
+    coinAmount: 300,
+    coinPrice: "165,000",
+    coinExp: 180,
+    isBgBlue: true,
+  },
+];

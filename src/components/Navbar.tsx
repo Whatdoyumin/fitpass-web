@@ -5,7 +5,7 @@ const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  if (["/signup", "/signup/step2"].includes(location.pathname)) {
+  if (location.pathname === "/signup" || location.pathname === "/buy-coins/payment") {
     return null;
   }  
 

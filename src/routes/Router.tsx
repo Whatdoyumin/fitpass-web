@@ -20,8 +20,11 @@ import {
   Signup,
   SignupStep2,
   ChangePhone,
+  Payment,
+  Notice,
 } from "../pages/index";
 import NotFound from "../pages/NotFound";
+import NoticeDetail from "../pages/Notice/NoticeDetail";
 
 const Router = createBrowserRouter([
   {
@@ -102,8 +105,20 @@ const Router = createBrowserRouter([
         element: <BuyCoins />,
       },
       {
+        path: "/buy-coins/payment",
+        element: <Payment type="buy-coins" />,
+      },
+      {
         path: "/my/change-phone",
         element: <ChangePhone />,
+      },
+      {
+        path: "/my/notices",
+        element: <Notice />,
+      },
+      {
+        path: "/my/noticedetail/:id",
+        element: <NoticeDetail />,
       },
     ],
   },
