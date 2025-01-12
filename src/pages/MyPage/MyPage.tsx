@@ -63,7 +63,7 @@ const MyPage = () => {
   ];
 
   return (
-    <div className="w-full h-full p-0 bg-white-200 overflow-y-auto">
+    <div className="w-full min-h-screen bg-white-200">
       <MyProfile />
       <MyCoin coinAmount={123} />
       <SectionComponent title="결제" items={paymentItems} />

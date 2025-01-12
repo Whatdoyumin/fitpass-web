@@ -94,7 +94,7 @@ const Router = createBrowserRouter([
       },
       {
         path: "/my/change-password",
-        element: <ChangePassword />,
+        element: <ChangePassword currentPassword={""} newPassword={""} confirmNewPassword={""} />,
       },
       {
         path: "/subscribe",

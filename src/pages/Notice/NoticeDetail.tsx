@@ -32,7 +32,7 @@ const NoticeDetail = () => {
   }
 
   return (
-    <div className="p-[25px]">
+    <div className="p-[25px] min-h-screen">
       <h1 className="text-[22px] font-bold mb-[9px]">
         [{notice.type}] {notice.title}
       </h1>

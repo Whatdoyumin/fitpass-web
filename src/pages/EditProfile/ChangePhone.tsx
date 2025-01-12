@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import InputField from "./common/InputField";
-import Button from './common/Button';
+import InputField from "../EditProfile/common/InputField";
+import Button from "../EditProfile/common/Button";
 
 function ChangePhone() {
   const [name, setName] = useState("");
@@ -80,7 +80,7 @@ function ChangePhone() {
       setIsVerificationSent(false);
     }
   };
-  
+
   const handleNavigate = (): void => {
     navigate("/my");
   };
@@ -100,7 +100,7 @@ function ChangePhone() {
   };
 
   return (
-    <div className="w-full bg-white-100 px-[20px] py-[29px] flex flex-col overflow-y-auto">
+    <div className="w-full min-h-screen bg-white-100 px-[20px] py-[29px] flex flex-col">
       {/* 이름 입력 */}
       <div className="mb-[25px]">
         <label className="text-gray-800 text-[16px] font-medium" style={{ lineHeight: "19px" }}>
@@ -131,85 +131,84 @@ function ChangePhone() {
         />
       </form>
 
-      <div className="mb-[146px]">
-      {/* 휴대폰 번호 입력 */}
-      <label className="text-gray-800 text-[16px] font-medium" style={{ lineHeight: "19px" }}>
-        휴대폰 번호
-      </label>
-      <div className="flex items-center gap-[12px] mt-[8px] h-[50px] relative">
-        <div className="relative flex-1">
-          <input
-            type="text"
-            value={phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
-            placeholder="휴대폰 번호를 입력해주세요"
-            className={`w-full p-3 border h-[50px] rounded-md text-[14px] ${
-              errors.phone
-                ? "border-red-500 focus:ring-1 focus:ring-red-500"
-                : "border-gray-300 focus:ring-1 focus:ring-black-700"
-            } focus:outline-none`}
-          />
+      <div className="">
+        {/* 휴대폰 번호 입력 */}
+        <label className="text-gray-800 text-[16px] font-medium" style={{ lineHeight: "19px" }}>
+          휴대폰 번호
+        </label>
+        <div className="flex items-center gap-[12px] mt-[8px] h-[50px] relative">
+          <div className="relative flex-1">
+            <input
+              type="text"
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
+              placeholder="휴대폰 번호를 입력해주세요"
+              className={`w-full p-3 border h-[50px] rounded-md text-[14px] ${
+                errors.phone
+                  ? "border-red-500 focus:ring-1 focus:ring-red-500"
+                  : "border-gray-300 focus:ring-1 focus:ring-black-700"
+              } focus:outline-none`}
+            />
+          </div>
+          <button
+            type="button"
+            onClick={handleSendVerification}
+            className="bg-blue-500 text-white-100 px-[20px] py-[13px] rounded-md text-[14px] font-medium max-w-[92px] w-full h-full"
+          >
+            인증하기
+          </button>
         </div>
-        <button
-          type="button"
-          onClick={handleSendVerification}
-          className="bg-blue-500 text-white-100 px-[20px] py-[13px] rounded-md text-[14px] font-medium max-w-[92px] w-full h-full"
-        >
-          인증하기
-        </button>
-      </div>
-      {errors.phone && <p className="text-red-500 text-[13px] mt-[9px]">{errors.phone}</p>}
+        {errors.phone && <p className="text-red-500 text-[13px] mt-[9px]">{errors.phone}</p>}
 
-    {/* 인증번호 입력 */}
-    <div className="flex items-center gap-[12px] mt-[23px] h-[50px] relative">
-      <div className="relative flex-1">
-        <input
-            type="text"
-            value={verificationCode}
-            onChange={(e) => setVerificationCode(e.target.value)}
-            placeholder="인증번호를 입력해주세요"
-            disabled={!isVerificationSent || isVerified}
-            className={`w-full p-3 border rounded-md text-[14px] h-[50px] pr-[50px] 
+        {/* 인증번호 입력 */}
+        <div className="flex items-center gap-[12px] mt-[23px] h-[50px] relative">
+          <div className="relative flex-1">
+            <input
+              type="text"
+              value={verificationCode}
+              onChange={(e) => setVerificationCode(e.target.value)}
+              placeholder="인증번호를 입력해주세요"
+              disabled={!isVerificationSent || isVerified}
+              className={`w-full p-3 border rounded-md text-[14px] h-[50px] pr-[50px] 
               ${
-              errors.verification
-                ? "border-red-500 focus:ring-1 focus:ring-red-500"
-                : isVerificationSent
-                ? "border-gray-300 focus:ring-1 focus:ring-black-700"
-                : "border-gray-250"
-            } focus:outline-none`}
-          />
-          {isVerificationSent && !isVerified && (
-            <span className="absolute right-3 top-[50%] transform -translate-y-[50%] text-red-500 text-[14px]">
-              {formatTime(timeLeft)}
-            </span>
-          )}
+                errors.verification
+                  ? "border-red-500 focus:ring-1 focus:ring-red-500"
+                  : isVerificationSent
+                  ? "border-gray-300 focus:ring-1 focus:ring-black-700"
+                  : "border-gray-250"
+              } focus:outline-none`}
+            />
+            {isVerificationSent && !isVerified && (
+              <span className="absolute right-3 top-[50%] transform -translate-y-[50%] text-red-500 text-[14px]">
+                {formatTime(timeLeft)}
+              </span>
+            )}
+          </div>
+          <button
+            type="button"
+            onClick={handleVerifyCode}
+            disabled={!isVerificationSent || isVerified}
+            className={`px-[20px] py-[13px] rounded-md text-[14px] font-medium max-w-[92px] w-full h-full ${
+              isVerificationSent ? "bg-blue-500 text-white-100" : "bg-blue-250 text-white-100"
+            }`}
+            style={{ whiteSpace: "nowrap" }}
+          >
+            확인하기
+          </button>
         </div>
-        <button
-          type="button"
-          onClick={handleVerifyCode}
-          disabled={!isVerificationSent || isVerified}
-          className={`px-[20px] py-[13px] rounded-md text-[14px] font-medium max-w-[92px] w-full h-full ${
-            isVerificationSent ? "bg-blue-500 text-white-100" : "bg-blue-250 text-white-100"
-          }`}
-          style={{ whiteSpace: "nowrap" }}
-        >
-          확인하기
-        </button>
+        {errors.verification && (
+          <p className="text-red-500 text-[13px] mt-[9px]">{errors.verification}</p>
+        )}
+        {isVerified && (
+          <p className="text-green-500 text-[13px] mt-[9px]">인증이 완료되었습니다.</p>
+        )}
       </div>
-      {errors.verification && <p className="text-red-500 text-[13px] mt-[9px]">{errors.verification}</p>}
-      {isVerified && <p className="text-green-500 text-[13px] mt-[9px]">인증이 완료되었습니다.</p>}
-    </div>
 
-
-    {/* 버튼 */}
-    <div className="button-container w-full flex justify-center">
-      <Button
-        onClick={handleSubmit}
-        type="button"
-        text="변경하기"
-      />
+      {/* 버튼 */}
+      <div className="button-container w-full flex justify-center mt-auto pt-[29px] pb-[86px]">
+        <Button onClick={handleSubmit} type="button" text="변경하기" />
+      </div>
     </div>
-  </div>
   );
 }
 

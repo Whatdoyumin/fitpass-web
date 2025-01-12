@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import InputField from "../ChangePhone/common/InputField";
-import Button from "../ChangePhone/common/Button";
+import InputField from "../EditProfile/common/InputField";
+import Button from "../EditProfile/common/Button";
 
 interface ChangePasswordProps {
   currentPassword: string;
@@ -87,7 +87,7 @@ function ChangePassword({ currentPassword, newPassword, confirmNewPassword }: Ch
 
   return (
     <form
-      className="h-full bg-white-100 px-[20px] py-[29px] text-gray-400 overflow-y-auto"
+      className="w-full min-h-screen bg-white-100 px-[20px] py-[29px] flex flex-col text-gray-400"
       onSubmit={handleNavigate}
     >
       <div className="mb-[25px]">
@@ -116,7 +116,7 @@ function ChangePassword({ currentPassword, newPassword, confirmNewPassword }: Ch
         />
       </div>
 
-      <div className="mb-[266px]">
+      <div className="">
         <InputField
           type="password"
           value={confirmNewPassword}
@@ -129,12 +129,8 @@ function ChangePassword({ currentPassword, newPassword, confirmNewPassword }: Ch
         />
       </div>
 
-      <div className="button-container w-full flex justify-center">
-        <Button
-          onClick={handleNavigate}
-          type="button"
-          text="변경하기"
-        />
+      <div className="button-container w-full flex justify-center mt-auto pt-[29px] pb-[86px]">
+        <Button onClick={handleNavigate} type="button" text="변경하기" />
       </div>
     </form>
   );
