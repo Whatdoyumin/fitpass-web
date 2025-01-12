@@ -5,7 +5,7 @@ const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  if (location.pathname === "/signup") {
+  if (location.pathname === "/signup" || location.pathname === "/buy-coins/payment") {
     return null;
   }
 
