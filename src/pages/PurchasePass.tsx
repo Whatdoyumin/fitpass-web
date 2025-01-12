@@ -1,5 +1,4 @@
 import { useState } from "react";
-import PassPaymentSuccess from "./PassPaymentSuccess";
 import Modal from "../components/Modal";
 import { useNavigate } from "react-router-dom";
 
