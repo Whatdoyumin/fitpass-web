@@ -11,25 +11,25 @@
   <tbody>
     <tr>
       <td align="center">
-        <a href="https://github.com/FE_TEAM_LEAD_GITHUB">
+        <a href="https://github.com/Whatdoyumin">
           <img src="https://github.com/Whatdoyumin.png" width="200px" alt="FE 팀장 프로필 이미지"/><br />
           <sub><b>FE 팀장: 윰 / 이유민</b></sub>
         </a>
       </td>
       <td align="center">
-        <a href="https://github.com/FE_TEAM_MEMBER1_GITHUB">
+        <a href="https://github.com/fsdffds">
           <img src="https://github.com/fsdffds.png" width="200px" alt="FE 팀원 프로필 이미지"/><br />
           <sub><b>FE 팀원: 블루 / 김보민</b></sub>
         </a>
       </td>
       <td align="center">
-        <a href="https://github.com/FE_TEAM_MEMBER2_GITHUB">
+        <a href="https://github.com/dhdld">
           <img src="https://github.com/dhdld.png" width="200px" alt="FE 팀원 프로필 이미지"/><br />
           <sub><b>FE 팀원: 소피 / 김소연</b></sub>
         </a>
       </td>
       <td align="center">
-        <a href="https://github.com/FE_TEAM_MEMBER3_GITHUB">
+        <a href="https://github.com/hansoojeongsj">
           <img src="https://github.com/hansoojeongsj.png" width="200px" alt="FE 팀원 프로필 이미지"/><br />
           <sub><b>FE 팀원: 크리 / 한수정</b></sub>
         </a>
