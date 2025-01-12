@@ -73,7 +73,7 @@ function Home() {
         </Slider>
       </div>
       
-      <div className="w-[390px] h-[500px] rounded-t-[15px] bg-white-200 absolute top-[370px] z-10 ">
+      <div className="w-[390px] h-[500px] rounded-t-[15px] bg-white-200 absolute top-[370px] z-5 ">
         {/* 추천 운동시설 */}
         <div className="w-[390px] h-[177px] pl-4 overflow-hidden mt-6">
         {/* <div className="overflow-hidden pl-3 rounded-t-[15px] absolute"> */}
