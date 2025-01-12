@@ -19,6 +19,14 @@ function Signin() {
     navigate("/signup");
   };
 
+  const handleFindId = () => {
+    navigate("/find-id");
+  }
+
+  const handleFindPassword = () => {
+    navigate("/find-password");
+  }
+
   return (
     <div className="w-full max-w-content flex flex-col items-center">
       {/* 제목 */}
@@ -84,13 +92,20 @@ function Signin() {
           </span>
         </div>
         <div className="flex gap-[13px] text-blue-500">
-          <a href="#" className="hover:underline">
-            아이디 찾기
-          </a>
-          <span>|</span>
-          <a href="#" className="hover:underline">
-            비밀번호 찾기
-          </a>
+        <button
+        onClick={handleFindId}
+        className="hover:underline focus:outline-none text-blue-500"
+      >
+        아이디 찾기
+      </button>
+      <span>|</span>
+      {/* 비밀번호 찾기 */}
+      <button
+        onClick={handleFindPassword}
+        className="hover:underline focus:outline-none text-blue-500"
+      >
+        비밀번호 찾기
+      </button>
         </div>
       </div>
 
