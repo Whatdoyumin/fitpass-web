@@ -67,9 +67,9 @@ function FindId() {
   };
 
   return (
-    <div className="w-full max-w-content flex flex-col items-center h-screen relative px-[20px] pt-[29px]">
+    <div className="w-full max-w-content flex flex-col items-center h-screen relative px-5 pt-[29px]">
       {/* 스크롤 가능 영역 */}
-      <div className="flex-grow w-full overflow-auto flex flex-col gap-[20px]">
+      <div className="flex-grow w-full overflow-auto flex flex-col gap-5">
         {/* 이름 입력창 */}
         <div className="w-full flex flex-col gap-[10px]">
           <label htmlFor="name" className="text-[16px] font-medium text-black-700">
@@ -90,7 +90,7 @@ function FindId() {
           </label>
           <div className="flex items-center gap-[12px]">
             {/* 휴대폰 입력창 */}
-            <div className="flex items-center h-[50px] px-[20px] border border-gray-400 rounded-[5px] flex-1 gap-[20px] relative">
+            <div className="flex items-center h-[50px] px-5 border border-gray-400 rounded-[5px] flex-1 gap-[20px] relative">
               <input
                 type="text"
                 placeholder="휴대폰 번호를 -없이 입력해주세요"
@@ -102,7 +102,7 @@ function FindId() {
             <button
               onClick={handleSendCode}
               disabled={!validatePhoneNumber()}
-              className={`h-[50px] px-[20px] rounded-[5px] text-[15px] font-medium ${
+              className={`h-[50px] px-5 rounded-[5px] text-[15px] font-medium ${
                 validatePhoneNumber()
                   ? "bg-blue-500 text-white-100 hover:bg-blue-400"
                   : "bg-gray-400 text-white-100"
@@ -115,7 +115,7 @@ function FindId() {
           {/* 인증번호 입력창 */}
           {isCodeSent && !isCodeConfirmed && (
             <div className="flex items-center gap-[12px] mt-[10px]">
-              <div className="flex items-center h-[50px] px-[20px] border border-gray-400 rounded-[5px] flex-1 relative">
+              <div className="flex items-center h-[50px] px-5 border border-gray-400 rounded-[5px] flex-1 relative">
                 <input
                   type="text"
                   placeholder="인증번호를 입력해주세요"
@@ -130,7 +130,7 @@ function FindId() {
               <button
                 onClick={handleVerifyCode}
                 disabled={verificationCode.length !== 6}
-                className={`h-[50px] px-[20px] rounded-[5px] text-[15px] font-medium ${
+                className={`h-[50px] px-[205px] rounded-[5px] text-[15px] font-medium ${
                   verificationCode.length === 6
                     ? "bg-blue-500 text-white-100 hover:bg-blue-400"
                     : "bg-blue-250 text-white-100"
