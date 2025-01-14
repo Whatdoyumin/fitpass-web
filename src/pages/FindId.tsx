@@ -130,7 +130,7 @@ function FindId() {
               <button
                 onClick={handleVerifyCode}
                 disabled={verificationCode.length !== 6}
-                className={`h-[50px] px-[205px] rounded-[5px] text-[15px] font-medium ${
+                className={`h-[50px] px-5 rounded-[5px] text-[15px] font-medium ${
                   verificationCode.length === 6
                     ? "bg-blue-500 text-white-100 hover:bg-blue-400"
                     : "bg-blue-250 text-white-100"
