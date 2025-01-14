@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 function FindId() {
   const navigate = useNavigate();
 
-  const [username, setUsername] = useState("");
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isPhoneVerified, setIsPhoneVerified] = useState(false);
@@ -14,18 +13,7 @@ function FindId() {
   const [isCodeConfirmed, setIsCodeConfirmed] = useState(false);
   const [timer, setTimer] = useState(180); // 3분 (180초)
   const [isTimerRunning, setIsTimerRunning] = useState(false);
-
-  const [usernameError, setUsernameError] = useState("");
-
-  const validateUsername = (value: string) => {
-    const regex = /^[a-zA-Z0-9]{4,12}$/;
-    if (!regex.test(value)) {
-      setUsernameError("영어와 숫자를 사용하여 4-12자의 아이디를 입력해주세요.");
-    } else {
-      setUsernameError("");
-    }
-    setUsername(value);
-  };
+  const [showModal, setShowModal] = useState(false); // 모달 상태
 
   /** 타이머 시작 */
   useEffect(() => {
@@ -64,12 +52,22 @@ function FindId() {
       setIsTimerRunning(false);
     }
   };
-  /** 다음 단계 핸들러 */
+
+  /** 확인하기 버튼 핸들러 */
   const handleNextStep = () => {
+    if (isCodeConfirmed) {
+      setShowModal(true); // 모달 열기
+    }
+  };
+
+  /** 모달 닫기 */
+  const closeModal = () => {
+    setShowModal(false);
+    navigate("/signin");
   };
 
   return (
-      <div className="w-full max-w-content flex flex-col items-center h-screen relative px-[20px] pt-[29px]">
+    <div className="w-full max-w-content flex flex-col items-center h-screen relative px-[20px] pt-[29px]">
       {/* 스크롤 가능 영역 */}
       <div className="flex-grow w-full overflow-auto flex flex-col gap-[20px]">
         {/* 이름 입력창 */}
@@ -143,10 +141,10 @@ function FindId() {
             </div>
           )}
 
-{isCodeConfirmed && (
-          <span className="text-[15px] text-green-500 mt-[10px]">인증이 완료되었습니다.</span>
-        )}
-      </div>
+          {isCodeConfirmed && (
+            <span className="text-[15px] text-green-500 mt-[10px]">인증이 완료되었습니다.</span>
+          )}
+        </div>
       </div>
 
       {/* 하단 버튼 */}
@@ -156,6 +154,24 @@ function FindId() {
       >
         확인하기
       </button>
+
+      {/* 모달 창 */}
+      {showModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black-700 bg-opacity-60 z-50">
+          {/* 모달 콘텐츠 */}
+          <div className="bg-white-100 rounded-lg pt-5 p-[15px] w-[300px] text-center z-60">
+            <h2 className="text-[18px] font-medium text-black-700 mb-[10px]">회원님의 아이디는</h2>
+            <p className="text-[12px] font-medium text-gray-500 mb-[35px]">abcd123 입니다</p>
+            <button
+              onClick={closeModal}
+              className="blueButton w-[270px] h-[46px]"
+            >
+              확인
+            </button>
+          </div>
+        </div>
+)}
+
     </div>
   );
 }
