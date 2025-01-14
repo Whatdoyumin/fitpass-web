@@ -13,6 +13,7 @@ export const PATH_NAMES = new Map<string, string>([
   ["/find-id", "아이디 찾기"],
   ["/find-password", "비밀번호 찾기"],
   ["/purchase-pass/:id", "패스 구매하기"],
+  ["/purchase-pass/:id/done", "패스 구매하기"],  // 추후 x 표시로 변경
   ["/use-pass", "보유 패스"],
   ["/my/edit-profile", "개인정보 수정"],
   ["/my/change-password", "비밀번호 변경"],
