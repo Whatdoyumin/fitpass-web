@@ -49,3 +49,42 @@ export const COIN_PRICE = [
     isBgBlue: true,
   },
 ];
+
+export const SUBSCRIBE_OPTION = [
+  {
+    id: 1,
+    option_ko: "베이직",
+    option_en: "Basic",
+    coinAmount: 90,
+    extroCoinAmount: null,
+    totalCoinAmount: 90,
+    price: "50,000",
+    recommendTarget: "1주일에 한 번 운동하는 사람",
+    benefit: "X",
+    comment: "가볍게 시작하기",
+  },
+  {
+    id: 2,
+    option_ko: "스탠다드",
+    option_en: "Standard",
+    coinAmount: 130,
+    extroCoinAmount: 5,
+    totalCoinAmount: 135,
+    price: "70,000",
+    recommendTarget: "1주일에 2-3번 운동하는 사람",
+    benefit: "추가 코인 제공",
+    comment: "인기있는 요금제",
+  },
+  {
+    id: 3,
+    option_ko: "프로",
+    option_en: "Pro",
+    coinAmount: 190,
+    extroCoinAmount: 10,
+    totalCoinAmount: 200,
+    price: "100,000",
+    recommendTarget: "1주일에 3-4번 운동하는 사람",
+    benefit: "추가 코인 제공",
+    comment: "최대 혜택 플랜",
+  },
+];
