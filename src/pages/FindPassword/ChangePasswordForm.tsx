@@ -61,6 +61,7 @@ const ChangePasswordForm: React.FC = () => {
 				<InputField
 					type="password"
 					placeholder="새로운 비밀번호를 입력해주세요"
+                    isPassword={true}
 					value={password}
 					onChange={(e) => validatePassword(e.target.value)}
 					hasError={!!passwordError}
@@ -74,6 +75,7 @@ const ChangePasswordForm: React.FC = () => {
 				<InputField
 					type="password"
 					placeholder="비밀번호를 재확인해주세요"
+                    isPassword={true}
 					value={confirmPassword}
 					onChange={(e) => validateConfirmPassword(e.target.value)}
 					hasError={!!confirmPasswordError}
