@@ -1,5 +1,7 @@
+import PlanInfo from "../components/subscribe/PlanInfo";
+
 function Subscribe() {
-  return <div>구독하기 페이지</div>;
+  return <PlanInfo />;
 }
 
 export default Subscribe;
