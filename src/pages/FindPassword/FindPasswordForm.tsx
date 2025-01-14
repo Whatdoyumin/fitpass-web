@@ -40,6 +40,7 @@ const FindPasswordForm: React.FC<FindPasswordFormProps> = ({
 }) => {
 	return (
 		<div className="flex-grow w-full overflow-auto flex flex-col gap-[25px]">
+			{/* 아이디 입력 */}
 			<div className="w-full flex flex-col gap-[10px]">
 				<label
 					htmlFor="username"
@@ -58,6 +59,7 @@ const FindPasswordForm: React.FC<FindPasswordFormProps> = ({
 					<span className="text-red-500 text-[13px]">{usernameError}</span>
 				)}
 			</div>
+			{/* 이름 입력 */}
 			<div className="w-full flex flex-col gap-[10px]">
 				<label
 					htmlFor="name"
@@ -76,6 +78,7 @@ const FindPasswordForm: React.FC<FindPasswordFormProps> = ({
 					<span className="text-red-500 text-[13px]">{nameError}</span>
 				)}
 			</div>
+			{/* 휴대폰 입력 */}
 			<div className="w-full flex flex-col gap-[10px]">
 				<label
 					htmlFor="phone"
@@ -98,12 +101,13 @@ const FindPasswordForm: React.FC<FindPasswordFormProps> = ({
 						className={`h-[50px] px-5 rounded-[5px] text-[15px] font-medium ${
 							phoneNumber.length > 0
 								? "bg-blue-500 text-white-100 hover:bg-blue-400"
-								: "bg-gray-400 text-white-100"
+								: "bg-blue-250 text-white-100"
 						}`}
 					>
 						인증하기
 					</button>
 				</div>
+				{/* 인증번호 입력 */}
 				{isCodeSent && !isCodeConfirmed && (
 					<div className="flex items-center gap-[12px] mt-[10px]">
 						<div className="flex items-center h-[50px] px-5 border border-gray-400 rounded-[5px] flex-1 relative">
@@ -124,7 +128,7 @@ const FindPasswordForm: React.FC<FindPasswordFormProps> = ({
 							className={`h-[50px] px-5 rounded-[5px] text-[15px] font-medium ${
 								verificationCode.length === 6
 									? "bg-blue-500 text-white-100 hover:bg-blue-400"
-									: "bg-gray-400 text-white-100"
+									: "bg-blue-250 text-white-100"
 							}`}
 						>
 							확인하기
@@ -139,7 +143,7 @@ const FindPasswordForm: React.FC<FindPasswordFormProps> = ({
 			</div>
 			<button
 				onClick={handleNextStep}
-				className={`blueButton w-[350px] fixed bottom-[115px] h-[51px]`}
+				className="blueButton w-[350px] fixed bottom-[115px] h-[51px]"
 			>
 				변경하기
 			</button>

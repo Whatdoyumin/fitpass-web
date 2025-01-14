@@ -13,34 +13,35 @@ function FindPassword() {
 
   const [usernameError, setUsernameError] = useState("");
   const [nameError, setNameError] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [passwordError, setPasswordError] = useState("");
 
-  const handleNextStep = () => {
-    setShowChangePassword(true);
+  const validateFields = () => {
+    if (username !== "qwe1234") setUsernameError("올바르지 않은 정보입니다.");
+    if (name !== "가나다") setNameError("올바르지 않은 정보입니다.");
+    return username === "qwe1234" && name === "가나다";
   };
 
-  const handleChangePassword = () => {
-    if (newPassword !== confirmPassword) {
-      setPasswordError("비밀번호가 일치하지 않습니다.");
-    } else {
-      setPasswordError("");
-      alert("비밀번호가 성공적으로 변경되었습니다.");
+  const handleSendCode = () => {
+    if (phoneNumber.length === 11) {
+      setIsCodeSent(true);
+    }
+  };
+
+  const handleVerifyCode = () => {
+    if (verificationCode === "123456") {
+      setIsCodeConfirmed(true);
+    }
+  };
+
+  const handleNextStep = () => {
+    if (validateFields() && isCodeConfirmed) {
+      setShowChangePassword(true);
     }
   };
 
   return (
     <div className="w-full max-w-content flex flex-col items-center h-screen relative px-5 pt-[29px]">
       {showChangePassword ? (
-        <ChangePasswordForm
-          newPassword={newPassword}
-          setNewPassword={setNewPassword}
-          confirmPassword={confirmPassword}
-          setConfirmPassword={setConfirmPassword}
-          handleChangePassword={handleChangePassword}
-          passwordError={passwordError}
-        />
+        <ChangePasswordForm />
       ) : (
         <FindPasswordForm
           username={username}
@@ -56,8 +57,8 @@ function FindPassword() {
           timer={180}
           verificationCode={verificationCode}
           setVerificationCode={setVerificationCode}
-          handleSendCode={() => {}}
-          handleVerifyCode={() => {}}
+          handleSendCode={handleSendCode}
+          handleVerifyCode={handleVerifyCode}
           handleNextStep={handleNextStep}
         />
       )}
