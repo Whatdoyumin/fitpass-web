@@ -1,4 +1,5 @@
 import type React from "react";
+import { useEffect } from "react";
 import InputField from "../Signup/InputField";
 
 interface FindPasswordFormProps {
@@ -13,6 +14,9 @@ interface FindPasswordFormProps {
 	isCodeSent: boolean;
 	isCodeConfirmed: boolean;
 	timer: number;
+	setTimer: (value: number) => void;
+	isTimerRunning: boolean;
+	setIsTimerRunning: (value: boolean) => void;
 	verificationCode: string;
 	setVerificationCode: (value: string) => void;
 	handleSendCode: () => void;
@@ -32,12 +36,16 @@ const FindPasswordForm: React.FC<FindPasswordFormProps> = ({
 	isCodeSent,
 	isCodeConfirmed,
 	timer,
+	setTimer,
+	isTimerRunning,
+	setIsTimerRunning,
 	verificationCode,
 	setVerificationCode,
 	handleSendCode,
 	handleVerifyCode,
 	handleNextStep,
 }) => {
+
 	return (
 		<div className="flex-grow w-full overflow-auto flex flex-col gap-[25px]">
 			{/* 아이디 입력 */}
@@ -119,7 +127,10 @@ const FindPasswordForm: React.FC<FindPasswordFormProps> = ({
 								className="w-full outline-none text-[14px] font-medium placeholder-gray-400"
 							/>
 							<span className="text-red-500 text-[14px] absolute right-[15px]">
-								{`${Math.floor(timer / 60)}:${String(timer % 60).padStart(2, "0")}`}
+								{`${Math.floor(timer / 60)}:${String(timer % 60).padStart(
+									2,
+									"0",
+								)}`}
 							</span>
 						</div>
 						<button
