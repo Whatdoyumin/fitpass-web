@@ -82,7 +82,7 @@ const PlanInfo = () => {
           <h2 className="text-18px text-black-700 font-bold">지금 시작하세요! 요금제 비교</h2>
           <div className="w-full h-40 flex flex-row gap-4 justify-center">
             {SUBSCRIBE_OPTION.map((option) => (
-              <div className="flex flex-col gap-2 items-center">
+              <div key={option.id} className="flex flex-col gap-2 items-center">
                 <span
                   className={`mt-2 px-2 py-1 border-2 rounded-full text-10px font-bold ${
                     option.option_en === "Pro"
