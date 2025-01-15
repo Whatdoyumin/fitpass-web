@@ -61,7 +61,7 @@ function SignupStep2() {
 
   /** 휴대폰 번호 확인 */
   const validatePhoneNumber = () => {
-    const regex = /^01[0-9]{8,9}$/;
+    const regex = /^01[0-9]{8,9}$/; // 01로 시작하는 10-11자리 숫자
     return regex.test(phoneNumber);
   };
 
@@ -167,7 +167,7 @@ function SignupStep2() {
                 className={`h-[50px] px-[20px] rounded-[5px] text-[15px] font-medium ${
                   verificationCode.length === 6
                     ? "bg-blue-500 text-white-100 hover:bg-blue-400"
-                    : "bg-gray-400 text-white-100"
+                    : "bg-blue-250 text-white-100"
                 }`}
               >
                 확인하기
