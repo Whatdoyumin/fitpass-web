@@ -21,8 +21,12 @@
 
   #root {
     @apply absolute h-screen w-full max-w-content;
-    padding-top: calc(theme(spacing.header) + 0.5rem);
-    padding-bottom: calc(theme(spacing.navbar) + 0.5rem);
+    padding-top: calc(theme(spacing.header));
+    padding-bottom: calc(theme(spacing.navbar));
+  }
+
+  #portal {
+    @apply absolute z-10 w-full;
   }
 
   h1,
@@ -39,7 +43,7 @@
 
 @layer components {
   .test-css {
-    @apply absolute bottom-[20px] w-full text-center;
+    @apply absolute bottom-[-7px] w-full text-center;
   }
 
   .test-css li {
@@ -58,5 +62,21 @@
 
   .blueButton {
     @apply bg-blue-500 text-white-100 text-15px rounded-5 inline-flex justify-center items-center;
+  }
+
+  .skyBlueButton {
+    @apply bg-blue-250 text-white-100 text-15px rounded-5 inline-flex justify-center items-center;
+  }
+
+  .payOptionButton {
+    @apply w-full h-[50px] flex justify-center items-center rounded-7 border;
+  }
+
+  .unSelectedPayOption {
+    @apply border-gray-400 text-16px text-black-700;
+  }
+
+  .selectedPayOption {
+    @apply border-blue-500 text-blue-500;
   }
 }

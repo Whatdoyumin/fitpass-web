@@ -1,9 +1,34 @@
-import { FitpassLogo, Password, User, PasswordFocus, UserFocus, PlatformGoogle,PlatformKaKao,PlatformNaver } from "../../assets/svg";
+import { 
+  FitpassLogo, 
+  Password, 
+  User, 
+  PasswordFocus, 
+  UserFocus, 
+  PlatformGoogle, 
+  PlatformKaKao, 
+  PlatformNaver 
+} from "../../assets/svg";
 import InputField from "./InputField";
+import { useNavigate } from "react-router-dom";
 
 function Signin() {
+  const navigate = useNavigate(); // 페이지 이동을 위한 useNavigate 훅 사용
+
+  /** 회원가입 페이지로 이동 */
+  const handleSignupRedirect = () => {
+    navigate("/signup");
+  };
+
+  const handleFindId = () => {
+    navigate("/find-id");
+  }
+
+  const handleFindPassword = () => {
+    navigate("/find-password");
+  }
+
   return (
-    <div className="w-full max-w-content flex flex-col items-center px-sideGap">
+    <div className="w-full max-w-content flex flex-col items-center">
       {/* 제목 */}
       <FitpassLogo className="w-[176px] h-[48px] mb-[40px]" />
 
@@ -67,13 +92,20 @@ function Signin() {
           </span>
         </div>
         <div className="flex gap-[13px] text-blue-500">
-          <a href="#" className="hover:underline">
-            아이디 찾기
-          </a>
-          <span>|</span>
-          <a href="#" className="hover:underline">
-            비밀번호 찾기
-          </a>
+        <button
+        onClick={handleFindId}
+        className="hover:underline focus:outline-none text-blue-500"
+      >
+        아이디 찾기
+      </button>
+      <span>|</span>
+      {/* 비밀번호 찾기 */}
+      <button
+        onClick={handleFindPassword}
+        className="hover:underline focus:outline-none text-blue-500"
+      >
+        비밀번호 찾기
+      </button>
         </div>
       </div>
 
@@ -85,8 +117,8 @@ function Signin() {
       </div>
 
       {/* 회원가입 */}
-      <a
-        href="#"
+      <button
+        onClick={handleSignupRedirect}
         className="
           flex
           justify-center
@@ -108,7 +140,7 @@ function Signin() {
         "
       >
         계정이 없으신가요? 간편 가입하기
-      </a>
+      </button>
     </div>
   );
 }

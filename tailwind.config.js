@@ -36,6 +36,7 @@ export default {
         red: {
           400: "#FF6161",
           500: "#FF0000",
+          600: "#F34421"
         },
       },
       spacing: {

@@ -5,9 +5,9 @@ const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  if (location.pathname === "/signup") {
+  if (location.pathname === "/signup" || location.pathname === "/signup/step2" || location.pathname === "/buy-coins/payment") {
     return null;
-  }
+  }  
 
   return (
     <div className="w-full max-w-content bottom-0 h-navbar bg-white-100 border-t-2 border-gray-300 fixed z-20">

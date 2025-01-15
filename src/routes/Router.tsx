@@ -13,14 +13,19 @@ import {
   PurchasePass,
   SearchFitness,
   SetLocation,
-  Signup,
   Subscribe,
   UploadReview,
   UsePass,
+  Signin,
+  Signup,
+  SignupStep2,
   ChangePhone,
+  Payment,
+  Notice,
+  PassPaymentSuccess,
 } from "../pages/index";
-import Signin from "../pages/Signin";
 import NotFound from "../pages/NotFound";
+import NoticeDetail from "../pages/Notice/NoticeDetail";
 
 const Router = createBrowserRouter([
   {
@@ -35,6 +40,10 @@ const Router = createBrowserRouter([
       {
         path: "/signup",
         element: <Signup />,
+      },
+      {
+        path: "/signup/step2",
+        element: <SignupStep2 />,
       },
       {
         path: "/signin",
@@ -69,6 +78,10 @@ const Router = createBrowserRouter([
         element: <PurchasePass />,
       },
       {
+        path: "/purchase-pass/:id/done",
+        element: <PassPaymentSuccess />
+      },
+      {
         path: "/use-pass",
         element: <UsePass />,
       },
@@ -97,8 +110,20 @@ const Router = createBrowserRouter([
         element: <BuyCoins />,
       },
       {
+        path: "/buy-coins/payment",
+        element: <Payment type="buy-coins" />,
+      },
+      {
         path: "/my/change-phone",
         element: <ChangePhone />,
+      },
+      {
+        path: "/my/notices",
+        element: <Notice />,
+      },
+      {
+        path: "/my/noticedetail/:id",
+        element: <NoticeDetail />,
       },
     ],
   },
