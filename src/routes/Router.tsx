@@ -106,6 +106,10 @@ const Router = createBrowserRouter([
         element: <Subscribe />,
       },
       {
+        path: "/subscribe/payment",
+        element: <Payment type="subscribe" />,
+      },
+      {
         path: "/buy-coins",
         element: <BuyCoins />,
       },

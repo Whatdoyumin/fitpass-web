@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react";
 import { ArrowDown, ArrowUp } from "../../assets/svg";
+import { TPaymentProps } from "../../type/payment";
 
 interface IPaymentDetailsProps {
-  coinInfo: {
-    coinAmount: number;
-    coinPrice: string;
-    coinExp: number;
+  item: {
+    coinAmount?: number;
+    price: string;
+    coinExp?: number | undefined;
+    option_ko?: string;
   };
   paymentMethod: string | null;
 }
 
-const PaymentDetails = ({ coinInfo, paymentMethod }: IPaymentDetailsProps) => {
+const PaymentDetails = ({ type, item, paymentMethod }: TPaymentProps & IPaymentDetailsProps) => {
   const [isOpen, setIsOpen] = useState(true);
   const [paymentDate, setPaymentDate] = useState<string>("");
   const [expiryDate, setExpiryDate] = useState<string>("");
@@ -24,9 +26,13 @@ const PaymentDetails = ({ coinInfo, paymentMethod }: IPaymentDetailsProps) => {
     setPaymentDate(today.toLocaleDateString());
 
     const expiry = new Date();
-    expiry.setDate(today.getDate() + coinInfo.coinExp);
+    if (type === "buy-coins" && item?.coinExp !== undefined) {
+      expiry.setDate(today.getDate() + item.coinExp);
+    } else {
+      expiry.setDate(today.getDate() + 30);
+    }
     setExpiryDate(expiry.toLocaleDateString());
-  }, [coinInfo]);
+  }, [item, type]);
 
   const getPaymentMethodText = () => {
     switch (paymentMethod) {
@@ -60,11 +66,13 @@ const PaymentDetails = ({ coinInfo, paymentMethod }: IPaymentDetailsProps) => {
           <div className="w-full bg-white-200 px-5 py-6 flex flex-col gap-2 rounded-7">
             <span className="w-full flex justify-between items-center">
               <p className="text-16px text-gray-600">결제 금액</p>
-              <p className="text-16px text-black-700">{coinInfo.coinPrice}원</p>
+              <p className="text-16px text-black-700">{item.price}원</p>
             </span>
             <span className="w-full flex justify-between items-center">
               <p className="text-16px text-gray-600">플랜</p>
-              <p className="text-16px text-black-700">{coinInfo.coinAmount}코인</p>
+              <p className="text-16px text-black-700">
+                {type === "buy-coins" ? `${item.coinAmount}코인` : `${item.option_ko}`}
+              </p>
             </span>
             <span className="w-full flex justify-between items-center">
               <p className="text-16px text-gray-600">결제일</p>
