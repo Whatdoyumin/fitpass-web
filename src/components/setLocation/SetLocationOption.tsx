@@ -1,8 +1,12 @@
+import { useNavigate } from "react-router-dom";
+
 interface SetLocationOptionProps {
   setMode: React.Dispatch<React.SetStateAction<"default" | "my-location" | "search">>;
 }
 
 const SetLocationOption = ({ setMode }: SetLocationOptionProps) => {
+  const navigate = useNavigate();
+
   return (
     <div className="w-full h-full bg-gray-300 pt-overpadding absolute left-0 top-0 z-20">
       <div className="w-full h-[352px] bg-white-100 rounded-tl-15 rounded-tr-15 pb-navbar bottom-0 absolute">
@@ -17,7 +21,7 @@ const SetLocationOption = ({ setMode }: SetLocationOptionProps) => {
             </button>
             <button
               className="w-full blueButton px-[124px] py-3.5"
-              onClick={() => setMode("search")}
+              onClick={() => navigate("/search-location")}
             >
               지역 선택
             </button>

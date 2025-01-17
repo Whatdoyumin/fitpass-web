@@ -1,5 +1,6 @@
-import { useState } from "react";
-import SearchHeader from "../SearchHeader";
+import { useEffect, useState } from "react";
+import SearchHeader from "../components/SearchHeader";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 declare global {
   interface Window {
@@ -8,10 +9,19 @@ declare global {
 }
 
 const SearchLocation = () => {
-  const [searchValue, setSearchValue] = useState("");
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const initialSearchValue = searchParams.get("q");
+  const [searchValue, setSearchValue] = useState(initialSearchValue);
   const [places, setPlaces] = useState<string[]>([]);
   const [pagination, setPagination] = useState<kakao.maps.services.Place[]>(null);
   const [errorMessage, setErrorMessage] = useState<kakao.maps.services.Pagination | null>(null);
+
+  useEffect(() => {
+    if (initialSearchValue) {
+      searchPlaces(initialSearchValue);
+    }
+  }, [initialSearchValue]);
 
   const searchPlaces = (keyword: string) => {
     if (!window.kakao) return;
@@ -39,13 +49,25 @@ const SearchLocation = () => {
   };
 
   const handleSearch = (keyword: string) => {
+    if (!keyword.trim()) return;
+
+    navigate(`/search-location?q=${encodeURIComponent(keyword)}`);
     searchPlaces(keyword);
+  };
+
+  const handlePlaceClick = (place: kakao.maps.services.PlacesSearchResulItem) => {
+    const { place_name, address_name, x, y } = place;
+    navigate(
+      `/location-detail?name=${encodeURIComponent(place_name)}&address=${encodeURIComponent(
+        address_name
+      )}&lat=${y}&lng=${x}`
+    );
   };
 
   return (
     <div className="w-full h-auto min-h-full absolute z-20">
       <SearchHeader
-        nav="/set-location?c"
+        nav="/search-location?q"
         placeholder="지역을 검색해주세요."
         onSearch={handleSearch}
         searchValue={searchValue}
@@ -58,7 +80,11 @@ const SearchLocation = () => {
         ) : (
           <ul className="flex flex-col">
             {places.map((place, index) => (
-              <li key={index} className="border-b-2 border-gray-200 ">
+              <li
+                key={index}
+                className="border-b-2 border-gray-200"
+                onClick={() => handlePlaceClick(place)}
+              >
                 <div className="bg-white p-3">
                   <h5 className="text-lg font-bold mb-1">{place.place_name}</h5>
                   {place.road_address_name ? (
@@ -100,4 +126,4 @@ const SearchLocation = () => {
   );
 };
 
-export { SearchLocation };
+export default SearchLocation;

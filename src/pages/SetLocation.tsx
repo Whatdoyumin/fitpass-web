@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { SetLocationOption } from "../components/setLocation/SetLocationOption";
-import { SearchLocation } from "../components/setLocation/SearchLocation";
+import SearchLocation from "./SearchLocation";
 import GetCurrentLocation from "../components/setLocation/GetCurrentLocation";
 
 function SetLocation() {

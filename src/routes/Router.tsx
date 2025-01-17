@@ -23,6 +23,8 @@ import {
   Payment,
   Notice,
   PassPaymentSuccess,
+  LocationDetail,
+  SearchLocation,
 } from "../pages/index";
 import NotFound from "../pages/NotFound";
 import NoticeDetail from "../pages/Notice/NoticeDetail";
@@ -62,6 +64,14 @@ const Router = createBrowserRouter([
         element: <SetLocation />,
       },
       {
+        path: "/search-location",
+        element: <SearchLocation />,
+      },
+      {
+        path: "/location-detail",
+        element: <LocationDetail />,
+      },
+      {
         path: "/search-fitness",
         element: <SearchFitness />,
       },
@@ -79,7 +89,7 @@ const Router = createBrowserRouter([
       },
       {
         path: "/purchase-pass/:id/done",
-        element: <PassPaymentSuccess />
+        element: <PassPaymentSuccess />,
       },
       {
         path: "/use-pass",
