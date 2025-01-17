@@ -20,6 +20,8 @@ import MyPage from "./MyPage/MyPage";
 import ChangePhone from "./EditProfile/ChangePhone";
 import Notice from "./Notice/Notice";
 import PassPaymentSuccess from "./PassPaymentSuccess";
+import LocationDetail from "./LocationDetails";
+import SearchLocation from "./SearchLocation";
 
 export {
   Home,
@@ -29,6 +31,8 @@ export {
   FindId,
   FindPassword,
   SetLocation,
+  LocationDetail,
+  SearchLocation,
   SearchFitness,
   ExploreFitness,
   FitnessDetails,

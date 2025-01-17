@@ -43,6 +43,7 @@ export default {
         header: "129px",
         navbar: "86px",
         sideGap: "20px",
+        overpadding: "-129px",
       },
       maxWidth: {
         content: "390px",
@@ -51,6 +52,7 @@ export default {
         3: "3px",
         5: "5px",
         7: "7px",
+        15: "15px",
       },
       fontSize: {
         "9px": "9px",
