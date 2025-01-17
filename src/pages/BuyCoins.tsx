@@ -13,7 +13,7 @@ function BuyCoins() {
             <CoinCard
               key={item.id}
               coinAmount={item.coinAmount}
-              coinPrice={item.coinPrice}
+              coinPrice={item.price}
               coinExp={item.coinExp}
               isBgBlue={item.isBgBlue}
             />
