@@ -46,7 +46,7 @@ const SearchHeader = ({
         <input
           type="text"
           placeholder={placeholder}
-          className="w-60"
+          className="w-60 h-10 focus:outline-none"
           value={searchValue}
           onChange={onChangeSearchValue}
           onKeyDown={handleSearchMovieWithKeyboard}

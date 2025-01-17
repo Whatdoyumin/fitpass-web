@@ -56,9 +56,9 @@ const SearchLocation = () => {
         {errorMessage ? (
           <div className="text-center text-gray-500">{errorMessage}</div>
         ) : (
-          <ul className="flex flex-col space-y-3">
+          <ul className="flex flex-col">
             {places.map((place, index) => (
-              <li key={index} className="border-b-2 border-gray-200">
+              <li key={index} className="border-b-2 border-gray-200 ">
                 <div className="bg-white p-3">
                   <h5 className="text-lg font-bold mb-1">{place.place_name}</h5>
                   {place.road_address_name ? (
