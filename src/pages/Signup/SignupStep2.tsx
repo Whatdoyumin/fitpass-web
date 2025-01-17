@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import InputField from "./InputField";
 import { useNavigate } from "react-router-dom";
 import { MoreTerms } from "../../assets/svg";
-import Portal from "../../components/Portal";
 
 function SignupStep2() {
   const [name, setName] = useState("");
@@ -100,8 +99,7 @@ function SignupStep2() {
   };
 
   return (
-    <Portal>
-      <div className="w-full max-w-content flex flex-col items-center h-screen relative px-[20px] pt-[84px]">
+      <div className="w-full max-w-content flex flex-col items-center h-screen relative px-5 pt-[29px]">
       {/* 스크롤 가능 영역 */}
       <div className="flex-grow w-full overflow-auto flex flex-col gap-[20px]">
         {/* 이름 입력창 */}
@@ -243,7 +241,7 @@ function SignupStep2() {
       <button
         onClick={handleNextStep}
         disabled={!isFormValid}
-        className={`w-screen h-[86px] text-[20px] font-medium text-white-100 ${
+        className={`fixed bottom-0 left-0 w-screen h-[86px] text-[20px] font-medium text-white-100 ${
           isFormValid ? "bg-blue-500 hover:bg-blue-400" : "bg-gray-400"
         }`}
         style={{
@@ -255,7 +253,6 @@ function SignupStep2() {
         동의하고 가입하기
       </button>
     </div>
-    </Portal>
   );
 }
 

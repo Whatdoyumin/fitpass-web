@@ -10,6 +10,8 @@ import {
 } from "../assets/svg";
 
 export const PATH_NAMES = new Map<string, string>([
+  ["signup", "회원가입"],
+  ["signup/step2", "회원가입"],
   ["/find-id", "아이디 찾기"],
   ["/find-password", "비밀번호 찾기"],
   ["/purchase-pass/:id", "패스 구매하기"],

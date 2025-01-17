@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import InputField from "./InputField";
 import { useNavigate } from "react-router-dom";
-import Portal from "../../components/Portal";
 
 function Signup() {
   const [username, setUsername] = useState("");
@@ -60,8 +59,7 @@ function Signup() {
   };
 
   return (
-    <Portal>
-    <div className="w-full max-w-content flex flex-col items-center gap-[25px] p-[20px] pt-[84px]">
+    <div className="w-full max-w-content flex flex-col items-center gap-[25px] relative px-5 pt-[29px]">
       {/* 아이디 입력창 */}
       <div className="w-full flex flex-col gap-[10px]">
         <label htmlFor="username" className="text-[16px] font-medium text-black-700">
@@ -108,7 +106,7 @@ function Signup() {
       <button
         onClick={handleNextStep}
         disabled={!isFormValid}
-        className={`fixed bottom-0 left-0 w-full h-[86px] text-[20px] font-medium text-white-100 ${
+        className={`fixed bottom-0 left-0 w-screen h-[86px] text-[20px] font-medium text-white-100 ${
           isFormValid ? "bg-blue-500 hover:bg-blue-400" : "bg-gray-400"
         }`}
         style={{
@@ -120,7 +118,6 @@ function Signup() {
         입력하기 (1/2)
       </button>
     </div>
-    </Portal>
   );
 }
 
