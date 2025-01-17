@@ -1,76 +1,101 @@
-import {
-  // useEffect,
-  useState,
-} from "react";
+import { useState } from "react";
 import SearchHeader from "../SearchHeader";
 
-// interface placeType {
-//   place_name: string;
-//   road_address_name: string;
-//   address_name: string;
-//   phone: string;
-//   place_url: string;
-// }
-
-// const { kakao } = window;
+declare global {
+  interface Window {
+    kakao: typeof kakao;
+  }
+}
 
 const SearchLocation = () => {
   const [searchValue, setSearchValue] = useState("");
-  // const [places, setPlaces] = useState();
-  // const [markers, setMarkers] = useState([]);
-  // const [map, setMap] = useState();
+  const [places, setPlaces] = useState<string[]>([]);
+  const [pagination, setPagination] = useState<kakao.maps.services.Place[]>(null);
+  const [errorMessage, setErrorMessage] = useState<kakao.maps.services.Pagination | null>(null);
 
-  // const [keyword, setKeyword] = useState("");
-  // const [selectedPlace, setSelectedPlace] = useState();
+  const searchPlaces = (keyword: string) => {
+    if (!window.kakao) return;
+    const ps = new window.kakao.maps.services.Places();
 
-  // const markerImageSrc =
-  //   "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png";
-  // const imageSize = { width: 36, height: 37 };
-  // const spriteSize = { width: 36, height: 691 };
+    if (!keyword.trim()) {
+      setPlaces([]);
+      setErrorMessage("검색어를 입력하세요.");
+      return;
+    }
 
-  // useEffect(() => {
-  //   if (!map) return;
-  //   const ps = new kakao.maps.services.Places();
+    ps.keywordSearch(keyword, (data, status, pagination) => {
+      if (status === window.kakao.maps.services.Status.OK) {
+        setPlaces(data);
+        setPagination(pagination);
+        setErrorMessage(null);
+      } else if (status === window.kakao.maps.services.Status.ZERO_RESULT) {
+        setPlaces([]);
+        setErrorMessage("검색 결과가 존재하지 않습니다.");
+      } else if (status === window.kakao.maps.services.Status.ERROR) {
+        setPlaces([]);
+        setErrorMessage("검색 결과 중 오류가 발생했습니다.");
+      }
+    });
+  };
 
-  //   ps.keywordSearch(searchValue, (data, status, _pagination) => {
-  //     if (status === kakao.maps.services.Status.OK) {
-  //       setPlaces(data);
-  //       // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기 위해
-  //       // LatLngBounds 객체에 좌표를 추가
-  //       const bounds = new kakao.maps.LatLngBounds();
-  //       const markers = [];
-
-  //       for (let i = 0; i < data.length; i++) {
-  //         markers.push({
-  //           position: {
-  //             lat: data[i].y,
-  //             lng: data[i].x,
-  //           },
-  //           content: data[i].place_name,
-  //         });
-  //         bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
-  //       }
-  //       setMarkers(markers);
-
-  //       // 검색된 장소 위치를 기준으로 지도 범위를 재설정
-  //       map.setBoundes(bounds);
-  //     }
-  //   });
-  // }, [map, keyword]);
-
-  const onSearch = () => {
-    // setKeyword(searchValue);
+  const handleSearch = (keyword: string) => {
+    searchPlaces(keyword);
   };
 
   return (
-    <div className="w-full h-full bg-white-200 absolute z-20">
+    <div className="w-full h-auto min-h-full absolute z-20">
       <SearchHeader
         nav="/set-location?c"
         placeholder="지역을 검색해주세요."
-        onSearch={onSearch}
+        onSearch={handleSearch}
         searchValue={searchValue}
         setSearchValue={setSearchValue}
       />
+
+      <div className="w-full h-auto p-3 pb-28 min-h-screen">
+        {errorMessage ? (
+          <div className="text-center text-gray-500">{errorMessage}</div>
+        ) : (
+          <ul className="flex flex-col space-y-3">
+            {places.map((place, index) => (
+              <li key={index} className="border-b-2 border-gray-200">
+                <div className="bg-white p-3">
+                  <h5 className="text-lg font-bold mb-1">{place.place_name}</h5>
+                  {place.road_address_name ? (
+                    <div className="text-sm text-gray-600">
+                      <p>{place.road_address_name}</p>
+                      <p className="text-gray-400">{place.address_name}</p>
+                    </div>
+                  ) : (
+                    <p className="text-sm text-gray-600">{place.address_name}</p>
+                  )}
+                  <p className="text-sm text-blue-500">{place.phone}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {pagination && !errorMessage && (
+          <div className="w-full flex gap-3 justify-center items-center mt-4">
+            {Array.from({ length: pagination.last }, (_, i) => i + 1).map((page) => (
+              <a
+                key={page}
+                href="#"
+                className={`${
+                  page === pagination.current ? "text-blue-500 font-bold" : "text-gray-500"
+                }`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  pagination.gotoPage(page);
+                }}
+              >
+                {page}
+              </a>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

@@ -3,6 +3,7 @@
   "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.node.json" }],
   "include": ["src/**/*.ts", "src/**/*.tsx", "src/types", "custom.d.ts"],
   "compilerOptions": {
-    "typeRoots": ["./node_modules/@types", "./node_modules/kakao.maps.d.ts"]
+    "typeRoots": ["./node_modules/@types", "./node_modules/kakao.maps.d.ts"],
+    "types": []
   }
 }
