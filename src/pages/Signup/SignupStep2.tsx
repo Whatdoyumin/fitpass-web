@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import InputField from "./InputField";
 import { useNavigate } from "react-router-dom";
 import { MoreTerms } from "../../assets/svg";
+import { signUp } from "../../apis/signup/signup";
 
 function SignupStep2() {
   const [name, setName] = useState("");
@@ -91,10 +92,14 @@ function SignupStep2() {
     agreements.location &&
     agreements.thirdParty;
 
-  /** 다음 단계 핸들러 */
-  const handleNextStep = () => {
+  const handleNextStep = async () => {
     if (isFormValid) {
-      navigate("/signin");
+      try {
+        await signUp(name, "idtest", "pwtest123", phoneNumber);
+        navigate("/signin");
+      } catch (error) {
+        alert(error.message);
+      }
     }
   };
 
