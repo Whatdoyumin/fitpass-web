@@ -5,9 +5,18 @@ import ReviewEditDelete from "./ReviewEditDelete";
 import { useNavigate } from "react-router-dom";
 import Modal from "../../components/Modal";
 
-function ReviewItem() {
+interface ReviewProps {
+  review: {
+    id: number;
+    score: number;
+    content: string;
+    date: string;
+  }
+}
 
-  const score: number = 3; // 임시 별점
+function ReviewItem({ review }: ReviewProps) {
+
+  // const score: number = 3; // 임시 별점
   const [isOpen, setIsOpen] = useState(false); // 수정삭제 버튼
 
   const navigate = useNavigate();
@@ -48,15 +57,15 @@ function ReviewItem() {
 
   return(
     <div className="w-[300px] h-[77px] flex flex-col gap-[12px] mt-[5px] ">
-    {/* 프로필사진, 별점, 내 리뷰일 때 수정삭제 가능버튼 */}
+    {/* 프로필사진, 별점, 내 리뷰일 때 수정삭제 가능한 더보기 버튼 */}
       <div className="flex h-[27px] items-center justify-between"> 
         <div className="flex items-center">
           <img src={ImgUser} alt="프로필 이미지" width="27px" height="27px" />
           <div className="flex items-center gap-[5px] w-[131px] h-[17px] ml-[15px] ">
             {Array.from({ length: 5 }, (_, index) => (
-              index < score ? (<FillStar width="17px" key={index}/>) : (<BorderStar width="17px" key={index}/>)
+              index < review.score ? (<FillStar width="17px" key={index}/>) : (<BorderStar width="17px" key={index}/>)
             ))}
-            <span className="font-medium text-[14px] text-blue-500 ml-[5px]">{score}</span>
+            <span className="font-medium text-[14px] text-blue-500 ml-[5px]">{review.score}</span>
           </div>
         </div>
         {/* 더보기 버튼 */}
@@ -79,8 +88,8 @@ function ReviewItem() {
             )}
           </div>
       </div>
-      <p className="font-medium text-[12px]">내용</p>
-      <p className="text-[10px] text-gray-600">작성 일자</p>
+      <p className="font-medium text-[12px]">{review.content}</p>
+      <p className="text-[10px] text-gray-600">{review.date}</p>
 
       {/* 수정, 삭제 모달 */}
       {openDeleteModal && (
