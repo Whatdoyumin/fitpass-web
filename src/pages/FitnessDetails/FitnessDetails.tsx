@@ -7,9 +7,10 @@ import { useState } from "react";
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import SvgLocation from "../assets/svg/Location";
-import { CoinRightRounded, Phonecall } from "../assets/svg";
-import Share from "../components/Share";
+import SvgLocation from "../../assets/svg/Location";
+import { CoinRightRounded, Phonecall } from "../../assets/svg";
+import Share from "./Share";
+import ReviewList from "./ReviewList";
 
 function FitnessDetails() {
   
@@ -189,6 +190,10 @@ function FitnessDetails() {
             </div>
           </div>
         ))}
+        <div className="border-b-[6px] w-[340px]"></div>
+        <div className="p-4 flex flex-col gap-1">
+          <ReviewList />
+        </div>
         <div className="flex flex-col items-center">
           <button className="w-[300px] h-[46px] rounded-[5px] bg-blue-500 text-white-100 text-[15px] font-bold my-5">패스 구매하기</button>
         </div>

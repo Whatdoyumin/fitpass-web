@@ -7,7 +7,7 @@ import FindPassword from "./FindPassword/FindPassword";
 import SetLocation from "./SetLocation";
 import SearchFitness from "./SearchFitness";
 import ExploreFitness from "./ExploreFitness/ExploreFitness";
-import FitnessDetails from "./FitnessDetails";
+import FitnessDetails from "./FitnessDetails/FitnessDetails";
 import PurchasePass from "./PurchasePass";
 import UsePass from "./UsePass";
 import UploadReview from "./UploadReview";
