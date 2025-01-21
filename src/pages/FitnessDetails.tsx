@@ -12,11 +12,11 @@ import { CoinRightRounded, Phonecall } from "../assets/svg";
 import Share from "../components/Share";
 
 function FitnessDetails() {
-  
   // 테스트 이미지
-  const imgurl: string = "https://s3-alpha-sig.figma.com/img/9771/3785/008387989af4aead9a0b02db565f1ca0?Expires=1736726400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=keikTmna2x6G2RNM~AJfZPEQ8GLIRVkUj8uV39FdgmBSNhPtcCsbYmx4TUtHSc45mqkkUK9Kme6sCAsytIzjSXFm1yVf0Xdwn1z6MjcNpd6jUQ4zU3YJwiuU9lTQ~ka74kZiU5WHriQQATmPMe1Wl3yRmWXTWMHxM-He9TpQot-gIi944ECLqOM7p0D3mZQeg8-BSFFoiXybxXYMUCQSPcAhY587xbNAgHwXeZog23iWpVYN1PRIiGV3Ba4G1PcQTPB1SJVgL6fDyEEh31DiSvaR6TR4rZ9mZMD8~WKluhc2XekN2W1OzCT~An0H1d0HtInNcGaAV4PDeCi1-IOfLQ__"
+  const imgurl: string =
+    "https://s3-alpha-sig.figma.com/img/9771/3785/008387989af4aead9a0b02db565f1ca0?Expires=1736726400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=keikTmna2x6G2RNM~AJfZPEQ8GLIRVkUj8uV39FdgmBSNhPtcCsbYmx4TUtHSc45mqkkUK9Kme6sCAsytIzjSXFm1yVf0Xdwn1z6MjcNpd6jUQ4zU3YJwiuU9lTQ~ka74kZiU5WHriQQATmPMe1Wl3yRmWXTWMHxM-He9TpQot-gIi944ECLqOM7p0D3mZQeg8-BSFFoiXybxXYMUCQSPcAhY587xbNAgHwXeZog23iWpVYN1PRIiGV3Ba4G1PcQTPB1SJVgL6fDyEEh31DiSvaR6TR4rZ9mZMD8~WKluhc2XekN2W1OzCT~An0H1d0HtInNcGaAV4PDeCi1-IOfLQ__";
 
-  const [currentIndex, setCurrentIndex] = useState(0);  // 슬라이드 인덱스
+  const [currentIndex, setCurrentIndex] = useState(0); // 슬라이드 인덱스
 
   const settings: Settings = {
     dots: false,
@@ -24,15 +24,17 @@ function FitnessDetails() {
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
-    arrows: false,  // 화살표 없애기,
-    beforeChange: (current: number, next: number) => setCurrentIndex(next),
+    arrows: false, // 화살표 없애기,
+    beforeChange: (current: number, next: number) => {
+      if (typeof next === "number") setCurrentIndex(next);
+    },
   };
 
   interface GymImg {
     id: number;
     url: string;
     alt: string;
-  };
+  }
 
   const images: GymImg[] = [
     {
@@ -53,8 +55,8 @@ function FitnessDetails() {
   ];
 
   interface FacilityInfo {
-    info: string;  // 시설 소개글
-    benefits: string[]  // 이용 혜택
+    info: string; // 시설 소개글
+    benefits: string[]; // 이용 혜택
   }
 
   interface GymInfo {
@@ -67,8 +69,8 @@ function FitnessDetails() {
     operatingHours: string; // 요일별 운영시간
     usageMethod: string[]; // 이용 방법
     additionalInfo: string[]; // 기타 사항
-    coin: number;   // 코인
-  };
+    coin: number; // 코인
+  }
 
   const gyms: GymInfo[] = [
     {
@@ -80,16 +82,16 @@ function FitnessDetails() {
       info: [
         {
           info: "시설 소개글~",
-          benefits: ["수건 1장 제공", "개인 락커 1개월 10,000원"]
-        }
+          benefits: ["수건 1장 제공", "개인 락커 1개월 10,000원"],
+        },
       ],
       operatingHours: "00:00 ~ 24:00",
       usageMethod: ["예약 전 전화 필수", "웹 페이지 내 결제 후 결제 내역 보여주기"],
-      additionalInfo: ["주차 불가능" ,"명절 당일 휴무"],
+      additionalInfo: ["주차 불가능", "명절 당일 휴무"],
       coin: 100,
     },
   ];
-  
+
   // // 스크롤
   // const [scroll, setScroll] = useState(false);
 
@@ -101,30 +103,30 @@ function FitnessDetails() {
   //   window.addEventListener('scroll', )
   // })
 
-
-
   return (
-      <div className="bg-white-200 h-full overflow-x-hidden overflow-y-auto flex flex-col items-center py-5">
-        <div className="relative w-[340px] h-[191px]">
-          <Slider {...settings} className="w-[340px] h-[191px]">
+    <div className="bg-white-200 h-full overflow-x-hidden overflow-y-auto flex flex-col items-center py-5">
+      <div className="relative w-[340px] h-[191px]">
+        <Slider {...settings} className="w-[340px] h-[191px]">
           {images.map((img) => (
             <div key={img.id} className="relative">
-              <img
-                src={img.url}
-                alt={img.alt}
-                className="w-[340px] h-[191px] rounded-t-[7px]"/>
-                <span className="absolute bottom-2 right-4 w-9 h-[19px] px-[10px] py-[3px] bg-black-700/60 text-white-100 rounded-[15px] text-[11px] font-medium flex justify-center items-center">{currentIndex + 1}/{images.length}</span>
+              <img src={img.url} alt={img.alt} className="w-[340px] h-[191px] rounded-t-[7px]" />
+              <span className="absolute bottom-2 right-4 w-9 h-[19px] px-[10px] py-[3px] bg-black-700/60 text-white-100 rounded-[15px] text-[11px] font-medium flex justify-center items-center">
+                {currentIndex + 1}/{images.length}
+              </span>
             </div>
           ))}
         </Slider>
         {gyms.map((gym) => (
-          <div className="absolute top-0 right-0 flex flex-col items-center justify-center">
+          <div
+            key={gym.id}
+            className="absolute top-0 right-0 flex flex-col items-center justify-center"
+          >
             <CoinRightRounded className="w-[70px] h-[27.22px] relative" />
             <span className="text-white-100 absolute text-[10px] font-bold">{gym.coin}코인</span>
           </div>
         ))}
-        </div>
-      <div className="bg-white-100 w-[340px]" >
+      </div>
+      <div className="bg-white-100 w-[340px]">
         {gyms.map((gym) => (
           <div key={gym.id}>
             <div className="p-4 flex flex-col gap-1">
@@ -132,8 +134,14 @@ function FitnessDetails() {
                 <p className="text-[25px] font-extrabold">{gym.name}</p>
                 <Share />
               </div>
-              <span className="flex text-xs font-medium gap-2 items-center"><SvgLocation className="w-[9px] h-[14px]" />{gym.address}</span>
-              <span className="flex text-xs font-medium gap-2 items-center"><Phonecall className="w-[10px] h-[10px]" />{gym.phone}</span>
+              <span className="flex text-xs font-medium gap-2 items-center">
+                <SvgLocation className="w-[9px] h-[14px]" />
+                {gym.address}
+              </span>
+              <span className="flex text-xs font-medium gap-2 items-center">
+                <Phonecall className="w-[10px] h-[10px]" />
+                {gym.phone}
+              </span>
             </div>
             <div className="border-b-[6px]"></div>
             <div className="p-4 flex flex-col gap-1">
@@ -148,9 +156,11 @@ function FitnessDetails() {
                   <p>{item.info}</p>
                   <div className="mt-3">
                     <ul>이용 혜택</ul>
-                      {item.benefits.map((benefit) => (
-                        <li className="text-gray-600 text-[10px] pl-1"><span className="text-[13px] font-medium">{benefit}</span></li>
-                      ))}
+                    {item.benefits.map((benefit, benefitIndex) => (
+                      <li key={benefitIndex} className="text-gray-600 text-[10px] pl-1">
+                        <span className="text-[13px] font-medium">{benefit}</span>
+                      </li>
+                    ))}
                   </div>
                 </div>
               ))}
@@ -167,20 +177,27 @@ function FitnessDetails() {
                 <li>토 {gym.operatingHours}</li>
                 <li>일 {gym.operatingHours}</li>
               </ul>
-              <span className="text-[13px] font-medium text-gray-600">운영시간과 휴장일은 시설 자체 사정에 따라 변동이 될 수 있으니, 유의하여 시설 이용하시길 바랍니다.</span>
+              <span className="text-[13px] font-medium text-gray-600">
+                운영시간과 휴장일은 시설 자체 사정에 따라 변동이 될 수 있으니, 유의하여 시설
+                이용하시길 바랍니다.
+              </span>
             </div>
             <div className="border-b-2"></div>
             <div className="p-4 flex flex-col gap-1">
               <p className="text-base font-bold">이용 방법</p>
-              {gym.usageMethod.map((item) => (
-                <p className="text-[13px] font-medium text-gray-600">{item}</p>
+              {gym.usageMethod.map((item, idx) => (
+                <p key={idx} className="text-[13px] font-medium text-gray-600">
+                  {item}
+                </p>
               ))}
             </div>
             <div className="border-b-2 w-[340px]"></div>
             <div className="p-4 flex flex-col gap-1">
               <p className="text-base font-bold">기타 사항</p>
-              {gym.additionalInfo.map((item) => (
-                <p className="text-[13px] font-medium text-gray-600">{item}</p>
+              {gym.additionalInfo.map((item, idx) => (
+                <p key={idx} className="text-[13px] font-medium text-gray-600">
+                  {item}
+                </p>
               ))}
             </div>
             <div className="border-b-2"></div>
@@ -190,7 +207,9 @@ function FitnessDetails() {
           </div>
         ))}
         <div className="flex flex-col items-center">
-          <button className="w-[300px] h-[46px] rounded-[5px] bg-blue-500 text-white-100 text-[15px] font-bold my-5">패스 구매하기</button>
+          <button className="w-[300px] h-[46px] rounded-[5px] bg-blue-500 text-white-100 text-[15px] font-bold my-5">
+            패스 구매하기
+          </button>
         </div>
         {/* div 반원 */}
         <div className="flex justify-between relative mt-2">
