@@ -9,17 +9,27 @@ declare global {
     namespace maps {
       function load(callback: () => void): void;
 
-      interface MapOptions {
-        center: LatLng;
-        level: number;
-      }
-
+      // 명시적으로 필요한 객체들의 타입을 선언
       class Map {
         constructor(container: HTMLElement, options: MapOptions);
       }
 
       class LatLng {
         constructor(lat: number, lng: number);
+      }
+
+      class Marker {
+        constructor(options: { position: LatLng; map: Map });
+      }
+
+      class InfoWindow {
+        constructor(options: { content: string });
+        open(map: Map, marker: Marker): void;
+      }
+
+      interface MapOptions {
+        center: LatLng | Coords;
+        level: number;
       }
 
       namespace services {
@@ -50,12 +60,16 @@ declare global {
           gotoPage: (page: number) => void;
         }
 
-        const Status: {
-          OK: "OK";
-          ZERO_RESULT: "ZERO_RESULT";
-          ERROR: "ERROR";
-        };
+        enum Status {
+          OK = "OK",
+          ZERO_RESULT = "ZERO_RESULT",
+          ERROR = "ERROR",
+        }
       }
     }
+  }
+
+  interface Window {
+    kakao: typeof kakao;
   }
 }

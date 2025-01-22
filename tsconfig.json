@@ -2,6 +2,7 @@
   "files": [],
   "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.node.json" }],
   "compilerOptions": {
+    "esModuleInterop": true,
     "baseUrl": "src",
     "typeRoots": ["./node_modules/@types", "./@types", "./node_modules/kakao.maps.d.ts"],
     "jsx": "react-jsx",
