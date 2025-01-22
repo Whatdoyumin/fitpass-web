@@ -5,7 +5,7 @@
   "compilerOptions": {
     "baseUrl": "src",
     "typeRoots": ["./node_modules/@types", "./node_modules/kakao.maps.d.ts"],
-    "types": [],
+    "types": ["prop-types"],
     "jsx": "react-jsx",
     "paths": {
       "@pages/*": ["pages/*"],

@@ -2,7 +2,8 @@
 // 2. slider로 불러오기
 // 3. 각각 usestate로 순서 받아오기
 
-import Slider, { Settings } from "react-slick";
+import Slider from "react-slick";
+import type { Settings } from "react-slick";
 import { useState } from "react";
 
 import "slick-carousel/slick/slick.css";
@@ -25,7 +26,7 @@ function FitnessDetails() {
     slidesToShow: 1,
     slidesToScroll: 1,
     arrows: false, // 화살표 없애기,
-    beforeChange: (current: number, next: number) => {
+    beforeChange: (next: number) => {
       if (typeof next === "number") setCurrentIndex(next);
     },
   };
@@ -98,7 +99,6 @@ function FitnessDetails() {
   // const handleScroll = () => {
   //   if(window.scrollY)
   // }
-
   // useEffect(() => {
   //   window.addEventListener('scroll', )
   // })
