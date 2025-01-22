@@ -3,7 +3,14 @@
   "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.node.json" }],
   "include": ["src/**/*.ts", "src/**/*.tsx", "src/types", "custom.d.ts"],
   "compilerOptions": {
+    "baseUrl": "src",
     "typeRoots": ["./node_modules/@types", "./node_modules/kakao.maps.d.ts"],
-    "types": []
+    "types": ["prop-types"],
+    "jsx": "react-jsx",
+    "paths": {
+      "@pages/*": ["pages/*"],
+      "@components/*": ["components/*"],
+      "@assets/*": ["assets/*"]
+    }
   }
 }
