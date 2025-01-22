@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { JSX, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import MyCoin from "../MyPage/MyCoin";
@@ -29,8 +29,8 @@ interface MyPageItem {
 }
 
 const paymentItems: MyPageItem[] = [
-  { id:1, icon: IcSubscribe, name: "구독하기", path: "/subscribe" },
-  { id:2, icon: IcFillDollar, name: "코인 구매하기", path: "/buy-coins" },
+  { id: 1, icon: IcSubscribe, name: "구독하기", path: "/subscribe" },
+  { id: 2, icon: IcFillDollar, name: "코인 구매하기", path: "/buy-coins" },
 ];
 
 const MyPage = () => {
@@ -58,7 +58,7 @@ const MyPage = () => {
       icon: IcMyLogout,
       name: "로그아웃",
       path: "#",
-      onClick: openLogoutModal ,
+      onClick: openLogoutModal,
     },
   ];
 
