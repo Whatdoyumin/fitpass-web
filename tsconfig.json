@@ -2,6 +2,8 @@
   "files": [],
   "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.node.json" }],
   "compilerOptions": {
+    "declaration": true,
+    "declarationDir": "dist/types",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "baseUrl": "src",
