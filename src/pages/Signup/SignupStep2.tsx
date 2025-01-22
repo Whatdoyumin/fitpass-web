@@ -246,19 +246,17 @@ function SignupStep2() {
       <button
         onClick={handleNextStep}
         disabled={!isFormValid}
-        className={`w-screen h-[86px] text-[20px] font-medium text-white-100 ${
+        className={`fixed bottom-0 left-0 w-screen h-[86px] text-[20px] font-medium text-white-100 ${
           isFormValid ? "bg-blue-500 hover:bg-blue-400" : "bg-gray-400"
         }`}
         style={{
           paddingTop: "17px",
           paddingBottom: "39px",
-          height: "86px",
         }}
       >
         동의하고 가입하기
       </button>
     </div>
-    </Portal>
   );
 }
 
