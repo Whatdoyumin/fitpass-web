@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import FindPasswordForm from "./FindPasswordForm";
 import ChangePasswordForm from "./ChangePasswordForm";
 
@@ -60,7 +60,7 @@ function FindPassword() {
   /** 타이머 동작 */
   useEffect(() => {
     let timerInterval: NodeJS.Timeout;
-  
+
     if (isTimerRunning) {
       timerInterval = setInterval(() => {
         setTimer((prevTimer) => {
@@ -76,10 +76,9 @@ function FindPassword() {
         });
       }, 1000);
     }
-  
+
     return () => clearInterval(timerInterval);
   }, [isTimerRunning]);
-  
 
   /** 다음 단계로 이동 */
   const handleNextStep = () => {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import InputField from "./Signup/InputField";
 import { useNavigate } from "react-router-dom";
 
@@ -17,16 +17,24 @@ function FindId() {
 
   /** 타이머 시작 */
   useEffect(() => {
-    let timerInterval: NodeJS.Timeout;
+    let timerInterval: ReturnType<typeof setInterval> | null = null;
+
     if (isTimerRunning && timer > 0) {
       timerInterval = setInterval(() => {
         setTimer((prev) => prev - 1);
       }, 1000);
     } else if (timer === 0) {
-      clearInterval(timerInterval);
+      if (timerInterval) {
+        clearInterval(timerInterval);
+      }
       setIsTimerRunning(false);
     }
-    return () => clearInterval(timerInterval);
+
+    return () => {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+      }
+    };
   }, [isTimerRunning, timer]);
 
   /** 휴대폰 번호 확인 */
@@ -141,7 +149,7 @@ function FindId() {
             </div>
           )}
 
-          {isCodeConfirmed && (
+          {isCodeConfirmed && isPhoneVerified && (
             <span className="text-[15px] text-green-500 mt-[10px]">인증이 완료되었습니다.</span>
           )}
         </div>
@@ -162,16 +170,12 @@ function FindId() {
           <div className="bg-white-100 rounded-lg pt-5 p-[15px] w-[300px] text-center z-60">
             <h2 className="text-[18px] font-medium text-black-700 mb-[10px]">회원님의 아이디는</h2>
             <p className="text-[12px] font-medium text-gray-500 mb-[35px]">abcd123 입니다</p>
-            <button
-              onClick={closeModal}
-              className="blueButton w-[270px] h-[46px]"
-            >
+            <button onClick={closeModal} className="blueButton w-[270px] h-[46px]">
               확인
             </button>
           </div>
         </div>
-)}
-
+      )}
     </div>
   );
 }

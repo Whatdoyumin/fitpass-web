@@ -5,7 +5,6 @@ import FitnessCard from "../../components/FitnessCard";
 
 // 피트니스 시설 살펴보기
 function ExploreFitness() {
-
   const dropdown: string[] = ["거리순", "저가순", "고가순"];
   const category: string[] = ["헬스", "필라테스", "요가", "기타"];
 
@@ -13,28 +12,33 @@ function ExploreFitness() {
     name: string;
     address: string;
     distance: string;
-  }
+    category: string;
+  };
 
   const fitness: Fitness[] = [
     {
       name: "동국대 헬스장",
       address: "서울특별시 중구 필동로 1길 30",
-      distance: "1.1km"
+      distance: "1.1km",
+      category: "헬스",
     },
     {
       name: "로아짐 수유역점",
       address: "서울 강북구 노해로8길 22 경남아너스빌 3층",
-      distance: "1.1km"
+      distance: "1.1km",
+      category: "헬스",
     },
     {
       name: "On 필라테스 센터",
       address: "서울 강북구 한천로 1093 농협건물 2층 (수유동)",
-      distance: "2.1km"
+      distance: "2.1km",
+      category: "필라테스",
     },
     {
       name: "진짜 요가센터",
       address: "중구 퇴계로 59000길",
-      distance: "2.6km"
+      distance: "2.6km",
+      category: "요가",
     },
   ];
 
@@ -43,7 +47,16 @@ function ExploreFitness() {
 
   const handleCategoryChange = (category: string | null) => {
     setSelectedCategory(category);
-  }
+  };
+
+  const filteredFitenss = fitness.filter(
+    (f) => !selectedCategory || f.category === selectedCategory
+  );
+
+  const sortedFitness =
+    selectedSort === "거리순"
+      ? filteredFitenss.sort((a, b) => parseFloat(a.distance) - parseFloat(b.distance))
+      : filteredFitenss;
 
   return (
     <div className="bg-white-200 px-5 py-6 h-full">
@@ -55,7 +68,7 @@ function ExploreFitness() {
       </div>
       <CategorySlide category={category} onCategoryChange={handleCategoryChange} />
       <div className="flex flex-col items-center">
-        <FitnessCard fitness={fitness} />
+        <FitnessCard fitness={sortedFitness} />
       </div>
     </div>
   );

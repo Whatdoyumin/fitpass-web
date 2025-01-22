@@ -1,4 +1,4 @@
-import { ShareIcon } from "../assets/svg";
+import { ShareIcon } from "../../assets/svg";
 
 const Share = () => {
   return(
