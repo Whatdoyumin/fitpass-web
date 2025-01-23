@@ -69,7 +69,7 @@ function Signin() {
       </div>
 
       {signinError ? (
-        <span className="text-red-500 text-[13px] mb-[18px]">{signinError}</span>
+        <span className="text-red-500 text-[13px] mb-[18px] w-[321px]">{signinError}</span>
       ): (
         <span className="h-[37.5px]"></span>
       )}
