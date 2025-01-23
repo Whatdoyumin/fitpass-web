@@ -3,6 +3,7 @@ import InputField from "./InputField";
 import { useNavigate, useLocation } from "react-router-dom";
 import { MoreTerms } from "../../assets/svg";
 import { signUp } from "../../apis/signup/signup";
+import { verifyCode, verifyPhoneNumber } from "../../apis/verify/verify";
 
 function SignupStep2() {
   const location = useLocation();
@@ -68,8 +69,9 @@ function SignupStep2() {
   };
 
   /** 인증하기 버튼 핸들러 */
-  const handleSendCode = () => {
+  const handleSendCode = async () => {
     if (validatePhoneNumber()) {
+      await verifyCode(phoneNumber);
       setIsCodeSent(true);
       setIsTimerRunning(true);
       setTimer(180); // 3분 타이머 시작
@@ -77,11 +79,16 @@ function SignupStep2() {
   };
 
   /** 인증번호 확인 */
-  const handleVerifyCode = () => {
-    if (verificationCode === "123456") {
-      setIsCodeConfirmed(true);
-      setIsPhoneVerified(true);
-      setIsTimerRunning(false);
+  const handleVerifyCode = async() => {
+    if (verificationCode.length === 6) {
+      try {
+        await verifyPhoneNumber(phoneNumber, verificationCode);
+        setIsPhoneVerified(true);
+        setIsCodeConfirmed(true);
+        setIsTimerRunning(false);
+      } catch (error) {
+        alert(error.message);
+      }
     }
   };
 
@@ -144,7 +151,7 @@ function SignupStep2() {
                 className={`h-[50px] px-[20px] rounded-[5px] text-[15px] font-medium ${
                   validatePhoneNumber()
                     ? "bg-blue-500 text-white-100 hover:bg-blue-400"
-                    : "bg-gray-400 text-white-100"
+                    : "bg-blue-250 text-white-100"
                 }`}
               >
                 인증하기

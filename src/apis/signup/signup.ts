@@ -22,6 +22,7 @@ export const signUp = async (name, id, password, phoneNumber) => {
   }
 };
 
+// 아이디 중복 확인 API
 export const checkID = async (id) => {
   try {
     const response = await axios.get(`${config.apiBaseUrl}/auth/check/login-id`, {
