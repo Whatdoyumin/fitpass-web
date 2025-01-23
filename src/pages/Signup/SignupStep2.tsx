@@ -18,6 +18,7 @@ function SignupStep2() {
   const [isCodeConfirmed, setIsCodeConfirmed] = useState(false);
   const [timer, setTimer] = useState(180); // 3분 타이머
   const [isTimerRunning, setIsTimerRunning] = useState(false);
+  const [codeError, setCodeError] = useState("");
 
   const [agreements, setAgreements] = useState({
     all: false,
@@ -83,11 +84,12 @@ function SignupStep2() {
     if (verificationCode.length === 6) {
       try {
         await verifyPhoneNumber(phoneNumber, verificationCode);
+        setCodeError("");
         setIsPhoneVerified(true);
         setIsCodeConfirmed(true);
         setIsTimerRunning(false);
       } catch (error) {
-        alert(error.message);
+        setCodeError(error.message);
       }
     }
   };
@@ -187,8 +189,11 @@ function SignupStep2() {
               </div>
             )}
 
+            {/* 인증번호 오류 메시지 */}
+            {codeError && <span className="text-red-500 text-[13px] mt-[10px]">{codeError}</span>}
+            {/* 인증 완료 메시지 */}
             {isCodeConfirmed && (
-              <span className="text-[15px] text-green-500 mt-[10px]">확인되었습니다.</span>
+              <span className="text-[13px] text-green-500 mt-[10px]">확인되었습니다.</span>
             )}
           </div>
         </div>
