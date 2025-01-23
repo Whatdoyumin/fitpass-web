@@ -5,6 +5,14 @@ import { MoreTerms } from "../../assets/svg";
 import { signUp } from "../../apis/signup/signup";
 import { verifyCode, verifyPhoneNumber } from "../../apis/verify/verify";
 
+interface Agreements {
+  all: boolean;
+  terms: boolean;
+  location: boolean;
+  thirdParty: boolean;
+  marketing: boolean;
+}
+
 function SignupStep2() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -20,7 +28,7 @@ function SignupStep2() {
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [codeError, setCodeError] = useState("");
 
-  const [agreements, setAgreements] = useState({
+  const [agreements, setAgreements] = useState<Agreements>({
     all: false,
     terms: false,
     location: false,
@@ -41,7 +49,7 @@ function SignupStep2() {
   };
 
   /** 개별 약관 핸들러 */
-  const handleAgreementChange = (key: keyof typeof agreements) => {
+  const handleAgreementChange = (key: keyof Agreements) => {
     setAgreements((prev) => {
       const updated = { ...prev, [key]: !prev[key] };
       updated.all = Object.values(updated).every(Boolean);
@@ -51,7 +59,7 @@ function SignupStep2() {
 
   /** 타이머 시작 */
   useEffect(() => {
-    let timerInterval: NodeJS.Timeout;
+    let timerInterval: NodeJS.Timeout | undefined = undefined;
     if (isTimerRunning && timer > 0) {
       timerInterval = setInterval(() => {
         setTimer((prev) => prev - 1);
@@ -244,7 +252,7 @@ function SignupStep2() {
                 <div className="flex items-center gap-[17px]">
                   <input
                     type="checkbox"
-                    checked={agreements[item.key]}
+                    checked={agreements[item.key as keyof Agreements]}
                     onChange={() => handleAgreementChange(item.key as keyof typeof agreements)}
                     className="w-[15px] h-[15px]"
                   />

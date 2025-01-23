@@ -2,20 +2,14 @@ import { useEffect, useState } from "react";
 import SearchHeader from "../components/SearchHeader";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
-declare global {
-  interface Window {
-    kakao: typeof kakao;
-  }
-}
-
 const SearchLocation = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const initialSearchValue = searchParams.get("q");
-  const [searchValue, setSearchValue] = useState(initialSearchValue);
-  const [places, setPlaces] = useState<string[]>([]);
-  const [pagination, setPagination] = useState<kakao.maps.services.Place[]>(null);
-  const [errorMessage, setErrorMessage] = useState<kakao.maps.services.Pagination | null>(null);
+  const [searchValue, setSearchValue] = useState<string>(initialSearchValue ?? "");
+  const [places, setPlaces] = useState<kakao.maps.services.PlacesSearchResultItem[]>([]);
+  const [pagination, setPagination] = useState<kakao.maps.services.Pagination | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     if (initialSearchValue) {
@@ -55,7 +49,7 @@ const SearchLocation = () => {
     searchPlaces(keyword);
   };
 
-  const handlePlaceClick = (place: kakao.maps.services.PlacesSearchResulItem) => {
+  const handlePlaceClick = (place: kakao.maps.services.PlacesSearchResultItem) => {
     const { place_name, address_name, x, y } = place;
     navigate(
       `/location-detail?name=${encodeURIComponent(place_name)}&address=${encodeURIComponent(

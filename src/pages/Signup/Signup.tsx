@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import InputField from "./InputField";
 import { useNavigate } from "react-router-dom";
 import { checkID } from "../../apis/signup/signup";
@@ -81,32 +81,34 @@ function Signup() {
         {idError && <span className="text-red-500 text-[13px]">{idError}</span>}
       </div>
 
-      {/* 비밀번호 입력창 */}
-      <div className="w-full flex flex-col gap-[10px]">
-        <label htmlFor="password" className="text-[16px] font-medium text-black-700">
-          비밀번호
-        </label>
-        <InputField
-          type="password"
-          placeholder="비밀번호를 입력해주세요"
-          isPassword={true}
-          value={password}
-          onChange={(e) => validatePassword(e.target.value)}
-          hasError={!!passwordError}
-        />
-        {passwordError && <span className="text-red-500 text-[13px]">{passwordError}</span>}
+        {/* 비밀번호 입력창 */}
+        <div className="w-full flex flex-col gap-[10px]">
+          <label htmlFor="password" className="text-[16px] font-medium text-black-700">
+            비밀번호
+          </label>
+          <InputField
+            type="password"
+            placeholder="비밀번호를 입력해주세요"
+            isPassword={true}
+            value={password}
+            onChange={(e) => validatePassword(e.target.value)}
+            hasError={!!passwordError}
+          />
+          {passwordError && <span className="text-red-500 text-[13px]">{passwordError}</span>}
 
-        {/* 비밀번호 확인 입력창 */}
-        <InputField
-          type="password"
-          placeholder="비밀번호를 재확인해주세요"
-          isPassword={true}
-          value={confirmPassword}
-          onChange={(e) => validateConfirmPassword(e.target.value)}
-          hasError={!!confirmPasswordError}
-        />
-        {confirmPasswordError && <span className="text-red-500 text-[13px]">{confirmPasswordError}</span>}
-      </div>
+          {/* 비밀번호 확인 입력창 */}
+          <InputField
+            type="password"
+            placeholder="비밀번호를 재확인해주세요"
+            isPassword={true}
+            value={confirmPassword}
+            onChange={(e) => validateConfirmPassword(e.target.value)}
+            hasError={!!confirmPasswordError}
+          />
+          {confirmPasswordError && (
+            <span className="text-red-500 text-[13px]">{confirmPasswordError}</span>
+          )}
+        </div>
 
       {/* 다음 단계 버튼 */}
       <button
