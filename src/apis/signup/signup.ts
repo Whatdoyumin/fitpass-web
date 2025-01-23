@@ -15,8 +15,22 @@ export const signUp = async (name, id, password, phoneNumber) => {
         "marketingAgreed": true
       });
 
+      console.log(response.data);
     return response.data;
   } catch (error) {
     throw new Error(error.response?.data?.message || '회원가입에 실패했습니다.');
   }
 };
+
+export const checkID = async (id) => {
+  try {
+    const response = await axios.get(`${config.apiBaseUrl}/auth/check/login-id`, {
+      params: {
+        loginId: id,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || '아이디 중복 확인에 실패했습니다.');
+  }
+}

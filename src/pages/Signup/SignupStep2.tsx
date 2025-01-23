@@ -1,17 +1,21 @@
 import { useState, useEffect } from "react";
 import InputField from "./InputField";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { MoreTerms } from "../../assets/svg";
 import { signUp } from "../../apis/signup/signup";
 
 function SignupStep2() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { id, password } = location.state || {};
+
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isPhoneVerified, setIsPhoneVerified] = useState(false);
   const [verificationCode, setVerificationCode] = useState("");
   const [isCodeSent, setIsCodeSent] = useState(false);
   const [isCodeConfirmed, setIsCodeConfirmed] = useState(false);
-  const [timer, setTimer] = useState(180); // 3분 (180초)
+  const [timer, setTimer] = useState(180); // 3분 타이머
   const [isTimerRunning, setIsTimerRunning] = useState(false);
 
   const [agreements, setAgreements] = useState({
@@ -21,8 +25,6 @@ function SignupStep2() {
     thirdParty: false,
     marketing: false,
   });
-
-  const navigate = useNavigate();
 
   /** 전체 동의 핸들러 */
   const handleAllAgreement = () => {
@@ -95,7 +97,7 @@ function SignupStep2() {
   const handleNextStep = async () => {
     if (isFormValid) {
       try {
-        await signUp(name, "idtest", "pwtest123", phoneNumber);
+        await signUp(name, id, password, phoneNumber);
         navigate("/signin");
       } catch (error) {
         alert(error.message);
