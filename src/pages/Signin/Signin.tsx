@@ -10,9 +10,14 @@ import {
 } from "../../assets/svg";
 import InputField from "./InputField";
 import { useNavigate } from "react-router-dom";
+import { signIn } from "../../apis/signin/signin";
+import { useState } from "react";
 
 function Signin() {
-  const navigate = useNavigate(); // 페이지 이동을 위한 useNavigate 훅 사용
+  const navigate = useNavigate();
+  const [id, setId] = useState("");
+  const [password, setPassword] = useState("");
+  const [signinError, setSigninError] = useState("");
 
   /** 회원가입 페이지로 이동 */
   const handleSignupRedirect = () => {
@@ -27,17 +32,26 @@ function Signin() {
     navigate("/find-password");
   }
 
+  const handleSignin = async () => {
+    try {
+      await signIn(id, password);
+      navigate("/");
+    } catch (error) {
+      setSigninError(error.message);
+    }
+  };
+
   return (
     <div className="w-full max-w-content flex flex-col items-center">
-      {/* 제목 */}
       <FitpassLogo className="w-[176px] h-[48px] mb-[40px]" />
 
-      {/* 입력 필드 */}
-      <div className="flex flex-col gap-[19px] mb-[40px]">
+      <div className="flex flex-col gap-[19px] mb-[17px]">
         {/* 아이디 입력창 */}
         <InputField
           type="text"
           placeholder="아이디 입력"
+          value={id}
+          onChange={(e) => setId(e.target.value)}
           icon={<User />}
           iconFocus={<UserFocus />}
         />
@@ -46,11 +60,19 @@ function Signin() {
         <InputField
           type="password"
           placeholder="비밀번호 입력"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           icon={<Password />}
           iconFocus={<PasswordFocus />}
           isPassword={true}
         />
       </div>
+
+      {signinError ? (
+        <span className="text-red-500 text-[13px] mb-[18px]">{signinError}</span>
+      ): (
+        <span className="h-[37.5px]"></span>
+      )}
 
       {/* 로그인 버튼 */}
       <button
@@ -67,12 +89,12 @@ function Signin() {
           rounded-[5px]
           hover:bg-blue-400
         "
+        onClick={handleSignin}
       >
         로그인
       </button>
 
-      <div className="flex justify-between w-[321px] text-12px text-gray-450 mt-[30px]">
-        {/* 자동 로그인 */}
+      <div className="flex justify-between w-[321px] text-[12px] text-gray-450 mt-[20.5px]">
         <div className="inline-flex items-center gap-[12px]">
           <input
             type="checkbox"
@@ -99,7 +121,6 @@ function Signin() {
         아이디 찾기
       </button>
       <span>|</span>
-      {/* 비밀번호 찾기 */}
       <button
         onClick={handleFindPassword}
         className="hover:underline focus:outline-none text-blue-500"
@@ -116,7 +137,6 @@ function Signin() {
         <PlatformGoogle className="w-[60px] h-[60px]" />
       </div>
 
-      {/* 회원가입 */}
       <button
         onClick={handleSignupRedirect}
         className="
