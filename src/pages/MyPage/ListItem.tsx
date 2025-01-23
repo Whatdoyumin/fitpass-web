@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import IcRightArrow from "../../assets/svg/IcRightArrow";
+import { JSX } from "react";
 
 interface ListItemProps {
   icon: (props: React.SVGProps<SVGSVGElement>) => JSX.Element;
