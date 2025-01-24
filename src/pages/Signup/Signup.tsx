@@ -56,7 +56,7 @@ function Signup() {
   const handleNextStep = async () => {
     if (isFormValid) {
       try {
-        await checkID(id);
+        await checkID({id});
         navigate("/signup/step2", { state: { id, password } });
       } catch (error) {
         setIdError(error.message);

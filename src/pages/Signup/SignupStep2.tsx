@@ -21,7 +21,7 @@ function SignupStep2() {
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isPhoneVerified, setIsPhoneVerified] = useState(false);
-  const [verificationCode, setVerificationCode] = useState("");
+  const [certificationCode, setCertificationCode] = useState("");
   const [isCodeSent, setIsCodeSent] = useState(false);
   const [isCodeConfirmed, setIsCodeConfirmed] = useState(false);
   const [timer, setTimer] = useState(180); // 3분 타이머
@@ -89,9 +89,9 @@ function SignupStep2() {
 
   /** 인증번호 확인 */
   const handleVerifyCode = async() => {
-    if (verificationCode.length === 6) {
+    if (certificationCode.length === 6) {
       try {
-        await verifyPhoneNumber(phoneNumber, verificationCode);
+        await verifyPhoneNumber({phoneNumber, certificationCode});
         setCodeError("");
         setIsPhoneVerified(true);
         setIsCodeConfirmed(true);
@@ -114,7 +114,7 @@ function SignupStep2() {
   const handleNextStep = async () => {
     if (isFormValid) {
       try {
-        await signUp(name, id, password, phoneNumber);
+        await signUp({name, id, password, phoneNumber});
         navigate("/signin");
       } catch (error) {
         alert(error.message);
@@ -175,8 +175,8 @@ function SignupStep2() {
                   <input
                     type="text"
                     placeholder="인증번호를 입력해주세요"
-                    value={verificationCode}
-                    onChange={(e) => setVerificationCode(e.target.value)}
+                    value={certificationCode}
+                    onChange={(e) => setCertificationCode(e.target.value)}
                     className="w-full outline-none text-[14px] font-medium placeholder-gray-400"
                   />
                   <span className="text-red-500 text-[14px] absolute right-[15px]">
@@ -185,9 +185,9 @@ function SignupStep2() {
                 </div>
                 <button
                   onClick={handleVerifyCode}
-                  disabled={verificationCode.length !== 6}
+                  disabled={certificationCode.length !== 6}
                   className={`h-[50px] px-[20px] rounded-[5px] text-[15px] font-medium ${
-                    verificationCode.length === 6
+                    certificationCode.length === 6
                       ? "bg-blue-500 text-white-100 hover:bg-blue-400"
                       : "bg-blue-250 text-white-100"
                   }`}

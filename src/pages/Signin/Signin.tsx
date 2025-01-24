@@ -33,8 +33,13 @@ function Signin() {
   }
 
   const handleSignin = async () => {
+    if (!id || !password) {
+      setSigninError("아이디와 비밀번호를 입력해주세요.");
+      return;
+    }
+    
     try {
-      await signIn(id, password);
+      await signIn({id, password});
       navigate("/");
     } catch (error) {
       setSigninError(error.message);

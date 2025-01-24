@@ -1,7 +1,12 @@
+export interface TSignInData {
+    id: string;
+    password: string;
+    }
+
 import axios from 'axios';
 import config from '../config';
 
-export const signIn = async (id, password) => {
+export const signIn = async ({ id, password }: TSignInData) => {
   try {
     const response = await axios.post(`${config.apiBaseUrl}/auth/login`, {
         "loginId": id,
