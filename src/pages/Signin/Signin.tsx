@@ -4,14 +4,14 @@ import {
   User, 
   PasswordFocus, 
   UserFocus, 
-  PlatformGoogle, 
-  PlatformKaKao, 
-  PlatformNaver 
 } from "../../assets/svg";
 import InputField from "./InputField";
 import { useNavigate } from "react-router-dom";
 import { signIn } from "../../apis/signin/signin";
 import { useState } from "react";
+import KakaoLoginButton from "../../components/socialLogin/KakaoLoginButton";
+import GoogleLoginButton from "../../components/socialLogin/GoogleLoginButton";
+import NaverLoginButton from "../../components/socialLogin/NaverLoginButton";
 
 function Signin() {
   const navigate = useNavigate();
@@ -132,9 +132,9 @@ function Signin() {
 
       {/* 소셜 로그인 */}
       <div className="flex gap-[35px] mt-[45.5px]">
-        <PlatformKaKao className="w-[60px] h-[60px]" />
-        <PlatformNaver className="w-[60px] h-[60px]" />
-        <PlatformGoogle className="w-[60px] h-[60px]" />
+        <KakaoLoginButton />
+        <NaverLoginButton />
+        <GoogleLoginButton />
       </div>
 
       <button
