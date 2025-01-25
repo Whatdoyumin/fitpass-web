@@ -54,7 +54,7 @@ function Home() {
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
-    arrows: false,  // 화살표 없애기
+    arrows: false, // 화살표 없애기
     dotsClass: "test-css",
   };
 
@@ -65,7 +65,7 @@ function Home() {
     speed: 500,
     slidesToShow: 3,
     slidesToScroll: 1,
-    arrows: false,  // 화살표 없애기
+    arrows: false, // 화살표 없애기
   };
 
   return (
@@ -83,7 +83,7 @@ function Home() {
           </div>
         </Slider>
       </div>
-      
+
       <div className="w-[390px] h-[500px] rounded-t-[15px] bg-white-200 absolute top-[370px] z-5 ">
         {/* 추천 운동시설 */}
         <div className="w-[390px] h-[177px] pl-4 overflow-hidden mt-6">
