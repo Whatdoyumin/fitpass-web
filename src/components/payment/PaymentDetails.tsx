@@ -5,7 +5,7 @@ import { TPaymentProps } from "../../type/payment";
 interface IPaymentDetailsProps {
   item: {
     coinAmount?: number;
-    price: string;
+    price: number;
     coinExp?: number | undefined;
     option_ko?: string;
   };
@@ -49,6 +49,10 @@ const PaymentDetails = ({ type, item, paymentMethod }: TPaymentProps & IPaymentD
     }
   };
 
+  const formatPrice = (price: number) => {
+    return price.toLocaleString();
+  };
+
   return (
     <div className="w-full min-h-14 bg-white-100 px-[25px] gap-3 border-t-8 border-white-200">
       {/* 접히기 제어 상단 부분 */}
@@ -66,7 +70,7 @@ const PaymentDetails = ({ type, item, paymentMethod }: TPaymentProps & IPaymentD
           <div className="w-full bg-white-200 px-5 py-6 flex flex-col gap-2 rounded-7">
             <span className="w-full flex justify-between items-center">
               <p className="text-16px text-gray-600">결제 금액</p>
-              <p className="text-16px text-black-700">{item.price}원</p>
+              <p className="text-16px text-black-700">{formatPrice(item.price)}원</p>
             </span>
             <span className="w-full flex justify-between items-center">
               <p className="text-16px text-gray-600">플랜</p>
