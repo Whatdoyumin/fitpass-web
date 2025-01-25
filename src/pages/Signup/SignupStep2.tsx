@@ -1,28 +1,40 @@
 import { useState, useEffect } from "react";
 import InputField from "./InputField";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { MoreTerms } from "../../assets/svg";
-import Portal from "../../components/Portal";
+import { signUp } from "../../apis/signup/signup";
+import { verifyCode, verifyPhoneNumber } from "../../apis/verify/verify";
+
+interface Agreements {
+  all: boolean;
+  terms: boolean;
+  location: boolean;
+  thirdParty: boolean;
+  marketing: boolean;
+}
 
 function SignupStep2() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { id, password } = location.state || {};
+
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isPhoneVerified, setIsPhoneVerified] = useState(false);
   const [verificationCode, setVerificationCode] = useState("");
   const [isCodeSent, setIsCodeSent] = useState(false);
   const [isCodeConfirmed, setIsCodeConfirmed] = useState(false);
-  const [timer, setTimer] = useState(180); // 3분 (180초)
+  const [timer, setTimer] = useState(180); // 3분 타이머
   const [isTimerRunning, setIsTimerRunning] = useState(false);
+  const [codeError, setCodeError] = useState("");
 
-  const [agreements, setAgreements] = useState({
+  const [agreements, setAgreements] = useState<Agreements>({
     all: false,
     terms: false,
     location: false,
     thirdParty: false,
     marketing: false,
   });
-
-  const navigate = useNavigate();
 
   /** 전체 동의 핸들러 */
   const handleAllAgreement = () => {
@@ -37,7 +49,7 @@ function SignupStep2() {
   };
 
   /** 개별 약관 핸들러 */
-  const handleAgreementChange = (key: keyof typeof agreements) => {
+  const handleAgreementChange = (key: keyof Agreements) => {
     setAgreements((prev) => {
       const updated = { ...prev, [key]: !prev[key] };
       updated.all = Object.values(updated).every(Boolean);
@@ -47,7 +59,7 @@ function SignupStep2() {
 
   /** 타이머 시작 */
   useEffect(() => {
-    let timerInterval: NodeJS.Timeout;
+    let timerInterval: NodeJS.Timeout | undefined = undefined;
     if (isTimerRunning && timer > 0) {
       timerInterval = setInterval(() => {
         setTimer((prev) => prev - 1);
@@ -66,8 +78,9 @@ function SignupStep2() {
   };
 
   /** 인증하기 버튼 핸들러 */
-  const handleSendCode = () => {
+  const handleSendCode = async () => {
     if (validatePhoneNumber()) {
+      await verifyCode(phoneNumber);
       setIsCodeSent(true);
       setIsTimerRunning(true);
       setTimer(180); // 3분 타이머 시작
@@ -75,11 +88,17 @@ function SignupStep2() {
   };
 
   /** 인증번호 확인 */
-  const handleVerifyCode = () => {
-    if (verificationCode === "123456") {
-      setIsCodeConfirmed(true);
-      setIsPhoneVerified(true);
-      setIsTimerRunning(false);
+  const handleVerifyCode = async() => {
+    if (verificationCode.length === 6) {
+      try {
+        await verifyPhoneNumber(phoneNumber, verificationCode);
+        setCodeError("");
+        setIsPhoneVerified(true);
+        setIsCodeConfirmed(true);
+        setIsTimerRunning(false);
+      } catch (error) {
+        setCodeError(error.message);
+      }
     }
   };
 
@@ -92,30 +111,33 @@ function SignupStep2() {
     agreements.location &&
     agreements.thirdParty;
 
-  /** 다음 단계 핸들러 */
-  const handleNextStep = () => {
+  const handleNextStep = async () => {
     if (isFormValid) {
-      navigate("/signin");
+      try {
+        await signUp(name, id, password, phoneNumber);
+        navigate("/signin");
+      } catch (error) {
+        alert(error.message);
+      }
     }
   };
 
   return (
-    <Portal>
-      <div className="w-full max-w-content flex flex-col items-center h-screen relative px-[20px] pt-[84px]">
-        {/* 스크롤 가능 영역 */}
-        <div className="flex-grow w-full overflow-auto flex flex-col gap-[20px]">
-          {/* 이름 입력창 */}
-          <div className="w-full flex flex-col gap-[10px]">
-            <label htmlFor="name" className="text-[16px] font-medium text-black-700">
-              이름
-            </label>
-            <InputField
-              type="text"
-              placeholder="이름을 입력해주세요"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </div>
+      <div className="w-full max-w-content flex flex-col items-center h-screen relative px-5 pt-[29px]">
+      {/* 스크롤 가능 영역 */}
+      <div className="flex-grow w-full overflow-auto flex flex-col gap-[20px]">
+        {/* 이름 입력창 */}
+        <div className="w-full flex flex-col gap-[10px]">
+          <label htmlFor="name" className="text-[16px] font-medium text-black-700">
+            이름
+          </label>
+          <InputField
+            type="text"
+            placeholder="이름을 입력해주세요"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </div>
 
           {/* 휴대폰 입력창 */}
           <div className="w-full flex flex-col gap-[10px]">
@@ -139,7 +161,7 @@ function SignupStep2() {
                 className={`h-[50px] px-[20px] rounded-[5px] text-[15px] font-medium ${
                   validatePhoneNumber()
                     ? "bg-blue-500 text-white-100 hover:bg-blue-400"
-                    : "bg-gray-400 text-white-100"
+                    : "bg-blue-250 text-white-100"
                 }`}
               >
                 인증하기
@@ -175,8 +197,11 @@ function SignupStep2() {
               </div>
             )}
 
+            {/* 인증번호 오류 메시지 */}
+            {codeError && <span className="text-red-500 text-[13px] mt-[10px]">{codeError}</span>}
+            {/* 인증 완료 메시지 */}
             {isCodeConfirmed && (
-              <span className="text-[15px] text-green-500 mt-[10px]">확인되었습니다.</span>
+              <span className="text-[13px] text-green-500 mt-[10px]">확인되었습니다.</span>
             )}
           </div>
         </div>
@@ -227,7 +252,7 @@ function SignupStep2() {
                 <div className="flex items-center gap-[17px]">
                   <input
                     type="checkbox"
-                    checked={agreements[item.key]}
+                    checked={agreements[item.key as keyof Agreements]}
                     onChange={() => handleAgreementChange(item.key as keyof typeof agreements)}
                     className="w-[15px] h-[15px]"
                   />
@@ -239,23 +264,21 @@ function SignupStep2() {
           </div>
         </div>
 
-        {/* 하단 버튼 */}
-        <button
-          onClick={handleNextStep}
-          disabled={!isFormValid}
-          className={`w-screen h-[86px] text-[20px] font-medium text-white-100 ${
-            isFormValid ? "bg-blue-500 hover:bg-blue-400" : "bg-gray-400"
-          }`}
-          style={{
-            paddingTop: "17px",
-            paddingBottom: "39px",
-            height: "86px",
-          }}
-        >
-          동의하고 가입하기
-        </button>
-      </div>
-    </Portal>
+      {/* 하단 버튼 */}
+      <button
+        onClick={handleNextStep}
+        disabled={!isFormValid}
+        className={`fixed bottom-0 left-0 w-screen h-[86px] text-[20px] font-medium text-white-100 ${
+          isFormValid ? "bg-blue-500 hover:bg-blue-400" : "bg-gray-400"
+        }`}
+        style={{
+          paddingTop: "17px",
+          paddingBottom: "39px",
+        }}
+      >
+        동의하고 가입하기
+      </button>
+    </div>
   );
 }
 

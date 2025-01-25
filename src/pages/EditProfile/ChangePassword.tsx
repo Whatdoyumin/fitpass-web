@@ -48,16 +48,16 @@ function ChangePassword() {
   const handleNewPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setNewPassword(value);
-  
+
     const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)[A-Za-z\d]{8,20}$/;
-  
+
     // 비밀번호가 빈 값일 경우 에러 제거
     if (value === "") {
       setIsPasswordValid(true);
-      setPasswordError(""); 
-      return; 
+      setPasswordError("");
+      return;
     }
-  
+
     // 비밀번호 유효성 검사
     if (!passwordRegex.test(value)) {
       setPasswordError("영어와 숫자를 사용하여 8-20자로 입력해주세요.");
@@ -70,7 +70,6 @@ function ChangePassword() {
       }
     }
   };
-  
 
   const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;

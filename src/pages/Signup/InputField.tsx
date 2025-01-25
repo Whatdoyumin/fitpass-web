@@ -60,9 +60,11 @@ function InputField({
           tracking-[-0.3px]
           ${isFocused ? "text-gray-500" : "text-gray-400"}
         `}
-        style={{
-          WebkitTextSecurity: isPassword && !isPasswordVisible ? "disc" : "none",
-        }}
+        style={
+          isPassword && !isPasswordVisible
+            ? ({ WebkitTextSecurity: "disc" } as React.CSSProperties)
+            : ({ WebkitTextSecurity: "none" } as React.CSSProperties)
+        }
       />
 
       {/* 오른쪽 아이콘 (비밀번호 표시/숨김 토글) */}
