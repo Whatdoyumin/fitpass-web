@@ -1,36 +1,36 @@
 import Slider, { Settings } from "react-slick";
-import { useState } from "react";
+// import { useState } from "react";
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 import CardCol from "./CardCol";
-import SvgProfile from "../../assets/svg/Profile";
-import Ad1 from "../../assets/img/ad1.jpeg";
+import RequireLogin from "../../components/RequireLogin";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 
-// interface FetchParms  {
-//   latitude: number;
-//   longitude: number;
-// };
-
-// interface ApiResponse {
-//   isSuccess: boolean;
-//   code: string;
-//   message: string;
-//   result: RecommendList[];
-// }
+import Ad1 from "../../assets/img/ad1.jpeg";
+import Ad2 from "../../assets/img/ad2.jpg";
+import Ad3 from "../../assets/img/ad3.jpg";
 
 export interface RecommendList {
   fitnessId: number;
   name: string;
   distance: number;
+  imageUrl: string;
 }
 
 function Home() {
 
-  // console.log(localStorage.getItem('lat'));
+  const [recentWatched, setRecentWatched] = useState([]);
+  
+  useEffect(() => {
+    const stored = JSON.parse(localStorage.getItem('watched') || '[]');
+    setRecentWatched(stored);
+
+    console.log(recentWatched);
+  }, [])
 
   const fetchRecommend = async () => {
     const response = await axios.get("http://15.165.128.52:8080/fitness/recommend");
@@ -43,6 +43,9 @@ function Home() {
   });
 
   const datas = data?.data.result;
+
+  // 로그인 여부
+  const accessToken = localStorage.getItem('accessToken');
 
   // 광고 슬라이드
   const adSettings: Settings = {
@@ -72,8 +75,12 @@ function Home() {
           <div>
             <img src={Ad1} alt="광고 이미지1" className="w-[294px] h-[240px] mx-auto"/>
           </div>
-          <div className="text-white-100">광고 이미지2</div>
-          <div className="text-white-100">광고 이미지3</div>
+          <div>
+            <img src={Ad2} alt="광고 이미지2" className="w-[294px] h-[240px] mx-auto"/>
+          </div>
+          <div>
+            <img src={Ad3} alt="광고 이미지3" className="w-[294px] h-[240px] mx-auto"/>
+          </div>
         </Slider>
       </div>
       
@@ -90,19 +97,20 @@ function Home() {
         </div>
         {/* 구분선 */}
         <div className="border-b-4 border-gray-300 py-3 w-[390px]"></div>
-        {/* 최근 본 운동 시설 -> 로그인 여부 추가 예정 */}
+        {/* 최근 본 운동 시설 */}
         <div className="w-[390px] h-[177px] pl-4 my-6 overflow-hidden">
           <p className="h-[19px] mb-[15px] font-bold text-[16px]"><span className="text-blue-500">최근 본</span> 운동 시설</p>
-
-          {/* 로그아웃 시 */}
-          <LoginHome />
-
-          {/* 로그인 시 */}
-            {/* <Slider {...fitSettings} className="h-[143px] mr-[-120px]">
-              {datas.map((data, index) => (
-                  <CardCol key={index} data={data} />
-              ))}
-            </Slider> */}
+            {accessToken ? (
+              (recentWatched.length > 0 ? (
+                <Slider {...fitSettings} className="h-[143px] mr-[-120px]">
+                {recentWatched?.map((data: RecommendList, index: number) => (
+                    <CardCol key={index} data={data} />
+                ))}
+              </Slider>
+              ) : (
+                <></>
+              ))
+            ) : (<RequireLogin />)}
         </div>
       </div>
     </div>
@@ -110,12 +118,3 @@ function Home() {
 }
 
 export default Home;
-
-const LoginHome = () => {
-  return(
-    <div className="flex flex-col items-center justify-center h-full gap-[22px]">
-      <SvgProfile className="w-[72px] h-[72px]" />
-      <p className="text-gray-350">로그인 후 이용 가능한 서비스입니다.</p>
-    </div>
-  );
-}
