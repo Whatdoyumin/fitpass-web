@@ -1,18 +1,19 @@
-import Slider, { Settings } from "react-slick";
-// import { useState } from "react";
+import { useEffect, useState } from "react";
 
+import Slider, { Settings } from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
+import { useQuery } from "@tanstack/react-query";
+
 import CardCol from "./CardCol";
 import RequireLogin from "../../components/RequireLogin";
-import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { axiosInstance } from "../../apis/axios-instance";
 
 import Ad1 from "../../assets/img/ad1.jpeg";
 import Ad2 from "../../assets/img/ad2.jpg";
 import Ad3 from "../../assets/img/ad3.jpg";
+
 
 export interface RecommendList {
   fitnessId: number;
@@ -24,23 +25,43 @@ export interface RecommendList {
 function Home() {
 
   const [recentWatched, setRecentWatched] = useState([]);
-  
+  const [fitSettings, setFitSettings] = useState({
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 3, // 기본값 설정
+    slidesToScroll: 1,
+    arrows: false,
+  });
+
+  // 최근 본 운동시설 슬라이드
   useEffect(() => {
     const stored = JSON.parse(localStorage.getItem('watched') || '[]');
     setRecentWatched(stored);
 
-    console.log(recentWatched);
+    setFitSettings((prevSettings) => ({
+      ...prevSettings,
+      slidesToShow: Math.min(stored.length, 3),
+    }))
   }, [])
 
   const fetchRecommend = async () => {
-    const response = await axios.get("http://15.165.128.52:8080/fitness/recommend");
+    const response = await axiosInstance.get("/fitness/recommend");
     return response;
   }
 
-  const {data} = useQuery({
-    queryKey: ['datas'],
+  const { data, isPending, isError } = useQuery({
+    queryKey: ['fitnessCenter'],
     queryFn: fetchRecommend,
   });
+
+  if (isPending) {
+    return <div>로딩중..</div>
+  }
+
+  if (isError) {
+    return <div>에러</div>
+  }
 
   const datas = data?.data.result;
 
@@ -58,15 +79,15 @@ function Home() {
     dotsClass: "test-css",
   };
 
-  // 운동 시설 슬라이드
-  const fitSettings: Settings = {
+  // 추천 운동 시설
+  const reSettings: Settings = {
     dots: false,
     infinite: true,
     speed: 500,
     slidesToShow: 3,
     slidesToScroll: 1,
     arrows: false, // 화살표 없애기
-  };
+  }
 
   return (
     <div className="flex flex-col">
@@ -89,7 +110,7 @@ function Home() {
         <div className="w-[390px] h-[177px] pl-4 overflow-hidden mt-6">
         {/* <div className="overflow-hidden pl-3 rounded-t-[15px] absolute"> */}
           <p className="h-[19px] mb-[15px] font-bold text-[16px]"><span className="text-blue-500">추천</span> 운동 시설</p>
-          <Slider {...fitSettings} className="h-[143px] mr-[-120px]" >
+          <Slider {...reSettings} className="h-[143px] mr-[-120px]" >
             {datas?.map((data: RecommendList, index: number) => (
               <CardCol key={index} data={data} />
             ))}
