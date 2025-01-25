@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Location } from "../assets/svg";
+import usePatchLocation from "../hooks/usePatchLocation";
 
 function LocationDetail() {
   const navigate = useNavigate();
@@ -31,10 +32,24 @@ function LocationDetail() {
     }
   }, [lat, lng, name]);
 
+  const { mutate } = usePatchLocation();
   const handleSetLocation = () => {
-    localStorage.setItem("lat", String(lat));
-    localStorage.setItem("lng", String(lng));
-    navigate("/");
+    mutate(
+      {
+        latitude: lat,
+        longitude: lng,
+      },
+      {
+        onSuccess: () => {
+          navigate("/");
+        },
+        onError: (error) => {
+          console.log(error.message);
+          alert("위치 설정에 실패했습니다. 다시 시도해주세요.");
+          navigate("/search-location");
+        },
+      }
+    );
   };
 
   return (
