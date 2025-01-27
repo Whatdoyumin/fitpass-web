@@ -19,6 +19,10 @@ export const signIn = async ({ id, password }: TSignInData) => {
       console.log(response.data);
     return response.data;
   } catch (error) {
-    throw new Error(error.response?.data?.message || '로그인에 실패했습니다.');
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data?.message || '로그인에 실패했습니다.');
+    } else {
+      throw new Error('로그인에 실패했습니다.');
+    }
   }
 };

@@ -2,6 +2,7 @@ import { useState } from "react";
 import InputField from "./InputField";
 import { useNavigate } from "react-router-dom";
 import { checkID } from "../../apis/signup/signup";
+import { AxiosError } from "axios";
 
 function Signup() {
   const [id, setId] = useState("");
@@ -59,7 +60,11 @@ function Signup() {
         await checkID({id});
         navigate("/signup/step2", { state: { id, password } });
       } catch (error) {
-        setIdError(error.message);
+        if (error instanceof AxiosError) {
+          setIdError(error.response?.data?.message);
+        } else {
+          setIdError("알 수 없는 오류가 발생했습니다.");
+        }
       }
     }
   };

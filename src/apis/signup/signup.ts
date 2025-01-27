@@ -28,8 +28,12 @@ export const signUp = async ({ name, id, password, phoneNumber }: TSignUpData) =
 
     console.log(response.data);
     return response.data;
-  } catch (error: any) {
-    throw new Error(error.response?.data?.message || '회원가입에 실패했습니다.');
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data?.message || '회원가입에 실패했습니다.');
+    } else {
+      throw new Error('회원가입에 실패했습니다.');
+    }
   }
 };
 
@@ -42,7 +46,11 @@ export const checkID = async ({ id }: TCheckIDData) => {
       },
     });
     return response.data;
-  } catch (error: any) {
-    throw new Error(error.response?.data?.message || '아이디 중복 확인에 실패했습니다.');
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data?.message || '아이디 중복 확인에 실패했습니다.');
+    } else {
+      throw new Error('아이디 중복 확인에 실패했습니다.');
+    }
   }
 };

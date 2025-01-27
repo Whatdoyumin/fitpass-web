@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { MoreTerms } from "../../assets/svg";
 import { signUp } from "../../apis/signup/signup";
 import { verifyCode, verifyPhoneNumber } from "../../apis/verify/verify";
+import { AxiosError } from "axios";
 
 interface Agreements {
   all: boolean;
@@ -59,16 +60,24 @@ function SignupStep2() {
 
   /** 타이머 시작 */
   useEffect(() => {
-    let timerInterval: NodeJS.Timeout | undefined = undefined;
+    let timerInterval: ReturnType<typeof setInterval> | null = null;
+
     if (isTimerRunning && timer > 0) {
       timerInterval = setInterval(() => {
         setTimer((prev) => prev - 1);
       }, 1000);
     } else if (timer === 0) {
-      clearInterval(timerInterval);
+      if (timerInterval) {
+        clearInterval(timerInterval);
+      }
       setIsTimerRunning(false);
     }
-    return () => clearInterval(timerInterval);
+
+    return () => {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+      }
+    };
   }, [isTimerRunning, timer]);
 
   /** 휴대폰 번호 확인 */
@@ -97,7 +106,11 @@ function SignupStep2() {
         setIsCodeConfirmed(true);
         setIsTimerRunning(false);
       } catch (error) {
-        setCodeError(error.message);
+        if (error instanceof AxiosError) {
+          setCodeError(error.response?.data?.message || "인증에 실패했습니다.");
+        } else {
+          setCodeError("인증에 실패했습니다.");
+        }
       }
     }
   };
@@ -117,7 +130,11 @@ function SignupStep2() {
         await signUp({name, id, password, phoneNumber});
         navigate("/signin");
       } catch (error) {
-        alert(error.message);
+        if (error instanceof AxiosError) {
+          alert(error.response?.data?.message || "회원가입에 실패했습니다.");
+        } else {
+          alert("회원가입에 실패했습니다.");
+        }
       }
     }
   };

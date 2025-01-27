@@ -18,7 +18,11 @@ export const verifyCode = async (phoneNumber: string) => {
         });
         return response.data;
     } catch (error) {
+        if (axios.isAxiosError(error)) {
         throw new Error(error.response?.data?.message || '문자 전송에 실패했습니다.');
+        } else {
+        throw new Error('문자 전송에 실패했습니다.');
+        }
     }
     }
 
@@ -31,6 +35,10 @@ export const verifyPhoneNumber = async ({ phoneNumber, certificationCode }: TVer
         });
         return response.data;
     } catch (error) {
-        throw new Error(error.response?.data?.message || '휴대폰 인증에 실패했습니다.');
+        if (axios.isAxiosError(error)) {
+            throw new Error(error.response?.data?.message || '휴대폰 인증에 실패했습니다.');
+        } else {
+            throw new Error('휴대폰 인증에 실패했습니다.');
+        }
     }
     }
