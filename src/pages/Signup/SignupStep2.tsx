@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import InputField from "./InputField";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { MoreTerms } from "../../assets/svg";
-import { signUp } from "../../apis/signup/signup";
 import { verifyCode, verifyPhoneNumber } from "../../apis/verify/verify";
 import { AxiosError } from "axios";
+import { useSignUpMutation } from "../../hooks/useSignup";
 
 interface Agreements {
   all: boolean;
@@ -16,7 +16,6 @@ interface Agreements {
 
 function SignupStep2() {
   const location = useLocation();
-  const navigate = useNavigate();
   const { id, password } = location.state || {};
 
   const [name, setName] = useState("");
@@ -115,7 +114,6 @@ function SignupStep2() {
     }
   };
 
-  /** 모든 약관이 체크되었는지 확인 */
   const isFormValid =
     name.trim() !== "" &&
     phoneNumber.trim() !== "" &&
@@ -124,20 +122,17 @@ function SignupStep2() {
     agreements.location &&
     agreements.thirdParty;
 
-  const handleNextStep = async () => {
+    const signUpMutation = useSignUpMutation();
+
+  const handleNextStep = () => {
     if (isFormValid) {
-      try {
-        await signUp({name, id, password, phoneNumber});
-        navigate("/signin");
-      } catch (error) {
-        if (error instanceof AxiosError) {
-          alert(error.response?.data?.message || "회원가입에 실패했습니다.");
-        } else {
-          alert("회원가입에 실패했습니다.");
+      signUpMutation.mutate({name, id, password, phoneNumber}, {
+        onError: (error) => {
+          alert(error instanceof Error ? error.message : "회원가입에 실패했습니다.");
         }
+      });
       }
     }
-  };
 
   return (
       <div className="w-full max-w-content flex flex-col items-center h-screen relative px-5 pt-[29px]">
