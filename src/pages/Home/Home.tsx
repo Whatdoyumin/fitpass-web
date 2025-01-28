@@ -8,11 +8,12 @@ import { useQuery } from "@tanstack/react-query";
 
 import CardCol from "./CardCol";
 import RequireLogin from "../../components/RequireLogin";
-import { axiosInstance } from "../../apis/axios-instance";
+// import { axiosInstance } from "../../apis/axios-instance";
 
 import Ad1 from "../../assets/img/ad1.jpeg";
 import Ad2 from "../../assets/img/ad2.jpg";
 import Ad3 from "../../assets/img/ad3.jpg";
+import axios from "axios";
 
 
 export interface RecommendList {
@@ -46,7 +47,8 @@ function Home() {
   }, [])
 
   const fetchRecommend = async () => {
-    const response = await axiosInstance.get("/fitness/recommend");
+    // const response = await axiosInstance.get("/fitness/recommend");
+    const response = await axios.get("http://15.165.128.52:8080/fitness/recommend");
     return response;
   }
 

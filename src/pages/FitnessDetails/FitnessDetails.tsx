@@ -15,7 +15,7 @@ import ReviewList from "./ReviewList";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-import MapContainer from "./MapContainer";
+// import MapContainer from "./MapContainer";
 
 interface FetchResponse {
   fitnessId: number
@@ -232,7 +232,7 @@ function FitnessDetails() {
         <div className="p-4 flex flex-col gap-1">
           <span className="text-base font-bold">위치 안내</span>
           {/* 위도 경도 기본값 20 설정 (서울시청) */}
-          <MapContainer data={{ fitnessLatitude: data?.fitnessLatitude || 20, fitnessLongitude: data?.fitnessLongitude || 20 }} />
+          {/* <MapContainer data={{ fitnessLatitude: data?.fitnessLatitude || 20, fitnessLongitude: data?.fitnessLongitude || 20 }} /> */}
         </div>
         <div className="border-b-[6px] w-[340px]"></div>
         <div className="p-4 flex flex-col gap-1">
