@@ -1,11 +1,13 @@
-// 예시)
-// import axios from 'axios';
+import axios from "axios";
+import config from "./config";
 
-// const axiosInstance = axios.create({
-//   headers: {
-//     Authorization: `Bearer ${accessToken}`,
-//   },
-//   baseURL: import.meta.env.VITE_API_URL,
-// });
+const accessToken = localStorage.getItem("accessToken");
 
-// export { axiosInstance };
+const axiosInstance = axios.create({
+  headers: {
+    Authorization: `Bearer ${accessToken}`,
+  },
+  baseURL: config.apiBaseUrl,
+});
+
+export { axiosInstance };
