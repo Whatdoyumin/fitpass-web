@@ -42,6 +42,8 @@ function LocationDetail() {
       {
         onSuccess: () => {
           navigate("/");
+          localStorage.setItem("latitude", `${lat}`);
+          localStorage.setItem("longitude", `${lng}`);
         },
         onError: (error) => {
           console.log(error.message);

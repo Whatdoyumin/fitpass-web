@@ -29,6 +29,8 @@ const GetCurrentLocation = () => {
         {
           onSuccess: () => {
             navigate("/");
+            localStorage.setItem("latitude", `${location.latitude}`);
+            localStorage.setItem("longitude", `${location.longitude}`);
           },
           onError: (error) => {
             console.log(error.message);
