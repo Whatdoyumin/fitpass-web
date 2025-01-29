@@ -12,6 +12,7 @@ import IcSubscribe from "../../assets/svg/IcSubscribe";
 import IcUser from "../../assets/svg/IcUser";
 
 import LogoutModal from "../MyPage/LogoutModal";
+import IcPayList from "../../assets/svg/IcPayList";
 
 // 로그아웃 처리 함수 (로컬 스토리지 초기화)
 const handleLogout = () => {
@@ -31,6 +32,8 @@ interface MyPageItem {
 const paymentItems: MyPageItem[] = [
   { id: 1, icon: IcSubscribe, name: "구독하기", path: "/subscribe" },
   { id: 2, icon: IcFillDollar, name: "코인 구매하기", path: "/buy-coins" },
+  { id: 3, icon: IcPayList, name: "구매 내역", path: "#" },
+
 ];
 
 const MyPage = () => {
@@ -63,7 +66,7 @@ const MyPage = () => {
   ];
 
   return (
-    <div className="w-full min-h-screen bg-white-200">
+    <div className="w-full min-h-[893px] bg-white-200">
       <MyProfile />
       <MyCoin coinAmount={123} />
       <SectionComponent title="결제" items={paymentItems} />
