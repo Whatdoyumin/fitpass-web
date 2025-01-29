@@ -36,7 +36,7 @@ export default {
         red: {
           400: "#FF6161",
           500: "#FF0000",
-          600: "#F34421"
+          600: "#F34421",
         },
       },
       spacing: {
@@ -55,6 +55,7 @@ export default {
       fontSize: {
         "9px": "9px",
         "10px": "10px",
+        "11px": "11px",
         "12px": "12px",
         "13px": "13px",
         "14px": "14px",

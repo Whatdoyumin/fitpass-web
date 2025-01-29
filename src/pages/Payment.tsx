@@ -2,18 +2,16 @@ import { useState } from "react";
 import BigDropdown from "../components/payment/BigDropdown";
 import PaymentDetails from "../components/payment/PaymentDetails";
 import SelectPayOption from "../components/payment/SelectPayOption";
-import { COIN_PRICE } from "../constants/price-menu";
-import { TPayOption } from "../type/payment";
+import { COIN_PRICE, SUBSCRIBE_OPTION } from "../constants/price-menu";
+import { TPaymentProps, TPayOption } from "../type/payment";
 import PaymentInfo from "../components/payment/PaymentInfo";
 import Modal from "../components/Modal";
 import { useNavigate } from "react-router-dom";
 
-interface IPaymentProps {
-  type: "subscribe" | "buy-coins";
-}
-
-function Payment({ type }: IPaymentProps) {
-  const [selectedCoin, setSelectedCoin] = useState(COIN_PRICE[0]);
+function Payment({ type }: TPaymentProps) {
+  const [selectItem, setSelectItem] = useState(
+    type === "buy-coins" ? COIN_PRICE[0] : SUBSCRIBE_OPTION[0]
+  );
   const [selectedPayOption, setSelectedPayOption] = useState<string | null>(null);
   const [isChecked, setIsChecked] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -21,9 +19,10 @@ function Payment({ type }: IPaymentProps) {
 
   const navigate = useNavigate();
 
-  const handleCoinChange = (coinId: number) => {
-    const coin = COIN_PRICE.find((item) => item.id === coinId);
-    if (coin) setSelectedCoin(coin);
+  const handleItemChange = (itemId: number) => {
+    const items = type === "buy-coins" ? COIN_PRICE : SUBSCRIBE_OPTION;
+    const item = items.find((i) => i.id === itemId);
+    if (item) setSelectItem(item);
   };
 
   const handlePayOptionChange = (option: TPayOption | null) => {
@@ -41,19 +40,24 @@ function Payment({ type }: IPaymentProps) {
     setIsCompleted((prev) => !prev);
   };
 
-  const coinOptions =
-    type === "buy-coins" ? COIN_PRICE.map((item) => `${item.coinAmount}코인`) : [];
+  const dropdownOptions =
+    type === "buy-coins"
+      ? COIN_PRICE.map((item) => `${item.coinAmount}코인`)
+      : SUBSCRIBE_OPTION.map((item) => `${item.option_ko} 요금제`);
 
   return (
     <div className="w-full h-full bg-white-200 overflow-y-auto flex flex-col justify-between">
       <div>
         <div className="w-full bg-white-100 flex flex-col px-[25px] py-[26px] gap-3">
-          <p className="text-16px">요금제 선택</p>
+          <p className="text-16px">{type === "buy-coins" ? "코인 요금제 선택" : "플랜 선택"}</p>
           <BigDropdown
-            options={coinOptions}
+            options={dropdownOptions}
             onOptionSelect={(option) => {
-              const selectedId = COIN_PRICE.find((item) => `${item.coinAmount}코인` === option)?.id;
-              if (selectedId) handleCoinChange(selectedId);
+              const selectedId =
+                type === "buy-coins"
+                  ? COIN_PRICE.find((item) => `${item.coinAmount}코인` === option)?.id
+                  : SUBSCRIBE_OPTION.find((item) => `${item.option_ko} 요금제` === option)?.id;
+              if (selectedId) handleItemChange(selectedId);
             }}
           />
         </div>
@@ -62,7 +66,7 @@ function Payment({ type }: IPaymentProps) {
           setSelectedOption={setSelectedPayOption}
           onPayOptionSelect={handlePayOptionChange}
         />
-        <PaymentDetails coinInfo={selectedCoin} paymentMethod={selectedPayOption} />
+        <PaymentDetails type={type} item={selectItem} paymentMethod={selectedPayOption} />
         <PaymentInfo isChecked={isChecked} setIsChecked={setIsChecked} />
       </div>
       <button

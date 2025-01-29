@@ -3,7 +3,7 @@ import Signin from "./Signin/Signin";
 import Signup from "./Signup/Signup";
 import SignupStep2 from "./Signup/SignupStep2";
 import FindId from "./FindId";
-import FindPassword from "./FindPassword";
+import FindPassword from "./FindPassword/FindPassword";
 import SetLocation from "./SetLocation";
 import SearchFitness from "./SearchFitness";
 import ExploreFitness from "./ExploreFitness/ExploreFitness";
@@ -19,6 +19,7 @@ import BuyCoins from "./BuyCoins";
 import MyPage from "./MyPage/MyPage";
 import ChangePhone from "./EditProfile/ChangePhone";
 import Notice from "./Notice/Notice";
+import PassPaymentSuccess from "./PassPaymentSuccess";
 
 export {
   Home,
@@ -42,4 +43,5 @@ export {
   MyPage,
   ChangePhone,
   Notice,
+  PassPaymentSuccess,
 };
