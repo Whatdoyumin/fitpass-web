@@ -1,5 +1,19 @@
 {
   "files": [],
   "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.node.json" }],
-  "include": ["src", "custom.d.ts"]
+  "compilerOptions": {
+    "declaration": true,
+    "declarationDir": "dist/types",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "baseUrl": "src",
+    "typeRoots": ["./node_modules/@types", "./@types", "./node_modules/kakao.maps.d.ts"],
+    "jsx": "react-jsx",
+    "paths": {
+      "@pages/*": ["pages/*"],
+      "@components/*": ["components/*"],
+      "@assets/*": ["assets/*"]
+    }
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/type", "custom.d.ts", "global.d.ts"]
 }

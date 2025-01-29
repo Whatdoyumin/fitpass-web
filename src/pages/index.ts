@@ -7,7 +7,7 @@ import FindPassword from "./FindPassword/FindPassword";
 import SetLocation from "./SetLocation";
 import SearchFitness from "./SearchFitness";
 import ExploreFitness from "./ExploreFitness/ExploreFitness";
-import FitnessDetails from "./FitnessDetails";
+import FitnessDetails from "./FitnessDetails/FitnessDetails";
 import PurchasePass from "./PurchasePass";
 import UsePass from "./UsePass/UsePass";
 import UploadReview from "./UploadReview";
@@ -20,6 +20,8 @@ import MyPage from "./MyPage/MyPage";
 import ChangePhone from "./EditProfile/ChangePhone";
 import Notice from "./Notice/Notice";
 import PassPaymentSuccess from "./PassPaymentSuccess";
+import LocationDetail from "./LocationDetails";
+import SearchLocation from "./SearchLocation";
 
 export {
   Home,
@@ -29,6 +31,8 @@ export {
   FindId,
   FindPassword,
   SetLocation,
+  LocationDetail,
+  SearchLocation,
   SearchFitness,
   ExploreFitness,
   FitnessDetails,
