@@ -6,6 +6,7 @@ type Fitness = {
   name: string;
   address: string;
   distance: string;
+  date: string;
 };
 
 type FitnessCardProps = {
@@ -43,8 +44,11 @@ function CompletedItem({ fitness }: FitnessCardProps) {
 
           <div className="flex flex-col w-[190px] h-[84px]">
             <div className="p-4 rounded-r-[5px]">
-              <div className="w-[177px] h-[58px] flex flex-col gap-[10px]">
-                <p className="font-medium text-sm h-[14px]">{item.name}</p>
+              <div className="w-[190px] flex flex-col gap-[10px]">
+                <div className="flex justify-between items-center">
+                  <p className="font-medium text-sm h-[14px]">{item.name}</p>
+                  <p className="text-[10px] text-gray-600 whitespace-nowrap">{item.date}</p>
+                </div>
                 <p className="text-[10px] text-gray-600 max-w-[207px] text-ellipsis overflow-hidden whitespace-nowrap">
                   {item.address}
                 </p>
@@ -53,9 +57,12 @@ function CompletedItem({ fitness }: FitnessCardProps) {
                   <p className="text-[10px] text-gray-600">{item.distance}</p>
                 </div>
               </div>
-              <div className="absolute flex items-center bottom-4 right-4 text-blue-400 border border-blue-400 rounded-[15px] w-15 h-[22px] text-[10px] font-bold text-center py-[5px] px-[10px]">
-                사용완료
-              </div>
+              <a
+                href="/upload-review"
+                className="absolute flex items-center bottom-4 right-4 text-white-100 bg-blue-500 border border-blue-500 rounded-[5px] h-[22px] text-[10px] font-bold text-center py-[5px] px-[10px]"
+              >
+                리뷰 남기기
+              </a>
             </div>
             <div className="absolute top-2/4 right-[-8.5px] w-[17.05px] h-[17px] rounded-full bg-gray-300 transform: -translate-y-1/2"></div>
           </div>

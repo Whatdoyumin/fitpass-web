@@ -8,7 +8,7 @@ function UsePass() {
   const [hasCompletedPass] = useState(true); // false로 설정하면 완료된 패스 없음
 
   return (
-    <div className="bg-gray-300 min-h-[629px]">
+    <div className="bg-gray-300 min-h-screen item-center">
       {hasAvailablePass || hasCompletedPass ? (
         <>
           {hasAvailablePass && <AvailableList />}

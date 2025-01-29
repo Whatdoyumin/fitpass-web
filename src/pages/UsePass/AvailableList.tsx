@@ -16,8 +16,7 @@ function AvailableList() {
       name: "동국대학교 헬스장",
       address: "서울특별시 중구 올림픽로 789",
       distance: "5km",
-      image:
-        "https://pbs.twimg.com/media/GFesVWkaEAAlP-3.jpg:large",
+      image: "https://pbs.twimg.com/media/GFesVWkaEAAlP-3.jpg:large",
     },
   ];
 
@@ -56,27 +55,29 @@ function AvailableList() {
           <IcNoAvailPass width={"158px"} height={"192px"} />
         </div>
       ) : (
-        <AvailableItem fitness={fitnessData} />
+        <div className="flex flex-col items-center">
+          <AvailableItem fitness={fitnessData} />
+        </div>
       )}
+      <div className="flex flex-col items-center">
+        {!isPassExpired && !isButtonActive && (
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="w-[340px] h-[51px] rounded-[5px] mt-[19px] mb-[5px] bg-blue-500 text-white-100"
+          >
+            사용하기
+          </button>
+        )}
 
-      {!isPassExpired && !isButtonActive && (
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="w-[340px] h-[51px] rounded-[5px] mt-[19px] mb-[5px] bg-blue-500 text-white-100"
-        >
-          사용하기
-        </button>
-      )}
-
-      {isButtonActive && !isPassExpired && (
-        <button
-          className="w-[340px] h-[51px] rounded-[5px] mt-[19px] mb-[5px] bg-white-100 border-[1px] border-blue-500 text-blue-500"
-          disabled
-        >
-          사용 중
-        </button>
-      )}
-
+        {isButtonActive && !isPassExpired && (
+          <button
+            className="w-[340px] h-[51px] rounded-[5px] mt-[19px] mb-[5px] bg-white-100 border-[1px] border-blue-500 text-blue-500"
+            disabled
+          >
+            사용 중
+          </button>
+        )}
+      </div>
       {isModalOpen && (
         <Modal
           onClose={() => {
