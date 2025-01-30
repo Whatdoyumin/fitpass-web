@@ -25,6 +25,7 @@ import {
   PassPaymentSuccess,
   LocationDetail,
   SearchLocation,
+  PayHistory,
 } from "../pages/index";
 import NotFound from "../pages/NotFound";
 import NoticeDetail from "../pages/Notice/NoticeDetail";
@@ -138,6 +139,10 @@ const Router = createBrowserRouter([
       {
         path: "/my/noticedetail/:id",
         element: <NoticeDetail />,
+      },
+      {
+        path: "/my/pay-history",
+        element: <PayHistory />,
       },
     ],
   },
