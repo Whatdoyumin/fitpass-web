@@ -22,6 +22,7 @@ import Notice from "./Notice/Notice";
 import PassPaymentSuccess from "./PassPaymentSuccess";
 import LocationDetail from "./LocationDetails";
 import SearchLocation from "./SearchLocation";
+import PayHistory from "./PayHistory";
 
 export {
   Home,
@@ -48,4 +49,5 @@ export {
   ChangePhone,
   Notice,
   PassPaymentSuccess,
+  PayHistory,
 };
