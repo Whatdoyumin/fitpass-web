@@ -4,6 +4,13 @@ import { useNavigate } from "react-router-dom";
 
 function PurchasePass() {
 
+  // 체크박스
+  const [isChecked, setIsChecked] = useState(false);
+
+  const handleCheckbox = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setIsChecked(event.target.checked);
+  }
+
   // 패스 구매 모달
   const [isModal, setIsModal] = useState(false);
 
@@ -44,14 +51,22 @@ function PurchasePass() {
               <div className="flex justify-between"><span className="text-gray-600">결제 후 코인</span><span>10코인</span></div>
             </div>
             <div className="h-[15px] p-4 my-2 flex items-center">
-              <input type="checkbox" id="agree" className="mr-3"/>
+              <input 
+                type="checkbox" 
+                id="agree" 
+                className="mr-3"
+                checked={isChecked}
+                onChange={handleCheckbox}
+                />
               <label htmlFor="agree" 
                 className="font-medium text-xs text-gray-500 ">
                 [필수] 위 구매 조건을 확인, 결제 진행 동의합니다.</label>
             </div>
             <div className="flex flex-col items-center">
-              <button type="submit" className="w-[300px] h-[46px] rounded-[5px] bg-blue-500 text-white-100 flex justify-center items-center text-[15px] font-bold mt-2"
-                onClick={() => handleModalOpen()}>패스 구매하기
+              <button type="submit" className={`w-[300px] h-[46px] rounded-[5px] text-white-100 flex justify-center items-center text-[15px] font-bold mt-2 
+              ${isChecked ? 'bg-blue-500' : 'bg-gray-400'}`}
+                onClick={() => handleModalOpen()}
+                disabled={!isChecked}>패스 구매하기
               </button>
             </div>
           </div>
@@ -64,26 +79,8 @@ function PurchasePass() {
         title="패스를 구매하시겠습니까?"
         btn1Text="아니요"
         btn2Text="확인"/>}
-      {/* {isModal && <Modal onClose={handleModalClose} />} */}
     </>
   );
 }
 
 export default PurchasePass;
-
-
-// const Modal = ({ onClose }) => {
-
-//   return (
-//     <div className="w-[390px] h-[736px] z-50 fixed bg-black-700/60 flex flex-col justify-center items-center">
-//       <div className="bg-white-100 w-[300px] h-[152px] rounded-[10px] flex flex-col justify-evenly">
-//         <p className="flex text-[18px] font-medium flex justify-center">패스를 구매하시겠습니까?</p>
-//         <div className="flex justify-around">
-//           <button onClick={() => onClose()} className="w-[130px] h-[46px] bg-blue-250 text-white-100 text-[14px] font-medium rounded-[5px]" >아니요</button>
-//           <button className="w-[130px] h-[46px] bg-blue-500 text-white-100 text-[14px] font-medium rounded-[5px]"
-//             >확인</button>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }

@@ -4,13 +4,17 @@ import { BorderStar, FillStar } from "../../assets/svg";
 import ReviewEditDelete from "./ReviewEditDelete";
 import { useNavigate } from "react-router-dom";
 import Modal from "../../components/Modal";
+import axios from "axios";
+import config from "../../apis/config";
+import { useMutation } from "@tanstack/react-query";
 
 interface ReviewProps {
   review: {
     id: number;
-    score: number;
     content: string;
-    date: string;
+    score: number;
+    createdAt: string;
+    updatedAt?: string;
   }
 }
 
@@ -49,10 +53,19 @@ function ReviewItem({ review }: ReviewProps) {
     setOpenDeleteModal(false);
   }
 
+  const mutation = useMutation({
+    mutationFn: async () => {
+      const response = await axios.delete(`${config.apiBaseUrl}/fitness/review/${review.id}`);
+      return response.data;
+    },
+    onSuccess: () => {setOpenDeleteModal(false);},
+    onError: (error) => {console.log("삭제 실패", error)},
+  })
+
   // 삭제 성공
   const handleDeleteSuccess = () => {
     console.log("리뷰가 삭제 됨");
-    setOpenDeleteModal(false);
+    mutation.mutate();
   }
 
   return(
@@ -89,7 +102,7 @@ function ReviewItem({ review }: ReviewProps) {
           </div>
       </div>
       <p className="font-medium text-[12px]">{review.content}</p>
-      <p className="text-[10px] text-gray-600">{review.date}</p>
+      <p className="text-[10px] text-gray-600">{review.updatedAt ? review.updatedAt : review.createdAt}</p>
 
       {/* 수정, 삭제 모달 */}
       {openDeleteModal && (

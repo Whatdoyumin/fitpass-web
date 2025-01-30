@@ -11,11 +11,13 @@ import SvgLocation from "../../assets/svg/Location";
 import { CoinRightRounded, Phonecall } from "../../assets/svg";
 import Share from "./Share";
 import ReviewList from "./ReviewList";
+import MapContainer from "./MapContainer";
 
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-// import MapContainer from "./MapContainer";
+import config from "../../apis/config";
+
 
 interface FetchResponse {
   fitnessId: number
@@ -48,7 +50,7 @@ function FitnessDetails() {
   }
 
   const fetchDetail = async () => {
-    const response = await axios.get(`http://15.165.128.52:8080/fitness/${id}`);
+    const response = await axios.get(`${config.apiBaseUrl}/fitness/${id}`);
     return response.data.result;
   }
 
@@ -66,94 +68,6 @@ function FitnessDetails() {
   if (isError) {
     return <div>Error</div>;
   }
-
-  // 테스트 이미지
-  // const imgurl: string =
-  //   "https://s3-alpha-sig.figma.com/img/9771/3785/008387989af4aead9a0b02db565f1ca0?Expires=1736726400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=keikTmna2x6G2RNM~AJfZPEQ8GLIRVkUj8uV39FdgmBSNhPtcCsbYmx4TUtHSc45mqkkUK9Kme6sCAsytIzjSXFm1yVf0Xdwn1z6MjcNpd6jUQ4zU3YJwiuU9lTQ~ka74kZiU5WHriQQATmPMe1Wl3yRmWXTWMHxM-He9TpQot-gIi944ECLqOM7p0D3mZQeg8-BSFFoiXybxXYMUCQSPcAhY587xbNAgHwXeZog23iWpVYN1PRIiGV3Ba4G1PcQTPB1SJVgL6fDyEEh31DiSvaR6TR4rZ9mZMD8~WKluhc2XekN2W1OzCT~An0H1d0HtInNcGaAV4PDeCi1-IOfLQ__";
-
-  // const settings: Settings = {
-  //   dots: false,
-  //   infinite: true,
-  //   speed: 500,
-  //   slidesToShow: 1,
-  //   slidesToScroll: 1,
-  //   arrows: false, // 화살표 없애기,
-  //   beforeChange: (next: number) => {
-  //     if (typeof next === "number") setCurrentIndex(next);
-  //   },
-  // };
-
-  // interface GymImg {
-  //   id: number;
-  //   url: string;
-  //   alt: string;
-  // }
-
-  // const images: GymImg[] = [
-  //   {
-  //     id: 1,
-  //     url: imgurl,
-  //     alt: "이미지1",
-  //   },
-  //   {
-  //     id: 2,
-  //     url: imgurl,
-  //     alt: "이미지2",
-  //   },
-  //   {
-  //     id: 3,
-  //     url: imgurl,
-  //     alt: "이미지3",
-  //   },
-  // ];
-
-  // interface FacilityInfo {
-  //   info: string; // 시설 소개글
-  //   benefits: string[]; // 이용 혜택
-  // }
-
-  // interface GymInfo {
-  //   id: number;
-  //   name: string;
-  //   address: string;
-  //   phone: string;
-  //   facilities: string; // 이용 종목
-  //   info: FacilityInfo[]; // 시설 소개
-  //   operatingHours: string; // 요일별 운영시간
-  //   usageMethod: string[]; // 이용 방법
-  //   additionalInfo: string[]; // 기타 사항
-  //   coin: number; // 코인
-  // }
-
-  // const gyms: GymInfo[] = [
-  //   {
-  //     id: 1,
-  //     name: "동국대 헬스장",
-  //     address: "서울특별시 중구 필동로 1길 30",
-  //     phone: "00 - 1234 - 1234",
-  //     facilities: "헬스",
-  //     info: [
-  //       {
-  //         info: "시설 소개글~",
-  //         benefits: ["수건 1장 제공", "개인 락커 1개월 10,000원"],
-  //       },
-  //     ],
-  //     operatingHours: "00:00 ~ 24:00",
-  //     usageMethod: ["예약 전 전화 필수", "웹 페이지 내 결제 후 결제 내역 보여주기"],
-  //     additionalInfo: ["주차 불가능", "명절 당일 휴무"],
-  //     coin: 100,
-  //   },
-  // ];
-
-  // // 스크롤
-  // const [scroll, setScroll] = useState(false);
-
-  // const handleScroll = () => {
-  //   if(window.scrollY)
-  // }
-  // useEffect(() => {
-  //   window.addEventListener('scroll', )
-  // })
 
   return (
     <div className="bg-white-200 h-full overflow-x-hidden overflow-y-auto flex flex-col items-center py-5">
@@ -232,7 +146,7 @@ function FitnessDetails() {
         <div className="p-4 flex flex-col gap-1">
           <span className="text-base font-bold">위치 안내</span>
           {/* 위도 경도 기본값 20 설정 (서울시청) */}
-          {/* <MapContainer data={{ fitnessLatitude: data?.fitnessLatitude || 20, fitnessLongitude: data?.fitnessLongitude || 20 }} /> */}
+          <MapContainer data={{ fitnessLatitude: data?.fitnessLatitude || 20, fitnessLongitude: data?.fitnessLongitude || 20 }} />
         </div>
         <div className="border-b-[6px] w-[340px]"></div>
         <div className="p-4 flex flex-col gap-1">
