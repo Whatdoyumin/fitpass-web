@@ -8,20 +8,12 @@ import { useQuery } from "@tanstack/react-query";
 
 import CardCol from "./CardCol";
 import RequireLogin from "../../components/RequireLogin";
-// import { axiosInstance } from "../../apis/axios-instance";
+import { HomeCardData } from "../../type/HomeCardData";
 
 import Ad1 from "../../assets/img/ad1.jpeg";
 import Ad2 from "../../assets/img/ad2.jpg";
 import Ad3 from "../../assets/img/ad3.jpg";
 import axios from "axios";
-
-
-export interface RecommendList {
-  fitnessId: number;
-  name: string;
-  distance: number;
-  imageUrl: string;
-}
 
 function Home() {
 
@@ -113,7 +105,7 @@ function Home() {
         {/* <div className="overflow-hidden pl-3 rounded-t-[15px] absolute"> */}
           <p className="h-[19px] mb-[15px] font-bold text-[16px]"><span className="text-blue-500">추천</span> 운동 시설</p>
           <Slider {...reSettings} className="h-[143px] mr-[-120px]" >
-            {datas?.map((data: RecommendList, index: number) => (
+            {datas?.map((data: HomeCardData, index: number) => (
               <CardCol key={index} data={data} />
             ))}
           </Slider>
@@ -126,7 +118,7 @@ function Home() {
             {accessToken ? (
               (recentWatched.length > 0 ? (
                 <Slider {...fitSettings} className="h-[143px] mr-[-120px]">
-                {recentWatched?.map((data: RecommendList, index: number) => (
+                {recentWatched?.map((data: HomeCardData, index: number) => (
                     <CardCol key={index} data={data} />
                 ))}
               </Slider>

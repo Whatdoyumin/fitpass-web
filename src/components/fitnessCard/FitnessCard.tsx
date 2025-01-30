@@ -5,6 +5,7 @@ import SvgLocation from "../../assets/svg/Location";
 import { TFitness } from "../../type/fitnessCard";
 
 import Done from "../../assets/img/use_done.png"
+import { handleSaveToLocalStorage } from "../../utils/storageUtils";
 
 type FitnessCardProps = {
   fitness: TFitness[];
@@ -13,12 +14,12 @@ type FitnessCardProps = {
 function FitnessCard({ fitness }: FitnessCardProps) {
   const navigate = useNavigate();
 
+  // YYYY.MM.DD 형태
   const myDate = (activeTime: string): string => {
     const date = new Date(activeTime);
     return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`;
   };
   
-
   return (
     <div className="flex flex-col gap-[15px] w-[340px]">
       {fitness.map((item, index) => {
@@ -55,7 +56,15 @@ function FitnessCard({ fitness }: FitnessCardProps) {
 
         return (
           <div className="flex rounded bg-white-100 relative h-[117px]" key={index}
-            onClick={() => navigate(`/fitness/${item.fitnessId}`)}>
+            onClick={() => {
+              handleSaveToLocalStorage({
+                fitnessId: item.fitnessId ?? 0,
+                name: item.fitnessName,
+                distance: item.distance,
+                imageUrl: item.imageUrl ?? ""
+              });
+              navigate(`/fitness/${item.fitnessId}`)
+            }}>
             <img className="w-[117px] rounded-l"
               src={item.imageUrl}
               alt="이미지" style={{
