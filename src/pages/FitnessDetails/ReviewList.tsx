@@ -43,7 +43,7 @@ function ReviewList() {
     queryFn: fetchReview,
   })
 
-  console.log(data?.data.result);
+  console.log(data?.data);
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage);

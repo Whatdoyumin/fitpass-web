@@ -15,6 +15,7 @@ interface ReviewProps {
     score: number;
     createdAt: string;
     updatedAt?: string;
+    isOwner: boolean;
   },
   refetch: () => void;
 }
@@ -72,6 +73,19 @@ function ReviewItem({ review, refetch }: ReviewProps) {
     mutation.mutate();
   }
 
+  // 날짜, 시간 변환 함수
+  const myDate = (dateString: string): string => {
+    const date = new Date(dateString);
+
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+  
+    return `${year}.${month.toString().padStart(2, "0")}.${day.toString().padStart(2, "0")}. ${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
+  };
+
   return(
     <div className="w-[300px] h-[77px] flex flex-col gap-[12px] mt-[5px] ">
     {/* 프로필사진, 별점, 내 리뷰일 때 수정삭제 가능한 더보기 버튼 */}
@@ -86,6 +100,7 @@ function ReviewItem({ review, refetch }: ReviewProps) {
           </div>
         </div>
         {/* 더보기 버튼 */}
+        { review.isOwner && (
           <div onClick={handleEditDelete} className="relative flex justify-center ">
             <button className="w-[24px] h-[24px]">
               <div className="flex flex-col gap-[3px] items-center">
@@ -104,9 +119,10 @@ function ReviewItem({ review, refetch }: ReviewProps) {
               </div>
             )}
           </div>
+        ) }
       </div>
       <p className="font-medium text-[12px]">{review.content}</p>
-      <p className="text-[10px] text-gray-600">{review.updatedAt ? review.updatedAt : review.createdAt}</p>
+      <p className="text-[10px] text-gray-600">{review.updatedAt ? myDate(review.updatedAt) : myDate(review.createdAt)}</p>
 
       {/* 수정, 삭제 모달 */}
       {openDeleteModal && (
