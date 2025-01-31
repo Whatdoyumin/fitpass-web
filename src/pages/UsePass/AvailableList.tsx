@@ -1,24 +1,22 @@
 import { useState, useEffect } from "react";
-import AvailableItem from "./AvailableItem";
 import Modal from "./UseModal";
 import { IcNoAvailPass, IcUnderArrow, IcUpperArrow } from "../../assets/svg";
+import FitnessCard from "../../components/fitnessCard/FitnessCard";
+import { TFitness } from "../../type/fitnessCard";
+import { usePostPass } from "../../apis/usepass/quries/useUsepassApi";
 
-function AvailableList() {
+type AvailableListProps = {
+  passes: TFitness[];
+  updatePassStatus: (passId: number|undefined, newStatus: string) => void;
+};
+
+const AvailableList = ({ passes, updatePassStatus }: AvailableListProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isChecked, setIsChecked] = useState(false); // 체크박스 상태
+  const [isAgree, setIsChecked] = useState(false); // 체크박스 상태
   const [isButtonActive, setIsButtonActive] = useState(false); // 버튼 상태
-  const [isPassExpired, setIsPassExpired] = useState(false); // 패스 만료 상태
-  const [passStartTime, setPassStartTime] = useState<number | null>(null); // 패스 사용 시작 시간
+  const [remainingTime, setRemainingTime] = useState<number>(60 * 60); // 남은 시간 (60분)
   const [isOpen, setIsOpen] = useState(false); // 약관 펼침 상태
-
-  const fitnessData = [
-    {
-      name: "동국대학교 헬스장",
-      address: "서울특별시 중구 올림픽로 789",
-      distance: "5km",
-      image: "https://img.freepik.com/free-photo/gym-with-indoor-cycling-equipment_23-2149270210.jpg",
-    },
-  ];
+  const { mutate: postUsePass } = usePostPass();
 
   const now = new Date();
   const currentTime = `${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, "0")}.${String(
@@ -26,26 +24,71 @@ function AvailableList() {
   ).padStart(2, "0")} ${String(now.getHours()).padStart(2, "0")}:${String(
     now.getMinutes()
   ).padStart(2, "0")}`;
+  
+  const startPassUsage = (passId: number | undefined) => {
+    const startTime = Date.now();
+    localStorage.setItem("passUsage", JSON.stringify({ passId, startTime }));
 
-  // 패스를 사용하고, 사용 시작 시간을 기록합니다.
-  const startPassUsage = () => {
-    setPassStartTime(Date.now());
     setIsButtonActive(true);
+    updatePassStatus(passId, "PROGRESS");
+
+    setRemainingTime(60 * 60);
   };
 
-  // 1시간 후 패스 만료 처리
+  // 로컬스토리지에서 남은 시간 계산
   useEffect(() => {
-    if (passStartTime) {
+    const storedPass = localStorage.getItem("passUsage");
+
+    if (storedPass) {
+      const { startTime } = JSON.parse(storedPass);
+      const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+      const timeLeft = 60 * 60 - elapsedTime;
+
+      if (timeLeft > 0) {
+        setRemainingTime(timeLeft);
+        setIsButtonActive(true);
+      } else {
+        localStorage.removeItem("passUsage");
+      }
+    }
+  }, []);
+
+  // 카운트다운
+  useEffect(() => {
+    if (isButtonActive && remainingTime > 0) {
       const timer = setInterval(() => {
-        if (Date.now() - passStartTime >= 5000) {
-          // 5초로 임시 설정
-          setIsPassExpired(true); // 패스 만료 상태로 변경
-          clearInterval(timer); // 타이머 종료
-        }
-      }, 1000); // 1초마다 체크
+        setRemainingTime((prevTime) => {
+          if (prevTime <= 1) {
+            clearInterval(timer);
+            localStorage.removeItem("passUsage");
+            setIsButtonActive(false);
+            return 0;
+          }
+          return prevTime - 1;
+        });
+      }, 1000);
+
       return () => clearInterval(timer);
     }
-  }, [passStartTime]);
+  }, [isButtonActive, remainingTime]);
+
+  const handlePostPass = () => {
+    if (isAgree && passes.length > 0) {
+      const pass = passes.find((pass) => pass.status === "NONE");
+      if (pass) {
+        postUsePass({ passId: pass.id, isAgree });
+        setIsModalOpen(false);
+        alert("패스가 사용되었습니다!");
+        startPassUsage(pass.id);
+      }
+    } else {
+      alert("사용 규정에 동의해야 합니다.");
+    }
+  };
+
+  const isPassExpired = passes.length === 0 || passes.every((pass) => pass.status === "DONE");
+  const isNonePassAvailable = passes.some((pass) => pass.status === "NONE");
+  const isAllProgress = passes.every((pass) => pass.status === "PROGRESS");
 
   return (
     <div className="bg-white-200 px-[25px] py-[23px]">
@@ -56,11 +99,12 @@ function AvailableList() {
         </div>
       ) : (
         <div className="flex flex-col items-center">
-          <AvailableItem fitness={fitnessData} />
+          {/* {passes.length > 0 && <FitnessCard fitness={passes} />} */}
+          {passes.length > 0 && <FitnessCard fitness={passes} limitTime={remainingTime} />}
         </div>
       )}
       <div className="flex flex-col items-center">
-        {!isPassExpired && !isButtonActive && (
+        {isNonePassAvailable && !isAllProgress && (
           <button
             onClick={() => setIsModalOpen(true)}
             className="w-[340px] h-[51px] rounded-[5px] mt-[19px] mb-[5px] bg-blue-500 text-white-100"
@@ -68,8 +112,7 @@ function AvailableList() {
             사용하기
           </button>
         )}
-
-        {isButtonActive && !isPassExpired && (
+        {isAllProgress && !isPassExpired && (
           <button
             className="w-[340px] h-[51px] rounded-[5px] mt-[19px] mb-[5px] bg-white-100 border-[1px] border-blue-500 text-blue-500"
             disabled
@@ -79,19 +122,14 @@ function AvailableList() {
         )}
       </div>
       {isModalOpen && (
-        <Modal
-          onClose={() => {
-            setIsModalOpen(false);
-          }}
-        >
+        <Modal onClose={() => setIsModalOpen(false)}>
           <div className="relative">
             <h2 className="text-xl font-bold text-center mb-4">사용하기</h2>
-
             <div className="p-[20px] bg-gray-200">
               <h3 className="text-black-700 text-[16px] mb-[19px] font-bold">패스 사용 목록</h3>
               <div className="flex justify-between text-[14px] mb-[17px]">
                 <span className="text-gray-600">매장명</span>
-                <span className="text-black-700">{fitnessData[0].name}</span>
+                <span className="text-black-700">{passes[0]?.fitnessName}</span>
               </div>
               <div className="flex justify-between text-[14px]">
                 <span className="text-gray-600">사용 일시</span>
@@ -103,19 +141,13 @@ function AvailableList() {
               <label className="flex gap-[13px]">
                 <input
                   type="checkbox"
-                  checked={isChecked}
-                  onChange={() => setIsChecked(!isChecked)}
+                  checked={isAgree}
+                  onChange={() => setIsChecked(!isAgree)}
                   className="rounded"
                 />
                 <span className="text-[12px]">사용 규정에 동의합니다</span>
               </label>
-
-              <span
-                className="flex items-center cursor-pointer"
-                onClick={() => {
-                  setIsOpen(!isOpen);
-                }}
-              >
+              <span className="flex items-center cursor-pointer" onClick={() => setIsOpen(!isOpen)}>
                 {isOpen ? (
                   <IcUpperArrow className="w-[9px] transform transition-transform" />
                 ) : (
@@ -132,27 +164,16 @@ function AvailableList() {
                   border: "1px solid #BABABA",
                   background: "#F7F7F7",
                   padding: "10px",
+                  fontSize: "14px",
                 }}
               >
-                <p>
-                  여기 사용 규정 내용이 들어갑니다. 자세한 내용은 약관을 확인해주세요.여기 사용 규정
-                  내용이 들어갑니다. 자세한 내용은 약관을 확인해주세요.여기 사용 규정 내용이
-                  들어갑니다. 자세한 내용은 약관을 확인해주세요.
-                </p>
+                <p>여기 사용 규정 내용이 들어갑니다. 자세한 내용은 약관을 확인해주세요.</p>
               </div>
             )}
 
             <div className="flex justify-end gap-2 mt-4">
               <button
-                onClick={() => {
-                  if (isChecked) {
-                    startPassUsage(); // 패스를 사용
-                    setIsModalOpen(false);
-                    alert("패스가 사용되었습니다!");
-                  } else {
-                    alert("사용 규정에 동의해야 합니다.");
-                  }
-                }}
+                onClick={handlePostPass}
                 className="w-full h-[46px] px-4 py-2 bg-blue-500 text-white-100 rounded-[5px]"
               >
                 사용하시겠습니까?
@@ -163,6 +184,6 @@ function AvailableList() {
       )}
     </div>
   );
-}
+};
 
 export default AvailableList;
