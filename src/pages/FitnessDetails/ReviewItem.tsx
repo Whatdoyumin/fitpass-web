@@ -15,10 +15,11 @@ interface ReviewProps {
     score: number;
     createdAt: string;
     updatedAt?: string;
-  }
+  },
+  refetch: () => void;
 }
 
-function ReviewItem({ review }: ReviewProps) {
+function ReviewItem({ review, refetch }: ReviewProps) {
 
   // const score: number = 3; // 임시 별점
   const [isOpen, setIsOpen] = useState(false); // 수정삭제 버튼
@@ -66,6 +67,7 @@ function ReviewItem({ review }: ReviewProps) {
   const handleDeleteSuccess = () => {
     console.log("리뷰가 삭제 됨");
     mutation.mutate();
+    refetch();
   }
 
   return(

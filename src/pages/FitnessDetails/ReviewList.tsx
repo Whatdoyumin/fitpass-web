@@ -3,7 +3,6 @@ import ReviewItem from "./ReviewItem";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { axiosInstance } from "../../apis/axios-instance";
-import config from "../../apis/config";
 
 type fetchReviewParams = {
   offset?: number;
@@ -13,17 +12,17 @@ type fetchReviewParams = {
 
 function ReviewList() {
 
-  // 정렬된 리뷰들
-  // const [sortedReviews, setSortedReviews] = useState(reviews);
-  // 정렬 기준 (기본값: 날짜순)
   const [sortOption, setSortOption] = useState<"score" | "date">("date");
+  
+  const [page, setPage] = useState(1);  // 현재 페이지
+  const pageSize = 3;
 
   const { id } = useParams();
 
   const fetchReview = async () => {
     const params: fetchReviewParams = {
-      offset: 0,
-      pageSize: 5,
+      offset: (page - 1) * pageSize,
+      pageSize: pageSize,
       sortBy: sortOption,
     }
     // const response = await axios.get(`${config.apiBaseUrl}/fitness/${id}/review`, {params});
@@ -31,23 +30,23 @@ function ReviewList() {
     return response;
   }
 
-  const { data } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ['reviews', id, sortOption],
     queryFn: fetchReview,
   })
 
   console.log(data?.data.result);
 
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+    if (newPage !== page) {
+      refetch();
+    }
+  }
+
   const sortReviews = (options: "score" | "date") => {
     setSortOption(options);
-    // // 별점 순 정렬
-    // if (options === "score") {
-    //   const sortedByScore = reviews.sort((a, b) => b.score - a.score);
-    //   setSortedReviews(sortedByScore);
-    // } else {
-    //   const sortedByDate = reviews.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-    //   setSortedReviews(sortedByDate);
-    // }
+    setPage(1);
   };
 
   return(
@@ -63,8 +62,30 @@ function ReviewList() {
       </div>
       <div className="flex flex-col gap-[15px]">
         {data?.data.result?.reviews.map((review) => (
-          <ReviewItem key={review.id} review={review} />
+          <ReviewItem key={review.id} review={review} refetch={refetch} />
         ))}
+      </div>
+      {/* pagination */}
+      <div className="text-gray-350 w-[300px] h-[17px] gap-[12px] flex justify-center text-[14px] mt-[20px]">
+        <button
+          onClick={() => handlePageChange(page - 1)}
+          disabled={page === 1}>{"<"}</button>
+        {data?.data.result?.totalPages &&
+        new Array(data?.data.result?.totalPages).fill(null).map((_, index) => {
+          const pageNum = index + 1;
+          return (
+            <button
+              className={`${page === pageNum ? 'text-gray-600' : 'text-gray-350'}`}
+              onClick={() => handlePageChange(pageNum)}
+            >
+              {pageNum}
+            </button>
+          )
+        })
+      }
+      <button
+        onClick={() => handlePageChange(page + 1)}
+        disabled={page >= data?.data.result?.totalPages}>{">"}</button>
       </div>
     </>
   );
