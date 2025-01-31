@@ -14,7 +14,7 @@ export const useSignin = () => {
       return response;
     },
     onSuccess: (data: { result: { accessToken: string; refreshToken: string } }) => {
-      console.log("로그인 성공:", data);
+      console.log("로그인 성공");
       login(data.result.accessToken, data.result.refreshToken);
       navigate("/");
     },
