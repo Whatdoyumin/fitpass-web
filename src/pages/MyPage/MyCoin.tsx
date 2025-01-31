@@ -1,10 +1,17 @@
 import IcPassTicket from "../../assets/svg/IcPassTicket";
 
-interface MyCoinProps {
-  coinAmount: number;
+interface MyProfileProps {
+  profile: {
+    id: number;
+    pictureUrl: string;
+    name: string;
+    planType: string | null; // planType null 가능
+    coinQuantity: number;
+  };
 }
 
-const MyCoin = ({ coinAmount }: MyCoinProps) => {
+
+const MyCoin = ({ profile }: MyProfileProps)  => {
   return (
     <div className="w-full bg-white-100 px-[25px] py-[26px] mt-2 relative">
       <h2 className="text-18px font-bold mb-[15px]" style={{ lineHeight: "21px" }}>
@@ -15,7 +22,7 @@ const MyCoin = ({ coinAmount }: MyCoinProps) => {
         <IcPassTicket className="absolute w-full h-full" />
 
         <div className="absolute top-1/2 right-0 text-white-100 text-15px sm:text-base lg:text-lg transform -translate-y-1/2 pr-[23px]">
-          {coinAmount}만개
+          {profile.coinQuantity}개
         </div>
       </div>
     </div>
