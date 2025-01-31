@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import InputField from "./InputField";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { MoreTerms } from "../../assets/svg";
-import { signUp } from "../../apis/signup/signup";
 import { verifyCode, verifyPhoneNumber } from "../../apis/verify/verify";
+import { AxiosError } from "axios";
+import { useSignUpMutation } from "../../hooks/useSignup";
 
 interface Agreements {
   all: boolean;
@@ -15,13 +16,12 @@ interface Agreements {
 
 function SignupStep2() {
   const location = useLocation();
-  const navigate = useNavigate();
   const { id, password } = location.state || {};
 
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isPhoneVerified, setIsPhoneVerified] = useState(false);
-  const [verificationCode, setVerificationCode] = useState("");
+  const [certificationCode, setCertificationCode] = useState("");
   const [isCodeSent, setIsCodeSent] = useState(false);
   const [isCodeConfirmed, setIsCodeConfirmed] = useState(false);
   const [timer, setTimer] = useState(180); // 3분 타이머
@@ -59,16 +59,24 @@ function SignupStep2() {
 
   /** 타이머 시작 */
   useEffect(() => {
-    let timerInterval: NodeJS.Timeout | undefined = undefined;
+    let timerInterval: ReturnType<typeof setInterval> | null = null;
+
     if (isTimerRunning && timer > 0) {
       timerInterval = setInterval(() => {
         setTimer((prev) => prev - 1);
       }, 1000);
     } else if (timer === 0) {
-      clearInterval(timerInterval);
+      if (timerInterval) {
+        clearInterval(timerInterval);
+      }
       setIsTimerRunning(false);
     }
-    return () => clearInterval(timerInterval);
+
+    return () => {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+      }
+    };
   }, [isTimerRunning, timer]);
 
   /** 휴대폰 번호 확인 */
@@ -89,20 +97,23 @@ function SignupStep2() {
 
   /** 인증번호 확인 */
   const handleVerifyCode = async() => {
-    if (verificationCode.length === 6) {
+    if (certificationCode.length === 6) {
       try {
-        await verifyPhoneNumber(phoneNumber, verificationCode);
+        await verifyPhoneNumber({phoneNumber, certificationCode});
         setCodeError("");
         setIsPhoneVerified(true);
         setIsCodeConfirmed(true);
         setIsTimerRunning(false);
       } catch (error) {
-        setCodeError(error.message);
+        if (error instanceof AxiosError) {
+          setCodeError(error.response?.data?.message || "인증에 실패했습니다.");
+        } else {
+          setCodeError("인증에 실패했습니다.");
+        }
       }
     }
   };
 
-  /** 모든 약관이 체크되었는지 확인 */
   const isFormValid =
     name.trim() !== "" &&
     phoneNumber.trim() !== "" &&
@@ -111,16 +122,17 @@ function SignupStep2() {
     agreements.location &&
     agreements.thirdParty;
 
-  const handleNextStep = async () => {
+    const signUpMutation = useSignUpMutation();
+
+  const handleNextStep = () => {
     if (isFormValid) {
-      try {
-        await signUp(name, id, password, phoneNumber);
-        navigate("/signin");
-      } catch (error) {
-        alert(error.message);
+      signUpMutation.mutate({name, id, password, phoneNumber}, {
+        onError: (error: unknown) => {
+          alert(error instanceof Error ? error.message : "회원가입에 실패했습니다.");
+        }
+      });
       }
     }
-  };
 
   return (
       <div className="w-full max-w-content flex flex-col items-center h-screen relative px-5 pt-[29px]">
@@ -175,8 +187,8 @@ function SignupStep2() {
                   <input
                     type="text"
                     placeholder="인증번호를 입력해주세요"
-                    value={verificationCode}
-                    onChange={(e) => setVerificationCode(e.target.value)}
+                    value={certificationCode}
+                    onChange={(e) => setCertificationCode(e.target.value)}
                     className="w-full outline-none text-[14px] font-medium placeholder-gray-400"
                   />
                   <span className="text-red-500 text-[14px] absolute right-[15px]">
@@ -185,9 +197,9 @@ function SignupStep2() {
                 </div>
                 <button
                   onClick={handleVerifyCode}
-                  disabled={verificationCode.length !== 6}
+                  disabled={certificationCode.length !== 6}
                   className={`h-[50px] px-[20px] rounded-[5px] text-[15px] font-medium ${
-                    verificationCode.length === 6
+                    certificationCode.length === 6
                       ? "bg-blue-500 text-white-100 hover:bg-blue-400"
                       : "bg-blue-250 text-white-100"
                   }`}
