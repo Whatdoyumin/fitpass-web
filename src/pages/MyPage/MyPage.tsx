@@ -17,8 +17,9 @@ import IcPayList from "../../assets/svg/IcPayList";
 import { useGetProfile } from "../../apis/mypage/quries/useProfileApi";
 
 const handleLogout = () => {
-  localStorage.removeItem("authToken");
-  localStorage.removeItem("userInfo");
+  sessionStorage.removeItem("accessToken");
+  sessionStorage.removeItem("refreshToken");
+
   sessionStorage.clear();
 };
 
@@ -40,11 +41,10 @@ const MyPage = () => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // ✅ 로그인 여부 확인
   useEffect(() => {
-    const authToken = `${import.meta.env.VTIE_ACCESS_TOKEN}`
+    const authToken = sessionStorage.getItem("accessToken");
     if (!authToken) {
-      // navigate("/signin"); // 로그인 안 했으면 로그인 페이지로 이동
+      navigate("/signin");
     }
   }, [navigate]);
 

@@ -30,7 +30,6 @@ const NoticeList = () => {
   const noticesData = data;
   const notices: Notice[] = noticesData?.content?.content ?? [];
   const totalPages: number = noticesData?.content?.totalPages ?? 1;
-  console.log(noticesData);
 
   const getPagination = () => {
     const range = 1;
