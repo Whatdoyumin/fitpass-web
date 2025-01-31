@@ -40,7 +40,7 @@ export default {
         },
       },
       spacing: {
-        header: "129px",
+        header: "79px",
         navbar: "86px",
         sideGap: "20px",
         overpadding: "-129px",
