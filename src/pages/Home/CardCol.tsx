@@ -18,12 +18,11 @@ function CardCol({ data }: CardColProps) {
   }
 
   return(
-      <div className="w-[143px] h-[140px] flex flex-col mb-0.5">
-        <img src={data.imageUrl} alt="썸네일" className="w-full h-[107px] object-cover rounded-t overflow-hidden"
-          onClick={() => handleClickCard()} />
+      <div className="w-[143px] h-[140px] flex flex-col mb-0.5" onClick={() => handleClickCard()}>
+        <img src={data.imageUrl} alt="썸네일" className="w-full h-[107px] object-cover rounded-t overflow-hidden"/>
         <div className="h-9 bg-white-100 rounded flex items-center justify-between gap-[10px] shadow-md">
           <span className="text-[11px] font-medium text-ellipsis overflow-hidden whitespace-nowrap flex-grow pl-[10px] ">{data.name}</span>
-          <div className="h-full flex items-center gap-1 content-center pr-[10px] ">
+          <div className="h-full flex items-center gap-1 content-center pr-[10px]">
             <SvgLocation className="w-[7px] h-[9px]" />
             <span className="text-[9px] text-gray-600">{Math.floor(data.distance)}km</span>
           </div>

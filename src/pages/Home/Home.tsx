@@ -14,8 +14,10 @@ import Ad1 from "../../assets/img/ad1.jpeg";
 import Ad2 from "../../assets/img/ad2.jpg";
 import Ad3 from "../../assets/img/ad3.jpg";
 import axios from "axios";
+import { useAuth } from "../../context/AuthContext";
 
 function Home() {
+  const {isLogin} = useAuth();
 
   const [recentWatched, setRecentWatched] = useState([]);
   const [fitSettings, setFitSettings] = useState({
@@ -59,8 +61,6 @@ function Home() {
 
   const datas = data?.data.result;
 
-  // 로그인 여부
-  const accessToken = localStorage.getItem('accessToken');
 
   // 광고 슬라이드
   const adSettings: Settings = {
@@ -115,8 +115,8 @@ function Home() {
         {/* 최근 본 운동 시설 */}
         <div className="w-[390px] h-[177px] pl-4 my-6 overflow-hidden">
           <p className="h-[19px] mb-[15px] font-bold text-[16px]"><span className="text-blue-500">최근 본</span> 운동 시설</p>
-            {accessToken ? (
-              (recentWatched.length > 0 ? (
+            {isLogin ?               
+            (recentWatched.length > 0 ? (
                 <Slider {...fitSettings} className="h-[143px] mr-[-120px]">
                 {recentWatched?.map((data: HomeCardData, index: number) => (
                     <CardCol key={index} data={data} />
@@ -124,8 +124,7 @@ function Home() {
               </Slider>
               ) : (
                 <></>
-              ))
-            ) : (<RequireLogin />)}
+              )) : (<RequireLogin />)}
         </div>
       </div>
     </div>
