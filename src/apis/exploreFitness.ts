@@ -1,5 +1,5 @@
 import axios from "axios";
-import { TFitness } from "../type/fitnessCard";
+import { TFitness } from "../types/fitnessCard";
 import config from "./config";
 
 type FetchParams = {

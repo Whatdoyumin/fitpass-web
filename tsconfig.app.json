@@ -25,5 +25,6 @@
     "composite": true,
     "outDir": "./dist"
   },
-  "include": ["src", "src/assets/lottie/**/*.json"]
+  "include": ["src", "src/assets/lottie/**/*.json"],
+  "exclude": ["node_modules", "dist", "src/assets/svg"]
 }

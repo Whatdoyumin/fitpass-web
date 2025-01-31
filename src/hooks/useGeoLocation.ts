@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { TLocationBody } from "../type/setLocation";
+import { TLocationBody } from "../types/setLocation";
 
 export const useGeoLocation = (options = {}) => {
   const [location, setLocation] = useState<TLocationBody>();
