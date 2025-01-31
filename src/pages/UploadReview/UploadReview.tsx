@@ -6,8 +6,8 @@ import {
   IcMiniBlueCoin,
   IcRightArrowDarkgray,
 } from "../../assets/svg";
-import { useParams } from "react-router-dom";
-import { useGetReviewFitness } from "../../apis/uploadReview/quries/useReviewApi";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useGetReviewFitness, usePostReview } from "../../apis/uploadReview/quries/useReviewApi";
 
 export default function UploadReview() {
   const [reviewText, setReviewText] = useState(""); // 리뷰 텍스트 상태
@@ -15,38 +15,63 @@ export default function UploadReview() {
   const [rating, setRating] = useState(0); // 평점 상태
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태
   const [isAgreed, setIsAgreed] = useState(false); // 정책 동의 체크박스 상태
+  const navigate = useNavigate();
 
-  const { id } = useParams<{ id: string }>();
-  const fitnessIdNumber = Number(id);
+  const { id: passId } = useParams<{ id: string }>(); // PassId 받아오기
+  const location = useLocation();
+
+  const fitnessId = location.state?.fitnessId;
+  const activeTime = location.state?.activeTime;
+  const formattedDate = activeTime ? activeTime.split("T")[0].replace(/-/g, ".") : "";
+
+  // fitnessId가 없으면 기본적으로 PassId를 사용 (임시 처리)
+  const fitnessIdNumber = fitnessId ? Number(fitnessId) : Number(passId);
 
   const { data, error, isLoading } = useGetReviewFitness(fitnessIdNumber);
 
-  if (isLoading) {
-    return <div>로딩중</div>;
-  }
+  // 리뷰 작성 API
+  const postReviewMutation = usePostReview();
 
-  if (error) {
-    return <div>오류: {error.message}</div>;
-  }
+  if (isLoading) return <div>로딩중</div>;
+  if (error) return <div>오류: {error.message}</div>;
 
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const text = e.target.value;
     if (text.length <= 300) {
       setReviewText(text);
-      setCharCount(text.length); // 문자 수 갱신
+      setCharCount(text.length);
     }
   };
 
   const handleStarClick = (index: number) => {
-    setRating(index + 1); // 클릭한 별을 기준으로 평점 설정
+    setRating(index + 1);
   };
 
   const handleSubmitReview = () => {
-    setIsModalOpen(true);
+    if (charCount < 10 || rating === 0 || !isAgreed) return;
+
+    postReviewMutation.mutate(
+      {
+        passId: Number(passId),
+        content: reviewText,
+        score: rating,
+        memberFitnessId: fitnessIdNumber,
+        agree: isAgreed,
+      },
+      {
+        onSuccess: () => {
+          setIsModalOpen(true);
+        },
+        onError: (error) => {
+          alert(`리뷰 등록 실패: ${error.message}`);
+        },
+      }
+    );
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
+    navigate(`/fitness/${fitnessId}`);
   };
 
   const handleCheckboxChange = () => {
@@ -67,7 +92,7 @@ export default function UploadReview() {
 
           {/* 왼쪽 상단 날짜 */}
           <div className="absolute top-2 left-2 bg-black bg-opacity-50 text-white-100 text-xs px-2 py-1 rounded">
-          {new Date().toLocaleDateString('ko-KR').replace(/\.$/, '')}{/* 예시 오늘 날짜 */}
+            {formattedDate}
           </div>
 
           {/* 오른쪽 상단 코인 */}
@@ -133,7 +158,6 @@ export default function UploadReview() {
           <IcRightArrowDarkgray width={4} className="flex items-center" />
         </div>
 
-        {/* 등록 버튼 */}
         <div className="pt-[22px] pb-[32px] px-[20px]">
           <button
             className="w-full bg-blue-500 text-white-100 py-[14px] rounded-[5px] text-[15px] font-bold"
@@ -151,8 +175,8 @@ export default function UploadReview() {
 
       {/* 모달 */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black-700 bg-opacity-50 flex justify-center items-center z-30 px-[45px]">
-          <div className="flex flex-col bg-white-100 pt-[35px] pb-[15px] px-[15px] rounded-[10px] max-w-[400px] w-full gap-[25px]">
+        <div className="fixed inset-0 bg-black-700 bg-opacity-50 flex justify-center items-center z-50 px-[45px]">
+          <div className="flex flex-col bg-white-100 pt-[35px] pb-[15px] px-[15px] rounded-[10px] max-w-[350px] w-full gap-[25px]">
             <div className="flex flex-col gap-[10px]">
               <p className="text-center text-[18px] font-bold">리뷰가 등록되었습니다</p>
               <p className="text-center text-[12px] text-gray-500">리뷰 등록 감사합니다.</p>
