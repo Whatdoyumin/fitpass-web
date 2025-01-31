@@ -8,7 +8,7 @@ interface IPaymentCard {
 const PaymentCard = ({ bgColor, color, title, content }: IPaymentCard) => {
   return (
     <div
-      className={`w-full h-[70px] rounded-[5px] relative ${
+      className={`w-full h-[70px] rounded-[5px] relative shadow-sm ${
         color === "blue"
           ? "bg-blue-500 text-white-100 "
           : color === "skyBlue"
