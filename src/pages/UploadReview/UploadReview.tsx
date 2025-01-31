@@ -6,28 +6,28 @@ import {
   IcMiniBlueCoin,
   IcRightArrowDarkgray,
 } from "../../assets/svg";
-import { mockData } from "./mock/data"; 
+import { useParams } from "react-router-dom";
+import { useGetReviewFitness } from "../../apis/uploadReview/quries/useReviewApi";
 
-type UploadReviewProps = {
-  date?: string;
-  coin?: number;
-  imageUrl?: string;
-  gymName?: string;
-  location?: string;
-};
-
-export default function UploadReview({
-  date = mockData.date,
-  coin = mockData.coin,
-  imageUrl = mockData.imageUrl,
-  gymName = mockData.gymName,
-  location = mockData.location,
-}: UploadReviewProps) {
+export default function UploadReview() {
   const [reviewText, setReviewText] = useState(""); // 리뷰 텍스트 상태
   const [charCount, setCharCount] = useState(0); // 문자 수 상태
   const [rating, setRating] = useState(0); // 평점 상태
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태
   const [isAgreed, setIsAgreed] = useState(false); // 정책 동의 체크박스 상태
+
+  const { id } = useParams<{ id: string }>();
+  const fitnessIdNumber = Number(id);
+
+  const { data, error, isLoading } = useGetReviewFitness(fitnessIdNumber);
+
+  if (isLoading) {
+    return <div>로딩중</div>;
+  }
+
+  if (error) {
+    return <div>오류: {error.message}</div>;
+  }
 
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const text = e.target.value;
@@ -61,33 +61,32 @@ export default function UploadReview({
           <div
             className="w-full h-[191px] bg-cover bg-center relative"
             style={{
-              background: `linear-gradient(0deg, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.35) 100%), url(${imageUrl}) center/cover no-repeat`,
+              background: `linear-gradient(0deg, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.35) 100%), url(${data?.imageUrl}) center/cover no-repeat`,
             }}
           ></div>
 
           {/* 왼쪽 상단 날짜 */}
           <div className="absolute top-2 left-2 bg-black bg-opacity-50 text-white-100 text-xs px-2 py-1 rounded">
-            {date}
+          {new Date().toLocaleDateString('ko-KR').replace(/\.$/, '')}{/* 예시 오늘 날짜 */}
           </div>
 
           {/* 오른쪽 상단 코인 */}
           <div className="absolute top-0 right-0 flex flex-col items-center text-white-100">
             <IcMiniBlueCoin width={70} />
             <span className="text-[10px] font-bold absolute top-[6.5px] right-[10px]">
-              {coin}코인
+              {data?.fee}코인
             </span>
           </div>
 
           {/* 이미지 위 텍스트 */}
           <div className="flex flex-col absolute bottom-4 left-4 text-white-100 gap-[12px]">
-            <h2 className="text-[22px] font-bold">{gymName}</h2>
+            <h2 className="text-[22px] font-bold">{data?.fitnessName}</h2>
             <div className="text-[11px] flex gap-[8px]">
               <IcLocation width={8} />
-              {location}
+              {data?.address}
             </div>
           </div>
         </div>
-
         {/* 평점 */}
         <div className="px-[20px] py-[23px] flex flex-col gap-[11px]">
           <p className="text-[15px] font-bold">평점을 선택해주세요</p>
