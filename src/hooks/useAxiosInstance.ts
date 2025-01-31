@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import axios from "axios";
-import config from "./config";
-import { axiosInstance } from "./axios-instance";
+import config from "../apis/config";
+import { axiosInstance } from "../apis/axios-instance";
 import { useAuth } from "../context/AuthContext";
 
 const useAxiosInstance = () => {
@@ -34,6 +34,7 @@ const useAxiosInstance = () => {
             error.config.headers.Authorization = `Bearer ${data.accessToken}`;
             return axiosInstance(error.config);
           } catch (refreshError) {
+            console.error("Failed to refresh token:", refreshError);
             logout(); // refreshToken도 만료되었으면 로그아웃 처리
           }
         }
