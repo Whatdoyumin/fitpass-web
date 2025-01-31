@@ -1,26 +1,20 @@
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { useAxiosInstance } from "../hooks/useAxiosInstance";
+import { signIn, TSignInData } from "../apis/signin/signin";
 
 export const useSignin = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
-  const axiosInstance = useAxiosInstance();
 
   return useMutation({
-    mutationFn: async ({ id, password }: { id: string; password: string }) => {
-      const response = await axiosInstance.post(`/auth/login`, {
-        loginId: id,
-        password,
-      });
-
-      console.log("로그인 응답:", response.data);
-      return response.data;
-    },
     mutationKey: ["signin"],
+    mutationFn: async (data: TSignInData) => {
+      const response = await signIn(data);
+      return response;
+    },
     onSuccess: (data: { result: { accessToken: string; refreshToken: string } }) => {
-      console.log("로그인 성공");
+      console.log("로그인 성공:", data);
       login(data.result.accessToken, data.result.refreshToken);
       navigate("/");
     },
