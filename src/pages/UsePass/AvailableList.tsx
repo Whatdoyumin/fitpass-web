@@ -7,7 +7,7 @@ import { usePostPass } from "../../apis/usepass/quries/useUsepassApi";
 
 type AvailableListProps = {
   passes: TFitness[];
-  updatePassStatus: (passId: number|undefined, newStatus: string) => void;
+  updatePassStatus: (passId: number | undefined, newStatus: string) => void;
 };
 
 const AvailableList = ({ passes, updatePassStatus }: AvailableListProps) => {
@@ -24,7 +24,7 @@ const AvailableList = ({ passes, updatePassStatus }: AvailableListProps) => {
   ).padStart(2, "0")} ${String(now.getHours()).padStart(2, "0")}:${String(
     now.getMinutes()
   ).padStart(2, "0")}`;
-  
+
   const startPassUsage = (passId: number | undefined) => {
     const startTime = Date.now();
     localStorage.setItem("passUsage", JSON.stringify({ passId, startTime }));
@@ -86,7 +86,10 @@ const AvailableList = ({ passes, updatePassStatus }: AvailableListProps) => {
     }
   };
 
-  const isPassExpired = passes.length === 0 || passes.every((pass) => pass.status === "DONE");
+  const hasAvailablePass = passes.some(
+    (pass) => pass.status === "NONE" || pass.status === "PROGRESS"
+  );
+  const isPassExpired = passes.length === 0 || !hasAvailablePass;
   const isNonePassAvailable = passes.some((pass) => pass.status === "NONE");
   const isAllProgress = passes.every((pass) => pass.status === "PROGRESS");
 

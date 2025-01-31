@@ -47,8 +47,8 @@ const NoticeList = () => {
   };
 
   return (
-    <div className="relative flex flex-col min-h-screen">
-      <ul className="overflow-y-auto">
+    <div className="relative flex flex-col min-h-[calc(100vh-165px)] overflow-y-auto">
+      <ul className=" flex-grow">
         {notices.map((notice) => (
           <li
             key={notice.id}
@@ -62,7 +62,7 @@ const NoticeList = () => {
       </ul>
 
       {/* 페이지네이션 */}
-      <div className="flex justify-center items-center w-full mt-auto pb-[100px]">
+      <div className="flex justify-center items-center w-full mb-[24px]">
         <button
           onClick={() => setCurrentPage(currentPage > 1 ? currentPage - 1 : 1)}
           className="px-[5px] text-[14px] text-gray-350"
