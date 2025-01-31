@@ -12,8 +12,12 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [accessToken, setAccessToken] = useState<string | null>(sessionStorage.getItem("accessToken"));
-  const [refreshToken, setRefreshToken] = useState<string | null>(sessionStorage.getItem("refreshToken"));
+  const [accessToken, setAccessToken] = useState<string | null>(
+    sessionStorage.getItem("accessToken")
+  );
+  const [refreshToken, setRefreshToken] = useState<string | null>(
+    sessionStorage.getItem("refreshToken")
+  );
   const [isLogin, setIsLogin] = useState(!!sessionStorage.getItem("accessToken")); // ✅ 저장된 토큰 기준 로그인 상태 유지
 
   useEffect(() => {
@@ -24,9 +28,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setAccessToken(newAccessToken);
     setRefreshToken(newRefreshToken);
     setIsLogin(true);
-    
+
     sessionStorage.setItem("accessToken", newAccessToken);
-    sessionStorage.setItem("refreshToken", newRefreshToken); // ✅ 새로고침 후에도 유지
+    sessionStorage.setItem("refreshToken", newRefreshToken);
   };
 
   const logout = () => {
@@ -39,7 +43,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <AuthContext.Provider value={{ accessToken, refreshToken, isLogin, setAccessToken, login, logout }}>
+    <AuthContext.Provider
+      value={{ accessToken, refreshToken, isLogin, setAccessToken, login, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );
