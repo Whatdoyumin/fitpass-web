@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import CardCol from "./CardCol";
 import RequireLogin from "../../components/RequireLogin";
-import { HomeCardData } from "../../type/HomeCardData";
+import { HomeCardData } from "../../types/HomeCardData";
 
 import Ad1 from "../../assets/img/ad1.jpeg";
 import Ad2 from "../../assets/img/ad2.jpg";

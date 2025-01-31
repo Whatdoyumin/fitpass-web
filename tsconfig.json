@@ -3,7 +3,7 @@
   "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.node.json" }],
   "compilerOptions": {
     "declaration": true,
-    "declarationDir": "dist/types",
+    "declarationDir": "src/types",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "baseUrl": "src",
@@ -15,5 +15,5 @@
       "@assets/*": ["assets/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/type", "custom.d.ts", "global.d.ts"]
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/types", "custom.d.ts", "global.d.ts"]
 }

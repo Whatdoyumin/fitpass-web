@@ -1,4 +1,4 @@
-import { TSearchParam } from "../type/searchFitness";
+import { TSearchParam } from "../types/searchFitness";
 import { axiosInstance } from "./axios-instance";
 
 const getSearchFitness = async ({ keyword, cursor = 0, size = 7 }: TSearchParam) => {
