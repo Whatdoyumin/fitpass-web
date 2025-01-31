@@ -3,6 +3,7 @@ import InputField from "./Signup/InputField";
 import { useNavigate } from "react-router-dom";
 import { findId } from "../apis/findid/findid";
 import PhoneVerification from "../components/PhoneVerification";
+import { AxiosError } from "axios";
 
 function FindId() {
   const navigate = useNavigate();
@@ -10,22 +11,30 @@ function FindId() {
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isCodeConfirmed, setIsCodeConfirmed] = useState(false);
-  const [showModal, setShowModal] = useState(false); // 모달 상태
+  const [showModal, setShowModal] = useState(false);
   const [id, setId] = useState("");
 
   /** 확인하기 버튼 핸들러 */
   const handleNextStep = async () => {
     if (isCodeConfirmed) {
-      const response = await findId({name, phoneNumber})
-      setId(response)
-      setShowModal(true); // 모달 열기
+      try {
+        const response = await findId({ name, phoneNumber });
+        setId(response);
+        setShowModal(true);
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          alert(error.response?.data?.message || "아이디 찾기에 실패했습니다.");
+        } else {
+          alert("아이디 찾기에 실패했습니다.");
+        }
+      }
     }
   };
 
   /** 모달 닫기 */
   const closeModal = () => {
     setShowModal(false);
-    navigate("/signin");
+    //navigate("/signin");
   };
 
   return (
@@ -45,14 +54,15 @@ function FindId() {
           />
         </div>
 
-        <PhoneVerification phoneNumber={phoneNumber} setPhoneNumber={setPhoneNumber} onVerifySuccess={() => setIsCodeConfirmed(true)} />
+        <PhoneVerification
+          phoneNumber={phoneNumber}
+          setPhoneNumber={setPhoneNumber}
+          onVerifySuccess={() => setIsCodeConfirmed(true)}
+        />
       </div>
 
       {/* 하단 버튼 */}
-      <button
-        onClick={handleNextStep}
-        className={`blueButton w-[350px] fixed bottom-[115px] h-[51px]`}
-      >
+      <button onClick={handleNextStep} className={`blueButton w-[350px] fixed bottom-[115px] h-[51px]`}>
         확인하기
       </button>
 
