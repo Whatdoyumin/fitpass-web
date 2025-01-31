@@ -3,7 +3,7 @@ import loadingAnimation from "../assets/lottie/loading.json";
 
 const LoadingSpinner = () => {
   return (
-    <div className="w-screen flex items-center justify-center">
+    <div className="w-full flex items-center justify-center">
       <Lottie loop animationData={loadingAnimation} play className="w-28 h-28" />
     </div>
   );
