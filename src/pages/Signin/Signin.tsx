@@ -42,7 +42,7 @@ function Signin() {
     signinMutation.mutate(
       { id, password },
       {
-        onError: (error) => {
+        onError: (error: unknown) => {
           setSigninError(error instanceof Error ? error.message : "알 수 없는 오류가 발생했습니다.");
         },
       }

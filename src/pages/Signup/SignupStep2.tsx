@@ -127,7 +127,7 @@ function SignupStep2() {
   const handleNextStep = () => {
     if (isFormValid) {
       signUpMutation.mutate({name, id, password, phoneNumber}, {
-        onError: (error) => {
+        onError: (error: unknown) => {
           alert(error instanceof Error ? error.message : "회원가입에 실패했습니다.");
         }
       });
