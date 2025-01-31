@@ -13,9 +13,6 @@ export const signIn = async ({ id, password }: TSignInData) => {
         "password": password
       });
 
-      localStorage.setItem('accessToken', response.data.result.accessToken);
-      localStorage.setItem('refreshToken', response.data.result.refreshToken);
-
       console.log(response.data);
     return response.data;
   } catch (error) {

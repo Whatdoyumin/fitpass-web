@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import axios from "axios";
+import config from "./config";
 import { axiosInstance } from "./axios-instance";
 import { useAuth } from "../context/AuthContext";
 
@@ -24,7 +25,7 @@ const useAxiosInstance = () => {
       async (error) => {
         if (error.response?.status === 401 && refreshToken) {
           try {
-            const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/auth/refresh`, { refreshToken });
+            const { data } = await axios.post(`${config.apiBaseUrl}/auth/refresh`, { refreshToken });
 
             setAccessToken(data.accessToken);
             localStorage.setItem("accessToken", data.accessToken);

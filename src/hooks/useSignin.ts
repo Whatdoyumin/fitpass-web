@@ -10,9 +10,9 @@ export const useSignin = () => {
   return useMutation({
     mutationFn: (data: TSignInData) => signIn(data),
     mutationKey: ["signin"],
-    onSuccess: () => {
+    onSuccess: (data: { result: { accessToken: string; refreshToken: string } }) => {
         console.log("로그인 성공");
-        login("accessToken", "refreshToken");
+        login(data.result.accessToken, data.result.refreshToken);
         navigate("/");
     },
     onError: (error:Error) => {
