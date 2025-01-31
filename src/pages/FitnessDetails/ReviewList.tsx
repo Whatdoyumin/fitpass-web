@@ -4,6 +4,14 @@ import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { axiosInstance } from "../../apis/axios-instance";
 
+// type Review = {
+//   id: number;
+//   content: string;
+//   score: number;
+//   createdAt: string;
+//   updatedAt?: string;
+// }
+
 type fetchReviewParams = {
   offset?: number;
   pageSize?: number;
@@ -62,6 +70,7 @@ function ReviewList() {
       </div>
       <div className="flex flex-col gap-[15px]">
         {data?.data.result?.reviews.map((review) => (
+        // {data?.data.result?.reviews.map((review: Review) => (
           <ReviewItem key={review.id} review={review} refetch={refetch} />
         ))}
       </div>

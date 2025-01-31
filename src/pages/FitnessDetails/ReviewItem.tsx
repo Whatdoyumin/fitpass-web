@@ -4,9 +4,9 @@ import { BorderStar, FillStar } from "../../assets/svg";
 import ReviewEditDelete from "./ReviewEditDelete";
 import { useNavigate } from "react-router-dom";
 import Modal from "../../components/Modal";
-import axios from "axios";
 import config from "../../apis/config";
 import { useMutation } from "@tanstack/react-query";
+import { axiosInstance } from "../../apis/axios-instance";
 
 interface ReviewProps {
   review: {
@@ -56,10 +56,13 @@ function ReviewItem({ review, refetch }: ReviewProps) {
 
   const mutation = useMutation({
     mutationFn: async () => {
-      const response = await axios.delete(`${config.apiBaseUrl}/fitness/review/${review.id}`);
+      const response = await axiosInstance.delete(`${config.apiBaseUrl}/fitness/review/${review.id}`);
       return response.data;
     },
-    onSuccess: () => {setOpenDeleteModal(false);},
+    onSuccess: () => {
+      setOpenDeleteModal(false);
+      refetch();
+    },
     onError: (error) => {console.log("삭제 실패", error)},
   })
 
@@ -67,7 +70,6 @@ function ReviewItem({ review, refetch }: ReviewProps) {
   const handleDeleteSuccess = () => {
     console.log("리뷰가 삭제 됨");
     mutation.mutate();
-    refetch();
   }
 
   return(
