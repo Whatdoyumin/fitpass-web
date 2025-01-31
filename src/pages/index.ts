@@ -9,7 +9,7 @@ import SearchFitness from "./SearchFitness";
 import ExploreFitness from "./ExploreFitness/ExploreFitness";
 import FitnessDetails from "./FitnessDetails/FitnessDetails";
 import PurchasePass from "./PurchasePass";
-import UsePass from "./UsePass";
+import UsePass from "./UsePass/UsePass";
 import UploadReview from "./UploadReview/UploadReview";
 import EditProfile from "./EditProfile/EditProfile";
 import ChangePassword from "./EditProfile/ChangePassword";
