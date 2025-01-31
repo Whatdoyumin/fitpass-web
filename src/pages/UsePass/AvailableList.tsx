@@ -16,7 +16,7 @@ function AvailableList() {
       name: "동국대학교 헬스장",
       address: "서울특별시 중구 올림픽로 789",
       distance: "5km",
-      image: "https://pbs.twimg.com/media/GFesVWkaEAAlP-3.jpg:large",
+      image: "https://img.freepik.com/free-photo/gym-with-indoor-cycling-equipment_23-2149270210.jpg",
     },
   ];
 

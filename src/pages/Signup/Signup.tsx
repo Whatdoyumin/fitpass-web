@@ -2,6 +2,8 @@ import { useState } from "react";
 import InputField from "./InputField";
 import { useNavigate } from "react-router-dom";
 import { checkID } from "../../apis/signup/signup";
+import { AxiosError } from "axios";
+import { useCheckIDMutation } from "../../hooks/useSignup";
 
 function Signup() {
   const [id, setId] = useState("");
@@ -45,22 +47,26 @@ function Signup() {
   };
 
   const isFormValid =
-  idError === "" &&
+    idError === "" &&
     passwordError === "" &&
     confirmPasswordError === "" &&
     id.trim() !== "" &&
     password.trim() !== "" &&
     confirmPassword.trim() !== "";
 
+  const checkIDMutation = useCheckIDMutation();
+
   /** 다음 단계 이동 함수 */
-  const handleNextStep = async () => {
+  const handleNextStep = () => {
     if (isFormValid) {
-      try {
-        await checkID(id);
-        navigate("/signup/step2", { state: { id, password } });
-      } catch (error) {
-        setIdError(error.message);
-      }
+        checkIDMutation.mutate({ id }, {
+          onSuccess: () => {
+            navigate("/signup/step2", { state: { id, password } });
+          },
+          onError: (error: unknown) => {
+            setIdError(error instanceof Error ? error.message : "알 수 없는 오류가 발생했습니다.");
+          },
+        });
     }
   };
 

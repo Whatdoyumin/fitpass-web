@@ -16,21 +16,21 @@ function CompletedList() {
           address: "서울특별시 강남구 테헤란로 123",
           distance: "2km",
           image:
-            "https://hankki-prod-bucket.s3.ap-northeast-2.amazonaws.com/dummy/%E1%84%80%E1%85%A9%E1%84%85%E1%85%A7%E1%84%83%E1%85%A2+%E1%84%86%E1%85%B5%E1%86%AF%E1%84%91%E1%85%B3%E1%86%AF%E1%84%85%E1%85%A2%E1%86%AB%E1%84%87%E1%85%B5.jpeg",
+            "https://image.ytn.co.kr/general/jpg/2023/0731/202307311330019611_h.jpg",
           date: "2024.12.01",
         },
         {
           name: "상명대 센터 B",
           address: "서울특별시 서초구 서초대로 456서울특별시 서초구 서초대로 456",
           distance: "3.5km",
-          image: "https://pbs.twimg.com/media/GFesVWkaEAAlP-3.jpg:large",
+          image: "https://blog.kakaocdn.net/dn/BwiKj/btrvJT4XtsX/fNcBY2m3cIUxzXkEDuXqfk/img.jpg",
           date: "2025.01.15",
         },
         {
           name: "동국대 헬스장",
           address: "서울특별시 중구 올림픽로 789",
           distance: "5km",
-          image: "https://pbs.twimg.com/media/GFesVWkaEAAlP-3.jpg:large",
+          image: "https://img.freepik.com/free-photo/gym-with-indoor-cycling-equipment_23-2149270210.jpg",
           date: "2025.01.01",
         },
       ];

@@ -1,47 +1,42 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useGetNotices } from "../../apis/mypage/quries/useNoticeApi"; // react-query 훅을 가져옵니다
 import SvgIcLeftPage from "../../assets/svg/IcLeftPage";
 import SvgIcRightPage from "../../assets/svg/IcRightPage";
 
 export interface Notice {
   id: number;
-  type: "공지" | "이벤트";
+  type: string;
   title: string;
-  author: string;
   createdAt: string;
-  views: number;
-  text: string;
   imageUrl: string;
+  content: string;
 }
 
-const notices: Notice[] = Array.from({ length: 82 }, (_, i) => ({
-  id: i + 1,
-  type: i % 2 === 0 ? "공지" : "이벤트",
-  title: `공지/이벤트 ${i + 1} 제목`,
-  author: `작성자${i + 1}`,
-  createdAt: new Date(2025, 0, i + 1).toISOString(),
-  views: Math.floor(Math.random() * 1000),
-  text: `이것은 공지/이벤트 ${i + 1}의 상세 내용입니다.`,
-  imageUrl: `/assets/img/img_notice.jpg`,
-}));
+export interface NoticesResponse {
+  content: { content: Notice[]; totalElements: number | undefined; totalPages: number };
+}
 
-const Notice = () => {
+const NoticeList = () => {
   const navigate = useNavigate();
-
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 10;
 
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = notices.slice(indexOfFirstItem, indexOfLastItem);
+  const { data, error, isLoading } = useGetNotices(currentPage - 1, itemsPerPage);
 
-  const totalPages = Math.ceil(notices.length / itemsPerPage);
+  if (isLoading) return <div>로딩</div>;
+  if (error instanceof Error) return <div>오류: {error.message}</div>;
+
+  const noticesData = data;
+  const notices: Notice[] = noticesData?.content?.content ?? [];
+  const totalPages: number = noticesData?.content?.totalPages ?? 1;
+
   const getPagination = () => {
     const range = 1;
     const start = Math.max(currentPage - range, 1);
     const end = Math.min(currentPage + range, totalPages);
 
-    let pages = [];
+    let pages: (number | string)[] = [];
     for (let i = start; i <= end; i++) {
       pages.push(i);
     }
@@ -54,17 +49,13 @@ const Notice = () => {
   return (
     <div className="relative flex flex-col min-h-screen">
       <ul className="overflow-y-auto">
-        {currentItems.map((notice) => (
+        {notices.map((notice) => (
           <li
             key={notice.id}
             className="border-b px-6 py-3"
             onClick={() => navigate(`/my/noticedetail/${notice.id}`)}
           >
-            <span
-              className={`font-medium ${notice.type === "공지" ? "text-blue-500" : "text-red-600"}`}
-            >
-              [{notice.type}]
-            </span>{" "}
+            <span className="font-medium text-blue-500">[공지] </span>
             <span className="text-gray-700">{notice.title}</span>
           </li>
         ))}
@@ -87,11 +78,7 @@ const Notice = () => {
               setCurrentPage(page as number);
             }}
             className={`px-[5px] text-[14px] ${
-              currentPage === page
-                ? "text-gray-600"
-                : page === "..."
-                ? "text-gray-350"
-                : "text-gray-350"
+              currentPage === page ? "text-gray-600" : "text-gray-350"
             }`}
           >
             {page}
@@ -109,4 +96,4 @@ const Notice = () => {
   );
 };
 
-export default Notice;
+export default NoticeList;
