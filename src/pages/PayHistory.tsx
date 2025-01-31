@@ -2,23 +2,50 @@ import { useEffect, useState } from "react";
 import { IcEmptyDollarBlue } from "../assets/svg";
 import { PaymentCard } from "../components/paymentCard/PaymentCard";
 import { Toggle } from "../components/paymentCard/Toggle";
-import { useGetPayHistory } from "../hooks/useGetPayHistory";
+import { useGetPayHistory, usePostPayDeactivate } from "../hooks/useGetPayHistory";
 import { useInView } from "react-intersection-observer";
 import { GuideLogin } from "./GuideLogin";
 import { TPayHistoryItem, TPayQuery } from "../type/payHistory";
 import { useAuth } from "../context/AuthContext";
 import SkeletonPaymentCard from "./../components/paymentCard/SkeletonPaymentCard";
+import Modal from "../components/Modal";
+import { useNavigate } from "react-router-dom";
 
 function PayHistory() {
+  const navigate = useNavigate();
   const [query, setQuery] = useState<TPayQuery>("ALL");
+  const [isSubscribing, setIsSubscribing] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
   const { isLogin } = useAuth();
 
   const { data, isFetching, hasNextPage, fetchNextPage, isPending, isError, error } =
     useGetPayHistory(query);
+  const { mutate } = usePostPayDeactivate();
 
   const handleAllClick = () => setQuery("ALL");
   const handlePlanClick = () => setQuery("PLAN");
   const handleCoinClick = () => setQuery("COIN");
+
+  const handleModalOpen = () => {
+    setIsModalOpen(true);
+  };
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    if (isCompleted) {
+      navigate("/my");
+    }
+  };
+  const handleCompleteDeactivate = () => {
+    mutate(undefined, {
+      onSuccess: () => {
+        setIsCompleted(true);
+      },
+      onError: () => {
+        alert("에러가 발생했습니다. 다시 시도해주세요.");
+      },
+    });
+  };
 
   const { ref, inView } = useInView({ threshold: 0 });
 
@@ -36,7 +63,7 @@ function PayHistory() {
         </div>
       );
     }
-    alert("다시 시도해주세요.");
+    console.log("다시 시도해주세요.");
     return;
   }
 
@@ -48,12 +75,20 @@ function PayHistory() {
     );
   }
 
+  if (data?.pages[0]?.data.result?.isSubscribing === true) {
+    setIsSubscribing(true);
+  }
+
   const formatDate = (dateString: string) => {
     return dateString.split("T")[0].replace(/-/g, ".");
   };
 
   return (
-    <div className="w-full h-full overflow-y-auto px-4 py-6 bg-white-200">
+    <div
+      className={`w-full h-full overflow-y-auto px-4 pt-6 bg-white-200 ${
+        isSubscribing ? "pb-14" : "pb-6"
+      }`}
+    >
       <div className="w-full flex flex-col gap-6">
         <div className="w-full flex justify-between items-center">
           <h1 className="text-25px font-extrabold">구매 내역</h1>
@@ -95,6 +130,25 @@ function PayHistory() {
           </div>
         )}
       </div>
+      {isSubscribing ? (
+        <button
+          className="w-[340px] h-[51px] blueButton bottom-navbar left-[7%] fixed"
+          onClick={handleModalOpen}
+        >
+          정기 구독 해지하기
+        </button>
+      ) : null}
+
+      {isModalOpen && (
+        <Modal
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          onSuccess={isCompleted ? handleCloseModal : handleCompleteDeactivate}
+          title={isCompleted ? "구독 해지가 완료되었습니다." : "구독을 해지하시겠습니까?"}
+          btn1Text={isCompleted ? null : "아니요"}
+          btn2Text={isCompleted ? "확인" : "네"}
+        />
+      )}
     </div>
   );
 }
