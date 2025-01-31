@@ -20,7 +20,6 @@ function SignupStep2() {
 
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [isPhoneVerified, setIsPhoneVerified] = useState(false);
   const [certificationCode, setCertificationCode] = useState("");
   const [isCodeSent, setIsCodeSent] = useState(false);
   const [isCodeConfirmed, setIsCodeConfirmed] = useState(false);
@@ -101,7 +100,6 @@ function SignupStep2() {
       try {
         await verifyPhoneNumber({phoneNumber, certificationCode});
         setCodeError("");
-        setIsPhoneVerified(true);
         setIsCodeConfirmed(true);
         setIsTimerRunning(false);
       } catch (error) {
@@ -117,7 +115,7 @@ function SignupStep2() {
   const isFormValid =
     name.trim() !== "" &&
     phoneNumber.trim() !== "" &&
-    isPhoneVerified &&
+    isCodeConfirmed &&
     agreements.terms &&
     agreements.location &&
     agreements.thirdParty;

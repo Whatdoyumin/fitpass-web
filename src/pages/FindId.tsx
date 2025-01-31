@@ -1,19 +1,23 @@
 import { useState, useEffect } from "react";
 import InputField from "./Signup/InputField";
 import { useNavigate } from "react-router-dom";
+import { verifyCode, verifyPhoneNumber } from "../apis/verify/verify";
+import { AxiosError } from "axios";
+import { findId } from "../apis/findid/findid";
 
 function FindId() {
   const navigate = useNavigate();
 
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [isPhoneVerified, setIsPhoneVerified] = useState(false);
-  const [verificationCode, setVerificationCode] = useState("");
+  const [certificationCode, setCertificationCode] = useState("");
   const [isCodeSent, setIsCodeSent] = useState(false);
   const [isCodeConfirmed, setIsCodeConfirmed] = useState(false);
   const [timer, setTimer] = useState(180); // 3분 (180초)
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [showModal, setShowModal] = useState(false); // 모달 상태
+  const [codeError, setCodeError] = useState("");
+  const [id, setId] = useState("");
 
   /** 타이머 시작 */
   useEffect(() => {
@@ -44,8 +48,9 @@ function FindId() {
   };
 
   /** 인증하기 버튼 핸들러 */
-  const handleSendCode = () => {
+  const handleSendCode = async () => {
     if (validatePhoneNumber()) {
+      await verifyCode(phoneNumber);
       setIsCodeSent(true);
       setIsTimerRunning(true);
       setTimer(180); // 3분 타이머 시작
@@ -53,17 +58,28 @@ function FindId() {
   };
 
   /** 인증번호 확인 */
-  const handleVerifyCode = () => {
-    if (verificationCode === "123456") {
-      setIsCodeConfirmed(true);
-      setIsPhoneVerified(true);
-      setIsTimerRunning(false);
+  const handleVerifyCode = async() => {
+    if (certificationCode.length === 6) {
+      try {
+        await verifyPhoneNumber({phoneNumber, certificationCode});
+        setCodeError("");
+        setIsCodeConfirmed(true);
+        setIsTimerRunning(false);
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          setCodeError(error.response?.data?.message || "인증에 실패했습니다.");
+        } else {
+          setCodeError("인증에 실패했습니다.");
+        }
+      }
     }
   };
 
   /** 확인하기 버튼 핸들러 */
-  const handleNextStep = () => {
+  const handleNextStep = async () => {
     if (isCodeConfirmed) {
+      const response = await findId({name, phoneNumber})
+      setId(response)
       setShowModal(true); // 모달 열기
     }
   };
@@ -127,29 +143,31 @@ function FindId() {
                 <input
                   type="text"
                   placeholder="인증번호를 입력해주세요"
-                  value={verificationCode}
-                  onChange={(e) => setVerificationCode(e.target.value)}
-                  className="w-full outline-none text-[14px] font-medium placeholder-gray-400"
-                />
-                <span className="text-red-500 text-[14px] absolute right-[15px]">
-                  {`${Math.floor(timer / 60)}:${String(timer % 60).padStart(2, "0")}`}
-                </span>
-              </div>
-              <button
-                onClick={handleVerifyCode}
-                disabled={verificationCode.length !== 6}
-                className={`h-[50px] px-5 rounded-[5px] text-[15px] font-medium ${
-                  verificationCode.length === 6
-                    ? "bg-blue-500 text-white-100 hover:bg-blue-400"
-                    : "bg-blue-250 text-white-100"
-                }`}
+                  value={certificationCode}
+                    onChange={(e) => setCertificationCode(e.target.value)}
+                    className="w-full outline-none text-[14px] font-medium placeholder-gray-400"
+                  />
+                  <span className="text-red-500 text-[14px] absolute right-[15px]">
+                    {`${Math.floor(timer / 60)}:${String(timer % 60).padStart(2, "0")}`}
+                  </span>
+                </div>
+                <button
+                  onClick={handleVerifyCode}
+                  disabled={certificationCode.length !== 6}
+                  className={`h-[50px] px-[20px] rounded-[5px] text-[15px] font-medium ${
+                    certificationCode.length === 6
+                      ? "bg-blue-500 text-white-100 hover:bg-blue-400"
+                      : "bg-blue-250 text-white-100"
+                  }`}
               >
                 확인하기
               </button>
             </div>
           )}
 
-          {isCodeConfirmed && isPhoneVerified && (
+          {/* 인증번호 오류 메시지 */}
+          {codeError && <span className="text-red-500 text-[13px] mt-[10px]">{codeError}</span>}
+          {isCodeConfirmed && (
             <span className="text-[15px] text-green-500 mt-[10px]">인증이 완료되었습니다.</span>
           )}
         </div>
@@ -169,7 +187,7 @@ function FindId() {
           {/* 모달 콘텐츠 */}
           <div className="bg-white-100 rounded-lg pt-5 p-[15px] w-[300px] text-center z-60">
             <h2 className="text-[18px] font-medium text-black-700 mb-[10px]">회원님의 아이디는</h2>
-            <p className="text-[12px] font-medium text-gray-500 mb-[35px]">abcd123 입니다</p>
+            <p className="text-[12px] font-medium text-gray-500 mb-[35px]">{id} 입니다</p>
             <button onClick={closeModal} className="blueButton w-[270px] h-[46px]">
               확인
             </button>
