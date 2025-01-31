@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import InputField from "./InputField";
-import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { MoreTerms } from "../../assets/svg";
-import Portal from "../../components/Portal";
+import { verifyCode, verifyPhoneNumber } from "../../apis/verify/verify";
+import { AxiosError } from "axios";
+import { useSignUpMutation } from "../../hooks/useSignup";
 
 interface Agreements {
   all: boolean;
@@ -13,14 +15,18 @@ interface Agreements {
 }
 
 function SignupStep2() {
+  const location = useLocation();
+  const { id, password } = location.state || {};
+
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isPhoneVerified, setIsPhoneVerified] = useState(false);
-  const [verificationCode, setVerificationCode] = useState("");
+  const [certificationCode, setCertificationCode] = useState("");
   const [isCodeSent, setIsCodeSent] = useState(false);
   const [isCodeConfirmed, setIsCodeConfirmed] = useState(false);
-  const [timer, setTimer] = useState(180); // 3분 (180초)
+  const [timer, setTimer] = useState(180); // 3분 타이머
   const [isTimerRunning, setIsTimerRunning] = useState(false);
+  const [codeError, setCodeError] = useState("");
 
   const [agreements, setAgreements] = useState<Agreements>({
     all: false,
@@ -29,8 +35,6 @@ function SignupStep2() {
     thirdParty: false,
     marketing: false,
   });
-
-  const navigate = useNavigate();
 
   /** 전체 동의 핸들러 */
   const handleAllAgreement = () => {
@@ -55,16 +59,24 @@ function SignupStep2() {
 
   /** 타이머 시작 */
   useEffect(() => {
-    let timerInterval: NodeJS.Timeout | undefined = undefined;
+    let timerInterval: ReturnType<typeof setInterval> | null = null;
+
     if (isTimerRunning && timer > 0) {
       timerInterval = setInterval(() => {
         setTimer((prev) => prev - 1);
       }, 1000);
     } else if (timer === 0) {
-      clearInterval(timerInterval);
+      if (timerInterval) {
+        clearInterval(timerInterval);
+      }
       setIsTimerRunning(false);
     }
-    return () => clearInterval(timerInterval);
+
+    return () => {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+      }
+    };
   }, [isTimerRunning, timer]);
 
   /** 휴대폰 번호 확인 */
@@ -74,8 +86,9 @@ function SignupStep2() {
   };
 
   /** 인증하기 버튼 핸들러 */
-  const handleSendCode = () => {
+  const handleSendCode = async () => {
     if (validatePhoneNumber()) {
+      await verifyCode(phoneNumber);
       setIsCodeSent(true);
       setIsTimerRunning(true);
       setTimer(180); // 3분 타이머 시작
@@ -83,15 +96,24 @@ function SignupStep2() {
   };
 
   /** 인증번호 확인 */
-  const handleVerifyCode = () => {
-    if (verificationCode === "123456") {
-      setIsCodeConfirmed(true);
-      setIsPhoneVerified(true);
-      setIsTimerRunning(false);
+  const handleVerifyCode = async() => {
+    if (certificationCode.length === 6) {
+      try {
+        await verifyPhoneNumber({phoneNumber, certificationCode});
+        setCodeError("");
+        setIsPhoneVerified(true);
+        setIsCodeConfirmed(true);
+        setIsTimerRunning(false);
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          setCodeError(error.response?.data?.message || "인증에 실패했습니다.");
+        } else {
+          setCodeError("인증에 실패했습니다.");
+        }
+      }
     }
   };
 
-  /** 모든 약관이 체크되었는지 확인 */
   const isFormValid =
     name.trim() !== "" &&
     phoneNumber.trim() !== "" &&
@@ -100,30 +122,34 @@ function SignupStep2() {
     agreements.location &&
     agreements.thirdParty;
 
-  /** 다음 단계 핸들러 */
+    const signUpMutation = useSignUpMutation();
+
   const handleNextStep = () => {
     if (isFormValid) {
-      navigate("/signin");
+      signUpMutation.mutate({name, id, password, phoneNumber}, {
+        onError: (error: unknown) => {
+          alert(error instanceof Error ? error.message : "회원가입에 실패했습니다.");
+        }
+      });
+      }
     }
-  };
 
   return (
-    <Portal>
-      <div className="w-full max-w-content flex flex-col items-center h-screen relative px-[20px] pt-[84px]">
-        {/* 스크롤 가능 영역 */}
-        <div className="flex-grow w-full overflow-auto flex flex-col gap-[20px]">
-          {/* 이름 입력창 */}
-          <div className="w-full flex flex-col gap-[10px]">
-            <label htmlFor="name" className="text-[16px] font-medium text-black-700">
-              이름
-            </label>
-            <InputField
-              type="text"
-              placeholder="이름을 입력해주세요"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </div>
+      <div className="w-full max-w-content flex flex-col items-center h-screen relative px-5 pt-[29px]">
+      {/* 스크롤 가능 영역 */}
+      <div className="flex-grow w-full overflow-auto flex flex-col gap-[20px]">
+        {/* 이름 입력창 */}
+        <div className="w-full flex flex-col gap-[10px]">
+          <label htmlFor="name" className="text-[16px] font-medium text-black-700">
+            이름
+          </label>
+          <InputField
+            type="text"
+            placeholder="이름을 입력해주세요"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </div>
 
           {/* 휴대폰 입력창 */}
           <div className="w-full flex flex-col gap-[10px]">
@@ -147,7 +173,7 @@ function SignupStep2() {
                 className={`h-[50px] px-[20px] rounded-[5px] text-[15px] font-medium ${
                   validatePhoneNumber()
                     ? "bg-blue-500 text-white-100 hover:bg-blue-400"
-                    : "bg-gray-400 text-white-100"
+                    : "bg-blue-250 text-white-100"
                 }`}
               >
                 인증하기
@@ -161,8 +187,8 @@ function SignupStep2() {
                   <input
                     type="text"
                     placeholder="인증번호를 입력해주세요"
-                    value={verificationCode}
-                    onChange={(e) => setVerificationCode(e.target.value)}
+                    value={certificationCode}
+                    onChange={(e) => setCertificationCode(e.target.value)}
                     className="w-full outline-none text-[14px] font-medium placeholder-gray-400"
                   />
                   <span className="text-red-500 text-[14px] absolute right-[15px]">
@@ -171,9 +197,9 @@ function SignupStep2() {
                 </div>
                 <button
                   onClick={handleVerifyCode}
-                  disabled={verificationCode.length !== 6}
+                  disabled={certificationCode.length !== 6}
                   className={`h-[50px] px-[20px] rounded-[5px] text-[15px] font-medium ${
-                    verificationCode.length === 6
+                    certificationCode.length === 6
                       ? "bg-blue-500 text-white-100 hover:bg-blue-400"
                       : "bg-blue-250 text-white-100"
                   }`}
@@ -183,8 +209,11 @@ function SignupStep2() {
               </div>
             )}
 
+            {/* 인증번호 오류 메시지 */}
+            {codeError && <span className="text-red-500 text-[13px] mt-[10px]">{codeError}</span>}
+            {/* 인증 완료 메시지 */}
             {isCodeConfirmed && (
-              <span className="text-[15px] text-green-500 mt-[10px]">확인되었습니다.</span>
+              <span className="text-[13px] text-green-500 mt-[10px]">확인되었습니다.</span>
             )}
           </div>
         </div>
@@ -247,23 +276,21 @@ function SignupStep2() {
           </div>
         </div>
 
-        {/* 하단 버튼 */}
-        <button
-          onClick={handleNextStep}
-          disabled={!isFormValid}
-          className={`w-screen h-[86px] text-[20px] font-medium text-white-100 ${
-            isFormValid ? "bg-blue-500 hover:bg-blue-400" : "bg-gray-400"
-          }`}
-          style={{
-            paddingTop: "17px",
-            paddingBottom: "39px",
-            height: "86px",
-          }}
-        >
-          동의하고 가입하기
-        </button>
-      </div>
-    </Portal>
+      {/* 하단 버튼 */}
+      <button
+        onClick={handleNextStep}
+        disabled={!isFormValid}
+        className={`fixed bottom-0 left-0 w-screen h-[86px] text-[20px] font-medium text-white-100 ${
+          isFormValid ? "bg-blue-500 hover:bg-blue-400" : "bg-gray-400"
+        }`}
+        style={{
+          paddingTop: "17px",
+          paddingBottom: "39px",
+        }}
+      >
+        동의하고 가입하기
+      </button>
+    </div>
   );
 }
 

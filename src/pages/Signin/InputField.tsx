@@ -13,6 +13,8 @@ interface InputFieldProps {
   iconFocus?: React.ReactNode; // Focus 상태 아이콘
   isPassword?: boolean; // 비밀번호 입력창 여부
   trailingIcon?: React.ReactNode;
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 function InputField({
@@ -22,6 +24,8 @@ function InputField({
   iconFocus,
   isPassword = false,
   trailingIcon,
+  value,
+  onChange,
 }: InputFieldProps) {
   const [inputType, setInputType] = useState(type); // 입력 타입 상태 관리
   const [isPasswordVisible, setIsPasswordVisible] = useState(false); // 비밀번호 표시 여부
@@ -59,6 +63,8 @@ function InputField({
       {/* 입력 필드 */}
       <input
         ref={inputRef}
+        value={value}
+        onChange={onChange}
         type={inputType}
         placeholder={placeholder}
         inputMode="text"
