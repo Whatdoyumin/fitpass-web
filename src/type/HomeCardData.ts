@@ -1,7 +1,8 @@
 
 // 홈 카드 데이터
 export type HomeCardData = {
-  image: string;
+  fitnessId: number;
   name: string;
   distance: number;
+  imageUrl: string;
 }
