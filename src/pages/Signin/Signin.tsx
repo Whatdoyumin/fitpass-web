@@ -4,14 +4,14 @@ import {
   User, 
   PasswordFocus, 
   UserFocus, 
-  PlatformGoogle, 
-  PlatformKaKao, 
-  PlatformNaver 
 } from "../../assets/svg";
 import InputField from "./InputField";
 import { useNavigate } from "react-router-dom";
-import { signIn } from "../../apis/signin/signin";
 import { useState } from "react";
+import KakaoLoginButton from "../../components/socialLogin/KakaoLoginButton";
+import GoogleLoginButton from "../../components/socialLogin/GoogleLoginButton";
+import NaverLoginButton from "../../components/socialLogin/NaverLoginButton";
+import { useSignin } from "../../hooks/useSignin";
 
 function Signin() {
   const navigate = useNavigate();
@@ -19,7 +19,6 @@ function Signin() {
   const [password, setPassword] = useState("");
   const [signinError, setSigninError] = useState("");
 
-  /** 회원가입 페이지로 이동 */
   const handleSignupRedirect = () => {
     navigate("/signup");
   };
@@ -32,13 +31,22 @@ function Signin() {
     navigate("/find-password");
   }
 
-  const handleSignin = async () => {
-    try {
-      await signIn(id, password);
-      navigate("/");
-    } catch (error) {
-      setSigninError(error.message);
+  const signinMutation = useSignin();
+
+  const handleSignin = () => {
+    if (!id || !password) {
+      setSigninError("아이디와 비밀번호를 입력해주세요.");
+      return;
     }
+
+    signinMutation.mutate(
+      { id, password },
+      {
+        onError: (error: unknown) => {
+          setSigninError(error instanceof Error ? error.message : "알 수 없는 오류가 발생했습니다.");
+        },
+      }
+    );
   };
 
   return (
@@ -132,9 +140,9 @@ function Signin() {
 
       {/* 소셜 로그인 */}
       <div className="flex gap-[35px] mt-[45.5px]">
-        <PlatformKaKao className="w-[60px] h-[60px]" />
-        <PlatformNaver className="w-[60px] h-[60px]" />
-        <PlatformGoogle className="w-[60px] h-[60px]" />
+        <KakaoLoginButton />
+        <NaverLoginButton />
+        <GoogleLoginButton />
       </div>
 
       <button
