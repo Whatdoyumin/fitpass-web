@@ -1,9 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import SvgLocation from "../../assets/svg/Location";
-import { RecommendList } from "./Home";
+import { HomeCardData } from "../../type/HomeCardData";
+import { handleSaveToLocalStorage } from "../../utils/storageUtils";
 
 type CardColProps = {
-  data: RecommendList
+  data: HomeCardData
 } 
 
 function CardCol({ data }: CardColProps) {
@@ -12,27 +13,7 @@ function CardCol({ data }: CardColProps) {
 
   // 로컬 스토리지 저장 및 상세 페이지로 이동
   const handleClickCard = () => {
-
-    const watched = JSON.parse(localStorage.getItem("watched") || "[]");
-
-    const currentFacility = {
-      fitnessId: data.fitnessId,
-      name: data.name,
-      distance: data.distance,
-      imageUrl: data.imageUrl,
-    };
-    
-    if (!watched.some((item: RecommendList) => item.fitnessId === data.fitnessId)) {
-      watched.unshift(currentFacility);  // 가장 앞쪽에 요소 추가
-    }
-
-    // 최근 본 운동 시설은 최대 7개까지
-    if (watched.length > 7) {
-      watched.pop();  // 마지막 요소 제거
-    }
-
-    localStorage.setItem('watched', JSON.stringify(watched));
-
+    handleSaveToLocalStorage(data);
     navigate(`/fitness/${data.fitnessId}`);
   }
 
