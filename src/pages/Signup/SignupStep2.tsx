@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import InputField from "./InputField";
 import { useLocation } from "react-router-dom";
 import { MoreTerms } from "../../assets/svg";
@@ -16,6 +16,42 @@ interface Agreements {
 function SignupStep2() {
   const location = useLocation();
   const { id, password } = location.state || {};
+
+  const [tokens, setTokens] = useState({
+    accessToken: "",
+    refreshToken: "",
+    status: "",
+  });
+
+  useEffect(() => {
+    const fetchTokens = async () => {
+      try {
+        const response = await fetch("http://localhost:5173/signup/step2", {
+          method: "GET",
+          credentials: "include", // ✅ 쿠키 사용 시 필요
+        });
+
+        const accessToken = response.headers.get("Authorization");
+        const refreshToken = response.headers.get("X-Refresh-Token");
+        const status = response.headers.get("X-Status");
+
+        console.log("🔑 [소셜 로그인] 헤더 정보:", { accessToken, refreshToken, status })
+
+        if (status === "register") {
+          setTokens({
+            accessToken: accessToken || "",
+            refreshToken: refreshToken || "",
+            status: "register",
+          });
+        }
+      } catch (error) {
+        console.error("헤더 데이터 가져오기 실패:", error);
+      }
+    };
+
+        fetchTokens();
+      }, []);
+    
 
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
