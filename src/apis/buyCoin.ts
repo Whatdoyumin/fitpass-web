@@ -1,8 +1,8 @@
-import { TPayCoinBody, TPayCoinSuccess } from "../type/buyCoin";
+import { TPayCoinBody, TPayCoinSuccess } from "../types/buyCoin";
 import { axiosInstance } from "./axios-instance";
 
 const postPayCoin = async ({ itemName, quantity, totalAmount, methodName }: TPayCoinBody) => {
-  const { data } = await axiosInstance.post("/coin/pay", {
+  const { data } = await axiosInstance.post("/coin/pay/request", {
     itemName: itemName,
     quantity: quantity,
     totalAmount: totalAmount,
