@@ -3,14 +3,14 @@ import ReviewItem from "./ReviewItem";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { axiosInstance } from "../../apis/axios-instance";
+import { TReview } from "../../type/review";
 
-// type Review = {
-//   id: number;
-//   content: string;
-//   score: number;
-//   createdAt: string;
-//   updatedAt?: string;
-// }
+type ReviewsResponse = {
+  result: {
+    reviews: TReview[];
+    totalPages: number;
+  };
+}
 
 type fetchReviewParams = {
   offset?: number;
@@ -25,27 +25,26 @@ function ReviewList() {
   const [page, setPage] = useState(1);  // 현재 페이지
   const pageSize = 3;
 
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
 
-  const fetchReview = async () => {
+  const fetchReview = async (): Promise<ReviewsResponse> => {
     const params: fetchReviewParams = {
       offset: (page - 1) * pageSize,
       pageSize: pageSize,
       sortBy: sortOption,
     }
-    // const response = await axios.get(`${config.apiBaseUrl}/fitness/${id}/review`, {params});
     const response = await axiosInstance.get(`/fitness/${id}/review`, {params});
-    return response;
+    console.log(response.data);
+    return response.data;
   }
 
-  const { data, refetch } = useQuery({
-    queryKey: ['reviews', id, sortOption],
+  const { data, refetch } = useQuery<ReviewsResponse>({
+    queryKey: ['reviews', id, sortOption, page],
     queryFn: fetchReview,
   })
 
-  console.log(data?.data);
-
   const handlePageChange = (newPage: number) => {
+    // if (newPage < 1 || newPage > (data?.result?.totalPages ?? 0)) return;
     setPage(newPage);
     if (newPage !== page) {
       refetch();
@@ -69,8 +68,7 @@ function ReviewList() {
           onClick={() => sortReviews("date")}>최신순</button>
       </div>
       <div className="flex flex-col gap-[15px]">
-        {data?.data.result?.reviews.map((review) => (
-        // {data?.data.result?.reviews.map((review: Review) => (
+        {data?.result?.reviews.map((review) => (
           <ReviewItem key={review.id} review={review} refetch={refetch} />
         ))}
       </div>
@@ -79,22 +77,23 @@ function ReviewList() {
         <button
           onClick={() => handlePageChange(page - 1)}
           disabled={page === 1}>{"<"}</button>
-        {data?.data.result?.totalPages &&
-        new Array(data?.data.result?.totalPages).fill(null).map((_, index) => {
-          const pageNum = index + 1;
-          return (
-            <button
-              className={`${page === pageNum ? 'text-gray-600' : 'text-gray-350'}`}
-              onClick={() => handlePageChange(pageNum)}
-            >
-              {pageNum}
-            </button>
-          )
-        })
-      }
+        {
+        // {data?.totalPages &&
+          new Array(data?.result?.totalPages).fill(null).map((_, index) => {
+            const pageNum = index + 1;
+            return (
+              <button
+                className={`${page === pageNum ? 'text-gray-600' : 'text-gray-350'}`}
+                onClick={() => handlePageChange(pageNum)}
+              >
+                {pageNum}
+              </button>
+            )
+          })
+        }
       <button
         onClick={() => handlePageChange(page + 1)}
-        disabled={page >= data?.data.result?.totalPages}>{">"}</button>
+        disabled={page >= (data?.result?.totalPages ?? 0)}>{">"}</button>
       </div>
     </>
   );

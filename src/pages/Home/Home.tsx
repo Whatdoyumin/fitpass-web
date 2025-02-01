@@ -13,10 +13,11 @@ import { HomeCardData } from "../../type/HomeCardData";
 import Ad1 from "../../assets/img/ad1.jpeg";
 import Ad2 from "../../assets/img/ad2.jpg";
 import Ad3 from "../../assets/img/ad3.jpg";
-import axios from "axios";
+
 import { useAuth } from "../../context/AuthContext";
 import { LoadingSpinner } from "../../components/LoadingSpinner";
 import NotFound from "../NotFound";
+import { axiosInstance } from "../../apis/axios-instance";
 
 function Home() {
   const {isLogin} = useAuth();
@@ -43,8 +44,7 @@ function Home() {
   }, []);
 
   const fetchRecommend = async () => {
-    // const response = await axiosInstance.get("/fitness/recommend");
-    const response = await axios.get("http://15.165.128.52:8080/fitness/recommend");
+    const response = await axiosInstance.get("/fitness/recommend");
     return response;
   };
 

@@ -7,22 +7,15 @@ import Modal from "../../components/Modal";
 import config from "../../apis/config";
 import { useMutation } from "@tanstack/react-query";
 import { axiosInstance } from "../../apis/axios-instance";
+import { TReview } from "../../type/review";
 
 interface ReviewProps {
-  review: {
-    id: number;
-    content: string;
-    score: number;
-    createdAt: string;
-    updatedAt?: string;
-    isOwner: boolean;
-  },
+  review: TReview,
   refetch: () => void;
 }
 
 function ReviewItem({ review, refetch }: ReviewProps) {
 
-  // const score: number = 3; // 임시 별점
   const [isOpen, setIsOpen] = useState(false); // 수정삭제 버튼
 
   const navigate = useNavigate();
