@@ -26,7 +26,7 @@ function CardCol({ data }: CardColProps) {
       />
       <div className="h-9 bg-white-100 rounded flex items-center justify-between gap-[10px] shadow-md">
         <span className="text-[11px] font-medium text-ellipsis overflow-hidden whitespace-nowrap flex-grow pl-[10px] ">
-          {data.name}
+          {data.fitnessName}
         </span>
         <div className="h-full flex items-center gap-1 content-center pr-[10px] ">
           <SvgLocation className="w-[7px] h-[9px]" />

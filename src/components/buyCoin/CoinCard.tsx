@@ -3,7 +3,7 @@ import { IcCoinWhite, IcEmptyDollar, IcEmptyDollarBlue, IcMycoinRectangle } from
 interface ICoinCardProps {
   isBgBlue: boolean;
   coinAmount: number;
-  coinPrice: string;
+  coinPrice: number;
   coinExp: number;
 }
 
