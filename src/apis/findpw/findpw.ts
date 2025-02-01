@@ -6,7 +6,7 @@ export interface TFindPwData {
 
 export interface TResetPwData {
   id: string;
-  newPassword: string;
+  password: string;
 }
 
 import axios from 'axios';
@@ -31,11 +31,11 @@ export const findPw = async ({ id, name, phoneNumber }: TFindPwData) => {
   }
 };
 
-export const resetPw = async ({ id, newPassword }: TResetPwData) => {
+export const resetPw = async ({ id, password }: TResetPwData) => {
   try {
-    const response = await axios.post(`${config.apiBaseUrl}/auth/reset-password`, {
+    const response = await axios.patch(`${config.apiBaseUrl}/auth/reset-password`, {
         "loginId": id,
-        "newPassword": newPassword,
+        "newPassword": password,
       });
 
       console.log(response.data);

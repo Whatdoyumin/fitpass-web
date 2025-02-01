@@ -34,7 +34,7 @@ function FindId() {
   /** 모달 닫기 */
   const closeModal = () => {
     setShowModal(false);
-    //navigate("/signin");
+    navigate("/signin");
   };
 
   return (
