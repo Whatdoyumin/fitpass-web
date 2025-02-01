@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ArrowDown, ArrowUp } from "../../assets/svg";
-import { TPaymentProps } from "../../type/payment";
+import { TPaymentProps } from "../../types/payment";
 
 interface IPaymentDetailsProps {
   item: {

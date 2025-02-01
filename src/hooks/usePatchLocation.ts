@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { TLocationBody } from "../type/setLocation";
+import { TLocationBody } from "../types/setLocation";
 import { patchLocation } from "../apis/setLocation";
 
 function usePatchLocation() {
