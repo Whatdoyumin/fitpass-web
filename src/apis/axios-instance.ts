@@ -1,20 +1,18 @@
 import axios from "axios";
 import config from "./config";
-import { useAuth } from "../context/AuthContext";
-
-const accessToken = sessionStorage.getItem("accessToken");
-const refreshToken = sessionStorage.getItem("sessionToken");
 
 export const axiosInstance = axios.create({
-  headers: {
-    Authorization: `Bearer ${accessToken}`,
-  },
   baseURL: config.apiBaseUrl,
+  headers: {
+    Authorization: `Bearer ${sessionStorage.getItem("accessToken") || ""}`,
+  },
+  withCredentials: true, // ✅ 쿠키 사용 (필요시)
 });
 
-// ✅ Axios 인터셉터: 토큰 자동 적용
+// ✅ Axios 요청 인터셉터: 모든 요청에 액세스 토큰 추가
 axiosInstance.interceptors.request.use(
   (config) => {
+    const accessToken = sessionStorage.getItem("accessToken");
     if (accessToken) {
       config.headers["Authorization"] = `Bearer ${accessToken}`;
     }
@@ -23,29 +21,52 @@ axiosInstance.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// ✅ Axios 인터셉터: 401 발생 시 자동 리프레시 토큰 요청
+// ✅ Axios 응답 인터셉터: 401 발생 시 리프레시 토큰을 사용하여 액세스 토큰 갱신
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
-    const { login, logout } = useAuth();
+    if (error.response?.status === 401) {
+      console.log("🔄 [401 오류] 리프레시 토큰을 사용하여 액세스 토큰 재발급 중...");
 
-    if (error.response?.status === 401 && refreshToken) {
-      console.log("🔑 리프레시 토큰으로 재시도합니다.");
+      const refreshToken = sessionStorage.getItem("refreshToken");
+
+      if (!refreshToken) {
+        console.error("🚪 [리프레시 토큰 없음] 로그아웃 필요.");
+        sessionStorage.removeItem("accessToken");
+        sessionStorage.removeItem("refreshToken");
+        return Promise.reject(error);
+      }
+
       try {
-        const res = await axios.post(`${config.apiBaseUrl}/auth/refresh`, {
-          refreshToken,
+        // ✅ 새로운 액세스 토큰 요청
+        const res = await axios.post(`${config.apiBaseUrl}/auth/refresh`, null, {
+          headers: {
+            "Refresh-Token": refreshToken, // 리프레시 토큰을 헤더로 전달
+          },
         });
 
-        login(res.data.result.accessToken, res.data.result.refreshToken);
+        if (res.status === 200) {
+          const newAccessToken = res.data.result.accessToken;
+          const newRefreshToken = res.data.result.refreshToken;
 
-        // ✅ 요청 재시도
-        error.config.headers["Authorization"] = `Bearer ${res.data.result.accessToken}`;
-        return axiosInstance(error.config);
+          console.log("✅ [리프레시 성공] 새 액세스 토큰 발급 완료.");
+
+          // 🔄 새로운 토큰을 sessionStorage에 저장
+          sessionStorage.setItem("accessToken", newAccessToken);
+          sessionStorage.setItem("refreshToken", newRefreshToken);
+
+          // 🔄 원래 요청을 새 액세스 토큰으로 재시도
+          error.config.headers["Authorization"] = `Bearer ${newAccessToken}`;
+          return axiosInstance(error.config);
+        }
       } catch (refreshError) {
-        logout();
-        console.error("🚪 리프레시 토큰 만료됨. 로그아웃 처리됨.", refreshError);
+        console.error("🚪 [리프레시 토큰 만료] 로그아웃 처리 필요.");
+        sessionStorage.removeItem("accessToken");
+        sessionStorage.removeItem("refreshToken");
+        return Promise.reject(refreshError);
       }
     }
+
     return Promise.reject(error);
   }
 );

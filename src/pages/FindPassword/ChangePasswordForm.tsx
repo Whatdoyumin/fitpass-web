@@ -2,8 +2,16 @@ import type React from "react";
 import { useState } from "react";
 import InputField from "../Signup/InputField";
 import { useNavigate } from "react-router-dom";
+import { resetPw } from "../../apis/findpw/findpw";
+import { AxiosError } from "axios";
 
-const ChangePasswordForm: React.FC = () => {
+interface ChangePasswordFormProps {
+	id: string;
+  }
+
+const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({
+	id
+}) => {
     const navigate = useNavigate();
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
@@ -32,15 +40,23 @@ const ChangePasswordForm: React.FC = () => {
 	};
 
 	/** 변경하기 버튼 핸들러 */
-	const handleChangePassword = () => {
+	const handleChangePassword = async () => {
 		if (
 			!passwordError &&
 			!confirmPasswordError &&
 			password &&
 			confirmPassword
 		) {
-			alert("비밀번호가 성공적으로 변경되었습니다!");
-            navigate("/signin");
+			try {
+				await resetPw({ id, password });
+				navigate('/signin')
+			} catch(error) {
+				if (error instanceof AxiosError) {
+				alert(error.response?.data?.message || "비밀번호 찾기에 실패했습니다.");
+				} else {
+				alert("비밀번호 찾기에 실패했습니다.");
+				}
+			}
 		} else {
 			if (!password) setPasswordError("비밀번호를 입력해주세요.");
 			if (!confirmPassword)
