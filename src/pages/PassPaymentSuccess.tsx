@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 
 const PassPaymentSuccess = () => {
   const { id } = useParams<{ id: string }>();
+  const fitnessId = id ? parseInt(id, 10) : 0;
 
   const navigate = useNavigate();
 
@@ -12,7 +13,7 @@ const PassPaymentSuccess = () => {
     navigate("/use-pass");
   }
 
-  const { data } = usePaymentPass( id!, 'afterBuyPass' );
+  const { data } = usePaymentPass( fitnessId, 'afterBuyPass' );
   console.log(data);
 
   return (

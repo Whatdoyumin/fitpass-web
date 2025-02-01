@@ -12,12 +12,12 @@ export type PaymentPass = {
   feeAfterPay: number;
 }
 
-const buyPass = async (id: string): Promise<PaymentPass>  => {
+const buyPass = async (id: number): Promise<PaymentPass>  => {
   const response = await axiosInstance.get<{ result: PaymentPass}>(`/fitness/payment/${id}`);
   return response.data.result;
 };
 
-export const usePaymentPass = (  id: string, queryKey: string ) => {
+export const usePaymentPass = (  id: number, queryKey: string ) => {
   return useQuery<PaymentPass>({
     queryKey: [queryKey, id],
     queryFn: () => buyPass(id)

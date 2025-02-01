@@ -2,11 +2,11 @@ import { useState } from "react";
 import Modal from "../components/Modal";
 import { useNavigate, useParams } from "react-router-dom";
 import { usePaymentPass } from "../hooks/useGetPaymentPass";
-
+import { usePostPass } from "../hooks/usePostPass";
 
 function PurchasePass() {
   const { id } = useParams<{ id: string }>();
-  // console.log(id);
+  const fitnessId = id ? parseInt(id, 10) : 0;
 
   // 체크박스
   const [isChecked, setIsChecked] = useState(false);
@@ -17,6 +17,16 @@ function PurchasePass() {
 
   const navigate = useNavigate();
 
+  // 패스 구매 post 연결
+  const mutation = usePostPass(navigate);
+
+  const handlePurchaseDone = () => {
+    mutation.mutate({
+      fitnessId,
+      agree: true
+    })
+  }
+
   // 패스 구매 모달
   const [isModal, setIsModal] = useState(false);
 
@@ -26,10 +36,6 @@ function PurchasePass() {
 
   const handleModalClose = () => {
     setIsModal(false);
-  }
-
-  const handlePurchaseDone = () => {
-    navigate(`/purchase-pass/${id}/done`)
   }
 
   // 코인 부족 시 패스 구매 모달
@@ -47,8 +53,8 @@ function PurchasePass() {
     navigate("/buy-coins");
   }
 
-  // api 연결
-  const { data } = usePaymentPass( id!, 'buyPass');
+  // 패스 데이터 연결
+  const { data } = usePaymentPass( fitnessId, 'buyPass');
 
   return (
     <>
