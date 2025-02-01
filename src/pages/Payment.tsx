@@ -8,6 +8,7 @@ import PaymentInfo from "../components/payment/PaymentInfo";
 import Modal from "../components/Modal";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { usePostPayCoin, usePostPayCoinSuccess } from "../hooks/usePostPayCoin";
+import { usePostPlan, usePostPlanSuccess } from "../hooks/usePostPlan";
 
 function Payment({ type }: TPaymentProps) {
   const [selectItem, setSelectItem] = useState(
@@ -40,39 +41,77 @@ function Payment({ type }: TPaymentProps) {
   };
 
   const { mutate } = usePostPayCoin();
+  const { mutate: planMutate } = usePostPlan();
   const handleCompletePay = () => {
-    mutate(
-      {
-        itemName: `${selectItem.coinAmount} 코인`,
-        quantity: selectItem.coinAmount,
-        totalAmount: Number(selectItem.price),
-        methodName: `${selectedPayOption}`,
-      },
-      {
-        onSuccess: (response) => {
-          if (response?.result && response?.result?.next_redirect_pc_url) {
-            window.location.href = response.result.next_redirect_pc_url;
+    if (type === "buy-coins") {
+      mutate(
+        {
+          itemName: `${selectItem.coinAmount} 코인`,
+          quantity: selectItem.coinAmount,
+          totalAmount: Number(selectItem.price),
+          methodName: `${selectedPayOption}`,
+        },
+        {
+          onSuccess: (response) => {
+            if (response?.result?.next_redirect_pc_url) {
+              window.location.href = response.result.next_redirect_pc_url;
+            }
+          },
+          onError: (error) => {
+            console.log(error.message);
+            setIsModalOpen(false);
+          },
+        }
+      );
+    } else if (type === "subscribe") {
+      if ("option_en" in selectItem) {
+        planMutate(
+          {
+            itemName: selectItem.option_en,
+            totalAmount: Number(selectItem.price),
+            methodName: `${selectedPayOption}`,
+          },
+          {
+            onSuccess: (response) => {
+              if (response?.result?.next_redirect_pc_url) {
+                window.location.href = response.result.next_redirect_pc_url;
+              }
+            },
+            onError: (error) => {
+              console.log(error.message);
+              setIsModalOpen(false);
+            },
           }
-        },
-        onError: (error) => {
-          console.log(error.message);
-          setIsModalOpen(false);
-        },
+        );
+      } else {
+        console.error("결제에 실패했습니다.");
       }
-    );
+    }
   };
 
   const { mutate: mutatePaySuccess } = usePostPayCoinSuccess();
+  const { mutate: mutatePlanSuccess } = usePostPlanSuccess();
   const pgToken = searchParams.get("pg_token");
   if (pgToken) {
-    mutatePaySuccess(
-      { pgToken },
-      {
-        onSuccess: () => {
-          setIsCompleted(true);
-        },
-      }
-    );
+    if (type === "buy-coins") {
+      mutatePaySuccess(
+        { pgToken },
+        {
+          onSuccess: () => {
+            setIsCompleted(true);
+          },
+        }
+      );
+    } else if (type === "subscribe") {
+      mutatePlanSuccess(
+        { pgToken },
+        {
+          onSuccess: () => {
+            setIsCompleted(true);
+          },
+        }
+      );
+    }
   }
 
   const handleCloseModal = () => {

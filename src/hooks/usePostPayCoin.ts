@@ -1,10 +1,10 @@
 import { useMutation } from "@tanstack/react-query";
-import { TPayCoinBody, TPayCoinSuccess } from "../types/buyCoin";
+import { TKakaoPayBody, TPayCoinSuccess } from "../types/buyCoin";
 import { postPayCoin, postPayCoinSuccess } from "../apis/buyCoin";
 
 function usePostPayCoin() {
   return useMutation({
-    mutationFn: (data: TPayCoinBody) => postPayCoin(data),
+    mutationFn: (data: TKakaoPayBody) => postPayCoin(data),
     mutationKey: ["payCoin"],
   });
 }

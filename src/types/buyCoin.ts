@@ -1,6 +1,6 @@
-export type TPayCoinBody = {
+export type TKakaoPayBody = {
   itemName: string;
-  quantity: number;
+  quantity?: number;
   totalAmount: number;
   methodName: string;
 };
