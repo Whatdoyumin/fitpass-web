@@ -6,7 +6,8 @@ import { COIN_PRICE, SUBSCRIBE_OPTION } from "../constants/price-menu";
 import { TPaymentProps, TPayOption } from "../types/payment";
 import PaymentInfo from "../components/payment/PaymentInfo";
 import Modal from "../components/Modal";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { usePostPayCoin, usePostPayCoinSuccess } from "../hooks/usePostPayCoin";
 
 function Payment({ type }: TPaymentProps) {
   const [selectItem, setSelectItem] = useState(
@@ -16,6 +17,7 @@ function Payment({ type }: TPaymentProps) {
   const [isChecked, setIsChecked] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
+  const [searchParams] = useSearchParams();
 
   const navigate = useNavigate();
 
@@ -29,15 +31,55 @@ function Payment({ type }: TPaymentProps) {
     setSelectedPayOption(option);
   };
 
+  const handleClickPay = () => {
+    if (selectedPayOption === null) {
+      alert("결제 수단을 선택해주세요.");
+      return;
+    }
+    setIsModalOpen((prev) => !prev);
+  };
+
+  const { mutate } = usePostPayCoin();
+  const handleCompletePay = () => {
+    mutate(
+      {
+        itemName: `${selectItem.coinAmount} 코인`,
+        quantity: selectItem.coinAmount,
+        totalAmount: Number(selectItem.price),
+        methodName: `${selectedPayOption}`,
+      },
+      {
+        onSuccess: (response) => {
+          if (response?.result && response?.result?.next_redirect_pc_url) {
+            window.location.href = response.result.next_redirect_pc_url;
+          }
+        },
+        onError: (error) => {
+          console.log(error.message);
+          setIsModalOpen(false);
+        },
+      }
+    );
+  };
+
+  const { mutate: mutatePaySuccess } = usePostPayCoinSuccess();
+  const pgToken = searchParams.get("pg_token");
+  if (pgToken) {
+    mutatePaySuccess(
+      { pgToken },
+      {
+        onSuccess: () => {
+          setIsCompleted(true);
+        },
+      }
+    );
+  }
+
   const handleCloseModal = () => {
     setIsModalOpen((prev) => !prev);
     if (isCompleted) {
       navigate("/my");
     }
-  };
-
-  const handleCompletePay = () => {
-    setIsCompleted((prev) => !prev);
   };
 
   const dropdownOptions =
@@ -73,7 +115,7 @@ function Payment({ type }: TPaymentProps) {
         className={`w-full max-w-content h-navbar py-6 bottom-0 fixed text-white-100 flex justify-center items-center text-[20px] ${
           isChecked ? "bg-blue-500" : "bg-gray-400 pointer-events-none"
         }`}
-        onClick={() => setIsModalOpen((prev) => !prev)}
+        onClick={handleClickPay}
       >
         구매하기
       </button>
