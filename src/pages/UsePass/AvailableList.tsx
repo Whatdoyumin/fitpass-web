@@ -38,20 +38,21 @@ const AvailableList = ({ passes, updatePassStatus }: AvailableListProps) => {
   // 로컬스토리지에서 남은 시간 계산
   useEffect(() => {
     const storedPass = localStorage.getItem("passUsage");
-
+  
     if (storedPass) {
-      const { startTime } = JSON.parse(storedPass);
+      const { passId, startTime } = JSON.parse(storedPass);
       const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
       const timeLeft = 60 * 60 - elapsedTime;
-
+  
       if (timeLeft > 0) {
         setRemainingTime(timeLeft);
         setIsButtonActive(true);
       } else {
         localStorage.removeItem("passUsage");
+        updatePassStatus(passId, "DONE");
       }
     }
-  }, []);
+  }, [updatePassStatus]); 
 
   // 카운트다운
   useEffect(() => {
