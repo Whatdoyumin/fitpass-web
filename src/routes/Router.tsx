@@ -97,7 +97,7 @@ const Router = createBrowserRouter([
         element: <UsePass />,
       },
       {
-        path: "/upload-review",
+        path: "/upload-review/:id",
         element: <UploadReview />,
       },
       {

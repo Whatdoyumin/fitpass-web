@@ -1,4 +1,4 @@
-import { TPayHistory } from "../type/payHistory";
+import { TPayHistory } from "../types/payHistory";
 import { axiosInstance } from "./axios-instance";
 
 const getPayHistory = async ({ query, cursor = 0, size = 7 }: TPayHistory) => {

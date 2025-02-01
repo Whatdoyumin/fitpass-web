@@ -10,7 +10,7 @@ export const useSignUpMutation = () => {
     mutationFn: (data: TSignUpData) => signUp(data),
     mutationKey: ["signup"],
     onSuccess: () => {
-        navigate("/login");
+        navigate("/signin");
     },
     onError: (error: Error) => {
       console.error("회원가입 실패:", error.message);

@@ -3,7 +3,7 @@ import ReviewItem from "./ReviewItem";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { axiosInstance } from "../../apis/axios-instance";
-import { TReview } from "../../type/review";
+import { TReview } from "../../types/review";
 
 type ReviewsResponse = {
   result: {

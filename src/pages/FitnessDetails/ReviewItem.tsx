@@ -7,7 +7,7 @@ import Modal from "../../components/Modal";
 import config from "../../apis/config";
 import { useMutation } from "@tanstack/react-query";
 import { axiosInstance } from "../../apis/axios-instance";
-import { TReview } from "../../type/review";
+import { TReview } from "../../types/review";
 
 interface ReviewProps {
   review: TReview,

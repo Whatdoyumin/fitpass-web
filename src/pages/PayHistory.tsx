@@ -5,7 +5,7 @@ import { Toggle } from "../components/paymentCard/Toggle";
 import { useGetPayHistory, usePostPayDeactivate } from "../hooks/useGetPayHistory";
 import { useInView } from "react-intersection-observer";
 import { GuideLogin } from "./GuideLogin";
-import { TPayHistoryItem, TPayQuery } from "../type/payHistory";
+import { TPayHistoryItem, TPayQuery } from "../types/payHistory";
 import { useAuth } from "../context/AuthContext";
 import SkeletonPaymentCard from "./../components/paymentCard/SkeletonPaymentCard";
 import Modal from "../components/Modal";

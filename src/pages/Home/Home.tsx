@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import CardCol from "./CardCol";
 import RequireLogin from "../../components/RequireLogin";
-import { HomeCardData } from "../../type/HomeCardData";
+import { HomeCardData } from "../../types/HomeCardData";
 
 import Ad1 from "../../assets/img/ad1.jpeg";
 import Ad2 from "../../assets/img/ad2.jpg";
@@ -117,7 +117,7 @@ function Home() {
         {/* 구분선 */}
         <div className="border-b-4 border-gray-300 py-3 w-[390px]"></div>
         {/* 최근 본 운동 시설 */}
-        <div className="w-[390px] h-[177px] pl-4 my-6 overflow-hidden">
+        <div className="w-[390px] h-[176px] pl-4 my-6 overflow-hidden">
           <p className="h-[19px] mb-[15px] font-bold text-[16px]"><span className="text-blue-500">최근 본</span> 운동 시설</p>
             {isLogin ?               
             (recentWatched.length > 0 ? (
