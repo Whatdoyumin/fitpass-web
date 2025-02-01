@@ -1,34 +1,19 @@
-import type React from "react";
+import { useState } from "react";
 import InputField from "../Signup/InputField";
 import PhoneVerification from "../../components/PhoneVerification";
 
 interface FindPasswordFormProps {
-  id: string;
-  setId: (value: string) => void;
-  name: string;
-  setName: (value: string) => void;
-  phoneNumber: string;
-  setPhoneNumber: (value: string) => void;
-  idError: string;
-  nameError: string;
-  isCodeConfirmed: boolean; 
-  setIsCodeConfirmed: (value: boolean) => void; 
-  handleNextStep: () => void;
+  handleNextStep: (data: { id: string; name: string; phoneNumber: string }) => void;
 }
 
-const FindPasswordForm: React.FC<FindPasswordFormProps> = ({
-  id,
-  setId,
-  name,
-  setName,
-  phoneNumber,
-  setPhoneNumber,
-  idError,
-  nameError,
-  isCodeConfirmed,
-  setIsCodeConfirmed,
-  handleNextStep,
-}) => {
+const FindPasswordForm: React.FC<FindPasswordFormProps> = ({ handleNextStep }) => {
+  const [id, setId] = useState("");
+  const [name, setName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [isCodeConfirmed, setIsCodeConfirmed] = useState(false);
+  const [idError, setIdError] = useState("");
+  const [nameError, setNameError] = useState("");
+
   return (
     <div className="flex-grow w-full overflow-auto flex flex-col gap-[25px]">
       {/* 아이디 입력 */}
@@ -45,7 +30,7 @@ const FindPasswordForm: React.FC<FindPasswordFormProps> = ({
         />
         {idError && <span className="text-red-500 text-[13px]">{idError}</span>}
       </div>
-      
+
       {/* 이름 입력 */}
       <div className="w-full flex flex-col gap-[10px]">
         <label htmlFor="name" className="text-[16px] font-medium text-black-700">
@@ -61,16 +46,13 @@ const FindPasswordForm: React.FC<FindPasswordFormProps> = ({
         {nameError && <span className="text-red-500 text-[13px]">{nameError}</span>}
       </div>
 
-      <PhoneVerification
-        phoneNumber={phoneNumber}
-        setPhoneNumber={setPhoneNumber}
-        onVerifySuccess={() => setIsCodeConfirmed(true)}
-      />
+      {/* 휴대폰 인증 */}
+      <PhoneVerification phoneNumber={phoneNumber} setPhoneNumber={setPhoneNumber} onVerifySuccess={() => setIsCodeConfirmed(true)} />
 
       <button
-        onClick={handleNextStep}
+        onClick={() => handleNextStep({ id, name, phoneNumber })}
         disabled={!isCodeConfirmed}
-        className={`blueButton w-[350px] fixed bottom-[115px] h-[51px]`}
+        className="blueButton w-[350px] fixed bottom-[115px] h-[51px]"
       >
         변경하기
       </button>
