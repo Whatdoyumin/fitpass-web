@@ -25,6 +25,7 @@ import {
   PassPaymentSuccess,
   LocationDetail,
   SearchLocation,
+  PayHistory,
 } from "../pages/index";
 import NotFound from "../pages/NotFound";
 import NoticeDetail from "../pages/Notice/NoticeDetail";
@@ -96,7 +97,7 @@ const Router = createBrowserRouter([
         element: <UsePass />,
       },
       {
-        path: "/upload-review",
+        path: "/upload-review/:id",
         element: <UploadReview />,
       },
       {
@@ -138,6 +139,10 @@ const Router = createBrowserRouter([
       {
         path: "/my/noticedetail/:id",
         element: <NoticeDetail />,
+      },
+      {
+        path: "/my/pay-history",
+        element: <PayHistory />,
       },
     ],
   },

@@ -15,7 +15,7 @@ const Header = () => {
   };
 
   const isMainHeader = (): boolean =>
-    ["/", "/fitness", "/fitness/:id", "/upload-review", "/my"].some((path) =>
+    ["/", "/fitness", "/fitness/:id", "/upload-review/:id", "/my", "/my/pay-history"].some((path) =>
       matchPath(path, location.pathname)
     );
 
@@ -26,7 +26,7 @@ const Header = () => {
   }
 
   return (
-    <div className="w-full max-w-content top-0 h-header bg-white-100 fixed flex items-end z-10">
+    <div className="w-full max-w-content top-0 h-header bg-white-100 fixed flex items-end z-50">
       {isMainHeader() ? <MainHeader /> : <PageHeader pageName={pageName} />}
     </div>
   );

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ArrowDown, ArrowUp, KakaoPay, NaverPay } from "../../assets/svg";
-import { TPayOption } from "../../type/payment";
+import { TPayOption } from "../../types/payment";
 import BigDropdown from "./BigDropdown";
 
 interface TSelectPayOptionProps {

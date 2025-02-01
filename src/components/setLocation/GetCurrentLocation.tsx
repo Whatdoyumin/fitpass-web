@@ -1,6 +1,7 @@
-import { useEffect } from "react";
 import { useGeoLocation } from "../../hooks/useGeoLocation";
 import { useNavigate } from "react-router-dom";
+import usePatchLocation from "../../hooks/usePatchLocation";
+import { useEffect } from "react";
 
 const geolocationOptions = {
   enableHighAccuracy: true,
@@ -11,16 +12,35 @@ const geolocationOptions = {
 const GetCurrentLocation = () => {
   const navigate = useNavigate();
   const { location, error } = useGeoLocation(geolocationOptions);
+  const { mutate } = usePatchLocation();
 
   useEffect(() => {
-    if (location?.latitude && location.longitude) {
-      localStorage.setItem("lat", String(location?.latitude));
-      localStorage.setItem("lng", String(location?.longitude));
-      navigate("/");
-    } else if (error) {
+    if (error) {
       alert("위치 정보를 가져오는 데 실패했습니다. 다시 시도해주세요.");
+      return;
     }
-  });
+
+    if (location?.latitude && location.longitude) {
+      mutate(
+        {
+          latitude: location.latitude,
+          longitude: location.longitude,
+        },
+        {
+          onSuccess: () => {
+            navigate("/");
+            localStorage.setItem("latitude", `${location.latitude}`);
+            localStorage.setItem("longitude", `${location.longitude}`);
+          },
+          onError: (error) => {
+            console.log(error.message);
+            alert("위치 설정에 실패했습니다. 다시 시도해주세요.");
+            navigate("/");
+          },
+        }
+      );
+    }
+  }, [location, error, mutate, navigate]);
 
   return <></>;
 };

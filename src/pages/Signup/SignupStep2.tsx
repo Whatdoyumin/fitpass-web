@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import InputField from "./InputField";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { MoreTerms } from "../../assets/svg";
-import { signUp } from "../../apis/signup/signup";
-import { verifyCode, verifyPhoneNumber } from "../../apis/verify/verify";
+import { useSignUpMutation } from "../../hooks/useSignup";
+import PhoneVerification from "../../components/PhoneVerification";
 
 interface Agreements {
   all: boolean;
@@ -15,18 +15,11 @@ interface Agreements {
 
 function SignupStep2() {
   const location = useLocation();
-  const navigate = useNavigate();
   const { id, password } = location.state || {};
 
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [isPhoneVerified, setIsPhoneVerified] = useState(false);
-  const [verificationCode, setVerificationCode] = useState("");
-  const [isCodeSent, setIsCodeSent] = useState(false);
   const [isCodeConfirmed, setIsCodeConfirmed] = useState(false);
-  const [timer, setTimer] = useState(180); // 3분 타이머
-  const [isTimerRunning, setIsTimerRunning] = useState(false);
-  const [codeError, setCodeError] = useState("");
 
   const [agreements, setAgreements] = useState<Agreements>({
     all: false,
@@ -57,70 +50,25 @@ function SignupStep2() {
     });
   };
 
-  /** 타이머 시작 */
-  useEffect(() => {
-    let timerInterval: NodeJS.Timeout | undefined = undefined;
-    if (isTimerRunning && timer > 0) {
-      timerInterval = setInterval(() => {
-        setTimer((prev) => prev - 1);
-      }, 1000);
-    } else if (timer === 0) {
-      clearInterval(timerInterval);
-      setIsTimerRunning(false);
-    }
-    return () => clearInterval(timerInterval);
-  }, [isTimerRunning, timer]);
-
-  /** 휴대폰 번호 확인 */
-  const validatePhoneNumber = () => {
-    const regex = /^01[0-9]{8,9}$/; // 01로 시작하는 10-11자리 숫자
-    return regex.test(phoneNumber);
-  };
-
-  /** 인증하기 버튼 핸들러 */
-  const handleSendCode = async () => {
-    if (validatePhoneNumber()) {
-      await verifyCode(phoneNumber);
-      setIsCodeSent(true);
-      setIsTimerRunning(true);
-      setTimer(180); // 3분 타이머 시작
-    }
-  };
-
-  /** 인증번호 확인 */
-  const handleVerifyCode = async() => {
-    if (verificationCode.length === 6) {
-      try {
-        await verifyPhoneNumber(phoneNumber, verificationCode);
-        setCodeError("");
-        setIsPhoneVerified(true);
-        setIsCodeConfirmed(true);
-        setIsTimerRunning(false);
-      } catch (error) {
-        setCodeError(error.message);
-      }
-    }
-  };
-
-  /** 모든 약관이 체크되었는지 확인 */
   const isFormValid =
     name.trim() !== "" &&
     phoneNumber.trim() !== "" &&
-    isPhoneVerified &&
+    isCodeConfirmed &&
     agreements.terms &&
     agreements.location &&
     agreements.thirdParty;
 
-  const handleNextStep = async () => {
+    const signUpMutation = useSignUpMutation();
+
+  const handleNextStep = () => {
     if (isFormValid) {
-      try {
-        await signUp(name, id, password, phoneNumber);
-        navigate("/signin");
-      } catch (error) {
-        alert(error.message);
+      signUpMutation.mutate({name, id, password, phoneNumber}, {
+        onError: (error: unknown) => {
+          alert(error instanceof Error ? error.message : "회원가입에 실패했습니다.");
+        }
+      });
       }
     }
-  };
 
   return (
       <div className="w-full max-w-content flex flex-col items-center h-screen relative px-5 pt-[29px]">
@@ -139,72 +87,8 @@ function SignupStep2() {
           />
         </div>
 
-          {/* 휴대폰 입력창 */}
-          <div className="w-full flex flex-col gap-[10px]">
-            <label htmlFor="phone" className="text-[16px] font-medium text-black-700">
-              휴대폰 번호
-            </label>
-            <div className="flex items-center gap-[12px]">
-              {/* 휴대폰 입력창 */}
-              <div className="flex items-center h-[50px] px-[20px] border border-gray-400 rounded-[5px] flex-1 gap-[20px] relative">
-                <input
-                  type="text"
-                  placeholder="휴대폰 번호를 -없이 입력해주세요"
-                  value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
-                  className="w-full outline-none text-[14px] font-medium placeholder-gray-400"
-                />
-              </div>
-              <button
-                onClick={handleSendCode}
-                disabled={!validatePhoneNumber()}
-                className={`h-[50px] px-[20px] rounded-[5px] text-[15px] font-medium ${
-                  validatePhoneNumber()
-                    ? "bg-blue-500 text-white-100 hover:bg-blue-400"
-                    : "bg-blue-250 text-white-100"
-                }`}
-              >
-                인증하기
-              </button>
-            </div>
-
-            {/* 인증번호 입력창 */}
-            {isCodeSent && !isCodeConfirmed && (
-              <div className="flex items-center gap-[12px] mt-[10px]">
-                <div className="flex items-center h-[50px] px-[20px] border border-gray-400 rounded-[5px] flex-1 relative">
-                  <input
-                    type="text"
-                    placeholder="인증번호를 입력해주세요"
-                    value={verificationCode}
-                    onChange={(e) => setVerificationCode(e.target.value)}
-                    className="w-full outline-none text-[14px] font-medium placeholder-gray-400"
-                  />
-                  <span className="text-red-500 text-[14px] absolute right-[15px]">
-                    {`${Math.floor(timer / 60)}:${String(timer % 60).padStart(2, "0")}`}
-                  </span>
-                </div>
-                <button
-                  onClick={handleVerifyCode}
-                  disabled={verificationCode.length !== 6}
-                  className={`h-[50px] px-[20px] rounded-[5px] text-[15px] font-medium ${
-                    verificationCode.length === 6
-                      ? "bg-blue-500 text-white-100 hover:bg-blue-400"
-                      : "bg-blue-250 text-white-100"
-                  }`}
-                >
-                  확인하기
-                </button>
-              </div>
-            )}
-
-            {/* 인증번호 오류 메시지 */}
-            {codeError && <span className="text-red-500 text-[13px] mt-[10px]">{codeError}</span>}
-            {/* 인증 완료 메시지 */}
-            {isCodeConfirmed && (
-              <span className="text-[13px] text-green-500 mt-[10px]">확인되었습니다.</span>
-            )}
-          </div>
-        </div>
+        <PhoneVerification phoneNumber={phoneNumber} setPhoneNumber={setPhoneNumber} onVerifySuccess={() => setIsCodeConfirmed(true)} />
+      </div>
 
         {/* 약관 동의 섹션 */}
         <div className="w-full mb-[27px]">

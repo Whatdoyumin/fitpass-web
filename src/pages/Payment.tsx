@@ -3,7 +3,7 @@ import BigDropdown from "../components/payment/BigDropdown";
 import PaymentDetails from "../components/payment/PaymentDetails";
 import SelectPayOption from "../components/payment/SelectPayOption";
 import { COIN_PRICE, SUBSCRIBE_OPTION } from "../constants/price-menu";
-import { TPaymentProps, TPayOption } from "../type/payment";
+import { TPaymentProps, TPayOption } from "../types/payment";
 import PaymentInfo from "../components/payment/PaymentInfo";
 import Modal from "../components/Modal";
 import { useNavigate, useSearchParams } from "react-router-dom";
