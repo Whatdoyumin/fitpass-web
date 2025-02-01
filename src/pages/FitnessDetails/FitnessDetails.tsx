@@ -17,6 +17,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import config from "../../apis/config";
+import { LoadingSpinner } from "../../components/LoadingSpinner";
 
 
 interface FetchResponse {
@@ -62,7 +63,7 @@ function FitnessDetails() {
   // console.log(data);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingSpinner />;
   }
 
   if (isError) {

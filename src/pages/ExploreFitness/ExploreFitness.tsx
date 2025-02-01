@@ -62,7 +62,7 @@ function ExploreFitness() {
           <>
             <FitnessCard fitness={fitness} />
             <div ref={observerRef} className="h-10 w-full text-center">
-              {isFetchingNextPage && "로딩중..."}
+              {isFetchingNextPage && <LoadingSpinner />}
             </div>
           </>
         )}

@@ -34,7 +34,6 @@ function ReviewList() {
       sortBy: sortOption,
     }
     const response = await axiosInstance.get(`/fitness/${id}/review`, {params});
-    console.log(response.data);
     return response.data;
   }
 
@@ -44,10 +43,11 @@ function ReviewList() {
   })
 
   const handlePageChange = (newPage: number) => {
-    // if (newPage < 1 || newPage > (data?.result?.totalPages ?? 0)) return;
+    if (newPage < 1 || newPage > (data?.result?.totalPages ?? 0)) return;
     setPage(newPage);
     if (newPage !== page) {
       refetch();
+      console.log("페이지 넘어감")
     }
   }
 
@@ -78,11 +78,11 @@ function ReviewList() {
           onClick={() => handlePageChange(page - 1)}
           disabled={page === 1}>{"<"}</button>
         {
-        // {data?.totalPages &&
           new Array(data?.result?.totalPages).fill(null).map((_, index) => {
             const pageNum = index + 1;
             return (
               <button
+                key={pageNum}
                 className={`${page === pageNum ? 'text-gray-600' : 'text-gray-350'}`}
                 onClick={() => handlePageChange(pageNum)}
               >

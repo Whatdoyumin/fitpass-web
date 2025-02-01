@@ -51,7 +51,7 @@ const FitnessCard = ({ fitness, limitTime }: FitnessCardProps) => {
             case "DONE":
               statusText = "리뷰 남기기";
               statusStyle =
-                "w-[70px] h-[26px] border bg-blue-500 text-white-100 border-blue-500 rounded-[5px]";
+                "w-[70px] h-[26px] mr-[10px] border bg-blue-500 text-white-100 border-blue-500 rounded-[5px]";
               bgStyle = "bg-gray-200";
               circleBg = "bg-gray-300";
               break;
@@ -72,7 +72,7 @@ const FitnessCard = ({ fitness, limitTime }: FitnessCardProps) => {
               if (item.fee !== undefined) {
                 handleSaveToLocalStorage({
                   fitnessId: item.fitnessId ?? 0,
-                  name: item.fitnessName,
+                  fitnessName: item.fitnessName,
                   distance: item.distance,
                   imageUrl: item.imageUrl ?? "",
                 });
@@ -108,14 +108,14 @@ const FitnessCard = ({ fitness, limitTime }: FitnessCardProps) => {
             <div className="flex flex-col w-[190px] h-[84px]">
               <div className="p-4 rounded-r-[5px]">
                 <div className="w-[177px] flex flex-col gap-[10px]">
-                  <div className="flex justify-between">
-                    <p className="font-medium text-sm h-[14px]">{item.fitnessName}</p>
+                  <div className="flex justify-between items-center h-[17px] ">
+                    <p className="font-medium text-sm">{item.fitnessName}</p>
                     {statusText === "리뷰 남기기" && formattedDate && (
                       <p className="text-[10px] text-gray-600">{formattedDate}</p>
                     )}
                   </div>
                   <p className="text-[10px] text-gray-600 max-w-[207px] text-ellipsis overflow-hidden whitespace-nowrap">
-                    {item.fitnessAddress}
+                    {item.address}
                   </p>
                   <div className="flex h-[12px] gap-[5px] items-center">
                     <SvgLocation className="w-[8px] h-[10px]" />
