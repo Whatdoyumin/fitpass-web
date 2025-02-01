@@ -4,8 +4,6 @@ import Slider, { Settings } from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-import { useQuery } from "@tanstack/react-query";
-
 import CardCol from "./CardCol";
 import RequireLogin from "../../components/RequireLogin";
 import { HomeCardData } from "../../types/HomeCardData";
@@ -17,7 +15,7 @@ import Ad3 from "../../assets/img/ad3.jpg";
 import { useAuth } from "../../context/AuthContext";
 import { LoadingSpinner } from "../../components/LoadingSpinner";
 import NotFound from "../NotFound";
-import { axiosInstance } from "../../apis/axios-instance";
+import { useFetchRecommendFitness } from "../../hooks/useGetRecommend";
 
 function Home() {
   const {isLogin} = useAuth();
@@ -43,15 +41,7 @@ function Home() {
     }));
   }, []);
 
-  const fetchRecommend = async () => {
-    const response = await axiosInstance.get("/fitness/recommend");
-    return response;
-  };
-
-  const { data, isPending, isError } = useQuery({
-    queryKey: ["fitnessCenter"],
-    queryFn: fetchRecommend,
-  });
+  const { data: datas, isPending, isError } = useFetchRecommendFitness();
 
   if (isPending) {
     return <LoadingSpinner />;
@@ -60,9 +50,6 @@ function Home() {
   if (isError) {
     return <NotFound />;
   }
-
-  const datas = data?.data.result;
-
 
   // 광고 슬라이드
   const adSettings: Settings = {
@@ -109,8 +96,8 @@ function Home() {
             <span className="text-blue-500">추천</span> 운동 시설
           </p>
           <Slider {...reSettings} className="h-[143px] mr-[-120px]">
-            {datas?.map((data: HomeCardData, index: number) => (
-              <CardCol key={index} data={data} />
+            {datas?.map((data: HomeCardData) => (
+              <CardCol key={data.fitnessId} data={data} />
             ))}
           </Slider>
         </div>
@@ -122,8 +109,8 @@ function Home() {
             {isLogin ?               
             (recentWatched.length > 0 ? (
                 <Slider {...fitSettings} className="h-[143px] mr-[-120px]">
-                {recentWatched?.map((data: HomeCardData, index: number) => (
-                  <CardCol key={index} data={data} />
+                {recentWatched?.map((data: HomeCardData) => (
+                  <CardCol key={data.fitnessId} data={data} />
                 ))}
               </Slider>
               ) : (

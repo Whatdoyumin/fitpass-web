@@ -58,13 +58,13 @@ function PurchasePass() {
 
   return (
     <>
-      <div className="bg-white-200 h-[736px] flex items-center justify-center">
+      <div className="bg-white-200 h-full flex items-center justify-center">
         <div className="flex flex-col h-[686.77px] items-center6 justify-center">
-          <img src={data?.fitnessImage} alt="이미지" className="w-[340px] h-[191px] rounded-t-[7px]" />
+          <img src={data?.imageUrl} alt="이미지" className="w-[340px] h-[191px] rounded-t-[7px]" />
           <div className="bg-white-100 w-[340px] h-[495.77px] font-medium text-base rounded-b ">
             <div className="p-4 flex flex-col gap-3">
               <p className="font-bold text-[18px] pt-3">결제 정보</p>
-              <div className="flex justify-between"><span className="text-gray-600 ">매장명</span><span>{data?.name}</span></div>
+              <div className="flex justify-between"><span className="text-gray-600 ">매장명</span><span>{data?.fitnessName}</span></div>
             </div>
             <div className="p-4 flex flex-col gap-2">
               <div className="flex justify-between"><span className="text-gray-600 ">상품 금액</span><span>{data?.fee}코인</span></div>

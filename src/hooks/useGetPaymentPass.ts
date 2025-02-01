@@ -3,8 +3,8 @@ import { axiosInstance } from "../apis/axios-instance";
 
 export type PaymentPass = {
   id: number;
-  name: string;
-  fitnessImage: string;
+  fitnessName: string;
+  imageUrl: string;
   fee: number;
   discount: number;
   totalFee: number;
