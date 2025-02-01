@@ -5,6 +5,7 @@
   "type": "module",
   "format": "prettier --write --cache .",
   "scripts": {
+    "clean": "rimraf dist",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
@@ -19,6 +20,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-kakao-maps-sdk": "^1.1.27",
+    "react-lottie-player": "^2.1.0",
     "react-router-dom": "^7.1.1",
     "react-slick": "^0.30.3",
     "slick-carousel": "^1.8.1"
