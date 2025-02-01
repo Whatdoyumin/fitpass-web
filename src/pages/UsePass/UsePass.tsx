@@ -53,33 +53,35 @@ function UsePass() {
 
   // passData가 없으면 빈 배열을 기본값으로 설정
   const availablePasses = [
-    ...passData?.none.filter((pass) => pass.status === "NONE") || [],
-    ...passData?.progress.filter((pass) => pass.status === "PROGRESS") || [],
+    ...(passData?.none.filter((pass) => pass.status === "NONE") || []),
+    ...(passData?.progress.filter((pass) => pass.status === "PROGRESS") || []),
   ];
 
-  const updatePassStatus = (passId: number|undefined, newStatus: string) => {
+  const updatePassStatus = (passId: number | undefined, newStatus: string) => {
     setPassData((prevPassData) => {
       const updatedPassData = { ...prevPassData };
-      const allPasses = [...updatedPassData.none, ...updatedPassData.progress, ...updatedPassData.done];
-      const updatedPasses = allPasses.map((pass) => 
+      const allPasses = [
+        ...updatedPassData.none,
+        ...updatedPassData.progress,
+        ...updatedPassData.done,
+      ];
+      const updatedPasses = allPasses.map((pass) =>
         pass.id === passId ? { ...pass, status: newStatus } : pass
       );
-      
+
       updatedPassData.none = updatedPasses.filter((pass) => pass.status === "NONE");
       updatedPassData.progress = updatedPasses.filter((pass) => pass.status === "PROGRESS");
       updatedPassData.done = updatedPasses.filter((pass) => pass.status === "DONE");
-      
+
       return updatedPassData;
     });
   };
 
   return (
-    <div className="bg-gray-300 min-h-screen item-center">
+    <div className="bg-gray-300 h-full item-center">
       {hasAvailablePass || hasCompletedPass ? (
         <>
-          {hasAvailablePass && availablePasses.length > 0 && (
-            <AvailableList passes={availablePasses} updatePassStatus={updatePassStatus} />
-          )}
+          <AvailableList passes={availablePasses} updatePassStatus={updatePassStatus} />
           {hasCompletedPass && passData?.done.length > 0 && (
             <CompletedList passes={passData.done} />
           )}

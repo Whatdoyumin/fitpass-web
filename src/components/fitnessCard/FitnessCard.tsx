@@ -25,6 +25,7 @@ const FitnessCard = ({ fitness, limitTime }: FitnessCardProps) => {
     const seconds = limitTime % 60;
     return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
   };
+  
   return (
     <div className="flex flex-col gap-[15px] w-[340px]">
       {fitness.map((item, index) => {
@@ -132,7 +133,12 @@ const FitnessCard = ({ fitness, limitTime }: FitnessCardProps) => {
                     className={`flex justify-center items-center w-15 text-blue-400 rounded-[15px] h-[22px] text-[10px] font-bold text-center py-[5px] px-[10px] ${statusStyle}`}
                     onClick={() => {
                       if (statusText === "리뷰 남기기") {
-                        navigate(`/upload-review/${item.id}`);
+                        navigate(`/upload-review/${item.id}`, {
+                          state: {
+                            fitnessId: item.fitnessId,
+                            activeTime: item.activeTime,
+                          },
+                        });
                       }
                     }}
                   >

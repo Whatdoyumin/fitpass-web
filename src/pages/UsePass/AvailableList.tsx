@@ -7,7 +7,7 @@ import { usePostPass } from "../../apis/usepass/quries/useUsepassApi";
 
 type AvailableListProps = {
   passes: TFitness[];
-  updatePassStatus: (passId: number|undefined, newStatus: string) => void;
+  updatePassStatus: (passId: number | undefined, newStatus: string) => void;
 };
 
 const AvailableList = ({ passes, updatePassStatus }: AvailableListProps) => {
@@ -24,7 +24,7 @@ const AvailableList = ({ passes, updatePassStatus }: AvailableListProps) => {
   ).padStart(2, "0")} ${String(now.getHours()).padStart(2, "0")}:${String(
     now.getMinutes()
   ).padStart(2, "0")}`;
-  
+
   const startPassUsage = (passId: number | undefined) => {
     const startTime = Date.now();
     localStorage.setItem("passUsage", JSON.stringify({ passId, startTime }));
@@ -38,20 +38,21 @@ const AvailableList = ({ passes, updatePassStatus }: AvailableListProps) => {
   // 로컬스토리지에서 남은 시간 계산
   useEffect(() => {
     const storedPass = localStorage.getItem("passUsage");
-
+  
     if (storedPass) {
-      const { startTime } = JSON.parse(storedPass);
+      const { passId, startTime } = JSON.parse(storedPass);
       const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
       const timeLeft = 60 * 60 - elapsedTime;
-
+  
       if (timeLeft > 0) {
         setRemainingTime(timeLeft);
         setIsButtonActive(true);
       } else {
         localStorage.removeItem("passUsage");
+        updatePassStatus(passId, "DONE");
       }
     }
-  }, []);
+  }, [updatePassStatus]); 
 
   // 카운트다운
   useEffect(() => {
@@ -86,7 +87,10 @@ const AvailableList = ({ passes, updatePassStatus }: AvailableListProps) => {
     }
   };
 
-  const isPassExpired = passes.length === 0 || passes.every((pass) => pass.status === "DONE");
+  const hasAvailablePass = passes.some(
+    (pass) => pass.status === "NONE" || pass.status === "PROGRESS"
+  );
+  const isPassExpired = passes.length === 0 || !hasAvailablePass;
   const isNonePassAvailable = passes.some((pass) => pass.status === "NONE");
   const isAllProgress = passes.every((pass) => pass.status === "PROGRESS");
 
