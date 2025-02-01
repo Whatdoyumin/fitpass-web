@@ -103,6 +103,11 @@ function PurchasePass() {
               </button>
             </div>
           </div>
+          {/* div 반원 */}
+          <div className="flex justify-between relative mt-2">
+            <div className="w-[40px] h-[40px] rounded-full bg-white-200 absolute bottom-[-20px] left-[-20px]"></div>
+            <div className="w-[40px] h-[40px] rounded-full bg-white-200 absolute bottom-[-20px] right-[-20px]"></div>
+          </div>
         </div>
       </div>
       {isModal && <Modal
