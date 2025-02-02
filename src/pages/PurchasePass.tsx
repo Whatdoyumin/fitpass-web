@@ -6,7 +6,7 @@ import { usePostPass } from "../hooks/usePostPass";
 
 function PurchasePass() {
   const { id } = useParams<{ id: string }>();
-  const fitnessId = id ? parseInt(id, 10) : 0;
+  const fitnessId = id ? parseInt(id, 10) : -1;
 
   // 체크박스
   const [isChecked, setIsChecked] = useState(false);

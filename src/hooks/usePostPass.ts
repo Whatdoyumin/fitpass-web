@@ -15,9 +15,12 @@ const postPass = async (data: postRequestBody) => {
 export const usePostPass = (navigate: ReturnType<typeof useNavigate>) => {
   return useMutation({
     mutationFn: postPass,
-    onSuccess: (data) => {
+    onSuccess: (data, variables) => {
       console.log("결제 성공", data);
-      navigate(`/purchase-pass/${data.id}/done`);
+
+      const id = variables.fitnessId;
+      navigate(`/purchase-pass/${id}/done`);
+      // navigate(`/purchase-pass/${data.result.memberFitnessId}/done`);
     },
     onError: (error) => {
       console.log("패스 구매 실패: ", error);
@@ -25,3 +28,5 @@ export const usePostPass = (navigate: ReturnType<typeof useNavigate>) => {
     }
   });
 };
+
+// 내가 구매한 패스 get to it 피트니스 memberfitnessid === 49
