@@ -8,6 +8,8 @@ import {
 } from "../../assets/svg";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useGetReviewFitness, usePostReview } from "../../apis/uploadReview/quries/useReviewApi";
+import { LoadingSpinner } from "../../components/LoadingSpinner";
+import NotFound from "../NotFound";
 
 export default function UploadReview() {
   const [reviewText, setReviewText] = useState(""); // 리뷰 텍스트 상태
@@ -32,8 +34,8 @@ export default function UploadReview() {
   // 리뷰 작성 API
   const postReviewMutation = usePostReview();
 
-  if (isLoading) return <div>로딩중</div>;
-  if (error) return <div>오류: {error.message}</div>;
+  if (isLoading) return <LoadingSpinner />;
+  if (error) return <NotFound />;
 
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const text = e.target.value;
