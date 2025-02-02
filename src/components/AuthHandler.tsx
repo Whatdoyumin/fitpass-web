@@ -16,8 +16,6 @@ const AuthHandler = () => {
     const refreshToken = getCookie("refreshToken");
     const status = getCookie("status");
 
-    console.log("🍪 [소셜 로그인] 쿠키 데이터:", { accessToken, refreshToken, status });
-
     if (accessToken && refreshToken) {
       // ✅ 토큰 저장 후 로그인 상태 유지
       login(accessToken, refreshToken);

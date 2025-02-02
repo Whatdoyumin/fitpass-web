@@ -36,8 +36,6 @@ function SignupStep2() {
     const refreshToken = getCookie("refreshToken");
     const status = getCookie("status");
 
-    console.log("🍪 [소셜 로그인] 쿠키 데이터:", { accessToken, refreshToken, status });
-
     if (accessToken && refreshToken && status) {
       setTokens({ accessToken, refreshToken, status });
     }
