@@ -2,7 +2,7 @@ import { useGetPassInfo } from "../../apis/usepass/quries/useUsepassApi";
 import AvailableList from "./AvailableList";
 import CompletedList from "./CompletedList";
 import IcNoUsePass from "../../assets/svg/IcNoUsePass";
-import { TFitness } from "../../type/fitnessCard";
+import { TFitness } from "../../types/fitnessCard";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
