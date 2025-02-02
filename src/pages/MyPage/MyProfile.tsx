@@ -32,11 +32,11 @@ const MyProfile = ({ profile }: MyProfileProps) => {
 
   const getPlanText = (planType: string | null) => {
     switch (planType) {
-      case "basic":
+      case "BASIC":
         return "Basic 요금제";
-      case "Standard":
+      case "STANDARD":
         return "Standard 요금제";
-      case "Pro":
+      case "PRO":
         return "Pro 요금제";
       default:
         return "이용 중인 요금제가 없습니다.";
