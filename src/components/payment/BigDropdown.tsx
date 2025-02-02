@@ -21,7 +21,7 @@ const BigDropdown = ({ options, onOptionSelect }: IBigDropdownProps) => {
   };
 
   return (
-    <div className="w-full bg-white-100 border border-gray-600 rounded-5">
+    <div className="relative w-full bg-white-100 border border-gray-600 rounded-5 overflow-visible">
       <div
         className="w-full h-[50px] flex justify-between items-center px-4 cursor-pointer"
         onClick={toggleDropdown}
@@ -36,7 +36,7 @@ const BigDropdown = ({ options, onOptionSelect }: IBigDropdownProps) => {
 
       {/* 옵션 목록 */}
       {isOpen && (
-        <div className="w-full bg-white border-t border-gray-300">
+        <div className="absolute w-full bg-white-100 border border-gray-300 shadow-md z-50">
           {options.map((option, index) => (
             <div
               key={index}
