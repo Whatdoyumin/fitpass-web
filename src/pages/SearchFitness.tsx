@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import SearchHeader from "../components/SearchHeader";
-import FitnessCard from "../components/FitnessCard";
+import FitnessCard from "../components/fitnessCard/FitnessCard";
 import { useGetSearchFitness } from "../hooks/useGetSearchFitness";
 import { useInView } from "react-intersection-observer";
 import { GuideLogin } from "./GuideLogin";
