@@ -43,7 +43,7 @@ function ExploreFitness() {
   }
 
   return (
-    <div className="bg-white-200 px-5 pt-6 pb-16 w-full h-full max-h-full overflow-y-auto absolute">
+    <div className="bg-white-200 px-5 pt-6 pb-16 w-full min-h-full absolute">
       <div className="flex justify-between mb-3 mt-5 px-1">
         <span className="text-[25px] font-extrabold">피트니스 시설</span>
         <div className="relative z-10">
@@ -62,7 +62,7 @@ function ExploreFitness() {
           <>
             <FitnessCard fitness={fitness} />
             <div ref={observerRef} className="h-10 w-full text-center">
-              {isFetchingNextPage && "로딩중..."}
+              {isFetchingNextPage && <LoadingSpinner />}
             </div>
           </>
         )}

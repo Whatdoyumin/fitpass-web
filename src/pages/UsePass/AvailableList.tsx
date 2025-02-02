@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Modal from "./UseModal";
 import { IcNoAvailPass, IcUnderArrow, IcUpperArrow } from "../../assets/svg";
 import FitnessCard from "../../components/fitnessCard/FitnessCard";
-import { TFitness } from "../../type/fitnessCard";
+import { TFitness } from "../../types/fitnessCard";
 import { usePostPass } from "../../apis/usepass/quries/useUsepassApi";
 
 type AvailableListProps = {

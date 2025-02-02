@@ -1,17 +1,18 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import SearchHeader from "../components/SearchHeader";
-import FitnessCard from "../components/FitnessCard";
+import FitnessCard from "../components/fitnessCard/FitnessCard";
 import { useGetSearchFitness } from "../hooks/useGetSearchFitness";
 import { useInView } from "react-intersection-observer";
 import { GuideLogin } from "./GuideLogin";
+import { useAuth } from "../context/AuthContext";
 
 function SearchFitness() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [searchValue, setSearchValue] = useState(searchParams.get("q") ?? "");
   const [debouncedSearchValue, setDebouncedSearchValue] = useState(searchValue);
-  const [isLogin] = useState(false);
+  const { isLogin } = useAuth();
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -75,7 +76,7 @@ function SearchFitness() {
         setSearchValue={setSearchValue}
       />
       {!isPending ? (
-        <div className="p-4">
+        <div className="w-full h-full overflow-y-auto p-4 pb-16">
           {debouncedSearchValue && fitnessList.length > 0 ? (
             <>
               <FitnessCard fitness={fitnessList} />

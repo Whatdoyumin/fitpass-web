@@ -4,19 +4,18 @@ import { BorderStar, FillStar } from "../../assets/svg";
 import ReviewEditDelete from "./ReviewEditDelete";
 import { useNavigate } from "react-router-dom";
 import Modal from "../../components/Modal";
+import config from "../../apis/config";
+import { useMutation } from "@tanstack/react-query";
+import { axiosInstance } from "../../apis/axios-instance";
+import { TReview } from "../../types/review";
 
 interface ReviewProps {
-  review: {
-    id: number;
-    score: number;
-    content: string;
-    date: string;
-  }
+  review: TReview,
+  refetch: () => void;
 }
 
-function ReviewItem({ review }: ReviewProps) {
+function ReviewItem({ review, refetch }: ReviewProps) {
 
-  // const score: number = 3; // 임시 별점
   const [isOpen, setIsOpen] = useState(false); // 수정삭제 버튼
 
   const navigate = useNavigate();
@@ -49,11 +48,36 @@ function ReviewItem({ review }: ReviewProps) {
     setOpenDeleteModal(false);
   }
 
+  const mutation = useMutation({
+    mutationFn: async () => {
+      const response = await axiosInstance.delete(`${config.apiBaseUrl}/fitness/review/${review.id}`);
+      return response.data;
+    },
+    onSuccess: () => {
+      setOpenDeleteModal(false);
+      refetch();
+    },
+    onError: (error) => {console.log("삭제 실패", error)},
+  })
+
   // 삭제 성공
   const handleDeleteSuccess = () => {
     console.log("리뷰가 삭제 됨");
-    setOpenDeleteModal(false);
+    mutation.mutate();
   }
+
+  // 날짜, 시간 변환 함수
+  const myDate = (dateString: string): string => {
+    const date = new Date(dateString);
+
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+  
+    return `${year}.${month.toString().padStart(2, "0")}.${day.toString().padStart(2, "0")}. ${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
+  };
 
   return(
     <div className="w-[300px] h-[77px] flex flex-col gap-[12px] mt-[5px] ">
@@ -69,6 +93,7 @@ function ReviewItem({ review }: ReviewProps) {
           </div>
         </div>
         {/* 더보기 버튼 */}
+        { review.isOwner && (
           <div onClick={handleEditDelete} className="relative flex justify-center ">
             <button className="w-[24px] h-[24px]">
               <div className="flex flex-col gap-[3px] items-center">
@@ -87,9 +112,10 @@ function ReviewItem({ review }: ReviewProps) {
               </div>
             )}
           </div>
+        ) }
       </div>
       <p className="font-medium text-[12px]">{review.content}</p>
-      <p className="text-[10px] text-gray-600">{review.date}</p>
+      <p className="text-[10px] text-gray-600">{review.updatedAt ? myDate(review.updatedAt) : myDate(review.createdAt)}</p>
 
       {/* 수정, 삭제 모달 */}
       {openDeleteModal && (

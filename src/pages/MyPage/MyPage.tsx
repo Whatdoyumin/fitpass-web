@@ -15,6 +15,8 @@ import LogoutModal from "../MyPage/LogoutModal";
 import IcPayList from "../../assets/svg/IcPayList";
 
 import { useGetProfile } from "../../apis/mypage/quries/useProfileApi";
+import { LoadingSpinner } from "../../components/LoadingSpinner";
+import NotFound from "../NotFound";
 
 const handleLogout = () => {
   sessionStorage.removeItem("accessToken");
@@ -34,7 +36,7 @@ interface MyPageItem {
 const paymentItems: MyPageItem[] = [
   { id: 1, icon: IcSubscribe, name: "구독하기", path: "/subscribe" },
   { id: 2, icon: IcFillDollar, name: "코인 구매하기", path: "/buy-coins" },
-  { id: 3, icon: IcPayList, name: "구매 내역", path: "#" },
+  { id: 3, icon: IcPayList, name: "구매 내역", path: "/my/pay-history" },
 ];
 
 const MyPage = () => {
@@ -50,13 +52,13 @@ const MyPage = () => {
 
   const { data: profile, isLoading, isError } = useGetProfile();
 
-  // 로딩 또는 에러 처리
   if (isLoading) {
-    return <div>로딩 중...</div>;
+    return <LoadingSpinner />;
   }
 
   if (isError) {
-    return <div>프로필 정보를 가져오는 데 실패했습니다.</div>;
+    navigate("/");
+    return <NotFound />;
   }
 
   const openLogoutModal = () => setIsModalOpen(true);

@@ -2,6 +2,9 @@ import { useGeoLocation } from "../../hooks/useGeoLocation";
 import { useNavigate } from "react-router-dom";
 import usePatchLocation from "../../hooks/usePatchLocation";
 import { useEffect } from "react";
+import { useAuth } from "../../context/AuthContext";
+import { GuideLogin } from "../../pages/GuideLogin";
+import { LoadingSpinner } from "../LoadingSpinner";
 
 const geolocationOptions = {
   enableHighAccuracy: true,
@@ -12,9 +15,12 @@ const geolocationOptions = {
 const GetCurrentLocation = () => {
   const navigate = useNavigate();
   const { location, error } = useGeoLocation(geolocationOptions);
-  const { mutate } = usePatchLocation();
+  const { mutate, isPending } = usePatchLocation();
+  const { isLogin } = useAuth();
 
   useEffect(() => {
+    if (!isLogin) return;
+
     if (error) {
       alert("위치 정보를 가져오는 데 실패했습니다. 다시 시도해주세요.");
       return;
@@ -40,7 +46,19 @@ const GetCurrentLocation = () => {
         }
       );
     }
-  }, [location, error, mutate, navigate]);
+  }, [isLogin, location, error, mutate, navigate]);
+
+  if (isPending) {
+    return <LoadingSpinner />;
+  }
+
+  if (!isLogin) {
+    return (
+      <div className="h-[400px] flex items-center justify-center z-50">
+        <GuideLogin />
+      </div>
+    );
+  }
 
   return <></>;
 };
