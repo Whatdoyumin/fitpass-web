@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import InputField from "./InputField";
-import { useLocation } from "react-router-dom";
-import { MoreTerms } from "../../assets/svg";
-import { useSignUpMutation } from "../../hooks/useSignup";
 import PhoneVerification from "../../components/PhoneVerification";
+import { useSignUpMutation } from "../../hooks/useSignup";
+import { useSocialSignup } from "../../hooks/useSocialSignup";
 
 interface Agreements {
   all: boolean;
@@ -14,8 +14,9 @@ interface Agreements {
 }
 
 function SignupStep2() {
+  const navigate = useNavigate();
   const location = useLocation();
-  const { id, password } = location.state || {};
+  const { id, password } = location.state || {}; 
 
   const [tokens, setTokens] = useState({
     accessToken: "",
@@ -23,35 +24,24 @@ function SignupStep2() {
     status: "",
   });
 
+  // ✅ 쿠키에서 값 가져오기 함수
+  const getCookie = (name: string) => {
+    const match = document.cookie.match(new RegExp("(^| )" + name + "=([^;]+)"));
+    return match ? match[2] : "";
+  };
+
   useEffect(() => {
-    const fetchTokens = async () => {
-      try {
-        const response = await fetch("http://localhost:5173/signup/step2", {
-          method: "GET",
-          credentials: "include", // ✅ 쿠키 사용 시 필요
-        });
+    // ✅ 쿠키에서 `accessToken`, `refreshToken`, `status` 가져오기
+    const accessToken = getCookie("accessToken");
+    const refreshToken = getCookie("refreshToken");
+    const status = getCookie("status");
 
-        const accessToken = response.headers.get("Authorization");
-        const refreshToken = response.headers.get("X-Refresh-Token");
-        const status = response.headers.get("X-Status");
+    console.log("🍪 [소셜 로그인] 쿠키 데이터:", { accessToken, refreshToken, status });
 
-        console.log("🔑 [소셜 로그인] 헤더 정보:", { accessToken, refreshToken, status })
-
-        if (status === "register") {
-          setTokens({
-            accessToken: accessToken || "",
-            refreshToken: refreshToken || "",
-            status: "register",
-          });
-        }
-      } catch (error) {
-        console.error("헤더 데이터 가져오기 실패:", error);
-      }
-    };
-
-        fetchTokens();
-      }, []);
-    
+    if (accessToken && refreshToken && status) {
+      setTokens({ accessToken, refreshToken, status });
+    }
+  }, [navigate]);
 
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -65,7 +55,7 @@ function SignupStep2() {
     marketing: false,
   });
 
-  /** 전체 동의 핸들러 */
+  /** ✅ 전체 동의 */
   const handleAllAgreement = () => {
     const newState = !agreements.all;
     setAgreements({
@@ -77,7 +67,7 @@ function SignupStep2() {
     });
   };
 
-  /** 개별 약관 핸들러 */
+  /** ✅ 개별 약관 동의 */
   const handleAgreementChange = (key: keyof Agreements) => {
     setAgreements((prev) => {
       const updated = { ...prev, [key]: !prev[key] };
@@ -94,23 +84,38 @@ function SignupStep2() {
     agreements.location &&
     agreements.thirdParty;
 
-    const signUpMutation = useSignUpMutation();
+  const signUpMutation = useSignUpMutation();
+  const socialSignUp = useSocialSignup();
 
-  const handleNextStep = () => {
+  /** ✅ 회원가입 요청 (소셜 로그인 / 일반 회원가입 구분) */
+  const handleNextStep = async () => {
     if (isFormValid) {
-      signUpMutation.mutate({name, id, password, phoneNumber}, {
-        onError: (error: unknown) => {
-          alert(error instanceof Error ? error.message : "회원가입에 실패했습니다.");
-        }
-      });
+      if (tokens.accessToken) {
+        socialSignUp.mutate({name, phoneNumber},
+          {
+            onError: (error: unknown) => {
+              alert(error instanceof Error ? error.message : "소셜 로그인에 실패했습니다.");
+            },
+          }
+        )
+      } else {
+        // ✅ 일반 회원가입 요청
+        signUpMutation.mutate(
+          { name, id, password, phoneNumber },
+          {
+            onError: (error: unknown) => {
+              alert(error instanceof Error ? error.message : "회원가입에 실패했습니다.");
+            },
+          }
+        );
       }
     }
+  };
 
   return (
-      <div className="w-full max-w-content flex flex-col items-center h-screen relative px-5 pt-[29px]">
-      {/* 스크롤 가능 영역 */}
+    <div className="w-full max-w-content flex flex-col items-center h-screen relative px-5 pt-[29px]">
+      {/* ✅ 입력 폼 */}
       <div className="flex-grow w-full overflow-auto flex flex-col gap-[20px]">
-        {/* 이름 입력창 */}
         <div className="w-full flex flex-col gap-[10px]">
           <label htmlFor="name" className="text-[16px] font-medium text-black-700">
             이름
@@ -123,26 +128,28 @@ function SignupStep2() {
           />
         </div>
 
-        <PhoneVerification phoneNumber={phoneNumber} setPhoneNumber={setPhoneNumber} onVerifySuccess={() => setIsCodeConfirmed(true)} />
+        <PhoneVerification
+          phoneNumber={phoneNumber}
+          setPhoneNumber={setPhoneNumber}
+          onVerifySuccess={() => setIsCodeConfirmed(true)}
+        />
       </div>
 
-        {/* 약관 동의 섹션 */}
-        <div className="w-full mb-[27px]">
-          {/* 전체 약관 동의 */}
-          <div className="w-full flex items-center gap-[17px] px-[26px] py-[10px]">
-            <input
-              type="checkbox"
-              checked={agreements.all}
-              onChange={handleAllAgreement}
-              className="w-[15px] h-[15px]"
-            />
-            <span className="text-[14px] text-gray-500 font-normal leading-[19px] tracking-[-0.28px]">
-              전체 약관에 동의합니다
-            </span>
-          </div>
+      {/* ✅ 약관 동의 */}
+      <div className="w-full mb-[27px]">
+        <div className="w-full flex items-center gap-[17px] px-[26px] py-[10px]">
+          <input
+            type="checkbox"
+            checked={agreements.all}
+            onChange={handleAllAgreement}
+            className="w-[15px] h-[15px]"
+          />
+          <span className="text-[14px] text-gray-500 font-normal leading-[19px] tracking-[-0.28px]">
+            전체 약관에 동의합니다
+          </span>
+        </div>
 
-          {/* 개별 약관 섹션 */}
-          <div
+        <div
             className="
             flex
             flex-col
@@ -162,39 +169,35 @@ function SignupStep2() {
             font-['Inter']
           "
           >
-            {[
-              { key: "terms", label: "[필수] 이용 약관 동의" },
-              { key: "location", label: "[필수] 위치 정보 서비스 이용약관 동의" },
-              { key: "thirdParty", label: "[필수] 제3자 정보 제공 동의" },
-              { key: "marketing", label: "[선택] 마케팅 정보 제공 동의" },
-            ].map((item) => (
-              <label key={item.key} className="flex items-center">
-                <div className="flex items-center gap-[17px]">
-                  <input
-                    type="checkbox"
-                    checked={agreements[item.key as keyof Agreements]}
-                    onChange={() => handleAgreementChange(item.key as keyof typeof agreements)}
-                    className="w-[15px] h-[15px]"
-                  />
-                  {item.label}
-                </div>
-                <MoreTerms className="h-[9px] ml-[10px]" />
-              </label>
-            ))}
-          </div>
+          {[
+            { key: "terms", label: "[필수] 이용 약관 동의" },
+            { key: "location", label: "[필수] 위치 정보 서비스 이용약관 동의" },
+            { key: "thirdParty", label: "[필수] 제3자 정보 제공 동의" },
+            { key: "marketing", label: "[선택] 마케팅 정보 제공 동의" },
+          ].map((item) => (
+            <label key={item.key} className="flex items-center">
+              <div className="flex items-center gap-[17px]">
+                <input
+                  type="checkbox"
+                  checked={agreements[item.key as keyof Agreements]}
+                  onChange={() => handleAgreementChange(item.key as keyof Agreements)}
+                  className="w-[15px] h-[15px]"
+                />
+                {item.label}
+              </div>
+            </label>
+          ))}
         </div>
+      </div>
 
-      {/* 하단 버튼 */}
+      {/* ✅ 회원가입 버튼 */}
       <button
         onClick={handleNextStep}
         disabled={!isFormValid}
         className={`fixed bottom-0 left-0 w-screen h-[86px] text-[20px] font-medium text-white-100 ${
           isFormValid ? "bg-blue-500 hover:bg-blue-400" : "bg-gray-400"
         }`}
-        style={{
-          paddingTop: "17px",
-          paddingBottom: "39px",
-        }}
+        style={{ paddingTop: "17px", paddingBottom: "39px" }}
       >
         동의하고 가입하기
       </button>
