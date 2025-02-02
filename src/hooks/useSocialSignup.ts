@@ -1,8 +1,10 @@
 import { useMutation } from "@tanstack/react-query";
 import { useAuth } from "../context/AuthContext";
 import { socialLogin, TSocialLoginData } from "../apis/signup/social-login";
+import { useNavigate } from "react-router-dom";
 
 export const useSocialSignup = () => {
+    const navigate = useNavigate();
   const { login } = useAuth();
 
   return useMutation({
@@ -12,6 +14,7 @@ export const useSocialSignup = () => {
       return response;
     },
     onSuccess: (data: { result: { accessToken: string; refreshToken: string } }) => {
+        navigate('/')
       console.log("✅ 소셜 회원가입 성공");
       login(data.result.accessToken, data.result.refreshToken);
     },
