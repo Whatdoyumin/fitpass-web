@@ -20,7 +20,7 @@
   }
 
   #root {
-    @apply absolute h-screen w-full max-w-content;
+    @apply absolute h-full w-full max-w-content overflow-y-auto;
     padding-top: calc(theme(spacing.header));
     padding-bottom: calc(theme(spacing.navbar));
   }

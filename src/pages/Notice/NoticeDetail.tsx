@@ -1,13 +1,14 @@
 import { useParams } from "react-router-dom";
 import { useGetNoticeById } from "../../apis/mypage/quries/useNoticeApi";
 import IcViewers from "../../assets/svg/IcViewers";
+import { LoadingSpinner } from "../../components/LoadingSpinner";
 
 const NoticeDetail = () => {
   const { id } = useParams<{ id: string }>();
   const { data: notice, isLoading, isError, error } = useGetNoticeById(Number(id));
 
   if (isLoading) {
-    return <div>로딩 중...</div>;
+    return <LoadingSpinner />;
   }
 
   if (isError) {

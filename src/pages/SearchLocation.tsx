@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import SearchHeader from "../components/SearchHeader";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { GuideLogin } from "./GuideLogin";
+import { useAuth } from "../context/AuthContext";
 
 const SearchLocation = () => {
   const navigate = useNavigate();
@@ -10,6 +12,7 @@ const SearchLocation = () => {
   const [places, setPlaces] = useState<kakao.maps.services.PlacesSearchResultItem[]>([]);
   const [pagination, setPagination] = useState<kakao.maps.services.Pagination | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const { isLogin } = useAuth();
 
   useEffect(() => {
     if (initialSearchValue) {
@@ -57,6 +60,14 @@ const SearchLocation = () => {
       )}&lat=${y}&lng=${x}`
     );
   };
+
+  if (!isLogin) {
+    return (
+      <div className="h-screen flex items-center justify-center z-50">
+        <GuideLogin />
+      </div>
+    );
+  }
 
   return (
     <div className="w-full h-auto min-h-full absolute z-20">
