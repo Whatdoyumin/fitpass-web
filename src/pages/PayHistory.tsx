@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 function PayHistory() {
   const navigate = useNavigate();
   const [query, setQuery] = useState<TPayQuery>("ALL");
-  const [isSubscribing, setIsSubscribing] = useState(true);
+  const [isSubscribing, setIsSubscribing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
   const { isLogin } = useAuth();
@@ -48,12 +48,19 @@ function PayHistory() {
   };
 
   const { ref, inView } = useInView({ threshold: 0 });
-
   useEffect(() => {
     if (inView && hasNextPage && !isFetching) {
       fetchNextPage();
     }
   }, [inView, hasNextPage, isFetching, fetchNextPage]);
+
+  useEffect(() => {
+    if (data?.pages[0]?.isSubscribing === true) {
+      setIsSubscribing(true);
+    } else {
+      setIsSubscribing(false);
+    }
+  }, [data?.pages, setIsSubscribing]);
 
   if (isError) {
     if ((error as { status?: number })?.status === 401) {
@@ -73,10 +80,6 @@ function PayHistory() {
         <GuideLogin />
       </div>
     );
-  }
-
-  if (data?.pages[0]?.data.result?.isSubscribing === true) {
-    setIsSubscribing(true);
   }
 
   const formatDate = (dateString: string) => {
@@ -154,7 +157,7 @@ function PayHistory() {
 }
 
 const CoinTitle = ({ text }: { text: number }) => (
-  <div className="w-20 flex justify-center items-center gap-1">
+  <div className="w-full flex justify-center items-center gap-1">
     <IcEmptyDollarBlue className="w-[17px] h-[17px]" />
     <p>{text} 코인</p>
   </div>
