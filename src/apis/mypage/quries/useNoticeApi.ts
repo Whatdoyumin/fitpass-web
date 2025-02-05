@@ -4,11 +4,12 @@ import { getNotices, getNoticeById } from "../axios/noticeApi";
 
 export interface Notice {
   id: number;
-  type: string;
+  noticeType: string;
   title: string;
   createdAt: string;
   imageUrl: string;
   content: string;
+  views: number;
 }
 
 export interface NoticesResponse {

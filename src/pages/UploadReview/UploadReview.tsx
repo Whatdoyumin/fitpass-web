@@ -50,14 +50,24 @@ export default function UploadReview() {
   };
 
   const handleSubmitReview = () => {
-    if (charCount < 10 || rating === 0 || !isAgreed) return;
+    if (rating === 0) {
+      alert("별점을 선택해주세요!");
+      return;
+    }
+    if (charCount < 10) {
+      alert("리뷰를 최소 10자 이상 작성해주세요!");
+      return;
+    }
+    if (!isAgreed) {
+      alert("리뷰 등록 정책에 동의해주세요!");
+      return;
+    }
 
     postReviewMutation.mutate(
       {
         passId: Number(passId),
         content: reviewText,
         score: rating,
-        memberFitnessId: fitnessIdNumber,
         agree: isAgreed,
       },
       {
@@ -66,6 +76,7 @@ export default function UploadReview() {
         },
         onError: (error) => {
           alert(`리뷰 등록 실패: ${error.message}`);
+          console.log(passId);
         },
       }
     );
@@ -163,7 +174,6 @@ export default function UploadReview() {
         <div className="pt-[22px] pb-[32px] px-[20px]">
           <button
             className="w-full bg-blue-500 text-white-100 py-[14px] rounded-[5px] text-[15px] font-bold"
-            disabled={charCount < 10 || rating === 0 || !isAgreed}
             onClick={handleSubmitReview}
           >
             리뷰 등록하기

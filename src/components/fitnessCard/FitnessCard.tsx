@@ -84,9 +84,10 @@ const FitnessCard = ({ fitness, limitTime }: FitnessCardProps) => {
               <div
                 className="w-[117px] rounded-l relative"
                 style={{
-                  background: `linear-gradient(0deg, rgba(0, 0, 0, 0.20) 0%, rgba(0, 0, 0, 0.20) 100%), url(${item.imageUrl})`,
+                  backgroundImage: `linear-gradient(0deg, rgba(0, 0, 0, 0.20) 0%, rgba(0, 0, 0, 0.20) 100%), url(${item.imageUrl})`,
                   backgroundSize: "cover",
                   backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat",
                   clipPath: `polygon(0% 0%, 100% 0%, 100% 9.09%, 98% 9.09%, 98% 18.18%, 100% 18.18%, 100% 27.27%, 98% 27.27%, 98% 36.36%, 100% 36.36%, 100% 45.45%, 98% 45.45%, 98% 54.54%, 100% 54.54%, 100% 63.63%, 98% 63.63%, 98% 72.72%, 100% 72.72%, 100% 81.81%, 98% 81.81%, 98% 90.9%, 100% 90.9%, 100% 100%, 0% 100%)`,
                 }}
               />

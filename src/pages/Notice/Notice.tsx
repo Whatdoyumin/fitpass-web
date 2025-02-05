@@ -8,11 +8,12 @@ import NotFound from "../NotFound";
 
 export interface Notice {
   id: number;
-  type: string;
+  noticeType: string;
   title: string;
   createdAt: string;
   imageUrl: string;
   content: string;
+  views: number;
 }
 
 export interface NoticesResponse {
@@ -60,8 +61,10 @@ const NoticeList = () => {
             className="border-b px-6 py-3"
             onClick={() => navigate(`/my/noticedetail/${notice.id}`)}
           >
-            <span className="font-medium text-blue-500">[공지] </span>
-            <span className="text-gray-700">{notice.title}</span>
+            <span className="font-medium text-blue-500">
+              [{notice.noticeType === "공지사항" ? "공지" : notice.noticeType}]
+            </span>
+            <span className="text-gray-700"> {notice.title}</span>
           </li>
         ))}
       </ul>
