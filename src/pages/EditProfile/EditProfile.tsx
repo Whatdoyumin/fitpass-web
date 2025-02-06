@@ -1,4 +1,4 @@
-import EditProfileCommon from "./EditProfileCommon";  // ChangeButton 컴포넌트를 import
+import EditProfileCommon from "./EditProfileCommon"; 
 
 function EditProfile() {
   return (
