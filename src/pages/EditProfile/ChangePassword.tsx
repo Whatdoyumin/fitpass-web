@@ -76,7 +76,7 @@ function ChangePassword() {
 
   return (
     <form
-      className="w-full min-h-screen bg-white-100 px-[20px] py-[29px] flex flex-col text-gray-400"
+      className="w-full h-full bg-white-100 px-[20px] py-[29px] flex flex-col text-gray-400"
       onSubmit={handleSubmit}
     >
       {/* 기존 비밀번호 입력 */}
@@ -113,7 +113,7 @@ function ChangePassword() {
       </div>
 
       {/* 제출 버튼 */}
-      <div className="button-container w-full flex justify-center mt-auto pt-[29px] pb-[86px]">
+      <div className="button-container w-full flex justify-center mt-auto">
         <Button type="submit" text="변경하기" />
       </div>
     </form>
