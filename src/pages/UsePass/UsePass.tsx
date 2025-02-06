@@ -10,6 +10,7 @@ type PassData = {
   none: TFitness[];
   progress: TFitness[];
   done: TFitness[];
+  reviewed: TFitness[];
 };
 
 function UsePass() {
@@ -17,7 +18,7 @@ function UsePass() {
 
   const [hasAvailablePass, setHasAvailablePass] = useState(false);
   const [hasCompletedPass, setHasCompletedPass] = useState(false);
-  const [passData, setPassData] = useState<PassData>({ none: [], progress: [], done: [] });
+  const [passData, setPassData] = useState<PassData>({ none: [], progress: [], done: [], reviewed: [] });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -31,7 +32,7 @@ function UsePass() {
     if (data?.isSuccess) {
       setPassData(data.result);
     } else {
-      setPassData({ none: [], progress: [], done: [] });
+      setPassData({ none: [], progress: [], done: [], reviewed: [] });
     }
   }, [data]);
 
@@ -43,7 +44,7 @@ function UsePass() {
       ];
 
       setHasAvailablePass(availablePasses.length > 0);
-      setHasCompletedPass(passData.done.length > 0);
+      setHasCompletedPass(passData.done.length > 0 || passData.reviewed.length > 0);
     }
   }, [passData]);
 
@@ -56,6 +57,10 @@ function UsePass() {
     ...(passData?.none.filter((pass) => pass.status === "NONE") || []),
     ...(passData?.progress.filter((pass) => pass.status === "PROGRESS") || []),
   ];
+  const completedPasses = [
+    ...(passData?.done.filter((pass) => pass.status === "DONE") || []),
+    ...(passData?.reviewed.filter((pass) => pass.status === "REVIEWED") || []),
+  ];
 
   const updatePassStatus = (passId: number | undefined, newStatus: string) => {
     setPassData((prevPassData) => {
@@ -64,6 +69,7 @@ function UsePass() {
         ...updatedPassData.none,
         ...updatedPassData.progress,
         ...updatedPassData.done,
+        ...updatedPassData.reviewed,
       ];
       const updatedPasses = allPasses.map((pass) =>
         pass.id === passId ? { ...pass, status: newStatus } : pass
@@ -72,6 +78,7 @@ function UsePass() {
       updatedPassData.none = updatedPasses.filter((pass) => pass.status === "NONE");
       updatedPassData.progress = updatedPasses.filter((pass) => pass.status === "PROGRESS");
       updatedPassData.done = updatedPasses.filter((pass) => pass.status === "DONE");
+      updatedPassData.reviewed = updatedPasses.filter((pass) => pass.status === "REVIEWED");
 
       return updatedPassData;
     });
@@ -82,8 +89,8 @@ function UsePass() {
       {hasAvailablePass || hasCompletedPass ? (
         <>
           <AvailableList passes={availablePasses} updatePassStatus={updatePassStatus} />
-          {hasCompletedPass && passData?.done.length > 0 && (
-            <CompletedList passes={passData.done} />
+          {hasCompletedPass && completedPasses.length > 0 && (
+            <CompletedList passes={completedPasses} />
           )}
         </>
       ) : (

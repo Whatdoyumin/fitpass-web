@@ -55,6 +55,13 @@ const FitnessCard = ({ fitness, limitTime }: FitnessCardProps) => {
               bgStyle = "bg-gray-200";
               circleBg = "bg-gray-300";
               break;
+            case "REVIEWED":
+              statusText = "작성 완료";
+              statusStyle =
+                "w-[70px] h-[26px] mr-[10px] border bg-gray-400 text-white-100 border-gray-400 rounded-[5px]";
+              bgStyle = "bg-gray-200";
+              circleBg = "bg-gray-300";
+              break;
             default:
               statusText = "사용 가능";
               break;
@@ -80,7 +87,7 @@ const FitnessCard = ({ fitness, limitTime }: FitnessCardProps) => {
               }
             }}
           >
-            {statusText === "리뷰 남기기" ? (
+            {statusText === "리뷰 남기기" || statusText === "작성 완료" ? (
               <div
                 className="w-[117px] rounded-l relative"
                 style={{
@@ -102,7 +109,7 @@ const FitnessCard = ({ fitness, limitTime }: FitnessCardProps) => {
               />
             )}
 
-            {statusText === "리뷰 남기기" && (
+            {(statusText === "리뷰 남기기" || statusText === "작성 완료") && (
               <img src={Done} alt="사용 완료" className="absolute bottom-[5px] left-[50px] z-10" />
             )}
 
