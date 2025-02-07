@@ -5,12 +5,12 @@ interface PortalProps {
   children: ReactNode;
 }
 
-const Portal: React.FC<PortalProps> = ({ children }) => {
+const Admin: React.FC<PortalProps> = ({ children }) => {
   if (typeof window === "undefined") {
     return null;
   }
 
-  const node = document.getElementById("portal");
+  const node = document.getElementById("admin");
 
   if (!node) {
     return null;
@@ -19,4 +19,4 @@ const Portal: React.FC<PortalProps> = ({ children }) => {
   return createPortal(children, node);
 };
 
-export default Portal;
+export default Admin;
