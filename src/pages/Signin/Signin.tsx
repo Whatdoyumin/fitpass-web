@@ -1,10 +1,4 @@
-import { 
-  FitpassLogo, 
-  Password, 
-  User, 
-  PasswordFocus, 
-  UserFocus, 
-} from "../../assets/svg";
+import { FitpassLogo, Password, User, PasswordFocus, UserFocus } from "../../assets/svg";
 import InputField from "./InputField";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -25,11 +19,11 @@ function Signin() {
 
   const handleFindId = () => {
     navigate("/find-id");
-  }
+  };
 
   const handleFindPassword = () => {
     navigate("/find-password");
-  }
+  };
 
   const signinMutation = useSignin();
 
@@ -43,14 +37,16 @@ function Signin() {
       { id, password },
       {
         onError: (error: unknown) => {
-          setSigninError(error instanceof Error ? error.message : "알 수 없는 오류가 발생했습니다.");
+          setSigninError(
+            error instanceof Error ? error.message : "알 수 없는 오류가 발생했습니다."
+          );
         },
       }
     );
   };
 
   return (
-    <div className="w-full max-w-content flex flex-col items-center">
+    <div className="w-full max-w-content flex flex-col items-center pb-16">
       <FitpassLogo className="w-[176px] h-[48px] mb-[40px]" />
 
       <div className="flex flex-col gap-[19px] mb-[17px]">
@@ -78,7 +74,7 @@ function Signin() {
 
       {signinError ? (
         <span className="text-red-500 text-[13px] mb-[18px] w-[321px]">{signinError}</span>
-      ): (
+      ) : (
         <span className="h-[37.5px]"></span>
       )}
 
@@ -117,24 +113,22 @@ function Signin() {
               checked:border-blue-500
             "
           />
-          <span className="text-gray-500 text-[12px] leading-none">
-            자동 로그인
-          </span>
+          <span className="text-gray-500 text-[12px] leading-none">자동 로그인</span>
         </div>
         <div className="flex gap-[13px] text-blue-500">
-        <button
-        onClick={handleFindId}
-        className="hover:underline focus:outline-none text-blue-500"
-      >
-        아이디 찾기
-      </button>
-      <span>|</span>
-      <button
-        onClick={handleFindPassword}
-        className="hover:underline focus:outline-none text-blue-500"
-      >
-        비밀번호 찾기
-      </button>
+          <button
+            onClick={handleFindId}
+            className="hover:underline focus:outline-none text-blue-500"
+          >
+            아이디 찾기
+          </button>
+          <span>|</span>
+          <button
+            onClick={handleFindPassword}
+            className="hover:underline focus:outline-none text-blue-500"
+          >
+            비밀번호 찾기
+          </button>
         </div>
       </div>
 
