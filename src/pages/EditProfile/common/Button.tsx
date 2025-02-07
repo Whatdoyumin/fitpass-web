@@ -1,13 +1,12 @@
-
 interface ButtonProps {
-  onClick: () => void;
-  type: 'button' | 'submit';
+  onClick?: () => void; // ✅ 선택적으로 변경!
+  type: "button" | "submit";
   text: string;
   disabled?: boolean;
   className?: string;
 }
 
-const Button = ({ onClick, type, text, disabled = false, className = '' }: ButtonProps) => {
+const Button = ({ onClick, type, text, disabled = false, className = "" }: ButtonProps) => {
   return (
     <button
       onClick={onClick}

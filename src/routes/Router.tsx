@@ -40,11 +40,17 @@ import {
 import NotFound from "../pages/NotFound";
 import NoticeDetail from "../pages/Notice/NoticeDetail";
 import AdminRootLayout from "../layout/AdminRootLayout";
+import AuthHandler from "../components/AuthHandler";
 
 const Router = createBrowserRouter([
   {
     path: "/",
-    element: <RootLayout />,
+    element: (
+      <>
+        <AuthHandler /> {/* ✅ 소셜 로그인 후 자동 실행 */}
+        <RootLayout />
+      </>
+    ),
     errorElement: <NotFound />,
     children: [
       {
@@ -57,7 +63,12 @@ const Router = createBrowserRouter([
       },
       {
         path: "/signup/step2",
-        element: <SignupStep2 />,
+        element: (
+          <>
+            <AuthHandler /> {/* ✅ 소셜 로그인 후 자동 실행 */}
+            <SignupStep2 />
+          </>
+        ),
       },
       {
         path: "/signin",

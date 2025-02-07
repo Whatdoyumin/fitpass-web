@@ -27,7 +27,7 @@ const NoticeDetail = () => {
         <span className="mr-[18px]">{new Date(notice.createdAt).toLocaleDateString()}</span>
         <div className="flex items-center">
           <IcViewers width={"11px"} height={"11px"} />
-          <span className="ml-[6px]">141</span>
+          <span className="ml-[6px]">{notice.views}</span>
         </div>
       </div>
 
