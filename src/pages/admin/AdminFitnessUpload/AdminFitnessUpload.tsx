@@ -5,6 +5,7 @@ import MainImgUpload from "./MainImgUpload";
 import SelectCategory from "./SelectCategory";
 import SubImgUpload from "./SubImgUpload";
 import SelectStatus from "./SelectStatus";
+import SetLocationModal from "./SetLocationModal";
 
 function AdminFitnessUpload() {
 
@@ -13,6 +14,16 @@ function AdminFitnessUpload() {
 
   const status: string[] = ["구매 가능", "구매 불가"];
   const [selectedStatus, setSelectedStatus] = useState<string>("");
+
+  const [isModal, setIsModal] = useState(false);
+
+  const handleModalOpen = () => { 
+    setIsModal(!isModal);
+  };
+
+  const handleModalClose = () => {
+    setIsModal(false);
+  }
 
   return (
     <div className="w-full h-full overflow-y-auto">
@@ -37,8 +48,11 @@ function AdminFitnessUpload() {
                   id="address" 
                   className="w-[240px] h-[30px] border border-gray-450 rounded-[3px] "
                 />
-                <button className="w-[53px] h-[30px] text-[14px] text-medium text-white-100 border bg-gray-400 rounded-[5px]">
-                  검색
+                <button
+                  type="button" 
+                  onClick={handleModalOpen}
+                  className="w-[53px] h-[30px] text-[14px] text-medium text-white-100 border bg-gray-400 rounded-[5px]"
+                >검색
                 </button>
               </div>
             </div>
@@ -76,7 +90,6 @@ function AdminFitnessUpload() {
 
           {/* 오른쪽 */}
           <div className="flex flex-col gap-4 w-[300px]">
-            {/* 이미지 업로드 */}
             <SubImgUpload />
             <SelectCategory category={category} onCategoryChange={setSelectedCategory} />
             <SelectStatus status={status} onStatusChange={setSelectedStatus} />
@@ -84,18 +97,17 @@ function AdminFitnessUpload() {
         </div>
 
         {/* textarea */}
-        <textarea className="w-full h-[270px] resize-none border border-gray-450 rounded-[3px]" placeholder="시설 소개 내용을 적어주세요"/>
+        <textarea className="w-full h-[270px] resize-none border border-gray-450 rounded-[3px] pl-2 pt-2" placeholder="시설 소개 내용을 적어주세요"/>
+
         <div className="flex flex-col mb-3 w-full">
-          <label htmlFor="time">
-            이용시간
-            
-          </label>
+          <label htmlFor="time">이용시간</label>
+
           <label htmlFor="howToUse">
             이용 방법 안내
             <input 
               type="text" 
               id="howToUse" 
-              className="w-full h-[30px] border border-gray-450 rounded-[3px] "
+              className="w-full h-[30px] border border-gray-450 rounded-[3px] pl-2"
               placeholder="패스 구매 전 전화 후 패스 구매하기. 시설에 방문하여 이용 가능 패스 사용 내역 보여주기"
             />
           </label>
@@ -104,7 +116,7 @@ function AdminFitnessUpload() {
             <input 
               type="text" 
               id="etc" 
-              className="w-full h-[30px] border border-gray-450 rounded-[3px] "
+              className="w-full h-[30px] border border-gray-450 rounded-[3px] pl-2"
               placeholder="주차 불가능, 옷 대여 가능"
             />
           </label>
@@ -117,6 +129,10 @@ function AdminFitnessUpload() {
             className="w-[150px] "/>
         </div>
       </form>
+
+      {isModal && (
+        <SetLocationModal onClose={handleModalClose} />
+      ) }
     </div>
   );
 }
