@@ -27,7 +27,7 @@ import AdminAccount from "./admin/AdminAccount";
 import AdminCoin from "./admin/AdminCoin";
 import AdminDashboard from "./admin/AdminDashboard";
 import AdminFitnessList from "./admin/AdminFitnessList";
-import AdminFitnessUpload from "./admin/AdminFitnessUpload";
+import AdminFitnessUpload from "./admin/AdminFitnessUpload/AdminFitnessUpload";
 import AdminNotice from "./admin/AdminNotice";
 import AdminPayHistory from "./admin/AdminPayHistory";
 import AdminSettings from "./admin/AdminSettings";
