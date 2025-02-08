@@ -79,7 +79,7 @@ const SearchLocation = () => {
         setSearchValue={setSearchValue}
       />
 
-      <div className="w-full h-auto p-3 pb-28 min-h-screen">
+      <div className="w-full max-w-content h-auto p-3 pb-28 min-h-screen">
         {errorMessage ? (
           <div className="text-center text-gray-500">{errorMessage}</div>
         ) : (

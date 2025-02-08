@@ -88,7 +88,7 @@ function PayHistory() {
 
   return (
     <div
-      className={`w-full h-full overflow-y-auto px-4 pt-6 bg-white-200 ${
+      className={`bg-white-200 px-5 pt-6 w-full max-w-content min-h-full absolute ${
         isSubscribing ? "pb-14" : "pb-6"
       }`}
     >
@@ -109,8 +109,10 @@ function PayHistory() {
           </div>
         ) : (
           <div className="w-full flex flex-col justify-center items-center gap-1">
-            {data?.pages.map((page, pageIndex) => (
-              <>
+            {data?.pages.every((page) => page.data.length === 0) ? (
+              <p className="text-gray-500 text-14px mt-10">구매 내역이 존재하지 않습니다.</p>
+            ) : (
+              data?.pages.map((page, pageIndex) => (
                 <div key={pageIndex} className="w-full flex flex-col gap-3">
                   {page.data.map((item: TPayHistoryItem) => (
                     <PaymentCard
@@ -127,9 +129,9 @@ function PayHistory() {
                     />
                   ))}
                 </div>
-                <div ref={ref} />
-              </>
-            ))}
+              ))
+            )}
+            <div ref={ref} />
           </div>
         )}
       </div>

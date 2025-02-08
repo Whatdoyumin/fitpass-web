@@ -76,7 +76,7 @@ function SearchFitness() {
         setSearchValue={setSearchValue}
       />
       {!isPending ? (
-        <div className="w-full h-full overflow-y-auto p-4 pb-16">
+        <div className="w-full h-full max-w-content overflow-y-auto p-4 pb-16">
           {debouncedSearchValue && fitnessList.length > 0 ? (
             <>
               <FitnessCard fitness={fitnessList} />

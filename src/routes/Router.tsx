@@ -26,9 +26,20 @@ import {
   LocationDetail,
   SearchLocation,
   PayHistory,
+  AdminAccount,
+  AdminDashboard,
+  AdminUser,
+  AdminFitnessList,
+  AdminFitnessUpload,
+  AdminSubscribe,
+  AdminCoin,
+  AdminPayHistory,
+  AdminNotice,
+  AdminSettings,
 } from "../pages/index";
 import NotFound from "../pages/NotFound";
 import NoticeDetail from "../pages/Notice/NoticeDetail";
+import AdminRootLayout from "../layout/AdminRootLayout";
 import AuthHandler from "../components/AuthHandler";
 
 const Router = createBrowserRouter([
@@ -154,6 +165,53 @@ const Router = createBrowserRouter([
       {
         path: "/my/pay-history",
         element: <PayHistory />,
+      },
+    ],
+  },
+  {
+    path: "/admin",
+    element: <AdminRootLayout />,
+    errorElement: <NotFound />,
+    children: [
+      {
+        index: true,
+        element: <AdminAccount />,
+      },
+      {
+        path: "dashboard",
+        element: <AdminDashboard />,
+      },
+      {
+        path: "user",
+        element: <AdminUser />,
+      },
+      {
+        path: "fitness/list",
+        element: <AdminFitnessList />,
+      },
+      {
+        path: "fitness/upload",
+        element: <AdminFitnessUpload />,
+      },
+      {
+        path: "pay",
+        element: <AdminPayHistory />,
+      },
+      {
+        path: "pay/subscribe",
+        element: <AdminSubscribe />,
+      },
+      {
+        path: "pay/coin",
+        element: <AdminCoin />,
+      },
+      {
+        path: "notice",
+        element: <AdminNotice />,
+      },
+      {
+        path: "settings",
+        element: <AdminSettings />,
       },
     ],
   },

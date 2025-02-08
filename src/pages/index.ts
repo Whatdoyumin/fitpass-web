@@ -23,6 +23,16 @@ import PassPaymentSuccess from "./PassPaymentSuccess";
 import LocationDetail from "./LocationDetails";
 import SearchLocation from "./SearchLocation";
 import PayHistory from "./PayHistory";
+import AdminAccount from "./admin/AdminAccount";
+import AdminCoin from "./admin/AdminCoin";
+import AdminDashboard from "./admin/AdminDashboard";
+import AdminFitnessList from "./admin/AdminFitnessList";
+import AdminFitnessUpload from "./admin/AdminFitnessUpload";
+import AdminNotice from "./admin/AdminNotice";
+import AdminPayHistory from "./admin/AdminPayHistory";
+import AdminSettings from "./admin/AdminSettings";
+import AdminSubscribe from "./admin/AdminSubscibe";
+import AdminUser from "./admin/AdminUser";
 
 export {
   Home,
@@ -50,4 +60,14 @@ export {
   Notice,
   PassPaymentSuccess,
   PayHistory,
+  AdminAccount,
+  AdminCoin,
+  AdminDashboard,
+  AdminFitnessList,
+  AdminFitnessUpload,
+  AdminNotice,
+  AdminPayHistory,
+  AdminSettings,
+  AdminSubscribe,
+  AdminUser,
 };
