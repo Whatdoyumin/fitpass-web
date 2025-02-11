@@ -1,17 +1,22 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import FileUpload from "../../../assets/img/adminImgFile.png"
 
-function SubImgUpload() {
+interface SubImgUploadProps {
+  subImg: string[],
+  setSubImg: React.Dispatch<React.SetStateAction<string[]>>;
+}
 
-  const [subImg, setSubImg] = useState<string[]>([]);
+function SubImgUpload({ subImg, setSubImg }: SubImgUploadProps) {
+
+  // const [subImg, setSubImg] = useState<string[]>([]);
+
+  const subInputRef = useRef<HTMLInputElement>(null);
 
   const handleSubImgChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
       setSubImg(Array.from(event.target.files).map((file) => file.name));
     }
   }
-
-  const subInputRef = useRef<HTMLInputElement>(null);
 
   const handleClickFileUpload = () => {
     subInputRef.current?.click();
@@ -25,7 +30,7 @@ function SubImgUpload() {
       <input
         type="text"
         value={subImg.join(", ")}
-        className="w-[300px] h-[30px] border border-gray-450 rounded-[3px] text-ellipsis overflow-hidden whitespace-nowrap pr-[40px]"
+        className="w-[300px] h-[30px] border border-gray-450 rounded-[3px] text-ellipsis overflow-hidden whitespace-nowrap pr-[40px] pl-2 text-[12px]"
         readOnly
       />
       <img
