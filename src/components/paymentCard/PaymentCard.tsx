@@ -18,11 +18,11 @@ const PaymentCard = ({ bgColor, color, title, content }: IPaymentCard) => {
     >
       <div className="w-full h-full flex relative">
         <div
-          className={`relative w-[180px] h-full border-r-2 border-dotted flex justify-center items-center text-[16px] ${
+          className={`relative w-[180px] max-w-[200px] h-full border-r-2 border-dotted flex justify-center items-center text-[16px] ${
             bgColor === "white" ? "border-r-white-100" : "border-r-white-200"
           }`}
         >
-          {title}
+          <p className="w-full text-center">{title}</p>
           <div
             className={`absolute -top-[4px] left-[101%] -translate-x-1/2 w-2 h-2 rounded-full ${
               bgColor === "gray" ? "bg-white-100" : "bg-white-200"

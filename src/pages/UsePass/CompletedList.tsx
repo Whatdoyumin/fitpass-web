@@ -1,5 +1,5 @@
 import FitnessCard from "../../components/fitnessCard/FitnessCard";
-import { TFitness } from "../../type/fitnessCard";
+import { TFitness } from "../../types/fitnessCard";
 
 interface CompletedListProps {
   passes: TFitness[];

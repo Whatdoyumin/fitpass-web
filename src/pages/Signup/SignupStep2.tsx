@@ -35,7 +35,7 @@ function SignupStep2() {
         const refreshToken = response.headers.get("X-Refresh-Token");
         const status = response.headers.get("X-Status");
 
-        console.log("🔑 [소셜 로그인] 헤더 정보:", { accessToken, refreshToken, status })
+        console.log("🔑 [소셜 로그인] 헤더 정보:", { accessToken, refreshToken, status });
 
         if (status === "register") {
           setTokens({
@@ -49,9 +49,8 @@ function SignupStep2() {
       }
     };
 
-        fetchTokens();
-      }, []);
-    
+    fetchTokens();
+  }, []);
 
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -94,20 +93,23 @@ function SignupStep2() {
     agreements.location &&
     agreements.thirdParty;
 
-    const signUpMutation = useSignUpMutation();
+  const signUpMutation = useSignUpMutation();
 
   const handleNextStep = () => {
     if (isFormValid) {
-      signUpMutation.mutate({name, id, password, phoneNumber}, {
-        onError: (error: unknown) => {
-          alert(error instanceof Error ? error.message : "회원가입에 실패했습니다.");
+      signUpMutation.mutate(
+        { name, id, password, phoneNumber },
+        {
+          onError: (error: unknown) => {
+            alert(error instanceof Error ? error.message : "회원가입에 실패했습니다.");
+          },
         }
-      });
-      }
+      );
     }
+  };
 
   return (
-      <div className="w-full max-w-content flex flex-col items-center h-screen relative px-5 pt-[29px]">
+    <div className="w-full max-w-content flex flex-col items-center h-screen relative px-5 pt-[29px]">
       {/* 스크롤 가능 영역 */}
       <div className="flex-grow w-full overflow-auto flex flex-col gap-[20px]">
         {/* 이름 입력창 */}
@@ -123,27 +125,31 @@ function SignupStep2() {
           />
         </div>
 
-        <PhoneVerification phoneNumber={phoneNumber} setPhoneNumber={setPhoneNumber} onVerifySuccess={() => setIsCodeConfirmed(true)} />
+        <PhoneVerification
+          phoneNumber={phoneNumber}
+          setPhoneNumber={setPhoneNumber}
+          onVerifySuccess={() => setIsCodeConfirmed(true)}
+        />
       </div>
 
-        {/* 약관 동의 섹션 */}
-        <div className="w-full mb-[27px]">
-          {/* 전체 약관 동의 */}
-          <div className="w-full flex items-center gap-[17px] px-[26px] py-[10px]">
-            <input
-              type="checkbox"
-              checked={agreements.all}
-              onChange={handleAllAgreement}
-              className="w-[15px] h-[15px]"
-            />
-            <span className="text-[14px] text-gray-500 font-normal leading-[19px] tracking-[-0.28px]">
-              전체 약관에 동의합니다
-            </span>
-          </div>
+      {/* 약관 동의 섹션 */}
+      <div className="w-full mb-[27px]">
+        {/* 전체 약관 동의 */}
+        <div className="w-full flex items-center gap-[17px] px-[26px] py-[10px]">
+          <input
+            type="checkbox"
+            checked={agreements.all}
+            onChange={handleAllAgreement}
+            className="w-[15px] h-[15px]"
+          />
+          <span className="text-[14px] text-gray-500 font-normal leading-[19px] tracking-[-0.28px]">
+            전체 약관에 동의합니다
+          </span>
+        </div>
 
-          {/* 개별 약관 섹션 */}
-          <div
-            className="
+        {/* 개별 약관 섹션 */}
+        <div
+          className="
             flex
             flex-col
             items-start
@@ -161,34 +167,34 @@ function SignupStep2() {
             tracking-[-0.28px]
             font-['Inter']
           "
-          >
-            {[
-              { key: "terms", label: "[필수] 이용 약관 동의" },
-              { key: "location", label: "[필수] 위치 정보 서비스 이용약관 동의" },
-              { key: "thirdParty", label: "[필수] 제3자 정보 제공 동의" },
-              { key: "marketing", label: "[선택] 마케팅 정보 제공 동의" },
-            ].map((item) => (
-              <label key={item.key} className="flex items-center">
-                <div className="flex items-center gap-[17px]">
-                  <input
-                    type="checkbox"
-                    checked={agreements[item.key as keyof Agreements]}
-                    onChange={() => handleAgreementChange(item.key as keyof typeof agreements)}
-                    className="w-[15px] h-[15px]"
-                  />
-                  {item.label}
-                </div>
-                <MoreTerms className="h-[9px] ml-[10px]" />
-              </label>
-            ))}
-          </div>
+        >
+          {[
+            { key: "terms", label: "[필수] 이용 약관 동의" },
+            { key: "location", label: "[필수] 위치 정보 서비스 이용약관 동의" },
+            { key: "thirdParty", label: "[필수] 제3자 정보 제공 동의" },
+            { key: "marketing", label: "[선택] 마케팅 정보 제공 동의" },
+          ].map((item) => (
+            <label key={item.key} className="flex items-center">
+              <div className="flex items-center gap-[17px]">
+                <input
+                  type="checkbox"
+                  checked={agreements[item.key as keyof Agreements]}
+                  onChange={() => handleAgreementChange(item.key as keyof typeof agreements)}
+                  className="w-[15px] h-[15px]"
+                />
+                {item.label}
+              </div>
+              <MoreTerms className="h-[9px] ml-[10px]" />
+            </label>
+          ))}
         </div>
+      </div>
 
       {/* 하단 버튼 */}
       <button
         onClick={handleNextStep}
         disabled={!isFormValid}
-        className={`fixed bottom-0 left-0 w-screen h-[86px] text-[20px] font-medium text-white-100 ${
+        className={`fixed bottom-0 w-full max-w-content h-[86px] text-[20px] font-medium text-white-100 ${
           isFormValid ? "bg-blue-500 hover:bg-blue-400" : "bg-gray-400"
         }`}
         style={{

@@ -4,8 +4,7 @@ import { PlatformKaKao } from "../../assets/svg";
 const KakaoLoginButton = () => {
   const handleLogin = () => {
     try {
-      const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${config.kakao.clientId}&redirect_uri=${config.kakao.redirectUri}&response_type=code`;
-      window.location.href = kakaoAuthUrl;
+      window.location.href = `${config.apiBaseUrl}/oauth2/authorization/kakao`;
     } catch (error) {
       console.error("카카오 로그인 URL 리다이렉트 중 오류 발생:", error);
     }

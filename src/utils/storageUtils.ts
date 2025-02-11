@@ -5,7 +5,7 @@ export const handleSaveToLocalStorage = (data: HomeCardData) => {
 
   const currentFacility = {
     fitnessId: data.fitnessId,
-    name: data.name,
+    fitnessName: data.fitnessName,
     distance: data.distance,
     imageUrl: data.imageUrl,
   };

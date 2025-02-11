@@ -43,10 +43,12 @@ export default {
         header: "79px",
         navbar: "86px",
         sideGap: "20px",
+        sideNavbar: "266px",
         overpadding: "-129px",
       },
       maxWidth: {
         content: "390px",
+        admin: "1280px",
       },
       borderRadius: {
         3: "3px",
@@ -71,5 +73,5 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [require("tailwind-scrollbar-hide")],
 };
