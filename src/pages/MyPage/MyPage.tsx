@@ -16,6 +16,7 @@ import IcPayList from "../../assets/svg/IcPayList";
 
 import { useGetProfile } from "../../apis/mypage/quries/useProfileApi";
 import { LoadingSpinner } from "../../components/LoadingSpinner";
+import NotFound from "../NotFound";
 
 const handleLogout = () => {
   sessionStorage.removeItem("accessToken");
@@ -56,9 +57,8 @@ const MyPage = () => {
   }
 
   if (isError) {
-    alert("에러가 발생했습니다. 다시 시도해주세요.");
     navigate("/");
-    return <LoadingSpinner />;
+    return <NotFound />;
   }
 
   const openLogoutModal = () => setIsModalOpen(true);

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import SearchHeader from "../components/SearchHeader";
-import FitnessCard from "../components/FitnessCard";
+import FitnessCard from "../components/fitnessCard/FitnessCard";
 import { useGetSearchFitness } from "../hooks/useGetSearchFitness";
 import { useInView } from "react-intersection-observer";
 import { GuideLogin } from "./GuideLogin";
@@ -76,7 +76,7 @@ function SearchFitness() {
         setSearchValue={setSearchValue}
       />
       {!isPending ? (
-        <div className="w-full h-full overflow-y-auto p-4 pb-16">
+        <div className="w-full h-full max-w-content overflow-y-auto p-4 pb-16">
           {debouncedSearchValue && fitnessList.length > 0 ? (
             <>
               <FitnessCard fitness={fitnessList} />

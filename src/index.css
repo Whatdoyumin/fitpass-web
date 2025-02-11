@@ -16,17 +16,19 @@
   }
 
   body {
-    @apply w-full max-w-content bg-white-100 font-sans m-0 mx-auto;
+    @apply w-full bg-white-100 font-sans m-0 mx-auto;
   }
 
   #root {
-    @apply absolute h-full w-full max-w-content overflow-y-auto;
+    @apply max-w-content h-full w-full overflow-y-auto m-0 mx-auto;
     padding-top: calc(theme(spacing.header));
     padding-bottom: calc(theme(spacing.navbar));
   }
 
-  #portal {
-    @apply absolute z-10 w-full;
+  #admin {
+    @apply max-w-admin min-h-screen absolute z-10 w-full overflow-y-auto;
+    padding-top: calc(theme(spacing.header));
+    padding-left: calc(theme(spacing.sideNavbar));
   }
 
   h1,
@@ -78,5 +80,9 @@
 
   .selectedPayOption {
     @apply border-blue-500 text-blue-500;
+  }
+
+  .adminTitle {
+    @apply text-18px font-extrabold;
   }
 }

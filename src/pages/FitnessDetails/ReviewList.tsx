@@ -1,30 +1,59 @@
 import { useState } from "react";
 import ReviewItem from "./ReviewItem";
+import { useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { axiosInstance } from "../../apis/axios-instance";
+import { TReview } from "../../types/review";
+
+type ReviewsResponse = {
+  result: {
+    reviews: TReview[];
+    totalPages: number;
+  };
+}
+
+type fetchReviewParams = {
+  offset?: number;
+  pageSize?: number;
+  sortBy?: string;
+}
 
 function ReviewList() {
 
-  // 임시 데이터
-  const reviews = [
-    { id: 1, score: 3, content: "리뷰 1", date: "2025-01-18" },
-    { id: 2, score: 5, content: "리뷰 2", date: "2025-01-17" },
-    { id: 3, score: 4, content: "리뷰 3", date: "2025-01-16" },
-  ];
-
-  // 정렬된 리뷰들
-  const [sortedReviews, setSortedReviews] = useState(reviews);
-  // 정렬 기준 (기본값: 날짜순)
   const [sortOption, setSortOption] = useState<"score" | "date">("date");
+  
+  const [page, setPage] = useState(1);  // 현재 페이지
+  const pageSize = 3;
+
+  const { id } = useParams<{ id: string }>();
+
+  const fetchReview = async (): Promise<ReviewsResponse> => {
+    const params: fetchReviewParams = {
+      offset: (page - 1) * pageSize,
+      pageSize: pageSize,
+      sortBy: sortOption,
+    }
+    const response = await axiosInstance.get(`/fitness/${id}/review`, {params});
+    return response.data;
+  }
+
+  const { data, refetch } = useQuery<ReviewsResponse>({
+    queryKey: ['reviews', id, sortOption, page],
+    queryFn: fetchReview,
+  })
+
+  const handlePageChange = (newPage: number) => {
+    if (newPage < 1 || newPage > (data?.result?.totalPages ?? 0)) return;
+    setPage(newPage);
+    if (newPage !== page) {
+      refetch();
+      console.log("페이지 넘어감")
+    }
+  }
 
   const sortReviews = (options: "score" | "date") => {
     setSortOption(options);
-    // 별점 순 정렬
-    if (options === "score") {
-      const sortedByScore = reviews.sort((a, b) => b.score - a.score);
-      setSortedReviews(sortedByScore);
-    } else {
-      const sortedByDate = reviews.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-      setSortedReviews(sortedByDate);
-    }
+    setPage(1);
   };
 
   return(
@@ -39,9 +68,32 @@ function ReviewList() {
           onClick={() => sortReviews("date")}>최신순</button>
       </div>
       <div className="flex flex-col gap-[15px]">
-        {sortedReviews.map((review) => (
-          <ReviewItem key={review.id} review={review} />
+        {data?.result?.reviews.map((review) => (
+          <ReviewItem key={review.id} review={review} refetch={refetch} />
         ))}
+      </div>
+      {/* pagination */}
+      <div className="text-gray-350 w-[300px] h-[17px] gap-[12px] flex justify-center text-[14px] mt-[20px]">
+        <button
+          onClick={() => handlePageChange(page - 1)}
+          disabled={page === 1}>{"<"}</button>
+        {
+          new Array(data?.result?.totalPages).fill(null).map((_, index) => {
+            const pageNum = index + 1;
+            return (
+              <button
+                key={pageNum}
+                className={`${page === pageNum ? 'text-gray-600' : 'text-gray-350'}`}
+                onClick={() => handlePageChange(pageNum)}
+              >
+                {pageNum}
+              </button>
+            )
+          })
+        }
+      <button
+        onClick={() => handlePageChange(page + 1)}
+        disabled={page >= (data?.result?.totalPages ?? 0)}>{">"}</button>
       </div>
     </>
   );

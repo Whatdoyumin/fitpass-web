@@ -3,14 +3,17 @@ import { useNavigate } from "react-router-dom";
 import { useGetNotices } from "../../apis/mypage/quries/useNoticeApi"; // react-query 훅을 가져옵니다
 import SvgIcLeftPage from "../../assets/svg/IcLeftPage";
 import SvgIcRightPage from "../../assets/svg/IcRightPage";
+import { LoadingSpinner } from "../../components/LoadingSpinner";
+import NotFound from "../NotFound";
 
 export interface Notice {
   id: number;
-  type: string;
+  noticeType: string;
   title: string;
   createdAt: string;
   imageUrl: string;
   content: string;
+  views: number;
 }
 
 export interface NoticesResponse {
@@ -24,8 +27,11 @@ const NoticeList = () => {
 
   const { data, error, isLoading } = useGetNotices(currentPage - 1, itemsPerPage);
 
-  if (isLoading) return <div>로딩</div>;
-  if (error instanceof Error) return <div>오류: {error.message}</div>;
+  if (isLoading) return <LoadingSpinner />;
+  if (error instanceof Error) {
+    console.log(error.message);
+    return <NotFound />;
+  }
 
   const noticesData = data;
   const notices: Notice[] = noticesData?.content?.content ?? [];
@@ -55,8 +61,10 @@ const NoticeList = () => {
             className="border-b px-6 py-3"
             onClick={() => navigate(`/my/noticedetail/${notice.id}`)}
           >
-            <span className="font-medium text-blue-500">[공지] </span>
-            <span className="text-gray-700">{notice.title}</span>
+            <span className="font-medium text-blue-500">
+              [{notice.noticeType === "공지사항" ? "공지" : notice.noticeType}]
+            </span>
+            <span className="text-gray-700"> {notice.title}</span>
           </li>
         ))}
       </ul>

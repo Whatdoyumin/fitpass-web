@@ -10,6 +10,7 @@ const getPayHistory = async ({ query, cursor = 0, size = 7 }: TPayHistory) => {
     data: data.result.items,
     nextCursor: data.result.hasNext ? data.result.cursor : null,
     hasNext: data.result.hasNext,
+    isSubscribing: data.result.isSubscribing,
   };
 };
 

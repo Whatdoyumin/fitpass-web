@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import BigDropdown from "../components/payment/BigDropdown";
 import PaymentDetails from "../components/payment/PaymentDetails";
 import SelectPayOption from "../components/payment/SelectPayOption";
@@ -42,7 +42,9 @@ function Payment({ type }: TPaymentProps) {
 
   const { mutate } = usePostPayCoin();
   const { mutate: planMutate } = usePostPlan();
+  // 결제 요청
   const handleCompletePay = () => {
+    // 코인 결제
     if (type === "buy-coins") {
       mutate(
         {
@@ -63,11 +65,12 @@ function Payment({ type }: TPaymentProps) {
           },
         }
       );
-    } else if (type === "subscribe") {
+      // 구독 결제
+    } else {
       if ("option_en" in selectItem) {
         planMutate(
           {
-            itemName: selectItem.option_en,
+            itemName: selectItem.option_ko,
             totalAmount: Number(selectItem.price),
             methodName: `${selectedPayOption}`,
           },
@@ -92,27 +95,45 @@ function Payment({ type }: TPaymentProps) {
   const { mutate: mutatePaySuccess } = usePostPayCoinSuccess();
   const { mutate: mutatePlanSuccess } = usePostPlanSuccess();
   const pgToken = searchParams.get("pg_token");
-  if (pgToken) {
+  const isRequestSent = useRef(false);
+
+  useEffect(() => {
+    if (!pgToken || isRequestSent.current) return;
+
+    isRequestSent.current = true;
+
     if (type === "buy-coins") {
+      console.log("코인 mutate 실행");
+
       mutatePaySuccess(
         { pgToken },
         {
           onSuccess: () => {
             setIsCompleted(true);
+            console.log("결제 성공");
+          },
+          onError: (error) => {
+            console.error("결제 실패:", error);
           },
         }
       );
     } else if (type === "subscribe") {
+      console.log("구독 mutate 실행");
+
       mutatePlanSuccess(
         { pgToken },
         {
           onSuccess: () => {
             setIsCompleted(true);
+            console.log("결제 성공");
+          },
+          onError: (error) => {
+            console.error("결제 실패:", error);
           },
         }
       );
     }
-  }
+  }, [pgToken, type, mutatePaySuccess, mutatePlanSuccess]);
 
   const handleCloseModal = () => {
     setIsModalOpen((prev) => !prev);
@@ -129,7 +150,7 @@ function Payment({ type }: TPaymentProps) {
   return (
     <div className="w-full h-full bg-white-200 overflow-y-auto flex flex-col justify-between">
       <div>
-        <div className="w-full bg-white-100 flex flex-col px-[25px] py-[26px] gap-3">
+        <div className="w-full h-[140px] bg-white-100 flex flex-col px-[25px] py-[26px] gap-3">
           <p className="text-16px">{type === "buy-coins" ? "코인 요금제 선택" : "플랜 선택"}</p>
           <BigDropdown
             options={dropdownOptions}

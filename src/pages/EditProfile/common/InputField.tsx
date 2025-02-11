@@ -7,7 +7,7 @@ interface InputFieldProps {
   value: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   placeholder: string;
-  isValid: boolean;
+  isValid?: boolean;
   errorMessage?: string;
   toggleVisibility?: () => void;
   isVisible?: boolean;

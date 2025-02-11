@@ -4,6 +4,7 @@ import usePatchLocation from "../../hooks/usePatchLocation";
 import { useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { GuideLogin } from "../../pages/GuideLogin";
+import { LoadingSpinner } from "../LoadingSpinner";
 
 const geolocationOptions = {
   enableHighAccuracy: true,
@@ -14,7 +15,7 @@ const geolocationOptions = {
 const GetCurrentLocation = () => {
   const navigate = useNavigate();
   const { location, error } = useGeoLocation(geolocationOptions);
-  const { mutate } = usePatchLocation();
+  const { mutate, isPending } = usePatchLocation();
   const { isLogin } = useAuth();
 
   useEffect(() => {
@@ -47,11 +48,19 @@ const GetCurrentLocation = () => {
     }
   }, [isLogin, location, error, mutate, navigate]);
 
-  return (
-    <div className="h-[400px] flex items-center justify-center z-50">
-      <GuideLogin />
-    </div>
-  );
+  if (isPending) {
+    return <LoadingSpinner />;
+  }
+
+  if (!isLogin) {
+    return (
+      <div className="h-[400px] flex items-center justify-center z-50">
+        <GuideLogin />
+      </div>
+    );
+  }
+
+  return <></>;
 };
 
 export default GetCurrentLocation;

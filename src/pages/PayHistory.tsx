@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 function PayHistory() {
   const navigate = useNavigate();
   const [query, setQuery] = useState<TPayQuery>("ALL");
-  const [isSubscribing, setIsSubscribing] = useState(true);
+  const [isSubscribing, setIsSubscribing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
   const { isLogin } = useAuth();
@@ -48,12 +48,19 @@ function PayHistory() {
   };
 
   const { ref, inView } = useInView({ threshold: 0 });
-
   useEffect(() => {
     if (inView && hasNextPage && !isFetching) {
       fetchNextPage();
     }
   }, [inView, hasNextPage, isFetching, fetchNextPage]);
+
+  useEffect(() => {
+    if (data?.pages[0]?.isSubscribing === true) {
+      setIsSubscribing(true);
+    } else {
+      setIsSubscribing(false);
+    }
+  }, [data?.pages, setIsSubscribing]);
 
   if (isError) {
     if ((error as { status?: number })?.status === 401) {
@@ -75,17 +82,13 @@ function PayHistory() {
     );
   }
 
-  if (data?.pages[0]?.data.result?.isSubscribing === true) {
-    setIsSubscribing(true);
-  }
-
   const formatDate = (dateString: string) => {
     return dateString.split("T")[0].replace(/-/g, ".");
   };
 
   return (
     <div
-      className={`w-full h-full overflow-y-auto px-4 pt-6 bg-white-200 ${
+      className={`bg-white-200 px-5 pt-6 w-full max-w-content min-h-full absolute ${
         isSubscribing ? "pb-14" : "pb-6"
       }`}
     >
@@ -106,8 +109,10 @@ function PayHistory() {
           </div>
         ) : (
           <div className="w-full flex flex-col justify-center items-center gap-1">
-            {data?.pages.map((page, pageIndex) => (
-              <>
+            {data?.pages.every((page) => page.data.length === 0) ? (
+              <p className="text-gray-500 text-14px mt-10">구매 내역이 존재하지 않습니다.</p>
+            ) : (
+              data?.pages.map((page, pageIndex) => (
                 <div key={pageIndex} className="w-full flex flex-col gap-3">
                   {page.data.map((item: TPayHistoryItem) => (
                     <PaymentCard
@@ -124,9 +129,9 @@ function PayHistory() {
                     />
                   ))}
                 </div>
-                <div ref={ref} />
-              </>
-            ))}
+              ))
+            )}
+            <div ref={ref} />
           </div>
         )}
       </div>
@@ -154,7 +159,7 @@ function PayHistory() {
 }
 
 const CoinTitle = ({ text }: { text: number }) => (
-  <div className="w-20 flex justify-center items-center gap-1">
+  <div className="w-full flex justify-center items-center gap-1">
     <IcEmptyDollarBlue className="w-[17px] h-[17px]" />
     <p>{text} 코인</p>
   </div>

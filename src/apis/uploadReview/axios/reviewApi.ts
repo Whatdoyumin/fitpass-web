@@ -9,19 +9,17 @@ export const postReview = async ({
   passId,
   content,
   score,
-  memberFitnessId,
   agree,
 }: {
   passId: number;
   content: string;
   score: number;
-  memberFitnessId: number;
   agree: boolean;
 }) => {
   const response = await axiosInstance.post(`/fitness/${passId}/review`, {
     content,
     score,
-    memberFitnessId,
+    passId,
     agree,
   });
   return response.data;
