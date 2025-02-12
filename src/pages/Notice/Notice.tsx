@@ -54,7 +54,7 @@ const NoticeList = () => {
 
   return (
     <div className="relative flex flex-col min-h-[calc(100vh-165px)] overflow-y-auto">
-      <ul className=" flex-grow">
+      <ul className="flex-grow">
         {notices.map((notice) => (
           <li
             key={notice.id}
