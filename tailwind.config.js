@@ -48,7 +48,7 @@ export default {
       },
       maxWidth: {
         content: "390px",
-        admin: "1280px",
+        admin: "1440",
       },
       borderRadius: {
         3: "3px",
