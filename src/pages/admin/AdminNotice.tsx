@@ -1,20 +1,11 @@
 import { useState } from "react";
 import { IcCheckEmpty, IcCheckFull, IcImage, IcSearch } from "../../assets/svg";
 import { useNavigate } from "react-router-dom";
-
-interface Notice {
-  id: number;
-  title: string;
-  image: boolean;
-  category: string;
-  publishDate: string;
-  status: string;
-  isHomeSlide: boolean;
-}
+import { mockNotices, Notice } from "../../mocks/mockNotices";
+import SvgIcLeftPage from "../../assets/svg/IcLeftPage";
+import SvgIcRightPage from "../../assets/svg/IcRightPage";
 
 function AdminNotice() {
-  const itemsPerPage = 10;
-
   const handleCheckboxChange = (id: number) => {
     setCheckedNotices((prevCheckedNotices) => {
       if (prevCheckedNotices.includes(id)) {
@@ -28,147 +19,23 @@ function AdminNotice() {
     });
   };
 
-  const mockNotices: Notice[] = [
-    {
-      id: 1,
-      title: "공지사항 제목 1",
-      image: true,
-      category: "공지",
-      publishDate: "2024-01-05",
-      status: "게시중",
-      isHomeSlide: false,
-    },
-    {
-      id: 2,
-      title: "공지사항 제목 2",
-      image: false,
-      category: "이벤트",
-      publishDate: "2024-01-06",
-      status: "게시중",
-      isHomeSlide: false,
-    },
-    {
-      id: 3,
-      title: "공지사항 제목 3",
-      image: true,
-      category: "이벤트",
-      publishDate: "2024-01-07",
-      status: "임시저장",
-      isHomeSlide: false,
-    },
-    {
-      id: 4,
-      title: "공지사항 제목 4번입니다요~",
-      image: true,
-      category: "공지",
-      publishDate: "2024-01-07",
-      status: "게시중",
-      isHomeSlide: true,
-    },
-    {
-      id: 5,
-      title: "공지사항 제목 5",
-      image: true,
-      category: "공지",
-      publishDate: "2024-01-05",
-      status: "게시중",
-      isHomeSlide: false,
-    },
-    {
-      id: 6,
-      title: "공지사항 제목 6",
-      image: false,
-      category: "이벤트",
-      publishDate: "2024-01-06",
-      status: "게시중",
-      isHomeSlide: false,
-    },
-    {
-      id: 7,
-      title: "공지사항 제목 7",
-      image: true,
-      category: "공지",
-      publishDate: "2024-01-07",
-      status: "게시중",
-      isHomeSlide: false,
-    },
-    {
-      id: 8,
-      title: "공지사항 제목 8",
-      image: true,
-      category: "공지",
-      publishDate: "2024-01-05",
-      status: "게시중",
-      isHomeSlide: false,
-    },
-    {
-      id: 9,
-      title: "공지사항 제목 9",
-      image: false,
-      category: "이벤트",
-      publishDate: "2024-01-06",
-      status: "게시중",
-      isHomeSlide: false,
-    },
-    {
-      id: 10,
-      title: "공지사항 제목 10",
-      image: true,
-      category: "이벤트",
-      publishDate: "2024-01-07",
-      status: "임시저장",
-      isHomeSlide: false,
-    },
-    {
-      id: 11,
-      title: "공지사항 제목 11",
-      image: false,
-      category: "공지",
-      publishDate: "2024-01-05",
-      status: "게시중",
-      isHomeSlide: true,
-    },
-    {
-      id: 12,
-      title: "공지사항 제목 12",
-      image: true,
-      category: "이벤트",
-      publishDate: "2024-01-06",
-      status: "게시중",
-      isHomeSlide: false,
-    },
-    {
-      id: 13,
-      title: "공지사항 제목 13",
-      image: true,
-      category: "이벤트",
-      publishDate: "2024-02-06",
-      status: "게시중",
-      isHomeSlide: true,
-    },
-    {
-      id: 14,
-      title: "공지사항 제목 14",
-      image: true,
-      category: "공지사항",
-      publishDate: "2024-02-09",
-      status: "게시중",
-      isHomeSlide: true,
-    },
-  ];
+  const itemsPerPage = 10;
+  const pagesPerGroup = 5; // 한 번에 보여줄 페이지 개수
 
-  const pageNumbers = [];
   const totalPages = Math.ceil(mockNotices.length / itemsPerPage);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  for (let i = 1; i <= totalPages; i++) {
-    pageNumbers.push(i);
-  }
+  // ✅ 현재 페이지 그룹 계산
+  const currentGroup = Math.ceil(currentPage / pagesPerGroup);
+  const startPage = (currentGroup - 1) * pagesPerGroup + 1;
+  const endPage = Math.min(startPage + pagesPerGroup - 1, totalPages);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
+
   const [checkedNotices, setCheckedNotices] = useState<number[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentNotices = mockNotices.reverse().slice(indexOfFirstItem, indexOfLastItem);
@@ -214,7 +81,7 @@ function AdminNotice() {
                     {notice.image ? <IcImage width={19.5} /> : ""}
                   </span>
                 </td>
-                <td className="px-4 py-2 text-left min-w-[260px] overflow-hidden text-ellipsis whitespace-nowrap">
+                <td className="px-4 py-2 text-left max-w-[260px] min-w-[260px] overflow-hidden text-ellipsis whitespace-nowrap">
                   {notice.title}
                 </td>
                 <td className="px-4 py-2 min-w-[110px]">{notice.category}</td>
@@ -242,7 +109,7 @@ function AdminNotice() {
       </div>
 
       {/* 작성하기 버튼 */}
-      <div className="flex pt-[50px] justify-end pr-[12px]">
+      <div className="flex pt-[26px] justify-end pr-[12px]">
         <button
           className="bg-blue-500 text-white-100 w-[150px] h-[51px] py-[14px] rounded-5 text-[15px]"
           onClick={() => navigate("/admin/notice/upload")}
@@ -252,31 +119,35 @@ function AdminNotice() {
       </div>
 
       {/* 페이지네이션 */}
-      <div className="flex justify-center item-center pt-[20px]">
+      <div className="flex justify-center items-center pt-[14px] gap-[10px] mb-[26px]">
         <button
-          onClick={() => handlePageChange(currentPage - 1)}
+          onClick={() => currentPage > 1 && setCurrentPage(currentPage - 1)}
           disabled={currentPage === 1}
-          className="px-4 py-2 text-gray-350"
+          className="text-gray-350 focus:outline-none"
         >
-          &lt;
+          <SvgIcLeftPage width={5} />
         </button>
-        {pageNumbers.slice(0, 5).map((pageNumber) => (
+
+        {/* 페이지 번호 버튼 */}
+        {Array.from({ length: endPage - startPage + 1 }, (_, index) => (
           <button
-            key={pageNumber}
-            onClick={() => handlePageChange(pageNumber)}
-            className={`px-4 py-2 text-sm ${
-              currentPage === pageNumber ? "text-gray-600" : "text-gray-350"
-            }`}
+            key={startPage + index}
+            onClick={() => handlePageChange(startPage + index)}
+            className={`text-sm ${
+              currentPage === startPage + index ? "text-gray-600" : "text-gray-350"
+            } focus:outline-none`}
           >
-            {pageNumber}
+            {startPage + index}
           </button>
         ))}
+
+        {/* 오른쪽 화살표 (다음 페이지) */}
         <button
-          onClick={() => handlePageChange(currentPage + 1)}
+          onClick={() => currentPage < totalPages && setCurrentPage(currentPage + 1)}
           disabled={currentPage === totalPages}
-          className="px-4 py-2 text-gray-350"
+          className="text-gray-350 focus:outline-none"
         >
-          &gt;
+          <SvgIcRightPage width={5} />
         </button>
       </div>
     </div>
