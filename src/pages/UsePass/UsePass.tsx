@@ -18,7 +18,12 @@ function UsePass() {
 
   const [hasAvailablePass, setHasAvailablePass] = useState(false);
   const [hasCompletedPass, setHasCompletedPass] = useState(false);
-  const [passData, setPassData] = useState<PassData>({ none: [], progress: [], done: [], reviewed: [] });
+  const [passData, setPassData] = useState<PassData>({
+    none: [],
+    progress: [],
+    done: [],
+    reviewed: [],
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -95,7 +100,7 @@ function UsePass() {
         </>
       ) : (
         <div className="flex justify-center items-center h-full">
-          <IcNoUsePass width="158px" />
+          <IcNoUsePass width="158px" height="calc(100vh - 165px)" />
         </div>
       )}
     </div>
