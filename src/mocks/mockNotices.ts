@@ -43,7 +43,7 @@ export const mockNotices: Notice[] = [
     category: "공지",
     publishDate: "2024-01-07",
     status: "게시중",
-    isHomeSlide: true,
+    isHomeSlide: false,
   },
   {
     id: 5,
@@ -106,7 +106,7 @@ export const mockNotices: Notice[] = [
     category: "공지",
     publishDate: "2024-01-05",
     status: "게시중",
-    isHomeSlide: true,
+    isHomeSlide: false,
   },
   {
     id: 12,
@@ -124,7 +124,7 @@ export const mockNotices: Notice[] = [
     category: "이벤트",
     publishDate: "2024-02-06",
     status: "게시중",
-    isHomeSlide: true,
+    isHomeSlide: false,
   },
   {
     id: 14,
@@ -133,7 +133,7 @@ export const mockNotices: Notice[] = [
     category: "공지사항",
     publishDate: "2024-02-09",
     status: "게시중",
-    isHomeSlide: true,
+    isHomeSlide: false,
   },
   {
     id: 15,
@@ -169,7 +169,7 @@ export const mockNotices: Notice[] = [
     category: "공지",
     publishDate: "2024-02-13",
     status: "게시중",
-    isHomeSlide: true,
+    isHomeSlide: false,
   },
   {
     id: 19,
@@ -178,7 +178,7 @@ export const mockNotices: Notice[] = [
     category: "공지",
     publishDate: "2024-02-14",
     status: "게시중",
-    isHomeSlide: true,
+    isHomeSlide: false,
   },
   {
     id: 20,
@@ -223,7 +223,7 @@ export const mockNotices: Notice[] = [
     category: "공지",
     publishDate: "2024-02-19",
     status: "게시중",
-    isHomeSlide: true,
+    isHomeSlide: false,
   },
   {
     id: 25,
@@ -232,7 +232,7 @@ export const mockNotices: Notice[] = [
     category: "이벤트",
     publishDate: "2024-02-20",
     status: "게시중",
-    isHomeSlide: true,
+    isHomeSlide: false,
   },
   {
     id: 26,
@@ -250,7 +250,7 @@ export const mockNotices: Notice[] = [
     category: "이벤트",
     publishDate: "2024-02-22",
     status: "게시중",
-    isHomeSlide: true,
+    isHomeSlide: false,
   },
   {
     id: 28,
@@ -267,7 +267,7 @@ export const mockNotices: Notice[] = [
     image: true,
     category: "이벤트",
     publishDate: "2024-02-24",
-    status: "임시저장",
+    status: "게시중",
     isHomeSlide: false,
   },
   {
@@ -277,7 +277,7 @@ export const mockNotices: Notice[] = [
     category: "공지",
     publishDate: "2024-02-25",
     status: "게시중",
-    isHomeSlide: true,
+    isHomeSlide: false,
   },
   {
     id: 31,
@@ -286,7 +286,7 @@ export const mockNotices: Notice[] = [
     category: "공지",
     publishDate: "2024-02-25",
     status: "게시중",
-    isHomeSlide: true,
+    isHomeSlide: false,
   },
   {
     id: 32,
@@ -295,7 +295,7 @@ export const mockNotices: Notice[] = [
     category: "공지",
     publishDate: "2024-02-25",
     status: "게시중",
-    isHomeSlide: true,
+    isHomeSlide: false,
   },
   {
     id: 33,
@@ -304,7 +304,7 @@ export const mockNotices: Notice[] = [
     category: "공지",
     publishDate: "2024-02-25",
     status: "게시중",
-    isHomeSlide: true,
+    isHomeSlide: false,
   },
   {
     id: 34,
@@ -313,7 +313,7 @@ export const mockNotices: Notice[] = [
     category: "공지",
     publishDate: "2024-02-25",
     status: "게시중",
-    isHomeSlide: true,
+    isHomeSlide: false,
   },
   {
     id: 35,
@@ -322,7 +322,7 @@ export const mockNotices: Notice[] = [
     category: "공지",
     publishDate: "2024-02-25",
     status: "게시중",
-    isHomeSlide: true,
+    isHomeSlide: false,
   },
   {
     id: 36,
@@ -348,7 +348,7 @@ export const mockNotices: Notice[] = [
     image: true,
     category: "이벤트",
     publishDate: "2024-01-07",
-    status: "임시저장",
+    status: "게시중",
     isHomeSlide: false,
   },
   {
@@ -359,7 +359,7 @@ export const mockNotices: Notice[] = [
     category: "공지",
     publishDate: "2024-01-07",
     status: "게시중",
-    isHomeSlide: true,
+    isHomeSlide: false,
   },
   {
     id: 40,
@@ -412,7 +412,7 @@ export const mockNotices: Notice[] = [
     image: true,
     category: "이벤트",
     publishDate: "2024-01-07",
-    status: "임시저장",
+    status: "게시중",
     isHomeSlide: false,
   },
   {
@@ -422,7 +422,7 @@ export const mockNotices: Notice[] = [
     category: "공지",
     publishDate: "2024-01-05",
     status: "게시중",
-    isHomeSlide: true,
+    isHomeSlide: false,
   },
   {
     id: 47,
@@ -440,7 +440,7 @@ export const mockNotices: Notice[] = [
     category: "이벤트",
     publishDate: "2024-02-06",
     status: "게시중",
-    isHomeSlide: true,
+    isHomeSlide: false,
   },
   {
     id: 49,
@@ -449,7 +449,7 @@ export const mockNotices: Notice[] = [
     category: "공지사항",
     publishDate: "2024-02-09",
     status: "게시중",
-    isHomeSlide: true,
+    isHomeSlide: false,
   },
   {
     id: 50,
@@ -485,7 +485,7 @@ export const mockNotices: Notice[] = [
     category: "공지",
     publishDate: "2024-02-13",
     status: "게시중",
-    isHomeSlide: true,
+    isHomeSlide: false,
   },
   {
     id: 54,
@@ -494,7 +494,7 @@ export const mockNotices: Notice[] = [
     category: "공지",
     publishDate: "2024-02-14",
     status: "게시중",
-    isHomeSlide: true,
+    isHomeSlide: false,
   },
   {
     id: 55,
@@ -556,7 +556,7 @@ export const mockNotices: Notice[] = [
     image: false,
     category: "공지",
     publishDate: "2024-02-21",
-    status: "임시저장",
+    status: "게시중",
     isHomeSlide: false,
   },
   {
@@ -583,7 +583,7 @@ export const mockNotices: Notice[] = [
     image: true,
     category: "이벤트",
     publishDate: "2024-02-24",
-    status: "임시저장",
+    status: "게시중",
     isHomeSlide: false,
   },
 ];

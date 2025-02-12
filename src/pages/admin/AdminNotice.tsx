@@ -6,26 +6,17 @@ import SvgIcLeftPage from "../../assets/svg/IcLeftPage";
 import SvgIcRightPage from "../../assets/svg/IcRightPage";
 
 function AdminNotice() {
-  const handleCheckboxChange = (id: number) => {
-    setCheckedNotices((prevCheckedNotices) => {
-      if (prevCheckedNotices.includes(id)) {
-        return prevCheckedNotices.filter((noticeId) => noticeId !== id);
-      } else if (prevCheckedNotices.length < 3) {
-        return [...prevCheckedNotices, id];
-      } else {
-        console.log("홈 슬라이드 게시 항목은 최대 3개까지 선택 가능합니다.");
-        return prevCheckedNotices;
-      }
-    });
-  };
+  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림 상태
+  const [modalType, setModalType] = useState<"add" | "remove" | null>(null); // "add" -> IcCheckEmpty, "remove" -> IcCheckFull
+  const [modalNoticeId, setModalNoticeId] = useState<number | null>(null); // 현재 모달에서 작업할 공지사항 ID
+  const [isIconChecked, setIsIconChecked] = useState<{ [key: number]: boolean }>({}); // 각 공지사항별 체크 상태
+  const [checkedCount, setCheckedCount] = useState(0); // 체크된 아이콘의 개수 추적
 
   const itemsPerPage = 10;
-  const pagesPerGroup = 5; // 한 번에 보여줄 페이지 개수
-
+  const pagesPerGroup = 5;
   const totalPages = Math.ceil(mockNotices.length / itemsPerPage);
   const [currentPage, setCurrentPage] = useState(1);
 
-  // ✅ 현재 페이지 그룹 계산
   const currentGroup = Math.ceil(currentPage / pagesPerGroup);
   const startPage = (currentGroup - 1) * pagesPerGroup + 1;
   const endPage = Math.min(startPage + pagesPerGroup - 1, totalPages);
@@ -34,12 +25,40 @@ function AdminNotice() {
     setCurrentPage(page);
   };
 
-  const [checkedNotices, setCheckedNotices] = useState<number[]>([]);
-
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentNotices = mockNotices.reverse().slice(indexOfFirstItem, indexOfLastItem);
+  const currentNotices = mockNotices.slice().reverse().slice(indexOfFirstItem, indexOfLastItem);
   const navigate = useNavigate();
+
+  // 체크박스를 클릭했을 때 처리 함수
+  const handleCheckboxChange = (id: number, isChecked: boolean) => {
+    // 이미 3개가 체크되어 있다면 추가로 체크되지 않도록 막기
+    if (checkedCount >= 3 && !isChecked) {
+      return; // 체크된 아이콘이 3개 이상이면 더 이상 추가 체크하지 않음
+    }
+
+    setModalNoticeId(id);
+    setModalType(isChecked ? "remove" : "add"); // "remove" -> IcCheckFull (checked), "add" -> IcCheckEmpty (unchecked)
+    setIsModalOpen(true); // 모달 열기
+  };
+
+  // 모달에서 "예"를 클릭했을 때 아이콘 변경
+  const handleModalAction = (confirm: boolean) => {
+    if (confirm && modalNoticeId !== null) {
+      // 아이콘 상태 변경
+      const updatedCheckedCount = isIconChecked[modalNoticeId] ? checkedCount - 1 : checkedCount + 1;
+      
+      setCheckedCount(updatedCheckedCount); // 체크된 아이콘 개수 업데이트
+
+      setIsIconChecked((prev) => ({
+        ...prev,
+        [modalNoticeId]: modalType === "add" ? true : false, // add일 때는 true (IcCheckFull), remove일 때는 false (IcCheckEmpty)
+      }));
+    }
+    setIsModalOpen(false);
+    setModalNoticeId(null);
+    setModalType(null);
+  };
 
   return (
     <div className="w-full px-[7px]">
@@ -75,9 +94,9 @@ function AdminNotice() {
           <tbody>
             {currentNotices.map((notice: Notice) => (
               <tr className="border-b border-gray-450 h-[50px] text-[12px]" key={notice.id}>
-                <td className="px-4 py-2 text-center min-w-[80px]">{notice.id}</td>
+                <td className="px-4 py-2 text-center min-w-[100px]">{notice.id}</td>
                 <td className="px-4 py-2">
-                  <span className="flex justify-center min-w-[80px] items-center">
+                  <span className="flex justify-center min-w-[60px] items-center">
                     {notice.image ? <IcImage width={19.5} /> : ""}
                   </span>
                 </td>
@@ -88,17 +107,21 @@ function AdminNotice() {
                 <td className="px-4 py-2 min-w-[110px]">{notice.publishDate}</td>
                 <td className="px-4 py-2 min-w-[110px]">{notice.status}</td>
                 <td className="px-4 py-2 min-w-[180px] text-center border-b border-gray-450">
-                  <input
-                    type="checkbox"
-                    checked={checkedNotices.includes(notice.id)}
-                    onChange={() => handleCheckboxChange(notice.id)}
-                    className="hidden"
-                  />
-                  <span className="flex justify-center items-center">
-                    {checkedNotices.includes(notice.id) ? (
-                      <IcCheckFull width={24} />
+                  <span className="flex justify-center items-center cursor-pointer">
+                    {isIconChecked[notice.id] ? (
+                      <IcCheckFull
+                        width={24}
+                        onClick={() =>
+                          handleCheckboxChange(notice.id, isIconChecked[notice.id] || false)
+                        }
+                      />
                     ) : (
-                      <IcCheckEmpty width={24} />
+                      <IcCheckEmpty
+                        width={24}
+                        onClick={() =>
+                          handleCheckboxChange(notice.id, isIconChecked[notice.id] || false)
+                        }
+                      />
                     )}
                   </span>
                 </td>
@@ -150,6 +173,33 @@ function AdminNotice() {
           <SvgIcRightPage width={5} />
         </button>
       </div>
+
+      {/* 모달 */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black-700 bg-opacity-50 flex justify-center items-center z-10">
+          <div className="bg-white-100 p-[30px] pt-[40px] rounded-lg shadow-lg w-[480px]">
+            <p className="text-center text-[25px] py-2 font-extrabold">
+              {modalType === "add"
+                ? "홈 슬라이드에 게시하겠습니까?"
+                : "홈 슬라이드 게시를 취소하겠습니까?"}
+            </p>
+            <div className="flex justify-around mt-[50px] text-18px text-white-100 gap-[20px]">
+              <button
+                onClick={() => handleModalAction(false)}
+                className="w-[100%] py-4 bg-blue-250 rounded-md"
+              >
+                아니요
+              </button>
+              <button
+                onClick={() => handleModalAction(true)}
+                className="w-[100%] py-4 bg-blue-500 rounded-md"
+              >
+                예
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
