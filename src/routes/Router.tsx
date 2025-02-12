@@ -159,7 +159,7 @@ const Router = createBrowserRouter([
         element: <Notice />,
       },
       {
-        path: "/my/noticedetail/:id",
+        path: "/my/notices/:id",
         element: <NoticeDetail />,
       },
       {
