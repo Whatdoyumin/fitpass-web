@@ -63,7 +63,7 @@ function AdminNoticeUpload() {
 
   return (
     <div className="w-full px-[7px]">
-      <h1 className="adminTitle">공지사항 게시글 작성</h1>
+      <h1 className="adminTitle">공지사항 → 게시글 작성</h1>
       <div className="px-[60px] pt-[45px] pb-[20px]">
         {/* 제목 입력 */}
         <div className="mb-[19px] flex items-center gap-[17px] text-14px">
