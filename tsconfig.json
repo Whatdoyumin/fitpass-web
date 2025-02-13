@@ -15,5 +15,6 @@
       "@assets/*": ["assets/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/types", "custom.d.ts", "global.d.ts"]
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/types", "custom.d.ts", "global.d.ts"],
+  "exclude": ["node_modules", "dist"]
 }

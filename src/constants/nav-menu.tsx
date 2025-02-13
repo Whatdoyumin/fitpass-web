@@ -26,7 +26,7 @@ export const PATH_NAMES = new Map<string, string>([
   ["/my/change-phone", "전화번호 변경"],
   ["/my/change-phone", "전화번호 변경"],
   ["/my/notices", "공지사항"],
-  ["/my/noticedetail/:id", "공지사항"],
+  ["/my/notices/:id", "공지사항"],
   ["/location-detail", " "],
 ]);
 
