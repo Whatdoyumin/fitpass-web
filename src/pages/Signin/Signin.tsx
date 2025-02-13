@@ -1,7 +1,7 @@
-import { FitpassLogo, Password, User, PasswordFocus, UserFocus } from "../../assets/svg";
-import InputField from "./InputField";
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { FitpassLogo } from "../../assets/svg";
+import InputField from "./InputField";
 import KakaoLoginButton from "../../components/socialLogin/KakaoLoginButton";
 import GoogleLoginButton from "../../components/socialLogin/GoogleLoginButton";
 import NaverLoginButton from "../../components/socialLogin/NaverLoginButton";
@@ -13,17 +13,9 @@ function Signin() {
   const [password, setPassword] = useState("");
   const [signinError, setSigninError] = useState("");
 
-  const handleSignupRedirect = () => {
-    navigate("/signup");
-  };
-
-  const handleFindId = () => {
-    navigate("/find-id");
-  };
-
-  const handleFindPassword = () => {
-    navigate("/find-password");
-  };
+  const handleSignupRedirect = () => navigate("/signup");
+  const handleFindId = () => navigate("/find-id");
+  const handleFindPassword = () => navigate("/find-password");
 
   const signinMutation = useSignin();
 
@@ -37,9 +29,7 @@ function Signin() {
       { id, password },
       {
         onError: (error: unknown) => {
-          setSigninError(
-            error instanceof Error ? error.message : "알 수 없는 오류가 발생했습니다."
-          );
+          setSigninError(error instanceof Error ? error.message : "알 수 없는 오류가 발생했습니다.");
         },
       }
     );
@@ -51,25 +41,10 @@ function Signin() {
 
       <div className="flex flex-col gap-[19px] mb-[17px]">
         {/* 아이디 입력창 */}
-        <InputField
-          type="text"
-          placeholder="아이디 입력"
-          value={id}
-          onChange={(e) => setId(e.target.value)}
-          icon={<User />}
-          iconFocus={<UserFocus />}
-        />
+        <InputField type="id" placeholder="아이디 입력" value={id} onChange={(e) => setId(e.target.value)} />
 
         {/* 비밀번호 입력창 */}
-        <InputField
-          type="password"
-          placeholder="비밀번호 입력"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          icon={<Password />}
-          iconFocus={<PasswordFocus />}
-          isPassword={true}
-        />
+        <InputField type="password" placeholder="비밀번호 입력" value={password} onChange={(e) => setPassword(e.target.value)} />
       </div>
 
       {signinError ? (
@@ -80,19 +55,7 @@ function Signin() {
 
       {/* 로그인 버튼 */}
       <button
-        className="
-          w-[321px]
-          h-[51px]
-          py-[17px]
-          px-[15px]
-          bg-blue-500
-          text-white-100
-          text-[16px]
-          font-medium
-          leading-none
-          rounded-[5px]
-          hover:bg-blue-400
-        "
+        className="w-[321px] h-[51px] py-[17px] px-[15px] bg-blue-500 text-white-100 text-[16px] font-medium leading-none rounded-[5px] hover:bg-blue-400"
         onClick={handleSignin}
       >
         로그인
@@ -100,33 +63,15 @@ function Signin() {
 
       <div className="flex justify-between w-[321px] text-[12px] text-gray-450 mt-[20.5px]">
         <div className="inline-flex items-center gap-[12px]">
-          <input
-            type="checkbox"
-            className="
-              w-[12px]
-              h-[12px]
-              rounded-[3px]
-              border
-              border-gray-500
-              appearance-none
-              checked:bg-blue-500
-              checked:border-blue-500
-            "
-          />
+          <input type="checkbox" className="w-[12px] h-[12px] rounded-[3px] border border-gray-500 appearance-none checked:bg-blue-500 checked:border-blue-500" />
           <span className="text-gray-500 text-[12px] leading-none">자동 로그인</span>
         </div>
         <div className="flex gap-[13px] text-blue-500">
-          <button
-            onClick={handleFindId}
-            className="hover:underline focus:outline-none text-blue-500"
-          >
+          <button onClick={handleFindId} className="hover:underline focus:outline-none text-blue-500">
             아이디 찾기
           </button>
           <span>|</span>
-          <button
-            onClick={handleFindPassword}
-            className="hover:underline focus:outline-none text-blue-500"
-          >
+          <button onClick={handleFindPassword} className="hover:underline focus:outline-none text-blue-500">
             비밀번호 찾기
           </button>
         </div>
@@ -139,28 +84,7 @@ function Signin() {
         <GoogleLoginButton />
       </div>
 
-      <button
-        onClick={handleSignupRedirect}
-        className="
-          flex
-          justify-center
-          items-center
-          gap-[10px]
-          w-[321px]
-          py-[12px]
-          px-[51px]
-          text-blue-500
-          text-[14px]
-          font-medium
-          leading-[19px]
-          tracking-[-0.28px]
-          border
-          border-blue-500
-          rounded-[5px]
-          hover:bg-blue-100
-          mt-[29px]
-        "
-      >
+      <button onClick={handleSignupRedirect} className="w-[321px] py-[12px] px-[51px] text-blue-500 border border-blue-500 rounded-[5px] hover:bg-blue-100 mt-[29px]">
         계정이 없으신가요? 간편 가입하기
       </button>
     </div>
