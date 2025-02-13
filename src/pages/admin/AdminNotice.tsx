@@ -96,16 +96,16 @@ function AdminNotice() {
               <tr className="border-b border-gray-450 h-[50px] text-[12px]" key={notice.id}>
                 <td className="px-4 py-2 text-center min-w-[100px]">{notice.id}</td>
                 <td className="px-4 py-2">
-                  <span className="flex justify-center min-w-[60px] items-center">
+                  <span className="flex justify-center min-w-[50px] items-center">
                     {notice.image ? <IcImage width={19.5} /> : ""}
                   </span>
                 </td>
                 <td className="px-4 py-2 text-left max-w-[260px] min-w-[260px] overflow-hidden text-ellipsis whitespace-nowrap">
                   {notice.title}
                 </td>
-                <td className="px-4 py-2 min-w-[110px]">{notice.category}</td>
-                <td className="px-4 py-2 min-w-[110px]">{notice.publishDate}</td>
-                <td className="px-4 py-2 min-w-[110px]">{notice.status}</td>
+                <td className="px-4 py-2 min-w-[120px]">{notice.category}</td>
+                <td className="px-4 py-2 min-w-[130px]">{notice.publishDate}</td>
+                <td className="px-4 py-2 min-w-[90px]">{notice.status}</td>
                 <td className="px-4 py-2 min-w-[180px] text-center border-b border-gray-450">
                   <span className="flex justify-center items-center cursor-pointer">
                     {isIconChecked[notice.id] ? (
