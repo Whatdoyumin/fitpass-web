@@ -1,50 +1,16 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  IcFontBold,
-  IcFontItalic,
-  IcFontStrikethrough,
-  IcFontUnderline,
-  IcImage,
-} from "../../assets/svg";
+import { IcCloseBtn, IcFontBold, IcFontUnderline, IcImage } from "../../assets/svg";
+import { mockNotices } from "../../mocks/mockNotices";
 
 function AdminNoticeUpload() {
   const [title, setTitle] = useState("");
   const [image, setImage] = useState("");
-  const [content, setContent] = useState("");
-  const [isBold, setIsBold] = useState(false);
-  const [isItalic, setIsItalic] = useState(false);
-  const [isUnderlined, setIsUnderlined] = useState(false);
-  const [isStrikethrough, setIsStrikethrough] = useState(false);
   const [selectedType, setSelectedType] = useState<"공지" | "이벤트">("공지");
   const [showModal, setShowModal] = useState(false);
+  const [showSaveModal, setShowSaveModal] = useState(false); // 새로운 상태 추가
 
   const navigate = useNavigate();
-
-  const toggleTextStyle = (style: string) => {
-    switch (style) {
-      case "bold":
-        setIsBold(!isBold);
-        break;
-      case "italic":
-        setIsItalic(!isItalic);
-        break;
-      case "underline":
-        setIsUnderlined(!isUnderlined);
-        if (isStrikethrough) {
-          setIsStrikethrough(false);
-        }
-        break;
-      case "strikethrough":
-        setIsStrikethrough(!isStrikethrough);
-        if (isUnderlined) {
-          setIsUnderlined(false);
-        }
-        break;
-      default:
-        break;
-    }
-  };
 
   // 이미지 추가 함수
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,7 +19,7 @@ function AdminNoticeUpload() {
       setImage(file.name);
     }
   };
-  
+
   const closeModal = () => {
     setShowModal(false);
   };
@@ -62,11 +28,27 @@ function AdminNoticeUpload() {
     navigate("/admin/notice");
   };
 
+  const toggleSaveModal = () => {
+    setShowSaveModal(!showSaveModal); // 저장 목록 모달 토글
+  };
+
+  // 텍스트 스타일 토글 함수 (볼드, 언더라인)
+  const toggleTextStyle = (style: string) => {
+    document.execCommand(style, false, null);
+  };
+
+  // 게시하기 버튼 활성화 조건
+  const isSubmitDisabled = !title; // 제목과 내용이 없으면 비활성화
+
+  // '임시저장' 상태인 항목만 필터링
+  const tempSavedNotices = mockNotices
+    .filter((item) => item.status === "임시저장")
+    .reverse(); // 순서를 거꾸로 정렬
+
   return (
     <div className="w-full px-[7px]">
       <h1 className="adminTitle">공지사항 게시글 작성</h1>
       <div className="px-[60px] pt-[45px] pb-[20px]">
-        
         {/* 제목 입력 */}
         <div className="mb-[19px] flex items-center gap-[17px] text-14px">
           <label className="min-w-[46px] text-gray-700">제목</label>
@@ -123,58 +105,54 @@ function AdminNoticeUpload() {
             />
           </div>
         </div>
-        <div className="flex h-[40px] gap-[51px] bg-blue-100 border-t border-x border-gray-450 ">
-          <button onClick={() => toggleTextStyle("bold")} className="pl-[18px]">
+
+        {/* 스타일 토글 버튼 */}
+        <div className="flex h-[40px] gap-[51px] bg-blue-100 border-t border-x border-gray-450">
+          <button onClick={() => toggleTextStyle("bold")} className="pl-[30px] focus:outline-none">
             <IcFontBold width={28} />
           </button>
-          <button onClick={() => toggleTextStyle("italic")}>
-            <IcFontItalic width={28} />
-          </button>
-          <button onClick={() => toggleTextStyle("underline")}>
+          <button onClick={() => toggleTextStyle("underline")} className="focus:outline-none">
             <IcFontUnderline width={28} />
-          </button>
-          <button onClick={() => toggleTextStyle("strikethrough")}>
-            <IcFontStrikethrough width={28} />
           </button>
         </div>
 
         {/* 내용 입력 */}
         <div className="mb-[35px]">
-          <textarea
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
+          <div
+            contentEditable
             className="w-full min-h-[460px] border border-gray-450 p-4 focus:outline-none text-12px text-black-700 placeholder-black-700"
-            placeholder="내용을 입력해주세요"
             style={{
-              fontWeight: isBold ? "bold" : "normal",
-              fontStyle: isItalic ? "italic" : "normal",
-              textDecoration: isUnderlined
-                ? "underline"
-                : isStrikethrough
-                ? "line-through"
-                : "none",
               resize: "none",
             }}
           />
         </div>
 
+        {/* 버튼 */}
         <div className="flex justify-end gap-[23px]">
           <button
+            onClick={toggleSaveModal} // 저장 목록 모달 열기
+            className="w-[150px] h-[51px] py-2 bg-white-100 text-blue-500 border border-blue-500 rounded-md"
+          >
+            저장 목록 ({tempSavedNotices.length})
+          </button>
+          <button
             onClick={() => {}}
-            className="w-[150px] h-[51px] px-6 py-2 bg-white-100 text-blue-500 border border-blue-500 rounded-md"
+            className="w-[150px] h-[51px] py-2 bg-white-100 text-blue-500 border border-blue-500 rounded-md"
+            disabled={isSubmitDisabled} // 제목 없으면 비활성화
           >
             임시 저장
           </button>
           <button
-            onClick={() => setShowModal(true)}
-            className="w-[150px] h-[51px] px-6 py-2 bg-blue-500 text-white-100 border rounded-md"
+            onClick={() => setShowModal(true)} // 게시하기 모달 보여주기
+            className={`w-[150px] h-[51px] py-2 bg-blue-500 text-white-100 border rounded-md`}
+            disabled={isSubmitDisabled} // 제목 없으면 비활성화
           >
             게시하기
           </button>
         </div>
       </div>
 
-      {/* 모달 */}
+      {/* 게시하기 모달 */}
       {showModal && (
         <div className="fixed inset-0 bg-black-700 bg-opacity-50 flex justify-center items-center z-10">
           <div className="bg-white-100 p-[30px] pt-[40px] rounded-lg shadow-lg w-[480px]">
@@ -186,6 +164,35 @@ function AdminNoticeUpload() {
               <button onClick={handleConfirm} className="w-[100%] py-4 bg-blue-500 rounded-md">
                 예
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 저장 목록 모달 */}
+      {showSaveModal && (
+        <div className="fixed inset-0 flex justify-center items-center z-10">
+          <div className="bg-white-100 pt-[22px] pb-[8px] w-[430px] h-[440px] rounded-lg border border-black-700">
+            <div className="flex justify-between px-[30px] items-center">
+              <p className="text-center text-[22px] py-2 text-gray-600 font-extrabold">저장 목록</p>
+              <button
+                onClick={toggleSaveModal} // 모달 닫기
+                className="text-[22px] text-gray-600"
+              >
+                <IcCloseBtn width={14} />
+              </button>
+            </div>
+            <div className="overflow-y-auto max-h-[300px] mt-[20px] px-[30px] border-t border-gray-300 pt-[5px]">
+              <ul>
+                {tempSavedNotices.map((notice, index) => (
+                  <li
+                    key={notice.id}
+                    className={`text-16px py-[20px] ${index < tempSavedNotices.length - 1 ? "border-b border-gray-300" : ""}`}
+                  >
+                    {notice.title}
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </div>
