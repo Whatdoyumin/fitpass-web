@@ -23,8 +23,9 @@
 
     /* Fix for project references */
     "composite": true,
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "declaration": true
   },
-  "include": ["src", "src/assets/lottie/**/*.json", "src/assets/svg/*.tsx"],
+  "include": ["src", "src/assets/lottie/**/*.json", "src/**/*"],
   "exclude": ["node_modules", "dist"]
 }

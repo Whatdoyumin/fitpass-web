@@ -55,8 +55,8 @@ function Payment({ type }: TPaymentProps) {
         },
         {
           onSuccess: (response) => {
-            if (response?.result?.next_redirect_pc_url) {
-              window.location.href = response.result.next_redirect_pc_url;
+            if (response?.result?.next_redirect_mobile_url) {
+              window.location.href = response.result.next_redirect_mobile_url;
             }
           },
           onError: (error) => {
@@ -76,8 +76,8 @@ function Payment({ type }: TPaymentProps) {
           },
           {
             onSuccess: (response) => {
-              if (response?.result?.next_redirect_pc_url) {
-                window.location.href = response.result.next_redirect_pc_url;
+              if (response?.result?.next_redirect_mobile_url) {
+                window.location.href = response.result.next_redirect_mobile_url;
               }
             },
             onError: (error) => {

@@ -33,6 +33,7 @@ import AdminPayHistory from "./admin/AdminPayHistory";
 import AdminSettings from "./admin/AdminSettings";
 import AdminSubscribe from "./admin/AdminSubscibe";
 import AdminUser from "./admin/AdminUser";
+import AdminNoticeUpload from "./admin/AdminNoticeUpload";
 
 export {
   Home,
@@ -70,4 +71,5 @@ export {
   AdminSettings,
   AdminSubscribe,
   AdminUser,
+  AdminNoticeUpload,
 };
