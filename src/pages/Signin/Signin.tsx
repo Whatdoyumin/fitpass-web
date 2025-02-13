@@ -108,9 +108,6 @@ function Signin() {
               rounded-[3px]
               border
               border-gray-500
-              appearance-none
-              checked:bg-blue-500
-              checked:border-blue-500
             "
           />
           <span className="text-gray-500 text-[12px] leading-none">자동 로그인</span>
