@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, JSX } from "react";
 import {
   PasswordEye,
   PasswordEyeView,
@@ -9,7 +9,7 @@ import {
 interface InputFieldProps {
   type: string;
   placeholder: string;
-  icon: React.ReactNode;
+  icon: JSX.Element;
   iconFocus?: React.ReactNode; // Focus 상태 아이콘
   isPassword?: boolean; // 비밀번호 입력창 여부
   trailingIcon?: React.ReactNode;
