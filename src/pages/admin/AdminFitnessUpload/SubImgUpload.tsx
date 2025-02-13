@@ -30,7 +30,8 @@ function SubImgUpload({ subImg, setSubImg }: SubImgUploadProps) {
       <input
         type="text"
         value={subImg.join(", ")}
-        className="w-[300px] h-[30px] border border-gray-450 rounded-[3px] text-ellipsis overflow-hidden whitespace-nowrap pr-[40px] pl-2 text-[12px]"
+        className="w-full h-[30px] border border-gray-450 rounded-[3px] text-ellipsis overflow-hidden whitespace-nowrap pr-[40px] pl-2 text-[12px] focus:outline-none"
+        // className="w-[450px] h-[30px] border border-gray-450 rounded-[3px] text-ellipsis overflow-hidden whitespace-nowrap pr-[40px] pl-2 text-[12px] focus:outline-none"
         readOnly
       />
       <img

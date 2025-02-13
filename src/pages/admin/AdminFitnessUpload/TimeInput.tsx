@@ -1,9 +1,13 @@
 import { useState } from "react";
 
-function TimeInput() {
+interface TimeInputProps {
+  setTime: React.Dispatch<React.SetStateAction<{ [key: string]: string }>>
+}
+
+function TimeInput({ setTime }: TimeInputProps) {
 
   const days: string[] = ["월", "화", "수", "목", "금", "토", "일"];
-  const [time, setTime] = useState<{ [key: string]: string | "휴무" }>(
+  const [localTime, setLocalTime] = useState<{ [key: string]: string | "휴무" }>(
     Object.fromEntries(days.map((day) => [day, ": ~ :"]))
   );
 
@@ -11,6 +15,7 @@ function TimeInput() {
     let value = e.target.value;
 
     if (value === "휴무") {
+      setLocalTime((prev) => ({ ...prev, [day]: "휴무" }));
       setTime((prev) => ({ ...prev, [day]: "휴무" }));
       return;
     }
@@ -25,23 +30,24 @@ function TimeInput() {
       value = value.replace(/(\d{2})(\d{2})(\d{2})(\d{2})/, "$1:$2 ~ $3:$4"); // 8자리 숫자 형식
     }
 
+    setLocalTime((prev) => ({...prev, [day]: value}) );
     setTime((prev) => ({...prev, [day]: value}) );
 
-    console.log(time);
+    console.log(localTime);
   }
 
   return(
-    <div className="flex gap-[10px]">
+    <div className="flex gap-[10px] mt-[-10px]">
       {days.map((day) => (
         <div key={day} className="flex flex-col ">
           <label>{day}</label>
           <input
             type="text"
             maxLength={13}
-            value={time[day]}
+            value={localTime[day]}
             placeholder="09:00 ~ 21:00"
             onChange={(e) => handleInputChange(e, day)}
-            className="w-[130px] h-[30px] border border-gray-450 rounded-[3px] text-center"
+            className="w-full h-[30px] border border-gray-450 rounded-[3px] text-center focus:outline-none"
             />
         </div>
       ))}

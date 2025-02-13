@@ -18,7 +18,7 @@ function SelectStatus({ status, onStatusChange }: StatusProps) {
   }
 
   return(
-    <div className="w-[300px] h-[50px] flex flex-col">
+    <div className="w-full h-[50px] flex flex-col">
       <p>판매 상태</p>
       <div className="w-full flex gap-[6px]">
         {status.map((item, index) => (

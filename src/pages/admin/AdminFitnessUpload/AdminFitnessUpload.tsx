@@ -1,11 +1,11 @@
 import { useState } from "react";
-import Button from "../../EditProfile/common/Button";
 import MainImgUpload from "./MainImgUpload";
 import SelectCategory from "./SelectCategory";
 import SubImgUpload from "./SubImgUpload";
 import SelectStatus from "./SelectStatus";
 import SetLocationModal from "./SetLocationModal";
 import TimeInput from "./TimeInput";
+import Modal from "../../../components/Modal";
 
 function AdminFitnessUpload() {
 
@@ -24,11 +24,12 @@ function AdminFitnessUpload() {
   const [etc, setEtc] = useState<string>("");
   const [mainImg, setMainImg] = useState<string>("");
   const [subImg, setSubImg] = useState<string[]>([]);
+  const [time, setTime] = useState<{ [key: string]: string }>({});
 
-  const [isModal, setIsModal] = useState(false);
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const [addressModal, setAddressModal] = useState(false);
+  const [submitModal, setSubmitModal] = useState(false);
+  
+  const submitForm = () => {
     console.log({
       fitnessName,
       address,
@@ -41,26 +42,44 @@ function AdminFitnessUpload() {
       howToUse,
       etc,
       mainImg,
-      subImg
+      subImg,
+      time,
     });
+    setSubmitModal(false);
+  }
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setSubmitModal(true);
   };
 
-  const handleModalOpen = () => { 
-    setIsModal(!isModal);
+  // 주소 검색 모달
+  const handleAddressModalOpen = () => { 
+    setAddressModal(!addressModal);
   };
 
-  const handleModalClose = () => {
-    setIsModal(false);
+  const handleAddressModalClose = () => {
+    setAddressModal(false);
   };
+
+  // 등록 모달
+  const handleSubmitModalOpen = () => {
+    setSubmitModal(!submitModal);
+  }
+
+  const handleSubmitModalClose = () => {
+    setSubmitModal(false);
+  }
 
   return (
     <div className="w-full h-full overflow-y-auto">
       <h1 className="adminTitle">피트니스 센터 → 시설 등록</h1>
-      <form onSubmit={handleSubmit}>
-        <div className="flex gap-6 mb-3">
+      <form onSubmit={handleSubmit} className="py-5 pl-[50px] pr-[100px] ">
+        <div className="flex gap-10 mb-3">
 
           {/* 왼쪽 */}
-          <div className="flex flex-col gap-4 w-[300px] ">
+          <div className="flex flex-col gap-4 flex-1 ">
+          {/* <div className="flex flex-col gap-4 w-[450px] "> */}
             <label htmlFor="fitnessName">
               업체명
               <input 
@@ -68,7 +87,7 @@ function AdminFitnessUpload() {
                 id="fitnessName" 
                 value={fitnessName}
                 onChange={(e) => setFitnessName(e.target.value)}
-                className="w-[300px] h-[30px] border border-gray-450 rounded-[3px] "
+                className="w-full h-[30px] border border-gray-450 rounded-[3px] focus:outline-none"
               />
             </label>
             <div className="flex flex-col">
@@ -79,12 +98,12 @@ function AdminFitnessUpload() {
                   id="address" 
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
-                  className="w-[240px] h-[30px] border border-gray-450 rounded-[3px] "
+                  className="w-full h-[30px] border border-gray-450 rounded-[3px] focus:outline-none"
                   readOnly
                 />
                 <button
                   type="button" 
-                  onClick={handleModalOpen}
+                  onClick={handleAddressModalOpen}
                   className="w-[53px] h-[30px] text-[14px] text-medium text-white-100 border bg-gray-400 rounded-[5px]"
                 >검색
                 </button>
@@ -97,7 +116,7 @@ function AdminFitnessUpload() {
                 id="fee" 
                 value={fee}
                 onChange={(e) => setFee(e.target.value)}
-                className="w-[300px] h-[30px] border border-gray-450 rounded-[3px] "
+                className="w-full h-[30px] border border-gray-450 rounded-[3px] focus:outline-none"
                 onInput={(e: React.FormEvent<HTMLInputElement>) => {
                   const input = e.currentTarget;
                   input.value = input.value.replace(/[^0-9.]/g, "").replace(/(\..*)\./g, "$1");
@@ -107,7 +126,8 @@ function AdminFitnessUpload() {
           </div>
 
           {/* 중간 */}
-          <div className="flex flex-col gap-4 w-[300px]">
+          <div className="flex flex-col gap-4 flex-1">
+          {/* <div className="flex flex-col gap-4 w-[450px]"> */}
             {/* 이미지 업로드 */}
             <MainImgUpload mainImg={mainImg} setMainImg={setMainImg} />
             <label htmlFor="phoneNumber">
@@ -118,7 +138,8 @@ function AdminFitnessUpload() {
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
                 maxLength={11}
-                className="w-[300px] h-[30px] border border-gray-450 rounded-[3px] "
+                className="w-full h-[30px] border border-gray-450 rounded-[3px] focus:outline-none"
+                // className="w-[450px] h-[30px] border border-gray-450 rounded-[3px] focus:outline-none"
                 onInput={(e: React.FormEvent<HTMLInputElement>) => {
                   const input = e.currentTarget;
                   input.value = input.value.replace(/[^0-9.]/g, "").replace(/(\..*)\./g, "$1");
@@ -132,7 +153,7 @@ function AdminFitnessUpload() {
                 id="totalFee" 
                 value={totalFee}
                 onChange={(e) => setTotalFee(e.target.value)}
-                className="w-[300px] h-[30px] border border-gray-450 rounded-[3px] "
+                className="w-full h-[30px] border border-gray-450 rounded-[3px] focus:outline-none"
                 onInput={(e: React.FormEvent<HTMLInputElement>) => {
                   const input = e.currentTarget;
                   input.value = input.value.replace(/[^0-9.]/g, "").replace(/(\..*)\./g, "$1");
@@ -142,7 +163,8 @@ function AdminFitnessUpload() {
           </div>
 
           {/* 오른쪽 */}
-          <div className="flex flex-col gap-4 w-[300px]">
+          <div className="flex flex-col gap-4 flex-1">
+          {/* <div className="flex flex-col gap-4 w-[450px]"> */}
             <SubImgUpload subImg={subImg} setSubImg={setSubImg} />
             <SelectCategory category={category} onCategoryChange={setSelectedCategory} />
             <SelectStatus status={status} onStatusChange={setSelectedStatus} />
@@ -152,15 +174,15 @@ function AdminFitnessUpload() {
         {/* textarea */}
         <textarea 
           className="w-full h-[270px] resize-none border border-gray-450 rounded-[3px] pl-2 pt-2
-            placeholder:text-[12px] placeholder:font-medium placeholder-black-700" 
+            placeholder:text-[12px] placeholder:font-medium placeholder-black-700 focus:outline-none" 
           placeholder="시설 소개 내용을 적어주세요"
           value={notice}
           onChange={(e) => setNotice(e.target.value)}
         />
 
-        <div className="flex flex-col mb-3 w-full">
+        <div className="flex flex-col gap-4 mb-3 flex-1">
           <label htmlFor="time">이용시간</label>
-          <TimeInput />
+          <TimeInput setTime={setTime} />
           <label htmlFor="howToUse">
             이용 방법 안내
             <input 
@@ -169,7 +191,7 @@ function AdminFitnessUpload() {
               value={howToUse}
               onChange={(e) => setHowToUse(e.target.value)}
               className="w-full h-[30px] border border-gray-450 rounded-[3px] pl-2
-                placeholder:text-[12px] placeholder:font-medium placeholder-gray-600"
+                placeholder:text-[12px] placeholder:font-medium placeholder-gray-600 focus:outline-none"
               placeholder="패스 구매 전 전화 후 패스 구매하기. 시설에 방문하여 이용 가능 패스 사용 내역 보여주기"
             />
           </label>
@@ -181,24 +203,33 @@ function AdminFitnessUpload() {
               value={etc}
               onChange={(e) => setEtc(e.target.value)}
               className="w-full h-[30px] border border-gray-450 rounded-[3px] pl-2
-                placeholder:text-[12px] placeholder:font-medium placeholder-gray-600"
+                placeholder:text-[12px] placeholder:font-medium placeholder-gray-600 focus:outline-none"
               placeholder="주차 불가능, 옷 대여 가능"
             />
           </label>
         </div>
         <div className="flex justify-end">
-          <Button
-            type="submit"
-            disabled={false}
-            text="등록하기" 
-            className="w-[150px] "
-          />
+          <button
+            type="button"
+            onClick={handleSubmitModalOpen}
+            className="w-[150px] h-[51px] bg-blue-500 text-white-100 rounded-lg text-[15px] font-bold"
+          >등록하기</button>
         </div>
       </form>
 
-      {isModal && (
-        <SetLocationModal onClose={handleModalClose} />
-      ) }
+      {addressModal && (
+        <SetLocationModal onClose={handleAddressModalClose} />
+      )}
+      {submitModal && (
+        <Modal
+          isOpen={submitModal}
+          onClose={handleSubmitModalClose}
+          onSuccess={submitForm}
+          title="등록하시겠습니까?"
+          btn1Text="아니요"
+          btn2Text="네"
+        />
+      )}
     </div>
   );
 }

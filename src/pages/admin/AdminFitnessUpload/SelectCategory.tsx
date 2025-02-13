@@ -22,7 +22,7 @@ function SelectCategory({ category, onCategoryChange }: CategoryProps) {
   }
 
   return(
-    <div className="w-[300px] h-[50px] flex flex-col">
+    <div className="w-full h-[50px] flex flex-col">
       <p>카테고리</p>
       <div className="w-full flex gap-[6px]">
         {category.map((item, index) => (
