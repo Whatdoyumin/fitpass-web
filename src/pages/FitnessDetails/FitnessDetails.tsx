@@ -84,7 +84,7 @@ function FitnessDetails() {
           {/* ))} */}
         {/* </Slider> */}
         {/* 코인 정보 */}
-        <div className="absolute top-0 right-0 flex flex-col items-center justify-center">
+        <div className="absolute top-0 right-[-1px] flex flex-col items-center justify-center">
           <CoinRightRounded className="w-[70px] h-[27.22px] relative" />
           <span className="text-white-100 absolute text-[10px] font-bold">{data?.fee}코인</span>
         </div>
