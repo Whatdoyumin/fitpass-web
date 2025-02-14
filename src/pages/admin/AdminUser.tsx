@@ -47,10 +47,13 @@ const mockUsers = [
   };
 
   return (
-    <div className="w-full h-full flex flex-col relative">
-      <h1 className="adminTitle w-[1120px]">사용자 → 회원 정보</h1>
+    <div className="w-full px-[7px] h-full flex flex-col relative">
+      <h1 className="adminTitle">사용자 → 회원 정보</h1>
 
-      <div className="w-[1120px] flex justify-end gap-[11px] relative z-[50] pt-[64px]">
+      <div className="flex justify-end relative pt-[64px]">
+      <label className="text-[12px] text-black-600  w-[345px]">검색하기</label>
+      </div>
+      <div className="flex justify-end gap-[11px] relative z-[50] pt-[7px]">
         {/* 드롭다운 */}
         <div className="relative w-[89px]">
           <button
@@ -90,18 +93,17 @@ const mockUsers = [
           <input
             type="text"
             className="border border-gray-450 focus:outline-none rounded-md w-full h-[48px] p-[12px]"
-            placeholder="검색하기"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
           <button type="button" className="absolute right-0 flex items-center justify-center p-[12px]">
             <IcSearch width={24} />
           </button>
-        </div>
+        </div>      
       </div>
 
       {/* 사용자 정보 테이블 */}
-      <div className="w-[1120px] min-h-[550px] overflow-hidden pt-[26px]">
+      <div className="min-h-[550px] overflow-hidden pt-[26px]">
         <table className="w-full border-collapse border border-gray-450">
           <thead className="bg-blue-100 text-[13px] h-[49px] border-b border-gray-450">
             <tr>
