@@ -37,6 +37,7 @@ import {
   AdminNotice,
   AdminSettings,
   AdminNoticeUpload,
+  AdminSignin
 } from "../pages/index";
 import NotFound from "../pages/NotFound";
 import NoticeDetail from "../pages/Notice/NoticeDetail";
@@ -177,6 +178,10 @@ const Router = createBrowserRouter([
       {
         index: true,
         element: <AdminAccount />,
+      },
+      {
+        path: "signin",
+        element: <AdminSignin />,
       },
       {
         path: "dashboard",

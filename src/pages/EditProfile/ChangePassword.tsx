@@ -79,6 +79,7 @@ function ChangePassword() {
       className="w-full h-full bg-white-100 px-[20px] py-[29px] flex flex-col text-gray-400"
       onSubmit={handleSubmit}
     >
+      <div className="min-h-[400px]">
       {/* 기존 비밀번호 입력 */}
       <div className="mb-[25px]">
         <label className="text-gray-800 text-[16px] font-medium">기존 비밀번호</label>
@@ -111,7 +112,7 @@ function ChangePassword() {
           errorMessage={confirmPasswordError}
         />
       </div>
-
+      </div>
       {/* 제출 버튼 */}
       <div className="button-container w-full flex justify-center mt-auto">
         <Button type="submit" text="변경하기" />

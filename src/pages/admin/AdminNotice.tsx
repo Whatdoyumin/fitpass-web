@@ -6,9 +6,9 @@ import SvgIcLeftPage from "../../assets/svg/IcLeftPage";
 import SvgIcRightPage from "../../assets/svg/IcRightPage";
 
 function AdminNotice() {
-  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 열림 상태
-  const [modalType, setModalType] = useState<"add" | "remove" | null>(null); // "add" -> IcCheckEmpty, "remove" -> IcCheckFull
-  const [modalNoticeId, setModalNoticeId] = useState<number | null>(null); // 현재 모달에서 작업할 공지사항 ID
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalType, setModalType] = useState<"add" | "remove" | null>(null);
+  const [modalNoticeId, setModalNoticeId] = useState<number | null>(null); // 현재 모달 공지사항 ID
   const [isIconChecked, setIsIconChecked] = useState<{ [key: number]: boolean }>({}); // 각 공지사항별 체크 상태
   const [checkedCount, setCheckedCount] = useState(0); // 체크된 아이콘의 개수 추적
 
@@ -30,22 +30,22 @@ function AdminNotice() {
   const currentNotices = mockNotices.slice().reverse().slice(indexOfFirstItem, indexOfLastItem);
   const navigate = useNavigate();
 
-  // 체크박스를 클릭했을 때 처리 함수
+  // 체크박스를 클릭 함수 
   const handleCheckboxChange = (id: number, isChecked: boolean) => {
-    // 이미 3개가 체크되어 있다면 추가로 체크되지 않도록 막기
+    // 이미 3개가 체크, 추가 x
     if (checkedCount >= 3 && !isChecked) {
-      return; // 체크된 아이콘이 3개 이상이면 더 이상 추가 체크하지 않음
+      return; 
     }
 
     setModalNoticeId(id);
-    setModalType(isChecked ? "remove" : "add"); // "remove" -> IcCheckFull (checked), "add" -> IcCheckEmpty (unchecked)
+    setModalType(isChecked ? "remove" : "add");
     setIsModalOpen(true); // 모달 열기
   };
 
-  // 모달에서 "예"를 클릭했을 때 아이콘 변경
+  // 모달에서 "예" 클릭
   const handleModalAction = (confirm: boolean) => {
     if (confirm && modalNoticeId !== null) {
-      // 아이콘 상태 변경
+      // 아이콘 변경
       const updatedCheckedCount = isIconChecked[modalNoticeId] ? checkedCount - 1 : checkedCount + 1;
       
       setCheckedCount(updatedCheckedCount); // 체크된 아이콘 개수 업데이트
@@ -96,16 +96,16 @@ function AdminNotice() {
               <tr className="border-b border-gray-450 h-[50px] text-[12px]" key={notice.id}>
                 <td className="px-4 py-2 text-center min-w-[100px]">{notice.id}</td>
                 <td className="px-4 py-2">
-                  <span className="flex justify-center min-w-[60px] items-center">
+                  <span className="flex justify-center min-w-[50px] items-center">
                     {notice.image ? <IcImage width={19.5} /> : ""}
                   </span>
                 </td>
                 <td className="px-4 py-2 text-left max-w-[260px] min-w-[260px] overflow-hidden text-ellipsis whitespace-nowrap">
                   {notice.title}
                 </td>
-                <td className="px-4 py-2 min-w-[110px]">{notice.category}</td>
-                <td className="px-4 py-2 min-w-[110px]">{notice.publishDate}</td>
-                <td className="px-4 py-2 min-w-[110px]">{notice.status}</td>
+                <td className="px-4 py-2 min-w-[120px]">{notice.category}</td>
+                <td className="px-4 py-2 min-w-[130px]">{notice.publishDate}</td>
+                <td className="px-4 py-2 min-w-[90px]">{notice.status}</td>
                 <td className="px-4 py-2 min-w-[180px] text-center border-b border-gray-450">
                   <span className="flex justify-center items-center cursor-pointer">
                     {isIconChecked[notice.id] ? (
@@ -151,7 +151,6 @@ function AdminNotice() {
           <SvgIcLeftPage width={5} />
         </button>
 
-        {/* 페이지 번호 버튼 */}
         {Array.from({ length: endPage - startPage + 1 }, (_, index) => (
           <button
             key={startPage + index}
@@ -164,7 +163,6 @@ function AdminNotice() {
           </button>
         ))}
 
-        {/* 오른쪽 화살표 (다음 페이지) */}
         <button
           onClick={() => currentPage < totalPages && setCurrentPage(currentPage + 1)}
           disabled={currentPage === totalPages}

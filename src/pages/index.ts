@@ -26,7 +26,7 @@ import PayHistory from "./PayHistory";
 import AdminAccount from "./admin/AdminAccount";
 import AdminCoin from "./admin/AdminCoin";
 import AdminDashboard from "./admin/AdminDashboard";
-import AdminFitnessList from "./admin/AdminFitnessList";
+import AdminFitnessList from "./admin/AdminFitnessList/AdminFitnessList";
 import AdminFitnessUpload from "./admin/AdminFitnessUpload";
 import AdminNotice from "./admin/AdminNotice";
 import AdminPayHistory from "./admin/AdminPayHistory";
@@ -34,6 +34,7 @@ import AdminSettings from "./admin/AdminSettings";
 import AdminSubscribe from "./admin/AdminSubscibe";
 import AdminUser from "./admin/AdminUser";
 import AdminNoticeUpload from "./admin/AdminNoticeUpload";
+import AdminSignin from "./admin/AdminSignin";
 
 export {
   Home,
@@ -72,4 +73,5 @@ export {
   AdminSubscribe,
   AdminUser,
   AdminNoticeUpload,
+  AdminSignin
 };

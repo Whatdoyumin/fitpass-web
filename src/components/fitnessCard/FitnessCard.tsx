@@ -27,7 +27,7 @@ const FitnessCard = ({ fitness, limitTime }: FitnessCardProps) => {
   };
 
   return (
-    <div className="flex flex-col gap-[15px] w-[340px]">
+    <div className="flex flex-col gap-[15px] w-[340px] whitespace-nowrap">
       {fitness.map((item, index) => {
         let statusText = "사용 가능";
         let statusStyle = "";
@@ -138,7 +138,7 @@ const FitnessCard = ({ fitness, limitTime }: FitnessCardProps) => {
                     </span>
                   )}
                   <div
-                    className={`flex justify-center items-center w-15 text-blue-400 rounded-[15px] h-[22px] text-[10px] font-bold text-center py-[5px] px-[10px] ${statusStyle}`}
+                    className={`flex justify-center items-center w-15 text-blue-400 rounded-[15px] h-[22px] text-[10px] font-bold text-center py-[5px] px-[10px] whitespace-nowrap ${statusStyle}`}
                     onClick={() => {
                       if (statusText === "리뷰 남기기") {
                         navigate(`/upload-review/${item.id}`, {
