@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import {
-  User,
+  //User,
   UserFocus,
   Password,
   PasswordFocus,
@@ -9,6 +9,8 @@ import {
   PasswordEyeFocus,
   PasswordEyeViewFocus,
 } from "../../assets/svg";
+
+import User from '../../../public/svg/User.svg';
 
 interface InputFieldProps {
   type: "id" | "password"; // "id" 또는 "password"로만 타입 제한
@@ -37,7 +39,7 @@ function InputField({ type, placeholder, value, onChange }: InputFieldProps) {
     >
       {/* 왼쪽 아이콘 (type이 id이면 User, password이면 Password) */}
       <div className="w-[25px] h-[25px] flex justify-center items-center">
-        {type === "id" ? (isFocused ? <UserFocus /> : <User />) : isFocused ? <PasswordFocus /> : <Password />}
+        {type === "id" ? (isFocused ? <UserFocus /> : <img src={User} />) : isFocused ? <PasswordFocus /> : <Password />}
       </div>
 
       {/* 입력 필드 */}
