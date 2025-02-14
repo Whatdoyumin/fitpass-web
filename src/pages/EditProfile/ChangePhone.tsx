@@ -102,6 +102,7 @@ function ChangePhone() {
   return (
     <div className="w-full h-full bg-white-100 px-[20px] py-[29px] flex flex-col">
       {/* 이름 입력 */}
+      <div className="h-[500px]">
       <div className="mb-[25px]">
         <label className="text-gray-800 text-[16px] font-medium" style={{ lineHeight: "19px" }}>
           이름
@@ -203,7 +204,7 @@ function ChangePhone() {
           <p className="text-green-500 text-[13px] mt-[9px]">인증이 완료되었습니다.</p>
         )}
       </div>
-
+      </div>
       {/* 버튼 */}
       <div className="button-container w-full flex justify-center mt-auto">
         <Button onClick={handleSubmit} type="button" text="변경하기" />

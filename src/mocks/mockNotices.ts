@@ -587,3 +587,95 @@ export const mockNotices: Notice[] = [
     isHomeSlide: false,
   },
 ];
+
+export interface DraftNotice {
+  id: number;
+  title: string;
+  image: string;
+  category: string;
+  content: string;
+  status: string;
+}
+
+export const mockDraftNotices: DraftNotice[] = [
+  {
+    id: 1,
+    title: "임시저장 값 따로 api 내려오려나 id 1",
+    category: "이벤트",
+    image: "string값",
+    content: "개긴 string값",
+    status: "임시저장",
+  },
+  {
+    id: 2,
+    title: "공지사항 임시저장 id 2",
+    category: "공지사항",
+    image: "string값",
+    content: "개긴 string값개긴 string값",
+    status: "임시저장",
+  },
+  {
+    id: 3,
+    title: "공지사항 임시저장 id 3",
+    category: "공지사항",
+    image: "kakao에서 받은 사진 어쩌고",
+    content: "진짜 긴 string값",
+    status: "임시저장",
+  },
+  {
+    id: 4,
+    title: "공지사항 임시저장 id 4",
+    category: "공지사항",
+    image: "",
+    content: "진짜 긴 string값",
+    status: "임시저장",
+  },
+  {
+    id: 5,
+    title: "임시저장 이벤트 공지 5",
+    category: "이벤트",
+    image: "이벤트 이미지 url",
+    content: "이벤트 관련 내용입니다.",
+    status: "임시저장",
+  },
+  {
+    id: 6,
+    title: "공지사항 임시저장 6",
+    category: "공지사항",
+    image: "https://example.com/image.png",
+    content: "공지사항 내용이 긴 경우도 있습니다.",
+    status: "임시저장",
+  },
+  {
+    id: 7,
+    title: "긴 제목을 가진 임시저장 공지 7",
+    category: "공지사항",
+    image: "https://example.com/another-image.png",
+    content: "이건 내용이 아주 긴 공지사항입니다. 내용이 길어도 상관없습니다. 내용은 계속해서 작성될 것입니다. 내용이 길어도 상관없습니다. 내용은 계속해서 작성될 것입니다.이건 내용이 아주 긴 공지사항입니다. 내용이 길어도 상관없습니다. 내용은 계속해서 작성될 것입니다. 내용이 길어도 상관없습니다. 내용은 계속해서 작성될 것입니다.이건 내용이 아주 긴 공지사항입니다. 내용이 길어도 상관없습니다. 내용은 계속해서 작성될 것입니다. 내용이 길어도 상관없습니다. 내용은 계속해서 작성될 것입니다.이건 내용이 아주 긴 공지사항입니다. 내용이 길어도 상관없습니다. 내용은 계속해서 작성될 것입니다. 내용이 길어도 상관없습니다. 내용은 계속해서 작성될 것입니다.",
+    status: "임시저장",
+  },
+  {
+    id: 8,
+    title: "이벤트 공지사항 임시저장 8",
+    category: "이벤트",
+    image: "https://example.com/event-image.jpg",
+    content: "이 이벤트는 올해 여름에 진행되는 행사입니다. 참가 신청을 서둘러주세요.",
+    status: "임시저장",
+  },
+  {
+    id: 9,
+    title: "임시저장된 공지 9",
+    category: "공지사항",
+    image: "",
+    content: "이미지 없이도 공지사항을 작성할 수 있습니다. 내용은 적당히 길어서 문제되지 않습니다.",
+    status: "임시저장",
+  },
+  {
+    id: 10,
+    title: "임시저장 이벤트 알림 10",
+    category: "이벤트",
+    image: "https://example.com/event-image-2.png",
+    content: "이번 이벤트는 다양한 상품이 준비되어 있습니다. 많은 참여 바랍니다!",
+    status: "임시저장",
+  },
+];
