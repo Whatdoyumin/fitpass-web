@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import MainImgUpload from "./MainImgUpload";
 import SelectCategory from "./SelectCategory";
 import SubImgUpload from "./SubImgUpload";
@@ -6,6 +6,7 @@ import SelectStatus from "./SelectStatus";
 import SetLocationModal from "./SetLocationModal";
 import TimeInput from "./TimeInput";
 import Modal from "../../../components/Modal";
+import { IcFontBold, IcFontUnderline } from "../../../assets/svg"
 
 function AdminFitnessUpload() {
 
@@ -20,16 +21,55 @@ function AdminFitnessUpload() {
   const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [totalFee, setTotalFee] = useState<string>("");
   const [notice, setNotice] = useState<string>("");
-  const [howToUse, setHowToUse] = useState<string>("");
+  const [howToUse, setHowToUse] = useState<string>("패스 구매 전 전화 후 패스 구매하기. 시설에 방문하여 이용 가능 패스 사용 내역 보여주기");
   const [etc, setEtc] = useState<string>("");
   const [mainImg, setMainImg] = useState<string>("");
   const [subImg, setSubImg] = useState<string[]>([]);
   const [time, setTime] = useState<{ [key: string]: string }>({});
 
+  // 모달 state
   const [addressModal, setAddressModal] = useState(false);
   const [submitModal, setSubmitModal] = useState(false);
-  
+
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  // 볼드, 언더라인
+  const toggleTextStyle = (style: string) => {
+    document.execCommand(style, false, undefined);
+  };
+
+  // useEffect(() => {
+  //   const contentElement = document.querySelector("[contenteditable]");
+  //   if (contentElement && !notice) {
+  //     contentElement.innerHTML = ""; // contentEditable 요소의 초기값 설정
+  //   }
+  // }, [notice])
+
   const submitForm = () => {
+    // const contentElement = document.querySelector("[contenteditable]");
+    // // if (contentElement && contentElement.innerHTML.trim() !== "") {
+    // //   setNotice(contentElement.innerHTML) // 저장된 내용 입력
+    // // } else {
+    // //   setNotice(""); // 비어있는 경우 기본값으로 설정
+    // // }
+
+    // if (contentElement) {
+    //   const content = contentElement.innerHTML.trim();
+    //   if (content !== "") {
+    //     setNotice(content);
+    //   } else {
+    //     setNotice(""); // 내용이 없으면 빈 문자열로 설정
+    //   }
+    // }
+    if (contentRef.current) {
+      const content = contentRef.current.innerHTML.trim();
+      if (content !== "") {
+        setNotice(content);
+      } else {
+        setNotice(""); // 내용이 없으면 빈 문자열로 설정
+      }
+    }
+
     console.log({
       fitnessName,
       address,
@@ -45,12 +85,14 @@ function AdminFitnessUpload() {
       subImg,
       time,
     });
+
     setSubmitModal(false);
+    document.querySelector('form')?.dispatchEvent(new Event('submit'));
   }
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSubmitModal(true);
+    setSubmitModal(false);
   };
 
   // 주소 검색 모달
@@ -64,7 +106,7 @@ function AdminFitnessUpload() {
 
   // 등록 모달
   const handleSubmitModalOpen = () => {
-    setSubmitModal(!submitModal);
+    setSubmitModal(true);
   }
 
   const handleSubmitModalClose = () => {
@@ -171,14 +213,25 @@ function AdminFitnessUpload() {
           </div>
         </div>
 
-        {/* textarea */}
-        <textarea 
-          className="w-full h-[270px] resize-none border border-gray-450 rounded-[3px] pl-2 pt-2
-            placeholder:text-[12px] placeholder:font-medium placeholder-black-700 focus:outline-none" 
-          placeholder="시설 소개 내용을 적어주세요"
-          value={notice}
-          onChange={(e) => setNotice(e.target.value)}
-        />
+        {/* 스타일 토글 버튼 */}
+        <div className="flex h-[40px] gap-[51px] bg-blue-100 border-t border-x border-gray-450 ">
+          <button onClick={() => toggleTextStyle("bold")} className="pl-[30px] focus:outline-none">
+            <IcFontBold width={28} />
+          </button>
+          <button onClick={() => toggleTextStyle("underline")} className="focus:outline-none">
+            <IcFontUnderline width={28} />
+          </button>
+        </div>
+        {/* 내용 입력 */}
+        <div className="mb-[35px]">
+          <div
+            ref={contentRef}
+            contentEditable
+            className="w-full h-[200px] resize-none border border-gray-450 rounded-[3px] pl-2 pt-2
+            placeholder:text-[12px] placeholder:font-medium placeholder-black-700 focus:outline-none"
+            dangerouslySetInnerHTML={{ __html: notice || "" }}
+          />
+        </div>
 
         <div className="flex flex-col gap-4 mb-3 flex-1">
           <label htmlFor="time">이용시간</label>
@@ -216,11 +269,12 @@ function AdminFitnessUpload() {
           >등록하기</button>
         </div>
       </form>
+      {/* 주소 등록 모달 */}
+      {addressModal && 
+        <SetLocationModal onClose={handleAddressModalClose} />}
 
-      {addressModal && (
-        <SetLocationModal onClose={handleAddressModalClose} />
-      )}
-      {submitModal && (
+      {/* 등록하기 모달 */}
+      {submitModal &&
         <Modal
           isOpen={submitModal}
           onClose={handleSubmitModalClose}
@@ -228,8 +282,7 @@ function AdminFitnessUpload() {
           title="등록하시겠습니까?"
           btn1Text="아니요"
           btn2Text="네"
-        />
-      )}
+        />}
     </div>
   );
 }
