@@ -88,11 +88,11 @@ function Home() {
         </Slider>
       </div>
 
-      <div className="w-[390px] h-[550px] rounded-t-[15px] bg-white-200 absolute top-[350px] z-5 ">
+      <div className="w-[390px] h-[550px] rounded-t-[15px] bg-white-200 absolute top-[340px] z-5 ">
         {/* 추천 운동시설 */}
-        <div className="w-[390px] h-[200px] pl-4 overflow-hidden mt-6">
+        <div className="w-[390px] h-[200px] pl-4 my-3 overflow-hidden mt-6">
           {/* <div className="overflow-hidden pl-3 rounded-t-[15px] absolute"> */}
-          <p className="h-[19px] mt-[10px] mb-[15px] font-bold text-[16px]">
+          <p className="h-[19px] mt-[10px] mb-[20px] font-bold text-[16px]">
             <span className="text-blue-500">추천</span> 운동 시설
           </p>
           <Slider {...reSettings} className="h-[143px] mr-[-120px]">
@@ -104,8 +104,8 @@ function Home() {
         {/* 구분선 */}
         <div className="border-b-4 border-gray-300 py-3 w-[390px]"></div>
         {/* 최근 본 운동 시설 */}
-        <div className="w-[390px] h-[176px] pl-4 my-6 overflow-hidden">
-          <p className="h-[19px] mb-[15px] font-bold text-[16px]"><span className="text-blue-500">최근 본</span> 운동 시설</p>
+        <div className="w-[390px] h-[220px] pl-4 my-7 overflow-hidden">
+          <p className="h-[19px] mb-[20px] font-bold text-[16px]"><span className="text-blue-500">최근 본</span> 운동 시설</p>
             {isLogin ?               
             (recentWatched.length > 0 ? (
                 <Slider {...fitSettings} className="h-[143px] mr-[-120px]">
