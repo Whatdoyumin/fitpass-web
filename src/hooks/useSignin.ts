@@ -13,10 +13,13 @@ export const useSignin = () => {
       const response = await signIn(data);
       return response;
     },
-    onSuccess: (data: { result: { accessToken: string; refreshToken: string } }) => {
+    onSuccess: (data: { result: { accessToken: string; refreshToken: string, role: string } }) => {
       console.log("로그인 성공");
       login(data.result.accessToken, data.result.refreshToken);
-      navigate("/");
+      if (data.result.role === "ADMIN")
+        navigate("/admin")
+      else
+        navigate("/");
     },
     onError: (error: Error) => {
       console.error("로그인 실패:", error.message);

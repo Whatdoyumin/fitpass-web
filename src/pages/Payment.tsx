@@ -108,10 +108,6 @@ function Payment({ type }: TPaymentProps) {
       mutatePaySuccess(
         { pgToken },
         {
-          onSuccess: () => {
-            setIsCompleted(true);
-            console.log("결제 성공");
-          },
           onError: (error) => {
             console.error("결제 실패:", error);
           },
@@ -123,17 +119,20 @@ function Payment({ type }: TPaymentProps) {
       mutatePlanSuccess(
         { pgToken },
         {
-          onSuccess: () => {
-            setIsCompleted(true);
-            console.log("결제 성공");
-          },
           onError: (error) => {
             console.error("결제 실패:", error);
           },
         }
       );
     }
-  }, [pgToken, type, mutatePaySuccess, mutatePlanSuccess]);
+  }, [mutatePaySuccess, mutatePlanSuccess, pgToken, type]);
+
+  useEffect(() => {
+    if (pgToken) {
+      setIsModalOpen(true);
+      setIsCompleted(true);
+    }
+  }, [pgToken, setIsCompleted]);
 
   const handleCloseModal = () => {
     setIsModalOpen((prev) => !prev);

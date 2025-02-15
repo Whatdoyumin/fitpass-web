@@ -24,7 +24,7 @@ function CardCol({ data }: CardColProps) {
         className="w-full h-[107px] object-cover rounded-t overflow-hidden"
         onClick={() => handleClickCard()}
       />
-      <div className="h-9 bg-white-100 rounded flex items-center justify-between gap-[10px] shadow-md">
+      <div className="h-9 bg-white-100 rounded flex items-center justify-between gap-[10px] shadow-[0px_4px_20px_rgba(0,0,0,0.1)]">
         <span className="text-[11px] font-medium text-ellipsis overflow-hidden whitespace-nowrap flex-grow pl-[10px] ">
           {data.fitnessName}
         </span>
