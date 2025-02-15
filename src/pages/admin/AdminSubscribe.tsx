@@ -37,7 +37,7 @@ function AdminSubscription() {
 
   return (
     <div className="w-full h-full overflow-y-auto p-5 relative">
-      <h1 className="adminTitle mb-6">구독 → 상품 관리</h1>
+      <h1 className="adminTitle mb-6">결제 → 구독 상품 관리</h1>
       <table className="w-full text-left border border-gray-300">
         <thead className="h-[50px] text-13px text-black-700 bg-blue-100 font-light">
           <tr>

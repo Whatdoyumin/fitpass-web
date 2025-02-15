@@ -31,7 +31,7 @@ import AdminFitnessList from "./admin/AdminFitnessList/AdminFitnessList";
 import AdminNotice from "./admin/AdminNotice";
 import AdminPayHistory from "./admin/AdminPayHistory";
 import AdminSettings from "./admin/AdminSettings";
-import AdminSubscribe from "./admin/AdminSubscibe";
+import AdminSubscribe from "./admin/AdminSubscribe";
 import AdminUser from "./admin/AdminUser";
 import AdminNoticeUpload from "./admin/AdminNoticeUpload";
 import AdminSignin from "./admin/AdminSignin";
@@ -73,5 +73,5 @@ export {
   AdminSubscribe,
   AdminUser,
   AdminNoticeUpload,
-  AdminSignin
+  AdminSignin,
 };
