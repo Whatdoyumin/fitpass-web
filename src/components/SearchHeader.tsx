@@ -29,7 +29,7 @@ const SearchHeader = ({
     }
   };
 
-  const handleSearchMovieWithKeyboard = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleSearchWithKeyboard = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       handleSearch();
     }
@@ -49,7 +49,7 @@ const SearchHeader = ({
           className="w-60 h-10 focus:outline-none"
           value={searchValue}
           onChange={onChangeSearchValue}
-          onKeyDown={handleSearchMovieWithKeyboard}
+          onKeyDown={handleSearchWithKeyboard}
         />
         <SearchGray width={"26px"} onClick={handleSearch} />
       </div>
