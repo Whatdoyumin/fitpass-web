@@ -5,6 +5,7 @@ import Dropdown from "./Dropdown";
 import { axiosInstance } from "../../../apis/axios-instance";
 import config from "../../../apis/config";
 import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
 type TListData = {
   fitnessId: number;
@@ -73,6 +74,7 @@ function AdminFitnessList() {
     return value?.toString().toLowerCase().includes(searchTerm.toLowerCase());
   });
   
+  const navigate = useNavigate();
 
   return (
     <div className="w-full h-full overflow-y-auto">
@@ -116,7 +118,9 @@ function AdminFitnessList() {
                   <td>{item.createdAt.split("T")[0]}</td>
                   <td>{item.editDate}</td>
                   {item.status ? (<td>구매 가능</td>) : (<td>구매 불가</td>)}
-                  <td><img src={DotVector} alt="더보기" /></td>
+                  <td><img src={DotVector} alt="더보기"
+                    onClick={() => navigate(`/admin/fitness/upload/${item.fitnessId}`)}
+                  /></td>
                 </tr>
               )))}
           </tbody>
