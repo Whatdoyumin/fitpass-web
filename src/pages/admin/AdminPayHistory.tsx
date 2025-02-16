@@ -1,40 +1,48 @@
 import { useState } from "react";
-import { TPayQuery } from "../../types/payHistory";
 import { Toggle } from "../../components/paymentCard/Toggle";
 import SearchBar from "../../components/adminCommon/SearchBar";
+import { useGetAdminPayHistory } from "../../hooks/useGetAdminPayHistory";
+import { Pagination } from "../../components/Pagination";
+import {
+  TAdminPayHistory,
+  TAdminPayHistoryResponse,
+  TPayHistoryType,
+} from "../../types/adminPayHistory";
 
 function AdminPayHistory() {
-  const [query, setQuery] = useState<TPayQuery>("COIN");
+  const [type, setType] = useState<TPayHistoryType>("코인");
   const [searchValue, setSearchValue] = useState("");
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState<string | null>(null);
+  const [page, setPage] = useState(0);
 
   const handlePlanClick = () => {
-    setQuery("PLAN");
-    setSearchQuery("");
+    setType("패스");
+    setSearchQuery(null);
+    setPage(0);
+    setSearchValue("");
   };
 
   const handleCoinClick = () => {
-    setQuery("COIN");
-    setSearchQuery("");
+    setType("코인");
+    setSearchQuery(null);
+    setPage(0);
+    setSearchValue("");
   };
+
+  // memberName이 비어 있으면 아예 쿼리에서 제거
+  const query: TAdminPayHistory = {
+    type,
+    size: 10,
+    page,
+    ...(searchQuery ? { memberName: searchQuery } : {}),
+  };
+
+  const { data } = useGetAdminPayHistory(query);
 
   const handleSearch = () => {
-    setSearchQuery(searchValue.trim());
+    setSearchQuery(searchValue.trim() || null);
+    setPage(0);
   };
-
-  const getPlanTypeLabel = (planType: string, coinCount: number) => {
-    if (planType === "NONE") return `${coinCount} 코인`;
-    const planLabels: { [key: string]: string } = {
-      BASIC: "베이직",
-      STANDARD: "스탠다드",
-      PRO: "프로",
-    };
-    return planLabels[planType] || planType;
-  };
-
-  const filteredData = mockData
-    .filter((data) => (query === "COIN" ? data.planType === "NONE" : data.planType !== "NONE"))
-    .filter((data) => (searchQuery ? data.name.includes(searchQuery) : true));
 
   return (
     <div className="w-full h-full overflow-y-auto">
@@ -45,7 +53,7 @@ function AdminPayHistory() {
             <Toggle
               items={[
                 { label: "코인", onClick: handleCoinClick },
-                { label: "플랜", onClick: handlePlanClick },
+                { label: "패스", onClick: handlePlanClick },
               ]}
             />
             <div className="flex gap-4">
@@ -62,81 +70,70 @@ function AdminPayHistory() {
               <tr>
                 <th className="text-center w-16">순번</th>
                 <th className="text-center w-32">회원명</th>
-                <th>이메일</th>
+                <th>{type === "코인" ? "이메일" : "계정"}</th>
                 <th>전화번호</th>
-                <th>결제일</th>
-                <th>결제 플랜</th>
-                <th>결제 금액 (원)</th>
+                <th>{type === "코인" ? "결제일" : "구매일"}</th>
+                {type === "코인" ? (
+                  <>
+                    <th>결제 플랜</th>
+                    <th>결제 금액 (원)</th>
+                  </>
+                ) : (
+                  <>
+                    <th>결제 업체</th>
+                    <th>결제 코인</th>
+                    <th>패스 상태</th>
+                    <th>사용 시각</th>
+                  </>
+                )}
               </tr>
             </thead>
             <tbody className="text-12px">
-              {filteredData.map((data, index) => (
-                <tr key={data.id} className="border-t border-gray-300 h-12">
-                  <td className="text-center">{index + 1}</td>
-                  <td className="text-center">{data.name}</td>
-                  <td>{data.email}</td>
-                  <td>{data.phone}</td>
-                  <td>{data.createdAt}</td>
-                  <td>{getPlanTypeLabel(data.planType, data.coinCount)}</td>
-                  <td>{data.amount.toLocaleString()} 원</td>
+              {data?.result?.content?.map((entry: TAdminPayHistoryResponse, index: number) => (
+                <tr key={entry.id} className="border-t border-gray-300 h-12">
+                  <td className="text-center">{index + 1 + page * 10}</td>
+                  <td className="text-center">{entry.memberName}</td>
+                  <td>{entry.account}</td>
+                  <td>{entry.phoneNumber.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3")}</td>
+                  <td>{new Date(entry.createdAt).toLocaleString()}</td>
+                  {type === "코인" ? (
+                    <>
+                      <td>{entry.planType}</td>
+                      <td>{entry.price?.toLocaleString()} 원</td>
+                    </>
+                  ) : (
+                    <>
+                      <td>{entry.fitnessName}</td>
+                      <td>{entry.coinCount} 코인</td>
+                      <td>{entry.passStatus}</td>
+                      <td>
+                        {entry.activeTime ? new Date(entry.activeTime).toLocaleString() : "-"}
+                      </td>
+                    </>
+                  )}
                 </tr>
               ))}
-              {filteredData.length === 0 && (
+              {data?.result?.content?.length === 0 && searchQuery && (
                 <tr>
-                  <td colSpan={7} className="text-center py-4 text-gray-500">
+                  <td colSpan={type === "코인" ? 7 : 8} className="text-center py-4 text-gray-500">
                     검색 결과가 없습니다.
                   </td>
                 </tr>
               )}
             </tbody>
           </table>
+
+          {data?.result?.totalPages > 1 && (
+            <Pagination
+              totalPages={data.result.totalPages}
+              currentPage={page}
+              onPageChange={setPage}
+            />
+          )}
         </div>
       </div>
     </div>
   );
 }
-
-const mockData = [
-  {
-    id: 1,
-    name: "홍길동",
-    email: "hong@example.com",
-    phone: "010-1234-5678",
-    createdAt: "2025-01-10",
-    planType: "BASIC",
-    amount: 10000,
-    coinCount: 95,
-  },
-  {
-    id: 2,
-    name: "김영희",
-    email: "kim@example.com",
-    phone: "010-2345-6789",
-    createdAt: "2025-02-05",
-    planType: "PRO",
-    amount: 30000,
-    coinCount: 200,
-  },
-  {
-    id: 3,
-    name: "이철수",
-    email: "lee@example.com",
-    phone: "010-3456-7890",
-    createdAt: "2025-02-10",
-    planType: "STANDARD",
-    amount: 20000,
-    coinCount: 135,
-  },
-  {
-    id: 4,
-    name: "이유민",
-    email: "lee2@example.com",
-    phone: "010-3256-7390",
-    createdAt: "2025-02-12",
-    planType: "NONE",
-    amount: 5500,
-    coinCount: 10,
-  },
-];
 
 export default AdminPayHistory;
