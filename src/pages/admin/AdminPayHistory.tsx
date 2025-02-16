@@ -29,7 +29,6 @@ function AdminPayHistory() {
     setSearchValue("");
   };
 
-  // memberName이 비어 있으면 아예 쿼리에서 제거
   const query: TAdminPayHistory = {
     type,
     size: 10,
@@ -46,9 +45,9 @@ function AdminPayHistory() {
 
   return (
     <div className="w-full h-full overflow-y-auto">
-      <div className="flex flex-col gap-10">
+      <div className="w-full flex flex-col gap-10">
         <h1 className="adminTitle">결제 → 구매 내역</h1>
-        <div className="flex flex-col gap-5">
+        <div className="w-full flex flex-col gap-5">
           <div className="flex justify-between items-center">
             <Toggle
               items={[
