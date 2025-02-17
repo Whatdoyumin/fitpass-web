@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { ArrowDown, ArrowUp } from "../../assets/svg";
 import { ADMIN_NAV_MENU } from "../../constants/admin-menu";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const AdminNav = () => {
+  const location = useLocation();
   const navigate = useNavigate();
   const [openItems, setOpenItems] = useState<{ [key: number]: boolean }>({});
 
@@ -13,6 +14,10 @@ const AdminNav = () => {
       [id]: !prev[id],
     }));
   };
+
+  if (location.pathname === "/admin/signin") {
+    return null;
+  }
 
   return (
     <div className="w-sideNavbar left-0 top-0 pt-header h-full bg-white-200 fixed border border-r-gray-400 overflow-y-auto scrollbar-hide">

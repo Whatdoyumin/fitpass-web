@@ -26,7 +26,7 @@ function SignupStep2() {
   useEffect(() => {
     const fetchTokens = async () => {
       try {
-        const response = await fetch("http://localhost:5173/signup/step2", {
+        const response = await fetch("https://fitpass.co.kr/signup/step2", {
           method: "GET",
           credentials: "include", // ✅ 쿠키 사용 시 필요
         });

@@ -63,7 +63,16 @@ function Signin() {
 
       <div className="flex justify-between w-[321px] text-[12px] text-gray-450 mt-[20.5px]">
         <div className="inline-flex items-center gap-[12px]">
-          <input type="checkbox" className="w-[12px] h-[12px] rounded-[3px] border border-gray-500 appearance-none checked:bg-blue-500 checked:border-blue-500" />
+          <input
+            type="checkbox"
+            className="
+              w-[12px]
+              h-[12px]
+              rounded-[3px]
+              border
+              border-gray-500
+            "
+          />
           <span className="text-gray-500 text-[12px] leading-none">자동 로그인</span>
         </div>
         <div className="flex gap-[13px] text-blue-500">
