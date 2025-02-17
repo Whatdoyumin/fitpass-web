@@ -1,19 +1,30 @@
 import { FitpassLogo, Password, User, PasswordFocus, UserFocus } from "../../assets/svg";
 import InputField from "../Signin/InputField";
 import { useState } from "react";
-
+import { useSignin } from "../../hooks/useSignin";
 
 function AdminSignin() {
     const [id, setId] = useState("");
     const [password, setPassword] = useState("");
     const [signinError, setSigninError] = useState("");
 
+    const signinMutation = useSignin();
+
     const handleSignin = () => {
         if (!id || !password) {
           setSigninError("아이디와 비밀번호를 입력해주세요.");
           return;
         }
-        // 로그인 api 연결
+        signinMutation.mutate(
+          { id, password },
+          {
+            onError: (error: unknown) => {
+              setSigninError(
+                error instanceof Error ? error.message : "알 수 없는 오류가 발생했습니다."
+              );
+            },
+          }
+        );
       };
 
     return (

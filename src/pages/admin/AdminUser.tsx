@@ -6,7 +6,7 @@ import SvgIcLeftPage from "../../assets/svg/IcLeftPage";
 import SvgIcRightPage from "../../assets/svg/IcRightPage";
 import SvgArrowDropDown from "../../assets/svg/ArrowDropDown";
 import { IcSearch } from "../../assets/svg";
-import useDebounce from "../../hooks/useDebounce"; // 🔄 검색 디바운스 훅
+import useDebounce from "../../hooks/useDebounce";
 
 type TUserData = {
   id: number;
