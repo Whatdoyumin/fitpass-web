@@ -34,7 +34,7 @@ const NoticeList = () => {
   }
 
   const noticesData = data;
-  const notices: Notice[] = noticesData?.content?.content ?? [];
+  const notices: Notice[] = noticesData?.content?.content?.slice().reverse() ?? [];
   const totalPages: number = noticesData?.content?.totalPages ?? 1;
 
   const getPagination = () => {
@@ -54,12 +54,12 @@ const NoticeList = () => {
 
   return (
     <div className="relative flex flex-col min-h-[calc(100vh-165px)] overflow-y-auto">
-      <ul className=" flex-grow">
+      <ul className="flex-grow">
         {notices.map((notice) => (
           <li
             key={notice.id}
             className="border-b px-6 py-3"
-            onClick={() => navigate(`/my/noticedetail/${notice.id}`)}
+            onClick={() => navigate(`/my/notices/${notice.id}`)}
           >
             <span className="font-medium text-blue-500">
               [{notice.noticeType === "공지사항" ? "공지" : notice.noticeType}]

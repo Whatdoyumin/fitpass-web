@@ -36,6 +36,8 @@ import {
   AdminPayHistory,
   AdminNotice,
   AdminSettings,
+  AdminNoticeUpload,
+  AdminSignin
 } from "../pages/index";
 import NotFound from "../pages/NotFound";
 import NoticeDetail from "../pages/Notice/NoticeDetail";
@@ -159,7 +161,7 @@ const Router = createBrowserRouter([
         element: <Notice />,
       },
       {
-        path: "/my/noticedetail/:id",
+        path: "/my/notices/:id",
         element: <NoticeDetail />,
       },
       {
@@ -176,6 +178,10 @@ const Router = createBrowserRouter([
       {
         index: true,
         element: <AdminAccount />,
+      },
+      {
+        path: "signin",
+        element: <AdminSignin />,
       },
       {
         path: "dashboard",
@@ -208,6 +214,10 @@ const Router = createBrowserRouter([
       {
         path: "notice",
         element: <AdminNotice />,
+      },
+      {
+        path: "notice/upload",
+        element: <AdminNoticeUpload />,
       },
       {
         path: "settings",
