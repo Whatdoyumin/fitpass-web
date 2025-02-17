@@ -26,7 +26,7 @@
   }
 
   #admin {
-    @apply w-screen min-w-admin min-h-screen absolute z-10 overflow-y-auto;
+    @apply w-screen min-h-screen absolute z-10 overflow-y-auto;
     padding-top: calc(theme(spacing.header));
     padding-left: calc(theme(spacing.sideNavbar));
   }
