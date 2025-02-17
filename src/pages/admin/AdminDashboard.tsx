@@ -32,7 +32,7 @@ function AdminDashboard() {
       <h1 className="adminTitle">대시보드</h1>
 
       <p className="text-[14px] mt-[64px] mb-[10px] h-[25px]">일자별 분석</p>
-      <div className="min-h-[550px] overflow-hidden">
+      <div className="min-h-[580px] overflow-hidden">
         <table className="w-full h-full border-collapse border border-gray-450">
           <thead className="bg-blue-100 text-[13px] text-center h-[49px] border-b border-gray-450">
             <tr>
@@ -64,7 +64,7 @@ function AdminDashboard() {
       </div>
 
       {/* 페이지네이션 */}
-      <div className="w-full flex justify-center items-center pt-[40px] gap-[10px]">
+      <div className="w-full flex justify-center items-center pt-[40px] gap-[10px] mb-[26px]">
         <button
           onClick={() => currentPage > 1 && setCurrentPage(currentPage - 1)}
           disabled={currentPage === 1}
