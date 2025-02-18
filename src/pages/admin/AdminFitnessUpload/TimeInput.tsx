@@ -32,8 +32,6 @@ function TimeInput({ setTime }: TimeInputProps) {
 
     setLocalTime((prev) => ({...prev, [day]: value}) );
     setTime((prev) => ({...prev, [day]: value}) );
-
-    console.log(localTime);
   }
 
   return(

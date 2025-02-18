@@ -7,14 +7,16 @@ import SetLocationModal from "./SetLocationModal";
 import TimeInput from "./TimeInput";
 import Modal from "../../../components/Modal";
 import { IcFontBold, IcFontUnderline } from "../../../assets/svg"
+import { useAdminFitnessUpload } from "../../../apis/postAdminFitness/quries/useAdminFitnessUpload";
 
 function AdminFitnessUpload() {
 
   const category: string[] = ["헬스", "필라테스", "요가", "기타"];
-  const status: string[] = ["구매 가능", "구매 불가"];
+  const status: boolean = true;
+  // const status: string[] = ["구매 가능", "구매 불가"];
 
   const [selectedCategory, setSelectedCategory] = useState<string[]>([]);
-  const [selectedStatus, setSelectedStatus] = useState<string>("");
+  const [selectedStatus, setSelectedStatus] = useState(true);
   const [fitnessName, setFitnessName] = useState<string>("");
   const [address, setAddress] = useState<string>("");
   const [fee, setFee] = useState<string>("");
@@ -23,8 +25,8 @@ function AdminFitnessUpload() {
   const [notice, setNotice] = useState<string>("");
   const [howToUse, setHowToUse] = useState<string>("패스 구매 전 전화 후 패스 구매하기. 시설에 방문하여 이용 가능 패스 사용 내역 보여주기");
   const [etc, setEtc] = useState<string>("");
-  const [mainImg, setMainImg] = useState<string>("");
-  const [subImg, setSubImg] = useState<string[]>([]);
+  const [mainImg, setMainImg] = useState<File | null>(null);
+  const [subImg, setSubImg] = useState<File[]>([]);
   const [time, setTime] = useState<{ [key: string]: string }>({});
 
   // 모달 state
@@ -32,6 +34,9 @@ function AdminFitnessUpload() {
   const [submitModal, setSubmitModal] = useState(false);
 
   const contentRef = useRef<HTMLDivElement>(null);
+
+  // api 연결
+  const { mutate: uploadFitness } = useAdminFitnessUpload();
 
   // 볼드, 언더라인
   const toggleTextStyle = (style: string) => {
@@ -45,22 +50,12 @@ function AdminFitnessUpload() {
   //   }
   // }, [notice])
 
-  const submitForm = () => {
-    // const contentElement = document.querySelector("[contenteditable]");
-    // // if (contentElement && contentElement.innerHTML.trim() !== "") {
-    // //   setNotice(contentElement.innerHTML) // 저장된 내용 입력
-    // // } else {
-    // //   setNotice(""); // 비어있는 경우 기본값으로 설정
-    // // }
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setSubmitModal(false);
+  };
 
-    // if (contentElement) {
-    //   const content = contentElement.innerHTML.trim();
-    //   if (content !== "") {
-    //     setNotice(content);
-    //   } else {
-    //     setNotice(""); // 내용이 없으면 빈 문자열로 설정
-    //   }
-    // }
+  const submitForm = () => {
     if (contentRef.current) {
       const content = contentRef.current.innerHTML.trim();
       if (content !== "") {
@@ -69,31 +64,70 @@ function AdminFitnessUpload() {
         setNotice(""); // 내용이 없으면 빈 문자열로 설정
       }
     }
+    if (!fitnessName || !mainImg || !fee || !phoneNumber || !totalFee || !etc || !howToUse) {
+      // if (!fitnessName || !mainImg || !address || !fee || !phoneNumber || !totalFee || !notice || !etc || !howToUse || !time || !selectedCategory.length) {
+        alert("모든 필수 항목을 입력해주세요.");
+        setSubmitModal(false);
+        return;
+      }
 
-    console.log({
-      fitnessName,
-      address,
-      fee,
-      phoneNumber,
-      totalFee,
-      selectedCategory,
-      selectedStatus,
-      notice,
-      howToUse,
-      etc,
-      mainImg,
-      subImg,
-      time,
+    const formData = new FormData();
+    // if (mainImg) {
+    //   const reader = new FileReader();
+    //   reader.onloadend = () => {
+    //     const base64Image = reader.result as string;
+    //     formData.append("mainImage", base64Image);
+    //   }
+    
+    //   // formData.append("mainImage", mainImg);
+    // }
+    // subImg.forEach((file, index) => {
+    //   formData.append(`additionalImages[${index}]`, file);
+    // });
+
+    // formData.append("totalFee", totalFee);
+    // formData.append("fee", fee);
+    // formData.append("latitude", "0");
+    // formData.append("longitude", "0");
+    // formData.append("time", JSON.stringify(time));
+    // formData.append("fitnessName", fitnessName);
+    // formData.append("etc", etc);
+    // formData.append("isPurchasable", String(selectedStatus));
+    // formData.append("address", address);
+    // formData.append("phoneNumber", phoneNumber);
+    // formData.append("notice", notice);
+    // formData.append("howToUse", howToUse);
+    // formData.append("categoryList", JSON.stringify(selectedCategory));
+    // formData.append("purchasable", String(selectedStatus));
+
+    formData.append("mainImage", mainImg);  // mainImage는 이미지 파일
+    subImg.forEach((file, index) => {
+      formData.append(`additionalImages[${index}]`, file);
     });
 
-    setSubmitModal(false);
-    document.querySelector('form')?.dispatchEvent(new Event('submit'));
-  }
+    formData.append("request", JSON.stringify({
+      totalFee: totalFee,
+      fee: fee,
+      latitude: 0,
+      time: time,
+      // time: JSON.stringify(time),
+      longitude: 0,
+      fitnessName: fitnessName,
+      etc: etc,
+      isPurchasable: String(selectedStatus),
+      address: address,
+      phoneNumber: phoneNumber,
+      notice: notice,
+      howToUse: howToUse,
+      categoryList: selectedCategory,
+      // categoryList: JSON.stringify(selectedCategory),
+      purchasable: String(selectedStatus)
+    }));
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setSubmitModal(false);
-  };
+    uploadFitness(formData);
+
+    console.log(formData);
+  }
 
   // 주소 검색 모달
   const handleAddressModalOpen = () => { 
