@@ -30,7 +30,7 @@ interface ErrorResponse {
 }
 
 export const useGetAdminNotice = (keyword: string | null, page: number = 1, size: number = 10) => {
-  return useQuery<NoticesResponse, AxiosError>({
+  return useQuery<NoticesResponse, AxiosError<ErrorResponse>>({
     queryKey: ["notices", keyword, page, size], 
     queryFn: () => getAdminNotice(keyword, page, size),
   });
