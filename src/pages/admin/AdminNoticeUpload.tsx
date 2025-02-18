@@ -2,22 +2,30 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IcCloseBtn, IcFontBold, IcFontUnderline, IcImage } from "../../assets/svg";
 import { mockDraftNotices, DraftNotice } from "../../mocks/mockNotices";
+import {
+  usePostAdminDraftNotice,
+  usePostAdminNotice,
+} from "../../apis/adminNotice/quries/useAdminNoticeUploadApi";
 
 function AdminNoticeUpload() {
   const [title, setTitle] = useState("");
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState<File | string>("");
   const [selectedType, setSelectedType] = useState<"공지" | "이벤트">("공지");
   const [showModal, setShowModal] = useState(false);
-  const [showSaveModal, setShowSaveModal] = useState(false); // 새로운 상태 추가
+  const [showSaveModal, setShowSaveModal] = useState(false);
   const [selectedNotice, setSelectedNotice] = useState<DraftNotice | null>(null);
+  const [content, setContent] = useState<string>("");
 
   const navigate = useNavigate();
+
+  const { mutate: postNotice } = usePostAdminNotice();
+  const { mutate: saveDraft } = usePostAdminDraftNotice();
 
   // 이미지 추가 함수
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setImage(file.name);
+      setImage(file);
     }
   };
 
@@ -25,26 +33,18 @@ function AdminNoticeUpload() {
     setShowModal(false);
   };
 
-  const handleConfirm = () => {
-    navigate("/admin/notice");
-  };
-
   const toggleSaveModal = () => {
-    setShowSaveModal(!showSaveModal); // 저장 목록 모달 토글
-  };
-
-  // 볼드, 언더라인
-  const toggleTextStyle = (style: string) => {
-    document.execCommand(style, false);
+    setShowSaveModal(!showSaveModal); // Toggle save modal
   };
 
   // 게시하기 버튼 활성화 조건
-  const isSubmitDisabled = !title;
+  const isSubmitDisabled = !(title && image && selectedType && content);
 
-  // '임시저장' 상태인 항목만 필터링, 순서를 거꾸로
+  const isDraftSubmitDisabled = !title;
+
+  // 임시저장 상태인 항목만 필터링, 순서를 거꾸로
   const tempSavedNotices = mockDraftNotices.filter((item) => item.status === "임시저장").reverse();
 
-  // 저장 목록 항목 클릭 시 해당 공지사항 정보 로드
   const handleNoticeClick = (notice: DraftNotice) => {
     setSelectedNotice(notice);
     setTitle(notice.title);
@@ -54,11 +54,53 @@ function AdminNoticeUpload() {
     // 내용도 가져오기
     const contentElement = document.querySelector("[contenteditable]");
     if (contentElement) {
-      contentElement.innerHTML = notice.content; // 저장된 내용 입력
+      contentElement.innerHTML = notice.content;
+      setContent(notice.content);
     }
 
-    // 모달 닫기
     setShowSaveModal(false);
+  };
+
+  // 게시하기 버튼 클릭 시 API 호출
+  const handlePostNotice = () => {
+    if (image instanceof File) {
+      postNotice(
+        {
+          title,
+          content,
+          type: selectedType === "공지" ? "ANNOUNCEMENT" : "EVENT",
+          image,
+        },
+        {
+          onSuccess: () => {
+            setShowModal(false);
+            navigate("/admin/notice");
+          },
+        }
+      );
+    }
+  };
+
+  const toggleTextStyle = (style: string) => {
+    document.execCommand(style, false);
+  };
+
+  const handleSaveDraft = () => {
+    if (!title) return;
+
+    saveDraft(
+      {
+        title,
+        content: content ? content : "",
+        type: selectedType === "공지" ? "ANNOUNCEMENT" : "EVENT",
+        image: image instanceof File ? image : "none",
+      },
+      {
+        onSuccess: () => {
+          navigate("/admin/notice");
+        },
+      }
+    );
   };
 
   return (
@@ -102,7 +144,7 @@ function AdminNoticeUpload() {
           <div className="relative w-full">
             <input
               type="text"
-              value={image || selectedNotice?.image || ""}
+              value={image instanceof File ? image.name : image || ""}
               readOnly
               className="w-full h-[40px] border border-gray-450 rounded-[3px] p-2 pr-[50px] focus:outline-none overflow-hidden text-ellipsis whitespace-nowrap"
             />
@@ -121,6 +163,7 @@ function AdminNoticeUpload() {
             />
           </div>
         </div>
+
         {/* 스타일 토글 버튼 */}
         <div className="flex h-[40px] gap-[51px] bg-blue-100 border-t border-x border-gray-450">
           <button onClick={() => toggleTextStyle("bold")} className="pl-[30px] focus:outline-none">
@@ -130,6 +173,7 @@ function AdminNoticeUpload() {
             <IcFontUnderline width={28} />
           </button>
         </div>
+
         {/* 내용 입력 */}
         <div className="mb-[35px]">
           <div
@@ -138,10 +182,11 @@ function AdminNoticeUpload() {
             style={{
               resize: "none",
             }}
+            onInput={(e) => setContent(e.currentTarget.innerHTML)} // 내용 업데이트
             dangerouslySetInnerHTML={{ __html: selectedNotice?.content || "" }}
           />
         </div>
-        
+
         {/* 버튼 */}
         <div className="flex justify-end gap-[23px]">
           <button
@@ -151,16 +196,16 @@ function AdminNoticeUpload() {
             저장 목록 ({tempSavedNotices.length})
           </button>
           <button
-            onClick={() => {}}
+            onClick={handleSaveDraft} // 임시저장 함수 호출
             className="w-[150px] h-[51px] py-2 bg-white-100 text-blue-500 border border-blue-500 rounded-md"
-            disabled={isSubmitDisabled} // 제목 없으면 비활성화
+            disabled={isDraftSubmitDisabled} // 제목 없으면 비활성화
           >
             임시 저장
           </button>
           <button
             onClick={() => setShowModal(true)}
             className={`w-[150px] h-[51px] py-2 bg-blue-500 text-white-100 border rounded-md`}
-            disabled={isSubmitDisabled} // 제목 없으면 비활성화
+            disabled={isSubmitDisabled}
           >
             게시하기
           </button>
@@ -176,7 +221,7 @@ function AdminNoticeUpload() {
               <button onClick={closeModal} className="w-[100%] py-4 bg-blue-250 rounded-md">
                 아니요
               </button>
-              <button onClick={handleConfirm} className="w-[100%] py-4 bg-blue-500 rounded-md">
+              <button onClick={handlePostNotice} className="w-[100%] py-4 bg-blue-500 rounded-md">
                 예
               </button>
             </div>
@@ -202,7 +247,7 @@ function AdminNoticeUpload() {
                     className={`text-16px py-[20px] ${
                       index < tempSavedNotices.length - 1 ? "border-b border-gray-300" : ""
                     }`}
-                    onClick={() => handleNoticeClick(notice)} // 항목 클릭 시 데이터 설정
+                    onClick={() => handleNoticeClick(notice)}
                   >
                     {notice.title}
                   </li>

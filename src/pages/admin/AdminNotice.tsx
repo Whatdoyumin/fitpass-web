@@ -20,7 +20,7 @@ function AdminNotice() {
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearchKeyword(searchKeyword);
-    }, 400); // 400ms 후 검색 업데이트
+    }, 400); // 400ms 후 업데이트
 
     return () => {
       clearTimeout(handler); // 이전 타이머 제거
@@ -85,11 +85,17 @@ function AdminNotice() {
     const day = date.getDate().toString().padStart(2, "0");
     return `${year}-${month}-${day}`;
   };
+  
   useEffect(() => {
     if (error) {
       alert(error.response?.data?.message);
     }
   }, [error]);
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
   return (
     <div className="w-full px-[7px]">
       <h1 className="adminTitle">공지사항</h1>
@@ -112,65 +118,53 @@ function AdminNotice() {
 
       {/* 공지사항 목록 테이블 */}
       <div className="mt-[26px] min-h-[550px]">
-        {isLoading ? (
-          <div>
-            <LoadingSpinner />{" "}
-          </div>
-        ) : error ? (
-          <div></div>
-        ) : (
-          <table className="w-full table-auto border border-gray-450">
-            <thead className="bg-blue-100 border-b border-gray-450">
-              <tr className="h-[50px] text-[13px] text-black-700">
-                <th className="px-4 py-2 text-center">순번</th>
-                <th className="px-4 py-2 text-center">이미지</th>
-                <th className="px-4 py-2 text-left">제목</th>
-                <th className="px-4 py-2 text-left">카테고리</th>
-                <th className="px-4 py-2 text-left">게시일</th>
-                <th className="px-4 py-2 text-left">상태</th>
-                <th className="px-4 py-2">홈 슬라이드 게시</th>
-              </tr>
-            </thead>
+        <table className="w-full table-auto border border-gray-450">
+          <thead className="bg-blue-100 border-b border-gray-450">
+            <tr className="h-[50px] text-[13px] text-black-700">
+              <th className="px-4 py-2 text-center">순번</th>
+              <th className="px-4 py-2 text-center">이미지</th>
+              <th className="px-4 py-2 text-left">제목</th>
+              <th className="px-4 py-2 text-left">카테고리</th>
+              <th className="px-4 py-2 text-left">게시일</th>
+              <th className="px-4 py-2 text-left">상태</th>
+              <th className="px-4 py-2">홈 슬라이드 게시</th>
+            </tr>
+          </thead>
 
-            <tbody>
-              {data?.result.content.map((notice: Notice) => (
-                <tr className="border-b border-gray-450 h-[50px] text-[12px]" key={notice.id}>
-                  <td className="px-4 py-2 text-center min-w-[100px]">{notice.id}</td>
-                  <td className="px-4 py-2">
-                    <span className="flex justify-center min-w-[50px] items-center">
-                      {notice.imageUrl && notice.imageUrl !== "none" ? (
-                        <IcImage width={19.5} />
-                      ) : (
-                        ""
-                      )}
-                    </span>
-                  </td>
-                  <td className="px-4 py-2 text-left max-w-[260px] min-w-[260px] overflow-hidden text-ellipsis whitespace-nowrap">
-                    {notice.title}
-                  </td>
-                  <td className="px-4 py-2 min-w-[120px]">{notice.category}</td>
-                  <td className="px-4 py-2 min-w-[130px]">{formatDate(notice.createdAt)}</td>
-                  <td className="px-4 py-2 min-w-[90px]">{notice.status}</td>
-                  <td className="px-4 py-2 min-w-[180px] text-center border-b border-gray-450">
-                    <span className="flex justify-center items-center cursor-pointer">
-                      {notice.isHomeSlide ? (
-                        <IcCheckFull
-                          width={24}
-                          onClick={() => handleCheckboxChange(notice.id, true)}
-                        />
-                      ) : (
-                        <IcCheckEmpty
-                          width={24}
-                          onClick={() => handleCheckboxChange(notice.id, false)}
-                        />
-                      )}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
+          <tbody>
+            {data?.result.content.map((notice: Notice) => (
+              <tr className="border-b border-gray-450 h-[50px] text-[12px]" key={notice.id}>
+                <td className="px-4 py-2 text-center min-w-[100px]">{notice.id}</td>
+                <td className="px-4 py-2">
+                  <span className="flex justify-center min-w-[50px] items-center">
+                    {notice.imageUrl && notice.imageUrl !== "none" ? <IcImage width={19.5} /> : ""}
+                  </span>
+                </td>
+                <td className="px-4 py-2 text-left max-w-[260px] min-w-[260px] overflow-hidden text-ellipsis whitespace-nowrap">
+                  {notice.title}
+                </td>
+                <td className="px-4 py-2 min-w-[120px]">{notice.category}</td>
+                <td className="px-4 py-2 min-w-[130px]">{formatDate(notice.createdAt)}</td>
+                <td className="px-4 py-2 min-w-[90px]">{notice.status}</td>
+                <td className="px-4 py-2 min-w-[180px] text-center border-b border-gray-450">
+                  <span className="flex justify-center items-center cursor-pointer">
+                    {notice.isHomeSlide ? (
+                      <IcCheckFull
+                        width={24}
+                        onClick={() => handleCheckboxChange(notice.id, true)}
+                      />
+                    ) : (
+                      <IcCheckEmpty
+                        width={24}
+                        onClick={() => handleCheckboxChange(notice.id, false)}
+                      />
+                    )}
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
 
       {/* 작성하기 버튼 */}
