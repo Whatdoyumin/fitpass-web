@@ -4,7 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { Notice, useGetAdminNotice } from "../../apis/adminNotice/quries/useAdminNoticeApi";
 import SvgIcLeftPage from "../../assets/svg/IcLeftPage";
 import SvgIcRightPage from "../../assets/svg/IcRightPage";
-import { usePatchHomeSlideCheck } from "../../apis/adminNotice/quries/useAdminNoticeApi"; 
+import { usePatchHomeSlideCheck } from "../../apis/adminNotice/quries/useAdminNoticeApi";
+import { LoadingSpinner } from "../../components/LoadingSpinner";
 
 function AdminNotice() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -25,7 +26,7 @@ function AdminNotice() {
       clearTimeout(handler); // 이전 타이머 제거
     };
   }, [searchKeyword]); // 검색어 변경될 때
-  
+
   const itemsPerPage = 10;
   const pagesPerGroup = 5;
   const [currentPage, setCurrentPage] = useState(1);
@@ -54,7 +55,6 @@ function AdminNotice() {
   const { mutate: patchHomeSlideCheck } = usePatchHomeSlideCheck();
 
   const handleCheckboxChange = (id: number, isChecked: boolean) => {
-
     setModalNoticeId(id);
     setModalType(isChecked ? "remove" : "add");
     setIsModalOpen(true);
@@ -85,7 +85,11 @@ function AdminNotice() {
     const day = date.getDate().toString().padStart(2, "0");
     return `${year}-${month}-${day}`;
   };
-
+  useEffect(() => {
+    if (error) {
+      alert(error.response?.data?.message);
+    }
+  }, [error]);
   return (
     <div className="w-full px-[7px]">
       <h1 className="adminTitle">공지사항</h1>
@@ -97,7 +101,7 @@ function AdminNotice() {
           <input
             className="w-full h-12 pl-4 pr-12 border border-gray-450 rounded-md bg-white focus:outline-none"
             value={searchKeyword}
-            onChange={(e) => setSearchKeyword(e.target.value)} 
+            onChange={(e) => setSearchKeyword(e.target.value)}
           />
           <IcSearch
             width="24px"
@@ -109,9 +113,11 @@ function AdminNotice() {
       {/* 공지사항 목록 테이블 */}
       <div className="mt-[26px] min-h-[550px]">
         {isLoading ? (
-          <div>Loading...</div>
+          <div>
+            <LoadingSpinner />{" "}
+          </div>
         ) : error ? (
-          <div>Error occurred: {error.message}</div>
+          <div></div>
         ) : (
           <table className="w-full table-auto border border-gray-450">
             <thead className="bg-blue-100 border-b border-gray-450">
@@ -150,16 +156,12 @@ function AdminNotice() {
                       {notice.isHomeSlide ? (
                         <IcCheckFull
                           width={24}
-                          onClick={() =>
-                            handleCheckboxChange(notice.id, true)
-                          }
+                          onClick={() => handleCheckboxChange(notice.id, true)}
                         />
                       ) : (
                         <IcCheckEmpty
                           width={24}
-                          onClick={() =>
-                            handleCheckboxChange(notice.id, false)
-                          }
+                          onClick={() => handleCheckboxChange(notice.id, false)}
                         />
                       )}
                     </span>

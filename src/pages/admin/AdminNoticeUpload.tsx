@@ -35,7 +35,7 @@ function AdminNoticeUpload() {
 
   // 볼드, 언더라인
   const toggleTextStyle = (style: string) => {
-    document.execCommand(style, false, null);
+    document.execCommand(style, false);
   };
 
   // 게시하기 버튼 활성화 조건
