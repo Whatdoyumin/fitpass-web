@@ -28,11 +28,11 @@ function AdminDashboard() {
   };
 
   return (
-    <div className="w-full h-full px-[7px] overflow-y-auto">
+    <div className="w-full h-full px-[7px]">
       <h1 className="adminTitle">대시보드</h1>
 
       <p className="text-[14px] mt-[64px] mb-[10px] h-[25px]">일자별 분석</p>
-      <div className="min-h-[580px] overflow-hidden">
+      <div className="min-h-[580px]">
         <table className="w-full h-full border-collapse border border-gray-450">
           <thead className="bg-blue-100 text-[13px] text-center h-[49px] border-b border-gray-450">
             <tr>

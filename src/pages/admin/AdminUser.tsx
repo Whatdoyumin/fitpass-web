@@ -116,7 +116,7 @@ function AdminUser() {
       </div>
 
       {/* 사용자 정보 테이블 */}
-      <div className="min-h-[580px] overflow-hidden pt-[26px]">
+      <div className="min-h-[580px] pt-[26px]">
         <table className="w-full border-collapse border border-gray-450">
           <thead className="bg-blue-100 text-[13px] h-[49px] border-b border-gray-450">
             <tr>
