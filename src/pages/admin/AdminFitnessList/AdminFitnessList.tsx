@@ -128,23 +128,6 @@ function AdminFitnessList() {
         </table>
 
         {/* pagination */}
-        {/* <div className="w-full mt-3 flex justify-center text-gray-350 font-medium text-[14px] ">
-          <button
-            disabled={page === 0}
-            onClick={() => setPage((prev) => Math.max(prev - 1, 0))}
-          >&lt;</button>
-          {Array.from({ length: totalPages }, (_, index) => index + 1).map((pageNum) => (
-            <button 
-              key={pageNum}
-              onClick={() => setPage(pageNum - 1)}
-              className={`mx-2 ${page === pageNum - 1 ? 'text-gray-600' : ''}`}
-            >{pageNum}</button>
-          ))}
-          <button
-            disabled={page === totalPages - 1}
-            onClick={() => setPage((prev) => Math.min(prev + 1, totalPages - 1))}
-          >&gt;</button>
-        </div> */}
         {totalPages > 1 && (
           <Pagination
             totalPages={totalPages}
