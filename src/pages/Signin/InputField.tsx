@@ -32,7 +32,7 @@ function InputField({ type, placeholder, value, onChange }: InputFieldProps) {
 
   return (
     <div
-      className={`flex items-center w-[321px] h-[50px] py-[10px] px-[15px] border rounded-[5px] gap-[15px] 
+      className={`flex items-center w-[321px] h-[50px] py-[10px] px-[15px] border rounded-[5px] gap-[15px] relative
       ${isFocused ? "border-gray-500" : "border-gray-400"}`}
     >
       {/* 왼쪽 아이콘 (type이 id이면 User, password이면 Password) */}
@@ -60,13 +60,13 @@ function InputField({ type, placeholder, value, onChange }: InputFieldProps) {
         autoComplete="off"
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
-        className="outline-none text-[15px] font-medium leading-[30px] placeholder-gray-400 tracking-[-0.3px]"
+        className="flex-grow outline-none text-[15px] font-medium leading-[30px] placeholder-gray-400 tracking-[-0.3px]"
       />
 
       {/* (비밀번호 표시/숨김 토글) */}
       {type === "password" && (
         <div
-          className="w-[25px] h-[25px] flex justify-center items-center cursor-pointer"
+          className="w-[25px] h-[25px] flex justify-center items-center cursor-pointer absolute right-[15px]"
           onMouseDown={togglePasswordVisibility}
         >
           {isPasswordVisible ? (
