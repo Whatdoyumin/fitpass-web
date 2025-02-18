@@ -1,4 +1,4 @@
-import { FitpassLogo, Password, User, PasswordFocus, UserFocus } from "../../assets/svg";
+import { FitpassLogo } from "../../assets/svg";
 import InputField from "../Signin/InputField";
 import { useState } from "react";
 import { useSignin } from "../../hooks/useSignin";
@@ -31,26 +31,8 @@ function AdminSignin() {
       <div className="w-full h-full overflow-y-auto flex flex-col items-center pt-[200px]">
         <FitpassLogo width={"173px"} height={"48px"} className="cursor-pointer" />
         <div className="flex flex-col gap-[19px] mb-[17px] pt-[40px]">
-        {/* 아이디 입력창 */}
-        <InputField
-          type="text"
-          placeholder="아이디 입력"
-          value={id}
-          onChange={(e) => setId(e.target.value)}
-          icon={<User />}
-          iconFocus={<UserFocus />}
-        />
-
-        {/* 비밀번호 입력창 */}
-        <InputField
-          type="password"
-          placeholder="비밀번호 입력"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          icon={<Password />}
-          iconFocus={<PasswordFocus />}
-          isPassword={true}
-        />
+        <InputField type="id" placeholder="아이디 입력" value={id} onChange={(e) => setId(e.target.value)} />
+        <InputField type="password" placeholder="비밀번호 입력" value={password} onChange={(e) => setPassword(e.target.value)} />
       </div>
 
       {signinError ? (
