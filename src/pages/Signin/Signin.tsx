@@ -41,7 +41,7 @@ function Signin() {
 
       <div className="flex flex-col gap-[19px] mb-[17px]">
         {/* 아이디 입력창 */}
-        <InputField type="id" placeholder="배포환경테스트..." value={id} onChange={(e) => setId(e.target.value)} />
+        <InputField type="id" placeholder="아이디 입력" value={id} onChange={(e) => setId(e.target.value)} />
 
         {/* 비밀번호 입력창 */}
         <InputField type="password" placeholder="비밀번호 입력" value={password} onChange={(e) => setPassword(e.target.value)} />
