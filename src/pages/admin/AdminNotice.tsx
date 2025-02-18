@@ -54,9 +54,6 @@ function AdminNotice() {
   const { mutate: patchHomeSlideCheck } = usePatchHomeSlideCheck();
 
   const handleCheckboxChange = (id: number, isChecked: boolean) => {
-    if (checkedCount >= 3 && !isChecked) {
-      return;
-    }
 
     setModalNoticeId(id);
     setModalType(isChecked ? "remove" : "add");

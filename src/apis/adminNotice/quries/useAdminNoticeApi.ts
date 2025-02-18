@@ -1,7 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { AxiosError } from 'axios';
 import { getAdminNotice, patchHomeSlideCheck } from '../axios/adminNoticeAPI';
-import { ErrorResponse } from "react-router-dom";
 export interface Notice {
   id: number;
   imageUrl: string;
@@ -26,6 +25,9 @@ export interface NoticesResponse {
   message: string;
   result: AdminNoticesResponse;
 }
+interface ErrorResponse {
+  message: string;
+}
 
 export const useGetAdminNotice = (keyword: string | null, page: number = 1, size: number = 10) => {
   return useQuery<NoticesResponse, AxiosError>({
@@ -36,13 +38,14 @@ export const useGetAdminNotice = (keyword: string | null, page: number = 1, size
 
 export const usePatchHomeSlideCheck = () => {
   return useMutation<
-    { isSuccess: boolean; code: string; message: string; result: string },
+    { isSuccess: boolean; code: string; message: string; result: string; },
     AxiosError<ErrorResponse>, 
-    { noticeId: number; isHomeSlide: boolean } 
+    { noticeId: number; isHomeSlide: boolean; } 
   >({
     mutationFn: ({ noticeId, isHomeSlide }) => patchHomeSlideCheck(noticeId, isHomeSlide),
-    onError: (error: AxiosError) => {
-      console.error("오류:", error);
+    onError: (error: AxiosError<ErrorResponse>) => {
+      console.error("오류:", error.response?.data?.message);
+      alert(`${error.response?.data?.message}`);
     },
     onSuccess: (data: { isSuccess: boolean; code: string; message: string; result: string }) => {
       if (data.isSuccess) {
