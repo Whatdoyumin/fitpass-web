@@ -34,22 +34,15 @@ const NoticeList = () => {
   }
 
   const noticesData = data;
-  const notices: Notice[] = noticesData?.content?.content?.slice().reverse() ?? [];
+  const notices: Notice[] = noticesData?.content?.content?.slice() ?? [];
   const totalPages: number = noticesData?.content?.totalPages ?? 1;
 
-  const getPagination = () => {
-    const range = 1;
-    const start = Math.max(currentPage - range, 1);
-    const end = Math.min(currentPage + range, totalPages);
-
-    let pages: (number | string)[] = [];
-    for (let i = start; i <= end; i++) {
-      pages.push(i);
-    }
-    if (start > 1) pages = [1, "...", ...pages];
-    if (end < totalPages) pages = [...pages, "...", totalPages];
-
-    return pages;
+  const pagesPerGroup = 5;
+  const currentGroup = Math.ceil(currentPage / pagesPerGroup);
+  const startPage = (currentGroup - 1) * pagesPerGroup + 1;
+  const endPage = Math.min(startPage + pagesPerGroup - 1, totalPages);
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
   };
 
   return (
@@ -58,46 +51,55 @@ const NoticeList = () => {
         {notices.map((notice) => (
           <li
             key={notice.id}
-            className="border-b px-6 py-3"
+            className="border-b px-6 py-3 flex min-w-[375px]"
             onClick={() => navigate(`/my/notices/${notice.id}`)}
           >
-            <span className="font-medium text-blue-500">
-              [{notice.noticeType === "공지사항" ? "공지" : notice.noticeType}]
+            <span
+              className={`font-medium whitespace-nowrap ${
+                notice.noticeType === "공지사항"
+                  ? "text-blue-500"
+                  : notice.noticeType === "이벤트"
+                  ? "text-red-600"
+                  : "text-gray-500"
+              }`}
+            >
+              [{notice.noticeType === "공지사항" ? "공지" : notice.noticeType}]&nbsp;
             </span>
-            <span className="text-gray-700"> {notice.title}</span>
+            <span className="text-gray-700 overflow-hidden whitespace-nowrap text-ellipsis">
+              {notice.title}
+            </span>
           </li>
         ))}
       </ul>
 
       {/* 페이지네이션 */}
-      <div className="flex justify-center items-center w-full mb-[24px]">
+      <div className="flex justify-center items-center pt-[14px] gap-[10px] mb-[26px]">
         <button
-          onClick={() => setCurrentPage(currentPage > 1 ? currentPage - 1 : 1)}
-          className="px-[5px] text-[14px] text-gray-350"
+          onClick={() => currentPage > 1 && setCurrentPage(currentPage - 1)}
+          disabled={currentPage === 1}
+          className="text-gray-350 focus:outline-none"
         >
-          <SvgIcLeftPage width={"5px"} />
+          <SvgIcLeftPage width={5} />
         </button>
 
-        {getPagination().map((page, index) => (
+        {Array.from({ length: endPage - startPage + 1 }, (_, index) => (
           <button
-            key={index}
-            onClick={() => {
-              if (page === "...") return;
-              setCurrentPage(page as number);
-            }}
-            className={`px-[5px] text-[14px] ${
-              currentPage === page ? "text-gray-600" : "text-gray-350"
-            }`}
+            key={startPage + index}
+            onClick={() => handlePageChange(startPage + index)}
+            className={`text-sm ${
+              currentPage === startPage + index ? "text-gray-600" : "text-gray-350"
+            } focus:outline-none`}
           >
-            {page}
+            {startPage + index}
           </button>
         ))}
 
         <button
-          onClick={() => setCurrentPage(currentPage < totalPages ? currentPage + 1 : totalPages)}
-          className="px-[5px] text-[14px] text-gray-350"
+          onClick={() => currentPage < totalPages && setCurrentPage(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className="text-gray-350 focus:outline-none"
         >
-          <SvgIcRightPage width={"5px"} />
+          <SvgIcRightPage width={5} />
         </button>
       </div>
     </div>
