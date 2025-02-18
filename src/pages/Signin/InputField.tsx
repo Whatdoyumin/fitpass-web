@@ -60,7 +60,7 @@ function InputField({ type, placeholder, value, onChange }: InputFieldProps) {
         autoComplete="off"
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
-        className="flex-grow outline-none text-[15px] font-medium leading-[30px] placeholder-gray-400 tracking-[-0.3px]"
+        className="outline-none text-[15px] font-medium leading-[30px] placeholder-gray-400 tracking-[-0.3px]"
       />
 
       {/* (비밀번호 표시/숨김 토글) */}
