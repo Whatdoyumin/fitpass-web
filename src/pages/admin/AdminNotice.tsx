@@ -1,22 +1,45 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { IcCheckEmpty, IcCheckFull, IcImage, IcSearch } from "../../assets/svg";
 import { useNavigate } from "react-router-dom";
-import { mockNotices, Notice } from "../../mocks/mockNotices";
+import { Notice, useGetAdminNotice } from "../../apis/adminNotice/quries/useAdminNoticeApi";
 import SvgIcLeftPage from "../../assets/svg/IcLeftPage";
 import SvgIcRightPage from "../../assets/svg/IcRightPage";
+import { usePatchHomeSlideCheck } from "../../apis/adminNotice/quries/useAdminNoticeApi"; 
 
 function AdminNotice() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState<"add" | "remove" | null>(null);
-  const [modalNoticeId, setModalNoticeId] = useState<number | null>(null); // 현재 모달 공지사항 ID
-  const [isIconChecked, setIsIconChecked] = useState<{ [key: number]: boolean }>({}); // 각 공지사항별 체크 상태
-  const [checkedCount, setCheckedCount] = useState(0); // 체크된 아이콘의 개수 추적
+  const [modalNoticeId, setModalNoticeId] = useState<number | null>(null);
+  const [checkedCount, setCheckedCount] = useState(0);
+  const [searchKeyword, setSearchKeyword] = useState<string>("");
 
+  const [debouncedSearchKeyword, setDebouncedSearchKeyword] = useState<string>("");
+
+  // 검색어 변경 디바운스
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchKeyword(searchKeyword);
+    }, 400); // 400ms 후 검색 업데이트
+
+    return () => {
+      clearTimeout(handler); // 이전 타이머 제거
+    };
+  }, [searchKeyword]); // 검색어 변경될 때
+  
   const itemsPerPage = 10;
   const pagesPerGroup = 5;
-  const totalPages = Math.ceil(mockNotices.length / itemsPerPage);
   const [currentPage, setCurrentPage] = useState(1);
 
+  // API 요청 -> debouncedSearchKeyword가 바뀔 때
+  const { data, isLoading, error } = useGetAdminNotice(
+    debouncedSearchKeyword || null,
+    currentPage,
+    itemsPerPage
+  );
+
+  const totalPages = data?.result?.totalElements
+    ? Math.ceil(data.result.totalElements / itemsPerPage)
+    : 0;
   const currentGroup = Math.ceil(currentPage / pagesPerGroup);
   const startPage = (currentGroup - 1) * pagesPerGroup + 1;
   const endPage = Math.min(startPage + pagesPerGroup - 1, totalPages);
@@ -25,39 +48,42 @@ function AdminNotice() {
     setCurrentPage(page);
   };
 
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentNotices = mockNotices.slice().reverse().slice(indexOfFirstItem, indexOfLastItem);
   const navigate = useNavigate();
 
-  // 체크박스를 클릭 함수 
+  // usePatchHomeSlideCheck 훅 사용
+  const { mutate: patchHomeSlideCheck } = usePatchHomeSlideCheck();
+
   const handleCheckboxChange = (id: number, isChecked: boolean) => {
-    // 이미 3개가 체크, 추가 x
-    if (checkedCount >= 3 && !isChecked) {
-      return; 
-    }
 
     setModalNoticeId(id);
     setModalType(isChecked ? "remove" : "add");
-    setIsModalOpen(true); // 모달 열기
+    setIsModalOpen(true);
   };
 
-  // 모달에서 "예" 클릭
   const handleModalAction = (confirm: boolean) => {
     if (confirm && modalNoticeId !== null) {
-      // 아이콘 변경
-      const updatedCheckedCount = isIconChecked[modalNoticeId] ? checkedCount - 1 : checkedCount + 1;
-      
-      setCheckedCount(updatedCheckedCount); // 체크된 아이콘 개수 업데이트
+      const updatedCheckedCount = checkedCount + (modalType === "add" ? 1 : -1);
+      setCheckedCount(updatedCheckedCount);
 
-      setIsIconChecked((prev) => ({
-        ...prev,
-        [modalNoticeId]: modalType === "add" ? true : false, // add일 때는 true (IcCheckFull), remove일 때는 false (IcCheckEmpty)
-      }));
+      // 체크박스 상태 변경을 위한 API 호출
+      if (modalType === "add") {
+        patchHomeSlideCheck({ noticeId: modalNoticeId, isHomeSlide: true });
+      } else if (modalType === "remove") {
+        patchHomeSlideCheck({ noticeId: modalNoticeId, isHomeSlide: false });
+      }
     }
+
     setIsModalOpen(false);
     setModalNoticeId(null);
     setModalType(null);
+  };
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
+    return `${year}-${month}-${day}`;
   };
 
   return (
@@ -68,67 +94,81 @@ function AdminNotice() {
       <div className="w-[345px] flex flex-col justify-end items-start gap-2 mt-[64px] ml-auto">
         <label className="text-[12px] text-black-600">검색하기</label>
         <div className="relative w-full">
-          <input className="w-full h-12 pl-4 pr-12 border border-gray-450 rounded-md bg-white focus:outline-none" />
+          <input
+            className="w-full h-12 pl-4 pr-12 border border-gray-450 rounded-md bg-white focus:outline-none"
+            value={searchKeyword}
+            onChange={(e) => setSearchKeyword(e.target.value)} 
+          />
           <IcSearch
             width="24px"
-            className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500"
+            className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer"
           />
         </div>
       </div>
 
       {/* 공지사항 목록 테이블 */}
       <div className="mt-[26px] min-h-[550px]">
-        <table className="w-full table-auto border border-gray-450">
-          <thead className="bg-blue-100 border-b border-gray-450">
-            <tr className="h-[50px] text-[13px] text-black-700">
-              <th className="px-4 py-2 text-center">순번</th>
-              <th className="px-4 py-2 text-center">이미지</th>
-              <th className="px-4 py-2 text-left">제목</th>
-              <th className="px-4 py-2 text-left">카테고리</th>
-              <th className="px-4 py-2 text-left">게시일</th>
-              <th className="px-4 py-2 text-left">상태</th>
-              <th className="px-4 py-2">홈 슬라이드 게시</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {currentNotices.map((notice: Notice) => (
-              <tr className="border-b border-gray-450 h-[50px] text-[12px]" key={notice.id}>
-                <td className="px-4 py-2 text-center min-w-[100px]">{notice.id}</td>
-                <td className="px-4 py-2">
-                  <span className="flex justify-center min-w-[50px] items-center">
-                    {notice.image ? <IcImage width={19.5} /> : ""}
-                  </span>
-                </td>
-                <td className="px-4 py-2 text-left max-w-[260px] min-w-[260px] overflow-hidden text-ellipsis whitespace-nowrap">
-                  {notice.title}
-                </td>
-                <td className="px-4 py-2 min-w-[120px]">{notice.category}</td>
-                <td className="px-4 py-2 min-w-[130px]">{notice.publishDate}</td>
-                <td className="px-4 py-2 min-w-[90px]">{notice.status}</td>
-                <td className="px-4 py-2 min-w-[180px] text-center border-b border-gray-450">
-                  <span className="flex justify-center items-center cursor-pointer">
-                    {isIconChecked[notice.id] ? (
-                      <IcCheckFull
-                        width={24}
-                        onClick={() =>
-                          handleCheckboxChange(notice.id, isIconChecked[notice.id] || false)
-                        }
-                      />
-                    ) : (
-                      <IcCheckEmpty
-                        width={24}
-                        onClick={() =>
-                          handleCheckboxChange(notice.id, isIconChecked[notice.id] || false)
-                        }
-                      />
-                    )}
-                  </span>
-                </td>
+        {isLoading ? (
+          <div>Loading...</div>
+        ) : error ? (
+          <div>Error occurred: {error.message}</div>
+        ) : (
+          <table className="w-full table-auto border border-gray-450">
+            <thead className="bg-blue-100 border-b border-gray-450">
+              <tr className="h-[50px] text-[13px] text-black-700">
+                <th className="px-4 py-2 text-center">순번</th>
+                <th className="px-4 py-2 text-center">이미지</th>
+                <th className="px-4 py-2 text-left">제목</th>
+                <th className="px-4 py-2 text-left">카테고리</th>
+                <th className="px-4 py-2 text-left">게시일</th>
+                <th className="px-4 py-2 text-left">상태</th>
+                <th className="px-4 py-2">홈 슬라이드 게시</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+
+            <tbody>
+              {data?.result.content.map((notice: Notice) => (
+                <tr className="border-b border-gray-450 h-[50px] text-[12px]" key={notice.id}>
+                  <td className="px-4 py-2 text-center min-w-[100px]">{notice.id}</td>
+                  <td className="px-4 py-2">
+                    <span className="flex justify-center min-w-[50px] items-center">
+                      {notice.imageUrl && notice.imageUrl !== "none" ? (
+                        <IcImage width={19.5} />
+                      ) : (
+                        ""
+                      )}
+                    </span>
+                  </td>
+                  <td className="px-4 py-2 text-left max-w-[260px] min-w-[260px] overflow-hidden text-ellipsis whitespace-nowrap">
+                    {notice.title}
+                  </td>
+                  <td className="px-4 py-2 min-w-[120px]">{notice.category}</td>
+                  <td className="px-4 py-2 min-w-[130px]">{formatDate(notice.createdAt)}</td>
+                  <td className="px-4 py-2 min-w-[90px]">{notice.status}</td>
+                  <td className="px-4 py-2 min-w-[180px] text-center border-b border-gray-450">
+                    <span className="flex justify-center items-center cursor-pointer">
+                      {notice.isHomeSlide ? (
+                        <IcCheckFull
+                          width={24}
+                          onClick={() =>
+                            handleCheckboxChange(notice.id, true)
+                          }
+                        />
+                      ) : (
+                        <IcCheckEmpty
+                          width={24}
+                          onClick={() =>
+                            handleCheckboxChange(notice.id, false)
+                          }
+                        />
+                      )}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
 
       {/* 작성하기 버튼 */}
