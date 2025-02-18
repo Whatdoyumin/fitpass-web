@@ -196,7 +196,7 @@ const Router = createBrowserRouter([
         element: <AdminFitnessList />,
       },
       {
-        path: "fitness/upload",
+        path: "fitness/upload/:id",
         element: <AdminFitnessUpload />,
       },
       {
