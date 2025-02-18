@@ -56,14 +56,14 @@ function AdminFitnessUpload() {
   };
 
   const submitForm = () => {
-    if (contentRef.current) {
-      const content = contentRef.current.innerHTML.trim();
-      if (content !== "") {
-        setNotice(content);
-      } else {
-        setNotice(""); // 내용이 없으면 빈 문자열로 설정
-      }
-    }
+    // if (contentRef.current) {
+    //   const content = contentRef.current.innerHTML.trim();
+    //   if (content !== "") {
+    //     setNotice(content);
+    //   } else {
+    //     setNotice(""); // 내용이 없으면 빈 문자열로 설정
+    //   }
+    // }
     if (!fitnessName || !mainImg || !fee || !phoneNumber || !totalFee || !etc || !howToUse) {
       // if (!fitnessName || !mainImg || !address || !fee || !phoneNumber || !totalFee || !notice || !etc || !howToUse || !time || !selectedCategory.length) {
         alert("모든 필수 항목을 입력해주세요.");
@@ -120,8 +120,6 @@ function AdminFitnessUpload() {
       notice: notice,
       howToUse: howToUse,
       categoryList: selectedCategory,
-      // categoryList: JSON.stringify(selectedCategory),
-      purchasable: String(selectedStatus)
     }));
 
     uploadFitness(formData);
@@ -145,6 +143,17 @@ function AdminFitnessUpload() {
 
   const handleSubmitModalClose = () => {
     setSubmitModal(false);
+  }
+
+  const handleNotice = () => {
+    if (contentRef.current) {
+      const content = contentRef.current.innerHTML.trim();
+      if (content !== "") {
+        setNotice(content);
+      } else {
+        setNotice(""); // 내용이 없으면 빈 문자열로 설정
+      }
+    }
   }
 
   return (
@@ -249,10 +258,18 @@ function AdminFitnessUpload() {
 
         {/* 스타일 토글 버튼 */}
         <div className="flex h-[40px] gap-[51px] bg-blue-100 border-t border-x border-gray-450 ">
-          <button onClick={() => toggleTextStyle("bold")} className="pl-[30px] focus:outline-none">
+          <button 
+            onMouseDown={(e) => {
+              e.preventDefault(); // 버튼 클릭 시 포커스가 contentEditable에서 벗어나는 걸 방지
+            }}
+            onClick={() => toggleTextStyle("bold")} className="pl-[30px] focus:outline-none">
             <IcFontBold width={28} />
           </button>
-          <button onClick={() => toggleTextStyle("underline")} className="focus:outline-none">
+          <button 
+            onMouseDown={(e) => {
+              e.preventDefault(); // 버튼 클릭 시 포커스가 contentEditable에서 벗어나는 걸 방지
+            }}
+          onClick={() => toggleTextStyle("underline")} className="focus:outline-none">
             <IcFontUnderline width={28} />
           </button>
         </div>
@@ -260,6 +277,7 @@ function AdminFitnessUpload() {
         <div className="mb-[35px]">
           <div
             ref={contentRef}
+            onBlur={handleNotice}
             contentEditable
             className="w-full h-[200px] resize-none border border-gray-450 rounded-[3px] pl-2 pt-2
             placeholder:text-[12px] placeholder:font-medium placeholder-black-700 focus:outline-none"
