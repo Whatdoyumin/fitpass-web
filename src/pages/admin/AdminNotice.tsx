@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Notice, useGetAdminNotice } from "../../apis/adminNotice/quries/useAdminNoticeApi";
 import SvgIcLeftPage from "../../assets/svg/IcLeftPage";
 import SvgIcRightPage from "../../assets/svg/IcRightPage";
+import { usePatchHomeSlideCheck } from "../../apis/adminNotice/quries/useAdminNoticeApi"; 
 
 function AdminNotice() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -49,6 +50,9 @@ function AdminNotice() {
 
   const navigate = useNavigate();
 
+  // usePatchHomeSlideCheck 훅 사용
+  const { mutate: patchHomeSlideCheck } = usePatchHomeSlideCheck();
+
   const handleCheckboxChange = (id: number, isChecked: boolean) => {
     if (checkedCount >= 3 && !isChecked) {
       return;
@@ -63,7 +67,15 @@ function AdminNotice() {
     if (confirm && modalNoticeId !== null) {
       const updatedCheckedCount = checkedCount + (modalType === "add" ? 1 : -1);
       setCheckedCount(updatedCheckedCount);
+
+      // 체크박스 상태 변경을 위한 API 호출
+      if (modalType === "add") {
+        patchHomeSlideCheck({ noticeId: modalNoticeId, isHomeSlide: true });
+      } else if (modalType === "remove") {
+        patchHomeSlideCheck({ noticeId: modalNoticeId, isHomeSlide: false });
+      }
     }
+
     setIsModalOpen(false);
     setModalNoticeId(null);
     setModalType(null);
@@ -210,20 +222,20 @@ function AdminNotice() {
             <p className="text-center text-[25px] py-2 font-extrabold">
               {modalType === "add"
                 ? "홈 슬라이드에 게시하겠습니까?"
-                : "홈 슬라이드에서 제거하시겠습니까?"}
+                : "홈 슬라이드 게시를 취소하겠습니까?"}
             </p>
-            <div className="flex gap-[24px] justify-center mt-[32px]">
+            <div className="flex justify-around mt-[50px] text-18px text-white-100 gap-[20px]">
               <button
-                className="w-[135px] h-[50px] rounded-[25px] border bg-gray-200"
                 onClick={() => handleModalAction(false)}
+                className="w-[100%] py-4 bg-blue-250 rounded-md"
               >
-                취소
+                아니요
               </button>
               <button
-                className="w-[135px] h-[50px] rounded-[25px] border bg-blue-400 text-white"
                 onClick={() => handleModalAction(true)}
+                className="w-[100%] py-4 bg-blue-500 rounded-md"
               >
-                {modalType === "add" ? "추가" : "제거"}
+                예
               </button>
             </div>
           </div>

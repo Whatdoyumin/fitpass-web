@@ -1,5 +1,5 @@
-import { axiosInstance } from "../../axios-instance"; // axios 인스턴스를 적절한 경로에서 import
-import { NoticesResponse } from "../quries/useAdminNoticeApi"; // NoticesResponse 타입을 가져옴
+import { axiosInstance } from "../../axios-instance"; 
+import { NoticesResponse } from "../quries/useAdminNoticeApi"; 
 
 export const getAdminNotice = async (
   keyword: string | null,
@@ -20,7 +20,7 @@ export const getAdminNotice = async (
         isSuccess: response.data.isSuccess,
         code: response.data.code,
         message: response.data.message,
-        result: response.data.result, // result 부분에 AdminNoticesResponse 할당
+        result: response.data.result, 
       };
     }
 
@@ -29,4 +29,13 @@ export const getAdminNotice = async (
     console.error("Failed to fetch notice detail:", error);
     throw error;
   }
+};
+
+export const patchHomeSlideCheck = async (noticeId: number, isHomeSlide: boolean) => {
+  const response = await axiosInstance.patch(
+    `/admin/notice/${noticeId}/home-slide-check?isHomeSlide=${isHomeSlide}`,
+    { noticeId }
+  );
+
+  return response.data;
 };

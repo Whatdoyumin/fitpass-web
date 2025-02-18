@@ -1,6 +1,7 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { AxiosError } from 'axios';
-import { getAdminNotice } from '../axios/adminNoticeAPI';
+import { getAdminNotice, patchHomeSlideCheck } from '../axios/adminNoticeAPI';
+import { ErrorResponse } from "react-router-dom";
 export interface Notice {
   id: number;
   imageUrl: string;
@@ -32,3 +33,25 @@ export const useGetAdminNotice = (keyword: string | null, page: number = 1, size
     queryFn: () => getAdminNotice(keyword, page, size),
   });
 };
+
+export const usePatchHomeSlideCheck = () => {
+  return useMutation<
+    { isSuccess: boolean; code: string; message: string; result: string },
+    AxiosError<ErrorResponse>, 
+    { noticeId: number; isHomeSlide: boolean } 
+  >({
+    mutationFn: ({ noticeId, isHomeSlide }) => patchHomeSlideCheck(noticeId, isHomeSlide),
+    onError: (error: AxiosError) => {
+      console.error("오류:", error);
+    },
+    onSuccess: (data: { isSuccess: boolean; code: string; message: string; result: string }) => {
+      if (data.isSuccess) {
+        console.log("홈슬라이드 변경 성공");
+        window.location.reload();
+      } else {
+        console.log(`홈슬라이드 변경 실패: ${data.message}`);
+      }
+    },
+  });
+};
+
