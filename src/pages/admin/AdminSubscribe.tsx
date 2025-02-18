@@ -10,7 +10,7 @@ interface Subscription {
   validity: string;
 }
 
-const plans = ["1코인", "5코인", "10코인", "20코인", "30코인", "100코인", "300코인"];
+const plans = ["베이직", "스탠다드", "프로"];
 
 function AdminSubscription() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -37,7 +37,7 @@ function AdminSubscription() {
 
   return (
     <div className="w-full h-full overflow-y-auto p-5 relative">
-      <h1 className="adminTitle mb-6">결제 → 코인 상품 관리</h1>
+      <h1 className="adminTitle mb-6">결제 → 구독 상품 관리</h1>
       <table className="w-full text-left border border-gray-300">
         <thead className="h-[50px] text-13px text-black-700 bg-blue-100 font-light">
           <tr>

@@ -1,21 +1,46 @@
 import { useState } from "react";
 import SvgIcLeftPage from "../../assets/svg/IcLeftPage";
 import SvgIcRightPage from "../../assets/svg/IcRightPage";
+import { axiosInstance } from "../../apis/axios-instance";
+import config from "../../apis/config";
+import { useQuery } from "@tanstack/react-query";
+
+type TDashboardData = {
+  newMemberCount: number;
+  visitant: number;
+  pageView: number;
+  buyPass: number;
+  usePass: number;
+  date: string;
+};
+
+type DashboardParams = {
+  page?: number;
+  size?: number;
+};
 
 function AdminDashboard() {
-  // mock data
-  const [dashboardData, setDashboardData] = useState([
-    { date: "2024-12-30", newUsers: 2, visitors: 30, pageViews: 200, passPurchases: 5, passUsage: 4 },
-    { date: "2024-12-29", newUsers: 1, visitors: 25, pageViews: 180, passPurchases: 5, passUsage: 5 },
-  ]);
-
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const pagesPerGroup = 5;
 
-  const totalPages = Math.ceil(dashboardData.length / itemsPerPage);
-  const startIdx = (currentPage - 1) * itemsPerPage;
-  const currentDatas = dashboardData.slice(startIdx, startIdx + itemsPerPage);
+  const fetchDashboard = async ({ queryKey }: { queryKey: [string, number] }) => {
+    const [, page] = queryKey;
+    const params: DashboardParams = {
+      page,
+      size: itemsPerPage,
+    };
+    const response = await axiosInstance.get(`${config.apiBaseUrl}/admin/dashboard`, { params });
+    return response.data;
+  };
+
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["dashboard", currentPage],
+    queryFn: fetchDashboard,
+  });
+
+  const dashboardData = data?.result?.items || [];
+  const totalPages = data?.result?.totalPage || 1;
 
   const currentGroup = Math.ceil(currentPage / pagesPerGroup);
   const startPage = (currentGroup - 1) * pagesPerGroup + 1;
@@ -27,12 +52,15 @@ function AdminDashboard() {
     }
   };
 
+  if (isLoading) return <p>Loading...</p>;
+  if (isError) return <p>Error loading data.</p>;
+
   return (
-    <div className="w-full h-full px-[7px] overflow-y-auto">
+    <div className="w-full h-full px-[7px]">
       <h1 className="adminTitle">대시보드</h1>
 
       <p className="text-[14px] mt-[64px] mb-[10px] h-[25px]">일자별 분석</p>
-      <div className="min-h-[550px] overflow-hidden">
+      <div className="min-h-[580px]">
         <table className="w-full h-full border-collapse border border-gray-450">
           <thead className="bg-blue-100 text-[13px] text-center h-[49px] border-b border-gray-450">
             <tr>
@@ -47,16 +75,16 @@ function AdminDashboard() {
             </tr>
           </thead>
           <tbody className="text-[12px] text-center">
-            {currentDatas.map((row, index) => (
+            {dashboardData.map((row: TDashboardData, index: number) => (
               <tr key={index} className={`h-[50px] ${index !== dashboardData.length - 1 ? "border-b border-gray-450" : ""}`}>
                 <td className="w-[200px]">{row.date}</td>
                 <td className="w-[9px]"></td>
-                <td className="w-[160px]">{row.newUsers}</td>
+                <td className="w-[160px]">{row.newMemberCount}</td>
                 <td className="w-[4px]"></td>
-                <td className="w-[180px]">{row.visitors}</td>
-                <td className="w-[180px]">{row.pageViews}</td>
-                <td className="w-[180px]">{row.passPurchases}</td>
-                <td className="w-[180px]">{row.passUsage}</td>
+                <td className="w-[180px]">{row.visitant}</td>
+                <td className="w-[180px]">{row.pageView}</td>
+                <td className="w-[180px]">{row.buyPass}</td>
+                <td className="w-[180px]">{row.usePass}</td>
               </tr>
             ))}
           </tbody>
@@ -65,11 +93,7 @@ function AdminDashboard() {
 
       {/* 페이지네이션 */}
       <div className="w-full flex justify-center items-center pt-[40px] gap-[10px]">
-        <button
-          onClick={() => currentPage > 1 && setCurrentPage(currentPage - 1)}
-          disabled={currentPage === 1}
-          className="text-gray-350 focus:outline-none"
-        >
+        <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} className="text-gray-350 focus:outline-none">
           <SvgIcLeftPage width={5} />
         </button>
 
@@ -77,19 +101,13 @@ function AdminDashboard() {
           <button
             key={startPage + index}
             onClick={() => handlePageChange(startPage + index)}
-            className={`text-sm ${
-              currentPage === startPage + index ? "text-gray-600" : "text-gray-350"
-            } focus:outline-none`}
+            className={`text-sm ${currentPage === startPage + index ? "text-gray-600" : "text-gray-350"} focus:outline-none`}
           >
             {startPage + index}
           </button>
         ))}
 
-        <button
-          onClick={() => currentPage < totalPages && setCurrentPage(currentPage + 1)}
-          disabled={currentPage === totalPages}
-          className="text-gray-350 focus:outline-none"
-        >
+        <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages} className="text-gray-350 focus:outline-none">
           <SvgIcRightPage width={5} />
         </button>
       </div>
