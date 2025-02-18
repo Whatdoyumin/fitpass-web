@@ -1,5 +1,9 @@
-import React, { useState, useRef, JSX } from "react";
+import { useState, useRef } from "react";
 import {
+  User,
+  UserFocus,
+  Password,
+  PasswordFocus,
   PasswordEye,
   PasswordEyeView,
   PasswordEyeFocus,
@@ -7,57 +11,43 @@ import {
 } from "../../assets/svg";
 
 interface InputFieldProps {
-  type: string;
+  type: "id" | "password"; // "id" 또는 "password"로만 타입 제한
   placeholder: string;
-  icon: JSX.Element;
-  iconFocus?: React.ReactNode; // Focus 상태 아이콘
-  isPassword?: boolean; // 비밀번호 입력창 여부
-  trailingIcon?: React.ReactNode;
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-function InputField({
-  type,
-  placeholder,
-  icon,
-  iconFocus,
-  isPassword = false,
-  trailingIcon,
-  value,
-  onChange,
-}: InputFieldProps) {
-  const [inputType, setInputType] = useState(type); // 입력 타입 상태 관리
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false); // 비밀번호 표시 여부
-  const [isFocused, setIsFocused] = useState(false); // Focus 상태
-  const inputRef = useRef<HTMLInputElement>(null); // input 참조
+function InputField({ type, placeholder, value, onChange }: InputFieldProps) {
+  const [inputType, setInputType] = useState(type === "password" ? "password" : "text");
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const togglePasswordVisibility = (e: React.MouseEvent) => {
     e.preventDefault();
     setIsPasswordVisible(!isPasswordVisible);
-    setInputType(isPasswordVisible ? "password" : "text"); // 타입 변경
-
+    setInputType(isPasswordVisible ? "password" : "text");
     inputRef.current?.focus();
   };
 
   return (
     <div
-      className={`
-        flex
-        items-center
-        w-[321px]
-        h-[50px]
-        py-[10px]
-        px-[15px]
-        border
-        rounded-[5px]
-        gap-[15px]
-        ${isFocused ? "border-gray-500" : "border-gray-400"}
-      `}
+      className={`flex items-center w-[321px] h-[50px] py-[10px] px-[15px] border rounded-[5px] gap-[15px] 
+      ${isFocused ? "border-gray-500" : "border-gray-400"}`}
     >
-      {/* 왼쪽 아이콘 */}
+      {/* 왼쪽 아이콘 (type이 id이면 User, password이면 Password) */}
       <div className="w-[25px] h-[25px] flex justify-center items-center">
-        {isFocused && iconFocus ? iconFocus : icon}
+        {type === "id" ? (
+          isFocused ? (
+            <UserFocus className="w-[25px] h-[25px]" />
+          ) : (
+            <User className="w-[25px] h-[25px]" />
+          )
+        ) : isFocused ? (
+          <PasswordFocus className="w-[25px] h-[25px]"/>
+        ) : (
+          <Password className="w-[25px] h-[25px]"/>
+        )}
       </div>
 
       {/* 입력 필드 */}
@@ -67,24 +57,14 @@ function InputField({
         onChange={onChange}
         type={inputType}
         placeholder={placeholder}
-        inputMode="text"
         autoComplete="off"
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
-        className={`
-          flex-grow
-          outline-none
-          text-[15px]
-          font-medium
-          leading-[30px]
-          placeholder-gray-400
-          tracking-[-0.3px]
-          ${isFocused ? "text-gray-500" : "text-gray-400"}
-        `}
+        className="flex-grow outline-none text-[15px] font-medium leading-[30px] placeholder-gray-400 tracking-[-0.3px]"
       />
 
-      {/* 오른쪽 아이콘 (비밀번호 표시/숨김 토글) */}
-      {isPassword ? (
+      {/* (비밀번호 표시/숨김 토글) */}
+      {type === "password" && (
         <div
           className="w-[25px] h-[25px] flex justify-center items-center cursor-pointer"
           onMouseDown={togglePasswordVisibility}
@@ -101,12 +81,6 @@ function InputField({
             <PasswordEye className="w-[19px] h-[20px]" />
           )}
         </div>
-      ) : (
-        trailingIcon && (
-          <div className="w-[25px] h-[25px] flex justify-center items-center">
-            {trailingIcon}
-          </div>
-        )
       )}
     </div>
   );
