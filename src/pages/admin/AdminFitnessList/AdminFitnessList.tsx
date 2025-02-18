@@ -6,6 +6,7 @@ import { axiosInstance } from "../../../apis/axios-instance";
 import config from "../../../apis/config";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
+import { Pagination } from "../../../components/Pagination";
 
 type TListData = {
   fitnessId: number;
@@ -127,7 +128,7 @@ function AdminFitnessList() {
         </table>
 
         {/* pagination */}
-        <div className="w-full mt-3 flex justify-center text-gray-350 font-medium text-[14px] ">
+        {/* <div className="w-full mt-3 flex justify-center text-gray-350 font-medium text-[14px] ">
           <button
             disabled={page === 0}
             onClick={() => setPage((prev) => Math.max(prev - 1, 0))}
@@ -143,7 +144,13 @@ function AdminFitnessList() {
             disabled={page === totalPages - 1}
             onClick={() => setPage((prev) => Math.min(prev + 1, totalPages - 1))}
           >&gt;</button>
-        </div>
+        </div> */}
+        {totalPages > 1 && (
+          <Pagination
+            totalPages={totalPages}
+            currentPage={page}
+            onPageChange={setPage} />
+        )}
       </div>
     </div>
   );
