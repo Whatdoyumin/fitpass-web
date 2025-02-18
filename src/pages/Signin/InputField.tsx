@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import {
-  //User,
+  User,
   UserFocus,
   Password,
   PasswordFocus,
@@ -8,7 +8,6 @@ import {
   PasswordEyeView,
   PasswordEyeFocus,
   PasswordEyeViewFocus,
-  User,
 } from "../../assets/svg";
 
 interface InputFieldProps {
@@ -40,14 +39,14 @@ function InputField({ type, placeholder, value, onChange }: InputFieldProps) {
       <div className="w-[25px] h-[25px] flex justify-center items-center">
         {type === "id" ? (
           isFocused ? (
-            <UserFocus />
+            <UserFocus className="w-[25px] h-[25px]" />
           ) : (
-            <User />
+            <User className="w-[25px] h-[25px]" />
           )
         ) : isFocused ? (
-          <PasswordFocus />
+          <PasswordFocus className="w-[25px] h-[25px]"/>
         ) : (
-          <Password />
+          <Password className="w-[25px] h-[25px]"/>
         )}
       </div>
 
@@ -72,14 +71,14 @@ function InputField({ type, placeholder, value, onChange }: InputFieldProps) {
         >
           {isPasswordVisible ? (
             isFocused ? (
-              <PasswordEyeViewFocus />
+              <PasswordEyeViewFocus className="w-[19px] h-[20px]" />
             ) : (
-              <PasswordEyeView />
+              <PasswordEyeView className="w-[19px] h-[20px]" />
             )
           ) : isFocused ? (
-            <PasswordEyeFocus />
+            <PasswordEyeFocus className="w-[19px] h-[20px]" />
           ) : (
-            <PasswordEye />
+            <PasswordEye className="w-[19px] h-[20px]" />
           )}
         </div>
       )}
