@@ -40,7 +40,7 @@ export const usePostAdminNotice = () => {
   return useMutation<
     void,
     AxiosError<ErrorResponse>,
-    { id: number | undefined; title: string; content: string; type: "ANNOUNCEMENT" | "EVENT"; image: File }
+    { id: number | undefined; title: string; content: string; type: "ANNOUNCEMENT" | "EVENT"; image: File | string; }
   >({
     mutationFn: postAdminNotice,
     onError: (error) => {
@@ -54,13 +54,13 @@ export const usePostAdminNotice = () => {
 export const usePostAdminDraftNotice = () => {
   return useMutation<
     void,
-    AxiosError<ErrorResponse>,
+    AxiosError,
     { id: number | undefined;  title: string; content: string; type: "ANNOUNCEMENT" | "EVENT"; image: File | string }
   >({
     mutationFn: postAdminDraftNotice,
     onError: (error) => {
-      console.error("임시저장 실패: ", error.response?.data?.message);
-      alert(`${error.response?.data?.message}`);
+      console.error("임시저장 실패: ", error);
+      alert(`${error}`);
     },
   });
 };

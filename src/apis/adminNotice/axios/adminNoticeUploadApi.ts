@@ -16,6 +16,12 @@ export const getAdminDraftNotice = async (): Promise<DraftNoticeResponse> => {
     throw error;
   }
 };
+async function convertUrlToFile(imageUrl: string, fileName: string): Promise<File> {
+  const response = await fetch(imageUrl);
+  const blob = await response.blob();
+  const file = new File([blob], fileName, { type: blob.type });
+  return file;
+}
 
 export const postAdminNotice = async ({
   id,
@@ -28,12 +34,19 @@ export const postAdminNotice = async ({
   title: string;
   content: string;
   type: "ANNOUNCEMENT" | "EVENT";
-  image: File;
+  image: File | string;
 }) => {
   const formData = new FormData();
 
   formData.append("request", JSON.stringify({ id, title, content, type }));
-  formData.append("image", image);
+
+  if (typeof image === 'string') {
+    const file = await convertUrlToFile(image, "image.jpg");
+    formData.append("image", file);
+  } else {
+    formData.append("image", image);
+  }
+
 
   const response = await axiosInstance.post("/admin/notice/save", formData, {
     headers: {
@@ -58,9 +71,15 @@ export const postAdminDraftNotice = async ({
   image: File | string;
 }) => {
   const formData = new FormData();
-
+  
   formData.append("request", JSON.stringify({ id, title, content, type }));
-  formData.append("image", image);
+
+  if (typeof image === 'string') {
+    const file = await convertUrlToFile(image, "image.jpg");
+    formData.append("image", file);
+  } else {
+    formData.append("image", image);
+  }
 
   const response = await axiosInstance.post("/admin/notice/draft", formData, {
     headers: {

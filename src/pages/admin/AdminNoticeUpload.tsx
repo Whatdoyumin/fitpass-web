@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IcCloseBtn, IcFontBold, IcFontUnderline, IcImage } from "../../assets/svg";
 import {
@@ -42,11 +42,11 @@ function AdminNoticeUpload() {
   // 게시하기 버튼 활성화 조건
   const isSubmitDisabled = !(title && image && selectedType && content);
 
-  // 제목 있어야 임시저장 
+  // 제목 있어야 임시저장
   const isDraftSubmitDisabled = !title;
 
   // 임시저장 목록
-  const tempSavedNotices = data?.notices ? [...data.notices].reverse() : [];  
+  const tempSavedNotices = data?.notices ? [...data.notices].reverse() : [];
   const [selectedNoticeId, setSelectedNoticeId] = useState<number | undefined>();
 
   const { data: noticeDetail } = useGetNoticeDetail(selectedNoticeId ?? undefined);
@@ -56,20 +56,51 @@ function AdminNoticeUpload() {
     setSelectedNoticeId(notice.id);
   };
 
+  // string 이미지를 파일명처럼
+  function getFileNameFromPresignedUrl(url: string | File): string {
+    if (url instanceof File) {
+      return url.name;
+    }
+    
+    try {
+      const decodedUrl = decodeURIComponent(url);        // URL 인코딩된 경우 대비
+      const urlWithoutParams = decodedUrl.split("?")[0]; // 쿼리 스트링 제거
+      const pathSegments = urlWithoutParams.split("/");  // '/' 기준으로 나누기
+      return pathSegments.pop() || "none";               // 마지막 요소 반환
+    } catch (error) {
+      console.error("파일명 추출 실패:", error);
+      return "none";
+    }
+  }
+
   useEffect(() => {
     if (selectedNoticeId !== undefined && selectedNoticeId !== null) {
       if (noticeDetail) {
         setTitle(noticeDetail.title);
-        setContent(noticeDetail.content || "");
+
+        const contentElement = document.querySelector("[contenteditable]");
+        if (contentElement) {
+          contentElement.innerHTML = noticeDetail.content;
+          setContent(noticeDetail.content);
+        }
+
         setSelectedType(noticeDetail.category === "ANNOUNCEMENT" ? "공지" : "이벤트");
-        setImage(noticeDetail.imageUrl || "");
+        
+        const fileName = getFileNameFromPresignedUrl(noticeDetail.imageUrl);
+        setImage(fileName || "");
+
+        console.log(noticeDetail.content);
+        console.log(noticeDetail.imageUrl);
+
       }
     }
   }, [selectedNoticeId, noticeDetail]);
 
   // 게시하기 버튼 클릭 시 API 호출
   const handlePostNotice = () => {
-    if (image instanceof File) {
+    console.log("게시하기 클릭됨");
+
+    if (image instanceof File || typeof image === 'string') {
       postNotice(
         {
           id: selectedNoticeId,
@@ -83,18 +114,36 @@ function AdminNoticeUpload() {
             setShowModal(false);
             navigate("/admin/notice");
           },
+          onError: (error) => {
+            console.error("게시 실패:", error);
+          }
         }
       );
     }
   };
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  const handleContentChange = () => {
+    if (contentRef.current) {
+      const currentContent = contentRef.current.innerHTML;
+      setContent(currentContent);
+    }
+  };
+
+  useEffect(() => {
+    if (contentRef.current && content !== contentRef.current.innerHTML.trim()) {
+      contentRef.current.innerHTML = content || ""; 
+    }
+  }, [content]);
 
   const toggleTextStyle = (style: string) => {
     document.execCommand(style, false);
+    handleContentChange(); 
   };
 
   const handleSaveDraft = () => {
     if (!title) return;
-
+    console.log(content);
     saveDraft(
       {
         id: selectedNoticeId,
@@ -152,7 +201,7 @@ function AdminNoticeUpload() {
           <div className="relative w-full">
             <input
               type="text"
-              value={image === "none" ? "" : (typeof image === 'string' ? image : image?.name || '')}
+              value={image === "none" ? "" : typeof image === "string" ? image : image?.name || ""}
               readOnly
               className="w-full h-[40px] border border-gray-450 rounded-[3px] p-2 pr-[50px] focus:outline-none overflow-hidden text-ellipsis whitespace-nowrap"
             />
@@ -185,14 +234,11 @@ function AdminNoticeUpload() {
         {/* 내용 입력 */}
         <div className="mb-[35px]">
           <div
+            ref={contentRef}
             contentEditable
-            className={`w-full min-h-[460px] border border-gray-450 p-4 focus:outline-none text-12px text-black-700 placeholder-black-700
-            ${content? content : ""}`}
-            style={{
-              resize: "none",
-            }}
-            onInput={(e) => setContent(e.currentTarget.innerHTML)} // 내용 업데이트
-            dangerouslySetInnerHTML={{ __html: content || "" }}
+            className={`w-full h-[200px] resize-none border border-gray-450 px-[19px] py-[22px]
+      focus:outline-none text-12px ${content ? content : ""}`}
+            onInput={handleContentChange} // 내용 입력 시 상태 업데이트
           />
         </div>
 
