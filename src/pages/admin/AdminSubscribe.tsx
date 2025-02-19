@@ -1,38 +1,59 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "../../components/Modal";
+import { ManagementInput } from "../../components/adminCommon/ManagementInput";
+import { useGetAdminSubsribe, usePutAdminSubscribe } from "../../hooks/useGetAdminSubsribe";
+import { TAdminPlanType, TAdminSubsribe } from "../../types/adminSubsribe";
 
-interface Subscription {
-  id: number;
-  plan: string;
-  price: string;
-  coins: string;
-  extraCoins: string;
-  validity: string;
-}
-
-const plans = ["베이직", "스탠다드", "프로"];
+const plans: TAdminPlanType[] = ["BASIC", "STANDARD", "PRO"];
 
 function AdminSubscription() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [subscriptions, setSubscriptions] = useState<Subscription[]>(
-    plans.map((plan, index) => ({
-      id: index + 1,
-      plan,
+  const [subscriptions, setSubscriptions] = useState<TAdminSubsribe[]>(
+    plans.map((planType) => ({
+      planType,
       price: "",
-      coins: "",
-      extraCoins: "",
-      validity: "",
+      coinQuantity: "",
+      coinAddition: "",
+      expirationPeriod: "",
     }))
   );
 
-  const handleChange = (id: number, field: keyof Subscription, value: string) => {
+  const { data } = useGetAdminSubsribe();
+  const { mutate } = usePutAdminSubscribe();
+
+  useEffect(() => {
+    if (data?.result) {
+      const updatedSubscriptions = data.result.map((item: TAdminSubsribe) => ({
+        planType: item.planType as TAdminPlanType,
+        price: item.price.toString(),
+        coinQuantity: item.coinQuantity.toString(),
+        coinAddition: item.coinAddition.toString(),
+        expirationPeriod: item.expirationPeriod.toString(),
+      }));
+      setSubscriptions(updatedSubscriptions);
+    }
+  }, [data]);
+
+  const handleChange = (index: number, field: keyof TAdminSubsribe, value: string) => {
     setSubscriptions((prev) =>
-      prev.map((sub) => (sub.id === id ? { ...sub, [field]: value } : sub))
+      prev.map((sub, i) => (i === index ? { ...sub, [field]: value } : sub))
     );
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
+  };
+
+  const handleEditSubsribes = () => {
+    mutate(subscriptions, {
+      onSuccess: () => {
+        alert("저장되었습니다.");
+        setIsModalOpen(false);
+      },
+      onError: (error) => {
+        console.log(error.message);
+      },
+    });
   };
 
   return (
@@ -50,56 +71,52 @@ function AdminSubscription() {
           </tr>
         </thead>
         <tbody>
-          {subscriptions.map(({ id, plan, price, coins, extraCoins, validity }) => (
-            <tr key={id} className="h-[50px] border-t text-12px border-gray-300">
-              <td className="text-center">{id}</td>
-              <td className="text-center">{plan}</td>
-              <td>
-                <div className="flex gap-2 items-center">
-                  <input
-                    type="number"
-                    value={price}
-                    onChange={(e) => handleChange(id, "price", e.target.value)}
-                    className="border border-gray-450 rounded-5 p-1 w-32"
-                  />
-                  <p>원</p>
-                </div>
-              </td>
-              <td>
-                <div className="flex gap-2 items-center">
-                  <input
-                    type="number"
-                    value={coins}
-                    onChange={(e) => handleChange(id, "coins", e.target.value)}
-                    className="border border-gray-450 rounded-5 p-1 w-32"
-                  />
-                  <p>코인</p>
-                </div>
-              </td>
-              <td>
-                <div className="flex gap-2 items-center">
-                  <input
-                    type="number"
-                    value={extraCoins}
-                    onChange={(e) => handleChange(id, "extraCoins", e.target.value)}
-                    className="border border-gray-450 rounded-5 p-1 w-32"
-                  />
-                  <p>코인</p>
-                </div>
-              </td>
-              <td>
-                <div className="flex gap-2 items-center">
-                  <input
-                    type="number"
-                    value={validity}
-                    onChange={(e) => handleChange(id, "validity", e.target.value)}
-                    className="border border-gray-450 rounded-5 p-1 w-32"
-                  />
-                  <p>일</p>
-                </div>
-              </td>
-            </tr>
-          ))}
+          {subscriptions.map(
+            ({ planType, price, coinQuantity, coinAddition, expirationPeriod }, index: number) => (
+              <tr key={index} className="h-[50px] border-t text-12px border-gray-300">
+                <td className="text-center">{index + 1}</td>
+                <td className="text-center">
+                  {planType == "BASIC" ? "베이직" : planType == "PRO" ? "프로" : "스탠다드"}
+                </td>
+                <td>
+                  <div className="flex gap-2 items-center">
+                    <ManagementInput
+                      value={price}
+                      onChange={(e) => handleChange(index, "price", e.target.value)}
+                    />
+                    <p>원</p>
+                  </div>
+                </td>
+                <td>
+                  <div className="flex gap-2 items-center">
+                    <ManagementInput
+                      value={coinQuantity}
+                      onChange={(e) => handleChange(index, "coinQuantity", e.target.value)}
+                    />
+                    <p>코인</p>
+                  </div>
+                </td>
+                <td>
+                  <div className="flex gap-2 items-center">
+                    <ManagementInput
+                      value={coinAddition}
+                      onChange={(e) => handleChange(index, "coinAddition", e.target.value)}
+                    />
+                    <p>코인</p>
+                  </div>
+                </td>
+                <td>
+                  <div className="flex gap-2 items-center">
+                    <ManagementInput
+                      value={expirationPeriod}
+                      onChange={(e) => handleChange(index, "expirationPeriod", e.target.value)}
+                    />
+                    <p>일</p>
+                  </div>
+                </td>
+              </tr>
+            )
+          )}
         </tbody>
       </table>
       <button
@@ -112,7 +129,7 @@ function AdminSubscription() {
         <Modal
           isOpen={isModalOpen}
           onClose={handleCloseModal}
-          onSuccess={handleCloseModal}
+          onSuccess={handleEditSubsribes}
           title={"저장하시겠습니까?"}
           btn1Text={"아니요"}
           btn2Text={"네"}
