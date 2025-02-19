@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import InputField from "../EditProfile/common/InputField";
-import Button from "../EditProfile/common/Button";
+import { verifyCode, verifyPhoneNumber } from "../../apis/verify/verify";
+import { useChangePhoneNumber } from "../../apis/mypage/quries/useAuthChangeApi";
 
 function ChangePhone() {
   const [name, setName] = useState("");
@@ -17,7 +18,10 @@ function ChangePhone() {
     phone: "",
     verification: "",
   });
+  const [verificationMessage, setVerificationMessage] = useState("");
   const navigate = useNavigate();
+
+  const { mutate: changePhoneNumber } = useChangePhoneNumber();
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -29,7 +33,7 @@ function ChangePhone() {
     return () => clearInterval(timer);
   }, [timeLeft, isVerificationSent]);
 
-  const handleSendVerification = (): void => {
+  const handleSendVerification = async (): Promise<void> => {
     let hasError = false;
     const newErrors = {
       name: "",
@@ -37,16 +41,6 @@ function ChangePhone() {
       phone: "",
       verification: "",
     };
-
-    if (name !== "한밤식") {
-      newErrors.name = "올바르지 않은 정보입니다.";
-      hasError = true;
-    }
-
-    if (password !== "aaaaaa456") {
-      newErrors.password = "올바르지 않은 정보입니다.";
-      hasError = true;
-    }
 
     const phoneRegex = /^[0-9]{10,11}$/;
     if (!phoneRegex.test(phoneNumber)) {
@@ -61,28 +55,66 @@ function ChangePhone() {
       setErrors(newErrors);
     }
 
-    // 모든 유효성 검사 통과하면 인증번호 전송
-    setIsVerificationSent(true);
-    setIsVerified(false);
-    setTimeLeft(180); // 3분(180초)
-    alert("인증번호가 전송되었습니다.");
-  };
-
-  const handleVerifyCode = () => {
-    if (verificationCode !== "1234") {
-      // 인증번호 불일치 처리
-      setErrors({ ...errors, verification: "올바르지 않습니다. 다시 인증해주세요." });
+    try {
+      await verifyCode(phoneNumber);
+      setIsVerificationSent(true);
       setIsVerified(false);
-    } else {
-      // 인증번호 일치 처리
-      setErrors({ ...errors, verification: "" });
-      setIsVerified(true);
-      setIsVerificationSent(false);
+      setTimeLeft(180);
+      setVerificationMessage("");
+      alert("인증번호가 전송되었습니다.");
+    } catch (error: unknown) {
+      if (error) {
+        setErrors((prev) => ({ ...prev, verification: "올바른 전화번호 형식이 아닙니다." }));
+      } else {
+        console.error("오류:", error);
+      }
     }
   };
 
-  const handleNavigate = (): void => {
-    navigate("/my");
+  const handleVerifyCode = async (): Promise<void> => {
+    try {
+      await verifyPhoneNumber({ phoneNumber, certificationCode: verificationCode });
+      setErrors((prev) => ({ ...prev, verification: "" }));
+      setIsVerified(true);
+      setIsVerificationSent(false);
+      setVerificationMessage("인증이 완료되었습니다.");
+    } catch (error: unknown) {
+      if (error) {
+        setErrors((prev) => ({
+          ...prev,
+          verification: "인증번호가 일치하지 않습니다.",
+        }));
+        setIsVerified(false);
+      } else {
+        console.error("오류:", error);
+      }
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      // changePhoneNumber 호출
+      changePhoneNumber(
+        { name, password, newPhoneNumber: phoneNumber },
+        {
+          onSuccess: (data) => {
+            if (data.isSuccess) {
+              // 전화번호 변경 성공 시 처리
+              navigate("/my");
+              console.log("전화번호 변경 완료");
+            }
+          },
+          onError: (error) => {
+            if (error?.response?.status === 401) {
+              alert("비밀번호 또는 이름이 올바르지 않습니다.")
+            }
+          },
+        }
+      );
+    } catch (error) {
+      console.error("API 호출 실패:", error);
+    }
   };
 
   const formatTime = (seconds: number): string => {
@@ -91,48 +123,33 @@ function ChangePhone() {
     return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
   };
 
-  const handleSubmit = (): void => {
-    if (isVerified) {
-      handleNavigate();
-    } else {
-      setErrors((prev) => ({ ...prev, verification: "인증을 완료해주세요." }));
-    }
-  };
-
   return (
     <div className="w-full h-full bg-white-100 px-[20px] py-[29px] flex flex-col">
-      {/* 이름 입력 */}
       <div className="h-[500px]">
-      <div className="mb-[25px]">
-        <label className="text-gray-800 text-[16px] font-medium" style={{ lineHeight: "19px" }}>
-          이름
-        </label>
-        <InputField
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="이름을 입력해주세요"
-          isValid={!errors.name}
-          errorMessage={errors.name}
-        />
-      </div>
+        {/* 이름 입력 */}
+        <div className="mb-[25px]">
+          <label className="text-gray-800 text-[16px] font-medium">이름</label>
+          <InputField
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="이름을 입력해주세요"
+            isValid={!errors.name}
+          />
+        </div>
 
-      {/* 비밀번호 입력 */}
-      <form className="mb-[25px]">
-        <label className="text-gray-800 text-[16px] font-medium" style={{ lineHeight: "19px" }}>
-          비밀번호
-        </label>
-        <InputField
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="비밀번호를 입력해주세요"
-          isValid={!errors.password}
-          errorMessage={errors.password}
-        />
-      </form>
+        {/* 비밀번호 입력 */}
+        <div className="mb-[25px]">
+          <label className="text-gray-800 text-[16px] font-medium">비밀번호</label>
+          <InputField
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="비밀번호를 입력해주세요"
+            isValid={!errors.password}
+          />
+        </div>
 
-      <div className="">
         {/* 휴대폰 번호 입력 */}
         <label className="text-gray-800 text-[16px] font-medium" style={{ lineHeight: "19px" }}>
           휴대폰 번호
@@ -170,13 +187,8 @@ function ChangePhone() {
               onChange={(e) => setVerificationCode(e.target.value)}
               placeholder="인증번호를 입력해주세요"
               disabled={!isVerificationSent || isVerified}
-              className={`w-full p-3 border rounded-md text-[14px] h-[50px] pr-[50px] 
-              ${
-                errors.verification
-                  ? "border-red-500 focus:ring-1 focus:ring-red-500"
-                  : isVerificationSent
-                  ? "border-gray-300 focus:ring-1 focus:ring-black-700"
-                  : "border-gray-250"
+              className={`w-full p-3 border rounded-md text-[14px] h-[50px] ${
+                errors.verification ? "border-red-500" : "border-gray-300"
               } focus:outline-none`}
             />
             {isVerificationSent && !isVerified && (
@@ -192,7 +204,6 @@ function ChangePhone() {
             className={`px-[20px] py-[13px] rounded-md text-[14px] font-medium max-w-[92px] w-full h-full ${
               isVerificationSent ? "bg-blue-500 text-white-100" : "bg-blue-250 text-white-100"
             }`}
-            style={{ whiteSpace: "nowrap" }}
           >
             확인하기
           </button>
@@ -200,14 +211,20 @@ function ChangePhone() {
         {errors.verification && (
           <p className="text-red-500 text-[13px] mt-[9px]">{errors.verification}</p>
         )}
-        {isVerified && (
-          <p className="text-green-500 text-[13px] mt-[9px]">인증이 완료되었습니다.</p>
+        {verificationMessage && (
+          <p className="text-gray-500 text-[13px] mt-[9px]">{verificationMessage}</p>
         )}
       </div>
-      </div>
-      {/* 버튼 */}
+
+      {/* 변경하기 버튼 */}
       <div className="button-container w-full flex justify-center mt-auto">
-        <Button onClick={handleSubmit} type="button" text="변경하기" />
+        <button
+          onClick={handleSubmit}
+          type="button"
+          className="w-full max-w-[350px] h-[51px] bg-blue-500 text-white-100 rounded-lg text-[15px] font-bold"
+        >
+          변경하기{" "}
+        </button>
       </div>
     </div>
   );
