@@ -1,5 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
-import { getAdminSubsribe } from "../apis/adminManagement/adminSubscribe";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { getAdminSubsribe, putAdminSubsribe } from "../apis/adminManagement/adminSubscribe";
+import { TAdminSubsribe } from "../types/adminSubsribe";
 
 function useGetAdminSubsribe() {
   return useQuery({
@@ -8,4 +9,11 @@ function useGetAdminSubsribe() {
   });
 }
 
-export { useGetAdminSubsribe };
+function usePutAdminSubscribe() {
+  return useMutation({
+    mutationFn: (data: TAdminSubsribe[]) => putAdminSubsribe(data),
+    mutationKey: ["editAdminSubsribe"],
+  });
+}
+
+export { useGetAdminSubsribe, usePutAdminSubscribe };
