@@ -1,38 +1,48 @@
 import { AxiosError } from "axios";
-import { patchChangePassword } from "../axios/authChangeApi";
+import { patchChangePassword, patchChangePhoneNumber } from "../axios/authChangeApi";
 import { useMutation } from "@tanstack/react-query";
-import { ErrorResponse } from "react-router-dom";
+interface ErrorResponse {
+  message: string;
+}
 
-// export const useChangePhoneNumber = () => {
-//   return useMutation<
-//     { isSuccess: boolean; code: string; message: string; result: {} },
-//     AxiosError,
-//     { name: string; password: string; newPhoneNumber: string }
-//   >({
-//     mutationFn: ({ name, password, newPhoneNumber }) =>
-//       postChangePhoneNumber({ name, password, newPhoneNumber }),
-//     onError: (error: AxiosError) => {
-//       console.error("📌 전화번호 변경 오류:", error);
-//     },
-//   });
-// };
+export const useChangePhoneNumber = () => {
+  return useMutation<
+    { isSuccess: boolean; code: string; message: string },
+    AxiosError<ErrorResponse>,
+    { name: string; password: string; newPhoneNumber: string }
+  >({
+    mutationFn: ({ name, password, newPhoneNumber }) =>
+      patchChangePhoneNumber({ name, password, newPhoneNumber }),
+    onError: (error) => {
+      console.error("전화번호 변경 오류:", error);
+      alert(`${error?.response?.data?.message}`);
+    },
+    onSuccess: (data: { isSuccess: boolean; code: string; message: string }) => {
+      if (data.isSuccess) {
+        alert("전화번호 변경 성공");
+      } else {
+        alert(`${data.message}`);
+      }
+    },
+  });
+};
 
 export const useChangePassword = () => {
   return useMutation<
-    { isSuccess: boolean; code: string; message: string; result: string }, // 수정된 응답 타입
-    AxiosError<ErrorResponse>, // 에러 타입
-    { password: string; newPassword: string } // 요청 타입
+    { isSuccess: boolean; code: string; message: string },
+    AxiosError<ErrorResponse>,
+    { password: string; newPassword: string }
   >({
     mutationFn: ({ password, newPassword }) => patchChangePassword({ password, newPassword }),
-    onError: (error: AxiosError) => {
-      console.error("📌 비밀번호 변경 오류:", error);
-      alert(`비밀번호 변경 오류: ${JSON.stringify(error?.response?.data, null, 2)}`);
+    onError: (error: AxiosError<ErrorResponse>) => {
+      console.error("비밀번호 변경 오류:", error);
+      alert(`${error?.response?.data?.message}`);
     },
-    onSuccess: (data) => {
+    onSuccess: (data: { isSuccess: boolean; code: string; message: string }) => {
       if (data.isSuccess) {
-        alert("비밀번호 변경 성공!");
+        alert("비밀번호 변경 성공");
       } else {
-        alert(`비밀번호 변경 실패: ${data.message}`);
+        alert(`${data.message}`);
       }
     },
   });
