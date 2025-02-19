@@ -41,13 +41,21 @@ function AdminNoticeUpload() {
   };
 
   // 게시하기 버튼 활성화 조건
-  const isSubmitDisabled = !(title && image && selectedType && content);
+  const isSubmitDisabled = !(title && selectedType);
+
+  const handleSubmit = () => {
+    if (!(title && image && selectedType && content)) {
+      alert("모든 필드를 입력해주세요.");
+      return;
+    }
+    setShowModal(true);
+  };
 
   // 제목 있어야 임시저장
   const isDraftSubmitDisabled = !title;
 
   // 임시저장 목록
-  const tempSavedNotices = data?.notices ? [...data.notices]: [];
+  const tempSavedNotices = data?.notices ? [...data.notices] : [];
   const [selectedNoticeId, setSelectedNoticeId] = useState<number | undefined>();
 
   const {
@@ -95,17 +103,12 @@ function AdminNoticeUpload() {
 
         const fileName = getFileNameFromPresignedUrl(noticeDetail.imageUrl);
         setImage(fileName || "");
-
-        console.log(noticeDetail.content);
-        console.log(noticeDetail.imageUrl);
       }
     }
   }, [selectedNoticeId, noticeDetail]);
 
   // 게시하기 버튼 클릭 시 API 호출
   const handlePostNotice = () => {
-    console.log("게시하기 클릭됨");
-
     if (image instanceof File || typeof image === "string") {
       postNotice(
         {
@@ -149,22 +152,25 @@ function AdminNoticeUpload() {
 
   const handleSaveDraft = () => {
     if (!title) return;
-    console.log(content);
-    saveDraft(
-      {
-        id: selectedNoticeId,
-        title,
-        content: content ? content : "",
-        type: selectedType === "공지" ? "ANNOUNCEMENT" : "EVENT",
-        image: image instanceof File ? image : "none",
-      },
-      {
-        onSuccess: () => {
-          navigate("/admin/notice");
+
+    if (image instanceof File || typeof image === "string") {
+      saveDraft(
+        {
+          id: selectedNoticeId,
+          title,
+          content: content ? content : "",
+          type: selectedType === "공지" ? "ANNOUNCEMENT" : "EVENT",
+          image,
         },
-      }
-    );
+        {
+          onSuccess: () => {
+            navigate("/admin/notice");
+          },
+        }
+      );
+    }
   };
+
   useEffect(() => {
     if (error) {
       alert(error.response?.data);
@@ -272,7 +278,7 @@ function AdminNoticeUpload() {
             임시 저장
           </button>
           <button
-            onClick={() => setShowModal(true)}
+            onClick={handleSubmit}
             className={`min-w-[150px] h-[51px] py-2 bg-blue-500 text-white-100 border rounded-md`}
             disabled={isSubmitDisabled}
           >

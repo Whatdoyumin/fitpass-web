@@ -6,9 +6,7 @@ import { LoadingSpinner } from "../../components/LoadingSpinner";
 const NoticeDetail = () => {
   const { id } = useParams<{ id: string }>();
   const { data: notice, isLoading, isError, error } = useGetNoticeById(Number(id));
-  
-  console.log(notice?.imageUrl);
-  
+    
   if (isLoading) {
     return <LoadingSpinner />;
   }
