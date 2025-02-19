@@ -6,7 +6,7 @@ import { LoadingSpinner } from "../../components/LoadingSpinner";
 const NoticeDetail = () => {
   const { id } = useParams<{ id: string }>();
   const { data: notice, isLoading, isError, error } = useGetNoticeById(Number(id));
-
+    
   if (isLoading) {
     return <LoadingSpinner />;
   }
@@ -23,7 +23,7 @@ const NoticeDetail = () => {
     <div className="p-[25px]  h-full">
       <h1 className="text-[22px] font-bold mb-[9px]">{notice.title}</h1>
       <div className="flex items-center text-sm text-gray-600 mb-[17px]">
-        <span className="mr-[18px]">작성자 {notice.id}</span>
+        <span className="mr-[18px]">관리자</span>
         <span className="mr-[18px]">{new Date(notice.createdAt).toLocaleDateString()}</span>
         <div className="flex items-center">
           <IcViewers width={"11px"} height={"11px"} />
@@ -36,7 +36,10 @@ const NoticeDetail = () => {
         alt="공지 이미지"
         className="mb-[10px] w-[340px] h-[255px] object-cover"
       />
-      <p className="text-gray-700 pb-[108px]">{notice.content}</p>
+      <div
+        className="text-gray-700 pb-[108px]"
+        dangerouslySetInnerHTML={{ __html: notice.content }}
+      ></div>
     </div>
   );
 };
