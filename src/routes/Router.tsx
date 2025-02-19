@@ -37,7 +37,7 @@ import {
   AdminNotice,
   AdminSettings,
   AdminNoticeUpload,
-  AdminSignin
+  AdminSignin,
 } from "../pages/index";
 import NotFound from "../pages/NotFound";
 import NoticeDetail from "../pages/Notice/NoticeDetail";
@@ -194,6 +194,10 @@ const Router = createBrowserRouter([
       {
         path: "fitness/list",
         element: <AdminFitnessList />,
+      },
+      {
+        path: "fitness/upload",
+        element: <AdminFitnessUpload />,
       },
       {
         path: "fitness/upload/:id",
