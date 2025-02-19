@@ -2,6 +2,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import {
   getAdminDraftNotice,
+  getNoticeDetail,
   postAdminDraftNotice,
   postAdminNotice,
 } from "../axios/adminNoticeUploadApi";
@@ -18,18 +19,28 @@ interface ErrorResponse {
   message: string;
 }
 
+export interface NoticeDetailResponse {
+  id: number | null;
+  title: string;
+  content: string;
+  imageUrl: File | string;
+  category: "EVENT" | "ANNOUNCEMENT";
+}
+
+// 임시저장 목록 불러오기기
 export const useGetAdminNotice = () => {
   return useQuery<DraftNoticeResponse, AxiosError>({
-    queryKey: ["adminDraftNotices"], // queryKey를 더 명확하게 수정
-    queryFn: getAdminDraftNotice, // 바로 함수 전달 가능
+    queryKey: ["adminDraftNotices"],
+    queryFn: getAdminDraftNotice,
   });
 };
 
+// 공지사항 글 작성
 export const usePostAdminNotice = () => {
   return useMutation<
     void,
     AxiosError<ErrorResponse>,
-    { title: string; content: string; type: "ANNOUNCEMENT" | "EVENT"; image: File }
+    { id: number | null; title: string; content: string; type: "ANNOUNCEMENT" | "EVENT"; image: File }
   >({
     mutationFn: postAdminNotice,
     onError: (error) => {
@@ -39,11 +50,12 @@ export const usePostAdminNotice = () => {
   });
 };
 
+// 공지사항 글 임시저장
 export const usePostAdminDraftNotice = () => {
   return useMutation<
     void,
     AxiosError<ErrorResponse>,
-    { title: string; content: string; type: "ANNOUNCEMENT" | "EVENT"; image: File | string }
+    { id: number | null;  title: string; content: string; type: "ANNOUNCEMENT" | "EVENT"; image: File | string }
   >({
     mutationFn: postAdminDraftNotice,
     onError: (error) => {
@@ -53,4 +65,10 @@ export const usePostAdminDraftNotice = () => {
   });
 };
 
-
+// 임시저장 글 불러오기
+export const useGetNoticeDetail = (noticeId: number | null) => {
+  return useQuery<NoticeDetailResponse, AxiosError>({
+    queryKey: ["NoticeDetail", noticeId],
+    queryFn: () => getNoticeDetail(noticeId),
+  });
+};

@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IcCloseBtn, IcFontBold, IcFontUnderline, IcImage } from "../../assets/svg";
-import { mockDraftNotices, DraftNotice } from "../../mocks/mockNotices";
 import {
+  DraftNotice,
   useGetAdminNotice,
+  useGetNoticeDetail,
   usePostAdminDraftNotice,
   usePostAdminNotice,
 } from "../../apis/adminNotice/quries/useAdminNoticeUploadApi";
@@ -14,14 +15,13 @@ function AdminNoticeUpload() {
   const [selectedType, setSelectedType] = useState<"공지" | "이벤트">("공지");
   const [showModal, setShowModal] = useState(false);
   const [showSaveModal, setShowSaveModal] = useState(false);
-  const [selectedNotice, setSelectedNotice] = useState<DraftNotice | null>(null);
   const [content, setContent] = useState<string>("");
 
   const navigate = useNavigate();
 
   const { mutate: postNotice } = usePostAdminNotice();
   const { mutate: saveDraft } = usePostAdminDraftNotice();
-  const { data } = useGetAdminNotice(); // 최상단에서 호출
+  const { data } = useGetAdminNotice();
 
   // 이미지 추가 함수
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,28 +46,30 @@ function AdminNoticeUpload() {
 
   // 임시저장 목록
   const tempSavedNotices = data?.notices ? [...data.notices].reverse() : [];
+  const [selectedNoticeId, setSelectedNoticeId] = useState<number | null>(null);
 
   const handleNoticeClick = (notice: DraftNotice) => {
-    setSelectedNotice(notice);
-    setTitle(notice.title);
-    setImage(notice.image);
-    setSelectedType(notice.category === "공지사항" ? "공지" : "이벤트"); // category에 맞게
-
-    // 내용도 가져오기
-    const contentElement = document.querySelector("[contenteditable]");
-    if (contentElement) {
-      contentElement.innerHTML = notice.content;
-      setContent(notice.content);
-    }
-
     setShowSaveModal(false);
+    setSelectedNoticeId(notice.id);
   };
+
+  const { data: noticeDetail } = useGetNoticeDetail(selectedNoticeId);
+
+  useEffect(() => {
+    if (noticeDetail) {
+      setTitle(noticeDetail.title);
+      setContent(noticeDetail.content || "");
+      setSelectedType(noticeDetail.category === "ANNOUNCEMENT" ? "공지" : "이벤트");
+      setImage(noticeDetail.imageUrl || "");
+    }
+  }, [noticeDetail]);
 
   // 게시하기 버튼 클릭 시 API 호출
   const handlePostNotice = () => {
     if (image instanceof File) {
       postNotice(
         {
+          id: selectedNoticeId,
           title,
           content,
           type: selectedType === "공지" ? "ANNOUNCEMENT" : "EVENT",
@@ -92,6 +94,7 @@ function AdminNoticeUpload() {
 
     saveDraft(
       {
+        id: selectedNoticeId,
         title,
         content: content ? content : "",
         type: selectedType === "공지" ? "ANNOUNCEMENT" : "EVENT",
@@ -114,7 +117,7 @@ function AdminNoticeUpload() {
           <label className="min-w-[46px] text-gray-700">제목</label>
           <input
             type="text"
-            value={title || selectedNotice?.title || ""}
+            value={title || ""}
             onChange={(e) => setTitle(e.target.value)}
             className="h-[40px] border border-gray-450 rounded-[3px] p-2 flex-grow focus:outline-none"
           />
@@ -146,7 +149,7 @@ function AdminNoticeUpload() {
           <div className="relative w-full">
             <input
               type="text"
-              value={image instanceof File ? image.name : image || ""}
+              value={image === "none" ? "" : (typeof image === 'string' ? image : image?.name || '')}
               readOnly
               className="w-full h-[40px] border border-gray-450 rounded-[3px] p-2 pr-[50px] focus:outline-none overflow-hidden text-ellipsis whitespace-nowrap"
             />
@@ -180,12 +183,13 @@ function AdminNoticeUpload() {
         <div className="mb-[35px]">
           <div
             contentEditable
-            className="w-full min-h-[460px] border border-gray-450 p-4 focus:outline-none text-12px text-black-700 placeholder-black-700"
+            className={`w-full min-h-[460px] border border-gray-450 p-4 focus:outline-none text-12px text-black-700 placeholder-black-700
+            ${content? content : ""}`}
             style={{
               resize: "none",
             }}
             onInput={(e) => setContent(e.currentTarget.innerHTML)} // 내용 업데이트
-            dangerouslySetInnerHTML={{ __html: selectedNotice?.content || "" }}
+            dangerouslySetInnerHTML={{ __html: content || "" }}
           />
         </div>
 
@@ -243,13 +247,13 @@ function AdminNoticeUpload() {
             </div>
             <div className="overflow-y-auto max-h-[300px] mt-[20px] px-[30px] border-t border-gray-300 pt-[5px]">
               <ul>
-              {tempSavedNotices.map((notice, index) => (
+                {tempSavedNotices.map((notice, index) => (
                   <li
                     key={notice.id}
                     className={`text-16px py-[20px] overflow-hidden whitespace-nowrap text-ellipsis ${
                       index < tempSavedNotices.length - 1 ? "border-b border-gray-300" : ""
                     }`}
-                    // onClick={() => handleNoticeClick(notice)}
+                    onClick={() => handleNoticeClick(notice)}
                   >
                     {notice.title}
                   </li>

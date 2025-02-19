@@ -12,17 +12,19 @@ export const getAdminDraftNotice = async (): Promise<DraftNoticeResponse> => {
     }
     throw new Error(response.data.message);
   } catch (error) {
-    console.error("Failed to fetch draft notices:", error);
+    console.error("오류:", error);
     throw error;
   }
 };
 
 export const postAdminNotice = async ({
+  id,
   title,
   content,
   type,
   image,
 }: {
+  id: number | null; 
   title: string;
   content: string;
   type: "ANNOUNCEMENT" | "EVENT";
@@ -30,7 +32,7 @@ export const postAdminNotice = async ({
 }) => {
   const formData = new FormData();
 
-  formData.append("request", JSON.stringify({ title, content, type }));
+  formData.append("request", JSON.stringify({ id, title, content, type }));
   formData.append("image", image);
 
   const response = await axiosInstance.post("/admin/notice/save", formData, {
@@ -42,13 +44,14 @@ export const postAdminNotice = async ({
   return response.data;
 };
 
-
 export const postAdminDraftNotice = async ({
+  id,
   title,
   content,
   type,
   image,
 }: {
+  id: number | null; 
   title: string;
   content: string;
   type: "ANNOUNCEMENT" | "EVENT";
@@ -56,7 +59,7 @@ export const postAdminDraftNotice = async ({
 }) => {
   const formData = new FormData();
 
-  formData.append("request", JSON.stringify({ title, content, type }));
+  formData.append("request", JSON.stringify({ id, title, content, type }));
   formData.append("image", image);
 
   const response = await axiosInstance.post("/admin/notice/draft", formData, {
@@ -66,4 +69,9 @@ export const postAdminDraftNotice = async ({
   });
 
   return response.data;
+};
+
+export const getNoticeDetail = async (noticeId: number | null) => {
+  const response = await axiosInstance.get(`/admin/notice/${noticeId}`);
+  return response.data.result;
 };
