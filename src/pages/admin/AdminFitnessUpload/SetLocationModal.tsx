@@ -3,13 +3,14 @@ import SvgIcCloseBtn from "../../../assets/svg/IcCloseBtn";
 
 interface ModalProps {
   onClose: () => void;
+  onSetLocation: (address: string, latitude: number, longitude: number) => void;
 }
 
 type Place = kakao.maps.services.PlacesSearchResultItem;
 
 type Pagination = kakao.maps.services.Pagination;
 
-function SetLocationModal({ onClose }: ModalProps) {
+function SetLocationModal({ onClose, onSetLocation }: ModalProps) {
   const [searchValue, setSearchValue] = useState<string>("");
   const [places, setPlaces] = useState<Place[]>([]);
   const [pagination, setPagination] = useState<Pagination | null>(null);
@@ -52,9 +53,12 @@ function SetLocationModal({ onClose }: ModalProps) {
 
   const handlePlaceClick = (place: Place) => {
     const { address_name, x, y } = place;
-    localStorage.setItem("address_name", address_name);
-    localStorage.setItem("latitude", y);
-    localStorage.setItem("longitude", x);
+    // localStorage.setItem("address_name", address_name);
+    // localStorage.setItem("latitude", y);
+    // localStorage.setItem("longitude", x);
+    console.log(typeof x);
+  
+    onSetLocation(address_name, y, x);
 
     onClose();
   };

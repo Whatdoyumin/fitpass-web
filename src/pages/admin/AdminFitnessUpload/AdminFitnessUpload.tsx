@@ -12,11 +12,11 @@ import { useAdminFitnessUpload } from "../../../apis/postAdminFitness/quries/use
 function AdminFitnessUpload() {
   const category: string[] = ["헬스", "필라테스", "요가", "기타"];
   const status: boolean = true;
-  const newAddress = localStorage.getItem("address_name") || "";
+
   const [selectedCategory, setSelectedCategory] = useState<string[]>([]);
   const [selectedStatus, setSelectedStatus] = useState(true);
   const [fitnessName, setFitnessName] = useState<string>("");
-  const [address, setAddress] = useState<string>(newAddress || "");
+  const [address, setAddress] = useState<string>("");
   const [fee, setFee] = useState<string>("");
   const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [totalFee, setTotalFee] = useState<string>("");
@@ -28,6 +28,8 @@ function AdminFitnessUpload() {
   const [mainImg, setMainImg] = useState<File | null>(null);
   const [subImg, setSubImg] = useState<File[]>([]);
   const [time, setTime] = useState<{ [key: string]: string }>({});
+  const [latitude, setLatitude] = useState<number>();
+  const [longitude, setLongitude] = useState<number>();
 
   // 모달 state
   const [addressModal, setAddressModal] = useState(false);
@@ -43,9 +45,11 @@ function AdminFitnessUpload() {
     document.execCommand(style, false, undefined);
   };
 
-  useEffect(() => {
-    setAddress(newAddress);
-  }, [newAddress]);
+  const handleLocation = (add: string, lat: number, lng: number) => {
+    setAddress(add);
+    setLatitude(lat);
+    setLongitude(lng);
+  }
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -54,25 +58,24 @@ function AdminFitnessUpload() {
 
   const submitForm = () => {
 
-      if (!fitnessName || !mainImg || !address || !fee || !phoneNumber || !totalFee || !notice || !etc || !howToUse || !time || !selectedCategory.length) {
-        alert("모든 필수 항목을 입력해주세요.");
-        setSubmitModal(false);
-        return;
-      }
+  if (!fitnessName || !mainImg || !address || !fee || !phoneNumber || !totalFee || !notice || !etc || !howToUse || !time || !selectedCategory.length) {
+    alert("모든 필수 항목을 입력해주세요.");
+    setSubmitModal(false);
+    return;
+  }
 
     const formData = new FormData();
-    formData.append("mainImage", mainImg);  // mainImage는 이미지 파일
-    subImg.forEach((file, index) => {
-      formData.append(`additionalImages[${index}]`, file);
+    formData.append("mainImage", mainImg);
+    subImg.forEach((file) => {
+      formData.append("additionalImages", file);
     });
 
     formData.append("request", JSON.stringify({
       totalFee: totalFee,
       fee: fee,
-      latitude: 0,
+      latitude: latitude,
       time: time,
-      // time: JSON.stringify(time),
-      longitude: 0,
+      longitude: longitude,
       fitnessName: fitnessName,
       etc: etc,
       isPurchasable: String(selectedStatus),
@@ -82,6 +85,7 @@ function AdminFitnessUpload() {
       howToUse: howToUse,
       categoryList: selectedCategory,
     }));
+    
     setSubmitModal(false);
     document.querySelector("form")?.dispatchEvent(new Event("submit"));
 
@@ -286,7 +290,11 @@ function AdminFitnessUpload() {
         </div>
       </form>
       {/* 주소 등록 모달 */}
-      {addressModal && <SetLocationModal onClose={handleAddressModalClose} />}
+      {addressModal && 
+        <SetLocationModal 
+          onClose={handleAddressModalClose} 
+          onSetLocation={handleLocation}
+        />}
 
       {/* 등록하기 모달 */}
       {submitModal && (

@@ -54,7 +54,7 @@ function PurchasePass() {
   }
 
   // 패스 데이터 연결
-  const { data } = usePaymentPass( fitnessId, 'buyPass');
+  const { data } = usePaymentPass( fitnessId );
 
   return (
     <>

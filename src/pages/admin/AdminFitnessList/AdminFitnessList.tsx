@@ -7,6 +7,8 @@ import config from "../../../apis/config";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { Pagination } from "../../../components/Pagination";
+import { LoadingSpinner } from "../../../components/LoadingSpinner";
+import NotFound from "../../NotFound";
 
 type TListData = {
   fitnessId: number;
@@ -30,6 +32,8 @@ function AdminFitnessList() {
   const [searchTerm, setSearchTerm] = useState("");  // 검색 데이터
   const [selectedFilter, setSelectedFilter] = useState<keyof TListData>("fitnessName");
   const [page, setPage] = useState(0);
+  
+  const navigate = useNavigate();
 
   const dropDownMap: Record<string, keyof TListData> = {
     "업체명": "fitnessName",
@@ -49,14 +53,22 @@ function AdminFitnessList() {
       searchType: selectedFilter,
       keyword: searchTerm
     }
-    const response = await axiosInstance.get(`${config.apiBaseUrl}/admin/fitness`, { params });
+    const response = await axiosInstance.get(`/admin/fitness`, { params });
     return response.data;
   };
 
-  const { data } = useQuery({
+  const { data, isFetching, isError } = useQuery({
     queryKey: ['fitnessList', page, selectedFilter, searchTerm],
     queryFn: fetchFitness,
   })
+
+  if (isFetching) {
+    return <LoadingSpinner />
+  }
+
+  if (isError) {
+    return <NotFound />
+  }
 
   console.log(data);
 
@@ -73,8 +85,6 @@ function AdminFitnessList() {
   
     return value?.toString().toLowerCase().includes(searchTerm.toLowerCase());
   });
-  
-  const navigate = useNavigate();
 
   return (
     <div className="w-full h-full overflow-y-auto">

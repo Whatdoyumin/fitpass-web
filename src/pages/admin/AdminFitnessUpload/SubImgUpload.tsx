@@ -7,14 +7,13 @@ interface SubImgUploadProps {
 }
 
 function SubImgUpload({ subImg, setSubImg }: SubImgUploadProps) {
-
-  // const [subImg, setSubImg] = useState<string[]>([]);
-
   const subInputRef = useRef<HTMLInputElement>(null);
 
   const handleSubImgChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
-      setSubImg(Array.from(event.target.files));
+      const filesArray = Array.from(event.target.files);
+      console.log("Selected files:", filesArray);
+      setSubImg(filesArray);
     }
   }
 

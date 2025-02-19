@@ -7,8 +7,6 @@ interface MainImgUploadProps {
 }
 
 function MainImgUpload({mainImg, setMainImg }: MainImgUploadProps) {
-  // const [mainImg, setMainImg] = useState<string>("");
-
   const mainInputRef = useRef<HTMLInputElement>(null);
 
   const handleMainFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {

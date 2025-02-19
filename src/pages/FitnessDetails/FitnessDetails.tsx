@@ -40,7 +40,6 @@ function FitnessDetails() {
   const [currentIndex, setCurrentIndex] = useState(0); // 슬라이드 인덱스
 
   const { id } = useParams();
-  // console.log(id);
 
   const navigate = useNavigate();
 
@@ -69,7 +68,7 @@ function FitnessDetails() {
   }
 
   const getImageArray = (data: FetchResponse): string[] => {
-  return [data.imageUrl, ...(data.additionalImages ?? [])];
+    return [data.imageUrl, ...(data.additionalImages ?? [])];
   };
 
   const images = data ? getImageArray(data) : [];
@@ -83,9 +82,9 @@ function FitnessDetails() {
     slidesToShow: 1,
     slidesToScroll: 1,
     arrows: false, // 화살표 없애기,
-    beforeChange: (next: number) => {
-      if (typeof next === "number") setCurrentIndex(next);
-    },
+    afterChange: (current: number) => {
+      setCurrentIndex(current);
+    }
   };
 
   return (
@@ -121,7 +120,8 @@ function FitnessDetails() {
           </span>
           <span className="flex text-xs font-medium gap-2 items-center">
             <Phonecall className="w-[10px] h-[10px]" />
-            {data?.phoneNumber}
+            {data?.phoneNumber
+              .replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3")}
           </span>
         </div>
         <div className="border-b-[6px]"></div>
