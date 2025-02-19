@@ -2,11 +2,10 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { axiosInstance } from "../../apis/axios-instance";
 import config from "../../apis/config";
-import SvgIcLeftPage from "../../assets/svg/IcLeftPage";
-import SvgIcRightPage from "../../assets/svg/IcRightPage";
 import SvgArrowDropDown from "../../assets/svg/ArrowDropDown";
 import { IcSearch } from "../../assets/svg";
 import useDebounce from "../../hooks/useDebounce";
+import { Pagination } from "../../components/Pagination";
 
 type TUserData = {
   id: number;
@@ -29,9 +28,8 @@ function AdminUser() {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchType, setSearchType] = useState("name");
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 10;
-  const pagesPerGroup = 5;
 
   // 🔄 검색어 디바운스
   const debouncedSearchTerm = useDebounce(searchTerm, 1000);
@@ -40,7 +38,7 @@ function AdminUser() {
   const fetchUsers = async ({ queryKey }: { queryKey: [string, number, string, string] }) => {
     const [, page, searchType, keyword] = queryKey;
     const params: UsersParams = {
-      page: page-1,
+      page: page,
       size: itemsPerPage,
       searchType,
       keyword: keyword || "",
@@ -54,21 +52,8 @@ function AdminUser() {
     queryFn: fetchUsers,
   });
 
-  console.log(data)
-
   const users = data?.result?.membersInfo || [];
   const totalPages = data?.result?.totalPages || 1;
-
-  // 페이지 그룹 계산
-  const currentGroup = Math.ceil(currentPage / pagesPerGroup);
-  const startPage = (currentGroup - 1) * pagesPerGroup + 1;
-  const endPage = Math.min(startPage + pagesPerGroup - 1, totalPages);
-
-  const handlePageChange = (newPage: number) => {
-    if (newPage >= 1 && newPage <= totalPages) {
-      setCurrentPage(newPage);
-    }
-  };
 
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error loading data.</p>;
@@ -144,43 +129,13 @@ function AdminUser() {
           </tbody>
         </table>
       </div>
-      
-      {/* 페이지네이션 */}
-      <div className="w-full flex justify-center items-center pt-[40px] gap-[10px] mb-[26px]">
-        {/* 이전 페이지 */}
-        <button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-          className="text-gray-350 focus:outline-none"
-        >
-          <SvgIcLeftPage width={5} />
-        </button>
 
-        {/* 페이지 숫자 표시 */}
-        {Array.from({ length: endPage - startPage + 1 }, (_, index) => {
-          const pageNum = startPage + index;
-          return (
-            <button
-              key={pageNum}
-              onClick={() => handlePageChange(pageNum)}
-              className={`text-sm rounded-md ${
-                currentPage === pageNum ? "text-gray-600" : "text-gray-350"
-              } focus:outline-none`}
-            >
-              {pageNum}
-            </button>
-          );
-        })}
-
-        {/* 다음 페이지 */}
-        <button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage >= totalPages}
-          className="text-gray-350 focus:outline-none"
-        >
-          <SvgIcRightPage width={5} />
-        </button>
-      </div>
+      {totalPages > 1 && (
+          <Pagination
+            totalPages={totalPages}
+            currentPage={currentPage}
+            onPageChange={setCurrentPage} />
+        )}
     </div>
   );
 }

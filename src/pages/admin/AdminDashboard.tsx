@@ -1,9 +1,8 @@
-import { useState } from "react";
-import SvgIcLeftPage from "../../assets/svg/IcLeftPage";
-import SvgIcRightPage from "../../assets/svg/IcRightPage";
+import { useState, useEffect } from "react";
 import { axiosInstance } from "../../apis/axios-instance";
 import config from "../../apis/config";
 import { useQuery } from "@tanstack/react-query";
+import { Pagination } from "../../components/Pagination";
 
 type TDashboardData = {
   newMemberCount: number;
@@ -14,23 +13,23 @@ type TDashboardData = {
   date: string;
 };
 
-type DashboardParams = {
-  page?: number;
-  size?: number;
+type DashboardResponse = {
+  result: {
+    items: TDashboardData[];
+    pageNo: number;
+    size: number;
+    totalPage: number;
+  };
 };
 
 function AdminDashboard() {
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 10;
-  const pagesPerGroup = 5;
 
   const fetchDashboard = async ({ queryKey }: { queryKey: [string, number] }) => {
     const [, page] = queryKey;
-    const params: DashboardParams = {
-      page,
-      size: itemsPerPage,
-    };
-    const response = await axiosInstance.get(`${config.apiBaseUrl}/admin/dashboard`, { params });
+    const params = { page: page + 1, size: itemsPerPage }; // ✅ API에서 페이지가 1부터 시작하므로 요청 시 +1
+    const response = await axiosInstance.get<DashboardResponse>(`${config.apiBaseUrl}/admin/dashboard`, { params });
     return response.data;
   };
 
@@ -39,18 +38,15 @@ function AdminDashboard() {
     queryFn: fetchDashboard,
   });
 
+  useEffect(() => {
+    if (data?.result?.pageNo !== undefined) {
+      setCurrentPage(data.result.pageNo - 1);
+    }
+  }, [data]);
+
+  console.log(data);
   const dashboardData = data?.result?.items || [];
   const totalPages = data?.result?.totalPage || 1;
-
-  const currentGroup = Math.ceil(currentPage / pagesPerGroup);
-  const startPage = (currentGroup - 1) * pagesPerGroup + 1;
-  const endPage = Math.min(startPage + pagesPerGroup - 1, totalPages);
-
-  const handlePageChange = (newPage: number) => {
-    if (newPage >= 1 && newPage <= totalPages) {
-      setCurrentPage(newPage);
-    }
-  };
 
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error loading data.</p>;
@@ -91,26 +87,13 @@ function AdminDashboard() {
         </table>
       </div>
 
-      {/* 페이지네이션 */}
-      <div className="w-full flex justify-center items-center pt-[40px] gap-[10px]">
-        <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} className="text-gray-350 focus:outline-none">
-          <SvgIcLeftPage width={5} />
-        </button>
-
-        {Array.from({ length: endPage - startPage + 1 }, (_, index) => (
-          <button
-            key={startPage + index}
-            onClick={() => handlePageChange(startPage + index)}
-            className={`text-sm ${currentPage === startPage + index ? "text-gray-600" : "text-gray-350"} focus:outline-none`}
-          >
-            {startPage + index}
-          </button>
-        ))}
-
-        <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages} className="text-gray-350 focus:outline-none">
-          <SvgIcRightPage width={5} />
-        </button>
-      </div>
+      {totalPages > 1 && (
+        <Pagination
+          totalPages={totalPages}
+          currentPage={currentPage}
+          onPageChange={setCurrentPage}
+        />
+      )}
     </div>
   );
 }
