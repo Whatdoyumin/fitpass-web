@@ -24,7 +24,7 @@ export const postAdminNotice = async ({
   type,
   image,
 }: {
-  id: number | null; 
+  id: number | undefined; 
   title: string;
   content: string;
   type: "ANNOUNCEMENT" | "EVENT";
@@ -51,7 +51,7 @@ export const postAdminDraftNotice = async ({
   type,
   image,
 }: {
-  id: number | null; 
+  id: number | undefined; 
   title: string;
   content: string;
   type: "ANNOUNCEMENT" | "EVENT";
@@ -71,7 +71,10 @@ export const postAdminDraftNotice = async ({
   return response.data;
 };
 
-export const getNoticeDetail = async (noticeId: number | null) => {
+export const getNoticeDetail = async (noticeId: number | undefined) => {
+  if (typeof noticeId !== 'number') {
+    return null;
+  }
   const response = await axiosInstance.get(`/admin/notice/${noticeId}`);
   return response.data.result;
 };

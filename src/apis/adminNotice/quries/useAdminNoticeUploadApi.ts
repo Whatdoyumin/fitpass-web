@@ -40,7 +40,7 @@ export const usePostAdminNotice = () => {
   return useMutation<
     void,
     AxiosError<ErrorResponse>,
-    { id: number | null; title: string; content: string; type: "ANNOUNCEMENT" | "EVENT"; image: File }
+    { id: number | undefined; title: string; content: string; type: "ANNOUNCEMENT" | "EVENT"; image: File }
   >({
     mutationFn: postAdminNotice,
     onError: (error) => {
@@ -55,7 +55,7 @@ export const usePostAdminDraftNotice = () => {
   return useMutation<
     void,
     AxiosError<ErrorResponse>,
-    { id: number | null;  title: string; content: string; type: "ANNOUNCEMENT" | "EVENT"; image: File | string }
+    { id: number | undefined;  title: string; content: string; type: "ANNOUNCEMENT" | "EVENT"; image: File | string }
   >({
     mutationFn: postAdminDraftNotice,
     onError: (error) => {
@@ -66,7 +66,7 @@ export const usePostAdminDraftNotice = () => {
 };
 
 // 임시저장 글 불러오기
-export const useGetNoticeDetail = (noticeId: number | null) => {
+export const useGetNoticeDetail = (noticeId: number | undefined) => {
   return useQuery<NoticeDetailResponse, AxiosError>({
     queryKey: ["NoticeDetail", noticeId],
     queryFn: () => getNoticeDetail(noticeId),

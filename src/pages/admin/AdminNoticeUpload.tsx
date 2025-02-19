@@ -36,33 +36,36 @@ function AdminNoticeUpload() {
   };
 
   const toggleSaveModal = () => {
-    setShowSaveModal(!showSaveModal); // 모달 열기/닫기 토글
+    setShowSaveModal(!showSaveModal);
   };
 
   // 게시하기 버튼 활성화 조건
   const isSubmitDisabled = !(title && image && selectedType && content);
 
+  // 제목 있어야 임시저장 
   const isDraftSubmitDisabled = !title;
 
   // 임시저장 목록
-  const tempSavedNotices = data?.notices ? [...data.notices].reverse() : [];
-  const [selectedNoticeId, setSelectedNoticeId] = useState<number | null>(null);
+  const tempSavedNotices = data?.notices ? [...data.notices].reverse() : [];  
+  const [selectedNoticeId, setSelectedNoticeId] = useState<number | undefined>();
+
+  const { data: noticeDetail } = useGetNoticeDetail(selectedNoticeId ?? undefined);
 
   const handleNoticeClick = (notice: DraftNotice) => {
     setShowSaveModal(false);
     setSelectedNoticeId(notice.id);
   };
 
-  const { data: noticeDetail } = useGetNoticeDetail(selectedNoticeId);
-
   useEffect(() => {
-    if (noticeDetail) {
-      setTitle(noticeDetail.title);
-      setContent(noticeDetail.content || "");
-      setSelectedType(noticeDetail.category === "ANNOUNCEMENT" ? "공지" : "이벤트");
-      setImage(noticeDetail.imageUrl || "");
+    if (selectedNoticeId !== undefined && selectedNoticeId !== null) {
+      if (noticeDetail) {
+        setTitle(noticeDetail.title);
+        setContent(noticeDetail.content || "");
+        setSelectedType(noticeDetail.category === "ANNOUNCEMENT" ? "공지" : "이벤트");
+        setImage(noticeDetail.imageUrl || "");
+      }
     }
-  }, [noticeDetail]);
+  }, [selectedNoticeId, noticeDetail]);
 
   // 게시하기 버튼 클릭 시 API 호출
   const handlePostNotice = () => {
