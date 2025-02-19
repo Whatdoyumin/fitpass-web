@@ -8,6 +8,7 @@ import {
   usePostAdminDraftNotice,
   usePostAdminNotice,
 } from "../../apis/adminNotice/quries/useAdminNoticeUploadApi";
+import { LoadingSpinner } from "../../components/LoadingSpinner";
 
 function AdminNoticeUpload() {
   const [title, setTitle] = useState("");
@@ -49,7 +50,7 @@ function AdminNoticeUpload() {
   const tempSavedNotices = data?.notices ? [...data.notices].reverse() : [];
   const [selectedNoticeId, setSelectedNoticeId] = useState<number | undefined>();
 
-  const { data: noticeDetail } = useGetNoticeDetail(selectedNoticeId ?? undefined);
+  const { data: noticeDetail, isLoading, error } = useGetNoticeDetail(selectedNoticeId ?? undefined);
 
   const handleNoticeClick = (notice: DraftNotice) => {
     setShowSaveModal(false);
@@ -159,7 +160,15 @@ function AdminNoticeUpload() {
       }
     );
   };
+  useEffect(() => {
+    if (error) {
+      alert(error.response?.data);
+    }
+  }, [error]);
 
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
   return (
     <div className="w-full px-[7px]">
       <h1 className="adminTitle">공지사항 → 게시글 작성</h1>
