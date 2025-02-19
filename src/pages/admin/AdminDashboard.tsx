@@ -3,6 +3,8 @@ import { axiosInstance } from "../../apis/axios-instance";
 import config from "../../apis/config";
 import { useQuery } from "@tanstack/react-query";
 import { Pagination } from "../../components/Pagination";
+import { LoadingSpinner } from "../../components/LoadingSpinner";
+import NotFound from "../NotFound";
 
 type TDashboardData = {
   newMemberCount: number;
@@ -44,12 +46,11 @@ function AdminDashboard() {
     }
   }, [data]);
 
-  console.log(data);
   const dashboardData = data?.result?.items || [];
   const totalPages = data?.result?.totalPage || 1;
 
-  if (isLoading) return <p>Loading...</p>;
-  if (isError) return <p>Error loading data.</p>;
+  if (isLoading) return <LoadingSpinner />;
+  if (isError) return <NotFound />;
 
   return (
     <div className="w-full h-full px-[7px]">

@@ -6,6 +6,8 @@ import SvgArrowDropDown from "../../assets/svg/ArrowDropDown";
 import { IcSearch } from "../../assets/svg";
 import useDebounce from "../../hooks/useDebounce";
 import { Pagination } from "../../components/Pagination";
+import { LoadingSpinner } from "../../components/LoadingSpinner";
+import NotFound from "../NotFound";
 
 type TUserData = {
   id: number;
@@ -55,8 +57,8 @@ function AdminUser() {
   const users = data?.result?.membersInfo || [];
   const totalPages = data?.result?.totalPages || 1;
 
-  if (isLoading) return <p>Loading...</p>;
-  if (isError) return <p>Error loading data.</p>;
+  if (isLoading) return <LoadingSpinner />;
+  if (isError) return <NotFound />;
 
   return (
     <div className="w-full px-[7px] h-full flex flex-col relative">
