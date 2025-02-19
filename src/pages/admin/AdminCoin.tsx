@@ -1,38 +1,64 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "../../components/Modal";
+import { TAdminCoinName, TAdminCoins } from "../../types/adminCoint";
+import { useGetAdminCoins, usePutAdminCoins } from "../../hooks/useGetAdminCoins";
 
-interface Subscription {
-  id: number;
-  plan: string;
-  price: string;
-  coins: string;
-  extraCoins: string;
-  validity: string;
-}
-
-const plans = ["1코인", "5코인", "10코인", "20코인", "30코인", "100코인", "300코인"];
+const names: TAdminCoinName[] = [
+  "1코인",
+  "5코인",
+  "10코인",
+  "20코인",
+  "30코인",
+  "100코인",
+  "300코인",
+];
 
 function AdminSubscription() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [subscriptions, setSubscriptions] = useState<Subscription[]>(
-    plans.map((plan, index) => ({
-      id: index + 1,
-      plan,
-      price: "",
-      coins: "",
-      extraCoins: "",
-      validity: "",
+  const [coins, setCoins] = useState<TAdminCoins[]>(
+    names.map((name) => ({
+      name,
+      price: 0,
+      coinQuantity: 0,
+      coinAddition: 0,
+      expirationPeriod: "",
     }))
   );
 
-  const handleChange = (id: number, field: keyof Subscription, value: string) => {
-    setSubscriptions((prev) =>
-      prev.map((sub) => (sub.id === id ? { ...sub, [field]: value } : sub))
-    );
+  const { data } = useGetAdminCoins();
+  const { mutate } = usePutAdminCoins();
+
+  useEffect(() => {
+    if (data?.result) {
+      const updatedCoins = data.result.map((item: TAdminCoins) => ({
+        name: item.name as TAdminCoinName,
+        price: item.price.toString(),
+        coinQuantity: item.coinQuantity.toString(),
+        coinAddition: item.coinAddition.toString(),
+        expirationPeriod: item.expirationPeriod.toString(),
+      }));
+      setCoins(updatedCoins);
+    }
+  }, [data]);
+
+  const handleChange = (index: number, field: keyof TAdminCoins, value: string) => {
+    setCoins((prev) => prev.map((coin, i) => (i === index ? { ...coin, [field]: value } : coin)));
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
+  };
+
+  const handleEditCoins = () => {
+    mutate(coins, {
+      onSuccess: () => {
+        alert("저장되었습니다.");
+        setIsModalOpen(false);
+      },
+      onError: (error) => {
+        console.log(error.message);
+      },
+    });
   };
 
   return (
@@ -50,16 +76,16 @@ function AdminSubscription() {
           </tr>
         </thead>
         <tbody>
-          {subscriptions.map(({ id, plan, price, coins, extraCoins, validity }) => (
-            <tr key={id} className="h-[50px] border-t text-12px border-gray-300">
-              <td className="text-center">{id}</td>
-              <td className="text-center">{plan}</td>
+          {coins.map(({ name, price, coinQuantity, coinAddition, expirationPeriod }, index) => (
+            <tr key={index} className="h-[50px] border-t text-12px border-gray-300">
+              <td className="text-center">{index + 1}</td>
+              <td className="text-center">{name}</td>
               <td>
                 <div className="flex gap-2 items-center">
                   <input
                     type="number"
                     value={price}
-                    onChange={(e) => handleChange(id, "price", e.target.value)}
+                    onChange={(e) => handleChange(index, "price", e.target.value)}
                     className="border border-gray-450 rounded-5 p-1 w-32"
                   />
                   <p>원</p>
@@ -69,8 +95,8 @@ function AdminSubscription() {
                 <div className="flex gap-2 items-center">
                   <input
                     type="number"
-                    value={coins}
-                    onChange={(e) => handleChange(id, "coins", e.target.value)}
+                    value={coinQuantity}
+                    onChange={(e) => handleChange(index, "coinQuantity", e.target.value)}
                     className="border border-gray-450 rounded-5 p-1 w-32"
                   />
                   <p>코인</p>
@@ -80,8 +106,8 @@ function AdminSubscription() {
                 <div className="flex gap-2 items-center">
                   <input
                     type="number"
-                    value={extraCoins}
-                    onChange={(e) => handleChange(id, "extraCoins", e.target.value)}
+                    value={coinAddition}
+                    onChange={(e) => handleChange(index, "coinAddition", e.target.value)}
                     className="border border-gray-450 rounded-5 p-1 w-32"
                   />
                   <p>코인</p>
@@ -91,8 +117,8 @@ function AdminSubscription() {
                 <div className="flex gap-2 items-center">
                   <input
                     type="number"
-                    value={validity}
-                    onChange={(e) => handleChange(id, "validity", e.target.value)}
+                    value={expirationPeriod}
+                    onChange={(e) => handleChange(index, "expirationPeriod", e.target.value)}
                     className="border border-gray-450 rounded-5 p-1 w-32"
                   />
                   <p>일</p>
@@ -112,7 +138,7 @@ function AdminSubscription() {
         <Modal
           isOpen={isModalOpen}
           onClose={handleCloseModal}
-          onSuccess={handleCloseModal}
+          onSuccess={handleEditCoins}
           title={"저장하시겠습니까?"}
           btn1Text={"아니요"}
           btn2Text={"네"}

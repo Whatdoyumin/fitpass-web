@@ -2,50 +2,39 @@ import { useState } from "react";
 import { SearchGray } from "../../../assets/svg";
 import DotVector from "../../../assets/img/Vector.png"
 import Dropdown from "./Dropdown";
+import { axiosInstance } from "../../../apis/axios-instance";
+import config from "../../../apis/config";
+import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
+import { Pagination } from "../../../components/Pagination";
 
 type TListData = {
   fitnessId: number;
   fitnessName: string;
-  categoryName: string[];
-  fee: number;
+  categoryNames: string[];
+  totalFee: number;
   phoneNumber: string;
-  joinDate: string;
-  editDate: string;
-  status: string;
+  createdAt: string;
+  editDate?: string;
+  status: boolean;
 }
 
-const dummyData: TListData[] = [
-  {
-    fitnessId: 1,
-    fitnessName: "00 피트니스",
-    categoryName: ["헬스, 필라테스"],
-    fee: 10,
-    phoneNumber: "010-1234-5678",
-    joinDate: "2024-01-15",
-    editDate: "2024-02-10",
-    status: "구매 가능",
-  },
-  {
-    fitnessId: 2,
-    fitnessName: "00 헬스장",
-    categoryName: ["헬스"],
-    fee: 5,
-    phoneNumber: "010-5678-1234",
-    joinDate: "2023-12-01",
-    editDate: "2024-01-20",
-    status: "구매 불가",
-  },
-];
-
+type FitnessParams = {
+  page?: number;
+  size?: number;
+  searchType?: string;
+  keyword?: string;
+}
 
 function AdminFitnessList() {
 
   const [searchTerm, setSearchTerm] = useState("");  // 검색 데이터
   const [selectedFilter, setSelectedFilter] = useState<keyof TListData>("fitnessName");
+  const [page, setPage] = useState(0);
 
   const dropDownMap: Record<string, keyof TListData> = {
     "업체명": "fitnessName",
-    "이용 종목": "categoryName",
+    "이용 종목": "categoryNames",
     "전화번호": "phoneNumber",
   };
 
@@ -53,9 +42,40 @@ function AdminFitnessList() {
     setSelectedFilter(dropDownMap[item])
   };
 
-  const filteredData = dummyData.filter((info) => 
-    info[selectedFilter].toString().toLowerCase().includes(searchTerm.toLowerCase())
-  )
+  // api 연결
+  const fetchFitness = async () => {
+    const params: FitnessParams = {
+      page: page,
+      size: 10,
+      searchType: selectedFilter,
+      keyword: searchTerm
+    }
+    const response = await axiosInstance.get(`${config.apiBaseUrl}/admin/fitness`, { params });
+    return response.data;
+  };
+
+  const { data } = useQuery({
+    queryKey: ['fitnessList', page, selectedFilter, searchTerm],
+    queryFn: fetchFitness,
+  })
+
+  console.log(data);
+
+  const listData = data?.result?.fitnessList;
+  const totalPages = data?.result?.totalPages;
+
+  // 검색 필터링
+  const filteredListData = (listData ?? []).filter((info: TListData) => {
+    const value = info[selectedFilter];
+  
+    if (Array.isArray(value)) {
+      return value.join(", ").toLowerCase().includes(searchTerm.toLowerCase());
+    }
+  
+    return value?.toString().toLowerCase().includes(searchTerm.toLowerCase());
+  });
+  
+  const navigate = useNavigate();
 
   return (
     <div className="w-full h-full overflow-y-auto">
@@ -88,23 +108,32 @@ function AdminFitnessList() {
             </tr>
           </thead>
           <tbody>
-            {filteredData.map((item, index) => (
-              <tr key={index} className="w-full h-[50px] gap-2 border border-gray-450 text-left">
-                <td className="text-center">{item.fitnessId}</td> 
-                <td>{item.fitnessName}</td>
-                <td>{item.categoryName}</td>
-                <td>{item.fee}코인</td>
-                <td>{item.phoneNumber}</td>
-                <td>{item.joinDate}</td>
-                <td>{item.editDate}</td>
-                <td>{item.status}</td>
-                <td><img src={DotVector} alt="더보기" /></td>
-              </tr>
-            ))}
+            {filteredListData &&
+              (filteredListData.map((item: TListData, index: number) => (
+                <tr key={item.fitnessId} className="w-full h-[50px] gap-2 border border-gray-450 text-left">
+                  <td className="text-center">{index + 1}</td> 
+                  <td>{item.fitnessName}</td>
+                  <td>{item.categoryNames.join(", ")}</td>
+                  <td>{item.totalFee}코인</td>
+                  <td>{item.phoneNumber}</td>
+                  <td>{item.createdAt.split("T")[0]}</td>
+                  <td>{item.editDate}</td>
+                  {item.status ? (<td>구매 가능</td>) : (<td>구매 불가</td>)}
+                  <td><img src={DotVector} alt="더보기"
+                    onClick={() => navigate(`/admin/fitness/upload/${item.fitnessId}`)}
+                  /></td>
+                </tr>
+              )))}
           </tbody>
         </table>
 
         {/* pagination */}
+        {totalPages > 1 && (
+          <Pagination
+            totalPages={totalPages}
+            currentPage={page}
+            onPageChange={setPage} />
+        )}
       </div>
     </div>
   );

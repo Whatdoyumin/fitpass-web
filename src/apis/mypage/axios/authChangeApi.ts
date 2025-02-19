@@ -1,8 +1,9 @@
 import axios from "axios";
 import config from "../../config"; // config 파일이 있는 경우
+import { axiosInstance } from "../../axios-instance";
 
 // axiosInstance 생성
-export const axiosInstance = axios.create({
+export const axiosPasswordInstance = axios.create({
   baseURL: config.apiBaseUrl, // API 기본 URL
   headers: {
     Authorization: `Bearer ${sessionStorage.getItem("accessToken") || ""}`,
@@ -18,7 +19,7 @@ export const patchChangePassword = async ({
   password: string;
   newPassword: string;
 }) => {
-  const response = await axiosInstance.patch("/auth/change/password", {
+  const response = await axiosPasswordInstance.patch("/auth/change/password", {
     password,
     newPassword,
   });
@@ -27,7 +28,7 @@ export const patchChangePassword = async ({
 };
 
 // 전화번호 변경 요청 함수
-export const postChangePhoneNumber = async ({
+export const patchChangePhoneNumber = async ({
   name,
   password,
   newPhoneNumber,
