@@ -1,12 +1,8 @@
-// 1. 이미지 배열
-// 2. slider로 불러오기
-// 3. 각각 usestate로 순서 받아오기
+import Slider from "react-slick";
+import type { Settings } from "react-slick";
 
-// import Slider from "react-slick";
-// import type { Settings } from "react-slick";
-
-// import "slick-carousel/slick/slick.css";
-// import "slick-carousel/slick/slick-theme.css";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import SvgLocation from "../../assets/svg/Location";
 import { CoinRightRounded, Phonecall } from "../../assets/svg";
 import Share from "./Share";
@@ -14,6 +10,7 @@ import ReviewList from "./ReviewList";
 import MapContainer from "./MapContainer";
 
 import { useNavigate, useParams } from "react-router-dom";
+import { useState } from "react";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import config from "../../apis/config";
@@ -35,11 +32,12 @@ interface FetchResponse {
   imageUrl: string,
   fitnessLatitude: number,
   fitnessLongitude: number,
+  additionalImages?: string[],
 }
 
 function FitnessDetails() {
 
-  // const [currentIndex, setCurrentIndex] = useState(0); // 슬라이드 인덱스
+  const [currentIndex, setCurrentIndex] = useState(0); // 슬라이드 인덱스
 
   const { id } = useParams();
   // console.log(id);
@@ -70,19 +68,39 @@ function FitnessDetails() {
     return <div>Error</div>;
   }
 
+  const getImageArray = (data: FetchResponse): string[] => {
+  return [data.imageUrl, ...(data.additionalImages ?? [])];
+  };
+
+  const images = data ? getImageArray(data) : [];
+
+  console.log(images);
+
+  const settings: Settings = {
+    dots: false,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    arrows: false, // 화살표 없애기,
+    beforeChange: (next: number) => {
+      if (typeof next === "number") setCurrentIndex(next);
+    },
+  };
+
   return (
     <div className="bg-white-200 h-full overflow-x-hidden overflow-y-auto flex flex-col items-center py-5">
       <div className="relative w-[340px] h-[191px]">
-        {/* <Slider {...settings} className="w-[340px] h-[191px]"> */}
-          {/* {images.map((img) => ( */}
+        <Slider {...settings} className="w-[340px] h-[191px]">
+          {images.map((img, index) => (
             <div className="relative w-[340px] h-[191px] ">
-              <img src={data?.imageUrl} alt={data?.fitnessName} className="w-[340px] h-[191px] rounded-t-[7px]" />
-              {/* <span className="absolute bottom-2 right-4 w-9 h-[19px] px-[10px] py-[3px] bg-black-700/60 text-white-100 rounded-[15px] text-[11px] font-medium flex justify-center items-center">
+              <img src={img} alt={`fitness-${index}`} className="w-[340px] h-[191px] rounded-t-[7px]" />
+              <span className="absolute bottom-2 right-4 w-9 h-[19px] px-[10px] py-[3px] bg-black-700/60 text-white-100 rounded-[15px] text-[11px] font-medium flex justify-center items-center">
                 {currentIndex + 1}/{images.length}
-              </span> */}
+              </span>
             </div>
-          {/* ))} */}
-        {/* </Slider> */}
+          ))}
+        </Slider>
         {/* 코인 정보 */}
         <div className="absolute top-0 right-[-1px] flex flex-col items-center justify-center">
           <CoinRightRounded className="w-[70px] h-[27.22px] relative" />

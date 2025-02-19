@@ -81,29 +81,6 @@ function ReviewList() {
           ))}
       </div>
       {/* pagination */}
-      {/* <div className="text-gray-350 w-[300px] h-[17px] gap-[12px] flex justify-center text-[14px] mt-[20px]">
-        <button onClick={() => handlePageChange(page - 1)} disabled={page === 1}>
-          {"<"}
-        </button>
-        {new Array(data?.result?.totalPages).fill(null).map((_, index) => {
-          const pageNum = index + 1;
-          return (
-            <button
-              key={pageNum}
-              className={`${page === pageNum ? "text-gray-600" : "text-gray-350"}`}
-              onClick={() => handlePageChange(pageNum)}
-            >
-              {pageNum}
-            </button>
-          );
-        })}
-        <button
-          onClick={() => handlePageChange(page + 1)}
-          disabled={page >= (data?.result?.totalPages ?? 0)}
-        >
-          {">"}
-        </button>
-      </div> */}
       <Pagination
         totalPages={totalPages}
         currentPage={page}

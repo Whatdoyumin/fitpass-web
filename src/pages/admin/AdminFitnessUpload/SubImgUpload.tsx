@@ -31,7 +31,6 @@ function SubImgUpload({ subImg, setSubImg }: SubImgUploadProps) {
         type="text"
         value={subImg.map((file) => file.name).join(", ")}
         className="w-full h-[30px] border border-gray-450 rounded-[3px] text-ellipsis overflow-hidden whitespace-nowrap pr-[40px] pl-2 text-[12px] focus:outline-none"
-        // className="w-[450px] h-[30px] border border-gray-450 rounded-[3px] text-ellipsis overflow-hidden whitespace-nowrap pr-[40px] pl-2 text-[12px] focus:outline-none"
         readOnly
       />
       <img

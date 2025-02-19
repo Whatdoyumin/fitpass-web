@@ -15,8 +15,7 @@ type TListData = {
   totalFee: number;
   phoneNumber: string;
   createdAt: string;
-  editDate?: string;
-  status: boolean;
+  purchasable: boolean;
 }
 
 type FitnessParams = {
@@ -102,7 +101,6 @@ function AdminFitnessList() {
               <th className="w-[70px] ">가격</th>
               <th className="w-[115px] ">전화번호</th>
               <th className="w-[114px] ">가입일</th>
-              <th className="w-[114px] ">접속일</th>
               <th className="w-[90px] ">상태</th>
               <th className="w-[20px] "></th>
             </tr>
@@ -117,8 +115,7 @@ function AdminFitnessList() {
                   <td>{item.totalFee}코인</td>
                   <td>{item.phoneNumber}</td>
                   <td>{item.createdAt.split("T")[0]}</td>
-                  <td>{item.editDate}</td>
-                  {item.status ? (<td>구매 가능</td>) : (<td>구매 불가</td>)}
+                  {item.purchasable ? (<td>구매 가능</td>) : (<td>구매 불가</td>)}
                   <td><img src={DotVector} alt="더보기"
                     onClick={() => navigate(`/admin/fitness/upload/${item.fitnessId}`)}
                   /></td>

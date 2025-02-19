@@ -54,8 +54,7 @@ function AdminFitnessUpload() {
 
   const submitForm = () => {
 
-    if (!fitnessName || !mainImg || !fee || !phoneNumber || !totalFee || !etc || !howToUse) {
-      // if (!fitnessName || !mainImg || !address || !fee || !phoneNumber || !totalFee || !notice || !etc || !howToUse || !time || !selectedCategory.length) {
+      if (!fitnessName || !mainImg || !address || !fee || !phoneNumber || !totalFee || !notice || !etc || !howToUse || !time || !selectedCategory.length) {
         alert("모든 필수 항목을 입력해주세요.");
         setSubmitModal(false);
         return;
@@ -135,7 +134,7 @@ function AdminFitnessUpload() {
                 id="fitnessName"
                 value={fitnessName}
                 onChange={(e) => setFitnessName(e.target.value)}
-                className="w-full h-[30px] border border-gray-450 rounded-[3px] focus:outline-none"
+                className="w-full h-[30px] border border-gray-450 rounded-[3px] focus:outline-none pl-1"
               />
             </label>
             <div className="flex flex-col">
@@ -146,7 +145,7 @@ function AdminFitnessUpload() {
                   id="address"
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
-                  className="w-full h-[30px] border border-gray-450 rounded-[3px] focus:outline-none pl-2"
+                  className="w-full h-[30px] border border-gray-450 rounded-[3px] focus:outline-none pl-1"
                   readOnly
                 />
                 <button
@@ -165,7 +164,7 @@ function AdminFitnessUpload() {
                 id="fee"
                 value={fee}
                 onChange={(e) => setFee(e.target.value)}
-                className="w-full h-[30px] border border-gray-450 rounded-[3px] focus:outline-none"
+                className="w-full h-[30px] border border-gray-450 rounded-[3px] focus:outline-none pl-1"
                 onInput={(e: React.FormEvent<HTMLInputElement>) => {
                   const input = e.currentTarget;
                   input.value = input.value.replace(/[^0-9.]/g, "").replace(/(\..*)\./g, "$1");
@@ -187,8 +186,7 @@ function AdminFitnessUpload() {
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
                 maxLength={11}
-                className="w-full h-[30px] border border-gray-450 rounded-[3px] focus:outline-none"
-                // className="w-[450px] h-[30px] border border-gray-450 rounded-[3px] focus:outline-none"
+                className="w-full h-[30px] border border-gray-450 rounded-[3px] focus:outline-none pl-1"
                 onInput={(e: React.FormEvent<HTMLInputElement>) => {
                   const input = e.currentTarget;
                   input.value = input.value.replace(/[^0-9.]/g, "").replace(/(\..*)\./g, "$1");
@@ -202,7 +200,7 @@ function AdminFitnessUpload() {
                 id="totalFee"
                 value={totalFee}
                 onChange={(e) => setTotalFee(e.target.value)}
-                className="w-full h-[30px] border border-gray-450 rounded-[3px] focus:outline-none"
+                className="w-full h-[30px] border border-gray-450 rounded-[3px] focus:outline-none pl-1"
                 onInput={(e: React.FormEvent<HTMLInputElement>) => {
                   const input = e.currentTarget;
                   input.value = input.value.replace(/[^0-9.]/g, "").replace(/(\..*)\./g, "$1");
