@@ -7,13 +7,12 @@ export const getAdminDraftNotice = async (): Promise<DraftNoticeResponse> => {
 
     if (response.data.isSuccess) {
       return {
-        count: response.data.result.count,
-        titles: response.data.result.titles,
+        notices: response.data.result.notices, // notices 배열 반환
       };
     }
     throw new Error(response.data.message);
   } catch (error) {
-    console.error("Failed to fetch notice detail:", error);
+    console.error("Failed to fetch draft notices:", error);
     throw error;
   }
 };

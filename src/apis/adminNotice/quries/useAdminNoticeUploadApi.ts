@@ -6,18 +6,22 @@ import {
   postAdminNotice,
 } from "../axios/adminNoticeUploadApi";
 
-export interface DraftNoticeResponse {
-  count: number;
-  titles: string[];
+export interface DraftNotice {
+  id: number;
+  title: string;
 }
+export interface DraftNoticeResponse {
+  notices: DraftNotice[];
+}
+
 interface ErrorResponse {
   message: string;
 }
 
 export const useGetAdminNotice = () => {
   return useQuery<DraftNoticeResponse, AxiosError>({
-    queryKey: ["notices"],
-    queryFn: () => getAdminDraftNotice(),
+    queryKey: ["adminDraftNotices"], // queryKey를 더 명확하게 수정
+    queryFn: getAdminDraftNotice, // 바로 함수 전달 가능
   });
 };
 
@@ -48,3 +52,5 @@ export const usePostAdminDraftNotice = () => {
     },
   });
 };
+
+

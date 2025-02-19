@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { IcCloseBtn, IcFontBold, IcFontUnderline, IcImage } from "../../assets/svg";
 import { mockDraftNotices, DraftNotice } from "../../mocks/mockNotices";
 import {
+  useGetAdminNotice,
   usePostAdminDraftNotice,
   usePostAdminNotice,
 } from "../../apis/adminNotice/quries/useAdminNoticeUploadApi";
@@ -20,6 +21,7 @@ function AdminNoticeUpload() {
 
   const { mutate: postNotice } = usePostAdminNotice();
   const { mutate: saveDraft } = usePostAdminDraftNotice();
+  const { data } = useGetAdminNotice(); // 최상단에서 호출
 
   // 이미지 추가 함수
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,7 +36,7 @@ function AdminNoticeUpload() {
   };
 
   const toggleSaveModal = () => {
-    setShowSaveModal(!showSaveModal); // Toggle save modal
+    setShowSaveModal(!showSaveModal); // 모달 열기/닫기 토글
   };
 
   // 게시하기 버튼 활성화 조건
@@ -42,8 +44,8 @@ function AdminNoticeUpload() {
 
   const isDraftSubmitDisabled = !title;
 
-  // 임시저장 상태인 항목만 필터링, 순서를 거꾸로
-  const tempSavedNotices = mockDraftNotices.filter((item) => item.status === "임시저장").reverse();
+  // 임시저장 목록
+  const tempSavedNotices = data?.notices ? [...data.notices].reverse() : [];
 
   const handleNoticeClick = (notice: DraftNotice) => {
     setSelectedNotice(notice);
@@ -191,20 +193,20 @@ function AdminNoticeUpload() {
         <div className="flex justify-end gap-[23px]">
           <button
             onClick={toggleSaveModal} // 저장 목록 모달 열기
-            className="w-[150px] h-[51px] py-2 bg-white-100 text-blue-500 border border-blue-500 rounded-md"
+            className="min-w-[150px] h-[51px] py-2 bg-white-100 text-blue-500 border border-blue-500 rounded-md"
           >
             저장 목록 ({tempSavedNotices.length})
           </button>
           <button
             onClick={handleSaveDraft} // 임시저장 함수 호출
-            className="w-[150px] h-[51px] py-2 bg-white-100 text-blue-500 border border-blue-500 rounded-md"
+            className="min-w-[150px] h-[51px] py-2 bg-white-100 text-blue-500 border border-blue-500 rounded-md"
             disabled={isDraftSubmitDisabled} // 제목 없으면 비활성화
           >
             임시 저장
           </button>
           <button
             onClick={() => setShowModal(true)}
-            className={`w-[150px] h-[51px] py-2 bg-blue-500 text-white-100 border rounded-md`}
+            className={`min-w-[150px] h-[51px] py-2 bg-blue-500 text-white-100 border rounded-md`}
             disabled={isSubmitDisabled}
           >
             게시하기
@@ -241,13 +243,13 @@ function AdminNoticeUpload() {
             </div>
             <div className="overflow-y-auto max-h-[300px] mt-[20px] px-[30px] border-t border-gray-300 pt-[5px]">
               <ul>
-                {tempSavedNotices.map((notice, index) => (
+              {tempSavedNotices.map((notice, index) => (
                   <li
                     key={notice.id}
-                    className={`text-16px py-[20px] ${
+                    className={`text-16px py-[20px] overflow-hidden whitespace-nowrap text-ellipsis ${
                       index < tempSavedNotices.length - 1 ? "border-b border-gray-300" : ""
                     }`}
-                    onClick={() => handleNoticeClick(notice)}
+                    // onClick={() => handleNoticeClick(notice)}
                   >
                     {notice.title}
                   </li>
