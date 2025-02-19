@@ -47,10 +47,14 @@ function AdminNoticeUpload() {
   const isDraftSubmitDisabled = !title;
 
   // 임시저장 목록
-  const tempSavedNotices = data?.notices ? [...data.notices].reverse() : [];
+  const tempSavedNotices = data?.notices ? [...data.notices]: [];
   const [selectedNoticeId, setSelectedNoticeId] = useState<number | undefined>();
 
-  const { data: noticeDetail, isLoading, error } = useGetNoticeDetail(selectedNoticeId ?? undefined);
+  const {
+    data: noticeDetail,
+    isLoading,
+    error,
+  } = useGetNoticeDetail(selectedNoticeId ?? undefined);
 
   const handleNoticeClick = (notice: DraftNotice) => {
     setShowSaveModal(false);
@@ -58,16 +62,18 @@ function AdminNoticeUpload() {
   };
 
   // string 이미지를 파일명처럼
-  function getFileNameFromPresignedUrl(url: string | File): string {
+  function getFileNameFromPresignedUrl(url: string | File | undefined): string | undefined {
     if (url instanceof File) {
       return url.name;
+    } else if (url === undefined) {
+      return undefined;
     }
-    
+
     try {
-      const decodedUrl = decodeURIComponent(url);        // URL 인코딩된 경우 대비
+      const decodedUrl = decodeURIComponent(url); // URL 인코딩된 경우 대비
       const urlWithoutParams = decodedUrl.split("?")[0]; // 쿼리 스트링 제거
-      const pathSegments = urlWithoutParams.split("/");  // '/' 기준으로 나누기
-      return pathSegments.pop() || "none";               // 마지막 요소 반환
+      const pathSegments = urlWithoutParams.split("/"); // '/' 기준으로 나누기
+      return pathSegments.pop() || "none"; // 마지막 요소 반환
     } catch (error) {
       console.error("파일명 추출 실패:", error);
       return "none";
@@ -86,13 +92,12 @@ function AdminNoticeUpload() {
         }
 
         setSelectedType(noticeDetail.category === "ANNOUNCEMENT" ? "공지" : "이벤트");
-        
+
         const fileName = getFileNameFromPresignedUrl(noticeDetail.imageUrl);
         setImage(fileName || "");
 
         console.log(noticeDetail.content);
         console.log(noticeDetail.imageUrl);
-
       }
     }
   }, [selectedNoticeId, noticeDetail]);
@@ -101,7 +106,7 @@ function AdminNoticeUpload() {
   const handlePostNotice = () => {
     console.log("게시하기 클릭됨");
 
-    if (image instanceof File || typeof image === 'string') {
+    if (image instanceof File || typeof image === "string") {
       postNotice(
         {
           id: selectedNoticeId,
@@ -117,7 +122,7 @@ function AdminNoticeUpload() {
           },
           onError: (error) => {
             console.error("게시 실패:", error);
-          }
+          },
         }
       );
     }
@@ -133,13 +138,13 @@ function AdminNoticeUpload() {
 
   useEffect(() => {
     if (contentRef.current && content !== contentRef.current.innerHTML.trim()) {
-      contentRef.current.innerHTML = content || ""; 
+      contentRef.current.innerHTML = content || "";
     }
   }, [content]);
 
   const toggleTextStyle = (style: string) => {
     document.execCommand(style, false);
-    handleContentChange(); 
+    handleContentChange();
   };
 
   const handleSaveDraft = () => {

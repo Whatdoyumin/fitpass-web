@@ -23,7 +23,7 @@ export interface NoticeDetailResponse {
   id: number | null;
   title: string;
   content: string;
-  imageUrl: File | string;
+  imageUrl: File | string | undefined;
   category: "EVENT" | "ANNOUNCEMENT";
 }
 
@@ -40,7 +40,13 @@ export const usePostAdminNotice = () => {
   return useMutation<
     void,
     AxiosError<ErrorResponse>,
-    { id: number | undefined; title: string; content: string; type: "ANNOUNCEMENT" | "EVENT"; image: File | string; }
+    {
+      id: number | undefined;
+      title: string;
+      content: string;
+      type: "ANNOUNCEMENT" | "EVENT";
+      image: File | string | undefined;
+    }
   >({
     mutationFn: postAdminNotice,
     onError: (error) => {
@@ -55,7 +61,13 @@ export const usePostAdminDraftNotice = () => {
   return useMutation<
     void,
     AxiosError,
-    { id: number | undefined;  title: string; content: string; type: "ANNOUNCEMENT" | "EVENT"; image: File | string }
+    {
+      id: number | undefined;
+      title: string;
+      content: string;
+      type: "ANNOUNCEMENT" | "EVENT";
+      image: File | string | undefined;
+    }
   >({
     mutationFn: postAdminDraftNotice,
     onError: (error) => {
