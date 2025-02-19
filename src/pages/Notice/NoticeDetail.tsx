@@ -23,7 +23,7 @@ const NoticeDetail = () => {
     <div className="p-[25px]  h-full">
       <h1 className="text-[22px] font-bold mb-[9px]">{notice.title}</h1>
       <div className="flex items-center text-sm text-gray-600 mb-[17px]">
-        <span className="mr-[18px]">작성자 {notice.id}</span>
+        <span className="mr-[18px]">관리자</span>
         <span className="mr-[18px]">{new Date(notice.createdAt).toLocaleDateString()}</span>
         <div className="flex items-center">
           <IcViewers width={"11px"} height={"11px"} />
