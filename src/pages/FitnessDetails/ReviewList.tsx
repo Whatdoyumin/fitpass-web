@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { axiosInstance } from "../../apis/axios-instance";
 import { TReview } from "../../types/review";
+import { Pagination } from "../../components/Pagination";
 
 type ReviewsResponse = {
   result: {
@@ -21,14 +22,14 @@ type fetchReviewParams = {
 function ReviewList() {
   const [sortOption, setSortOption] = useState<"score" | "date">("date");
 
-  const [page, setPage] = useState(1); // 현재 페이지
-  const pageSize = 3;
+  const [page, setPage] = useState(0); // 현재 페이지
+  const pageSize = 5;
 
   const { id } = useParams<{ id: string }>();
 
   const fetchReview = async (): Promise<ReviewsResponse> => {
     const params: fetchReviewParams = {
-      offset: (page - 1) * pageSize,
+      offset: page,
       pageSize: pageSize,
       sortBy: sortOption,
     };
@@ -41,18 +42,13 @@ function ReviewList() {
     queryFn: fetchReview,
   });
 
-  const handlePageChange = (newPage: number) => {
-    if (newPage < 1 || newPage > (data?.result?.totalPages ?? 0)) return;
-    setPage(newPage);
-    if (newPage !== page) {
-      refetch();
-      console.log("페이지 넘어감");
-    }
-  };
+  console.log(data);
+
+  const totalPages: number = data?.result?.totalPages ?? 0;
 
   const sortReviews = (options: "score" | "date") => {
     setSortOption(options);
-    setPage(1);
+    setPage(0);
   };
 
   return (
@@ -85,7 +81,7 @@ function ReviewList() {
           ))}
       </div>
       {/* pagination */}
-      <div className="text-gray-350 w-[300px] h-[17px] gap-[12px] flex justify-center text-[14px] mt-[20px]">
+      {/* <div className="text-gray-350 w-[300px] h-[17px] gap-[12px] flex justify-center text-[14px] mt-[20px]">
         <button onClick={() => handlePageChange(page - 1)} disabled={page === 1}>
           {"<"}
         </button>
@@ -107,7 +103,11 @@ function ReviewList() {
         >
           {">"}
         </button>
-      </div>
+      </div> */}
+      <Pagination
+        totalPages={totalPages}
+        currentPage={page}
+        onPageChange={setPage} />
     </>
   );
 }

@@ -60,7 +60,7 @@ function FitnessDetails() {
     queryFn: fetchDetail,
   });
 
-  // console.log(data);
+  console.log(data);
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -115,16 +115,36 @@ function FitnessDetails() {
         <div className="border-b-2"></div>
 
         <div className="p-4 flex flex-col gap-1">
+          <p className="text-base font-bold">시설 소개</p>
+          <span className="text-[13px] font-medium text-gray-600">
+            <p>
+              {data?.notice
+                .replace(/<div>/g, "\n") // <div>를 줄바꿈으로 변환
+                .replace(/<\/?[^>]+>/g, "") // 나머지 HTML 태그 제거
+                .split("\n") // 줄바꿈 기준으로 나누기
+                .map((line, index) => (
+                  <span key={index}>
+                    {line}
+                    <br />
+                  </span>
+                ))}
+            </p>
+          </span>
+        </div>
+        <div className="border-b-2"></div>
+
+        <div className="p-4 flex flex-col gap-1">
           <p className="text-base font-bold">운영 시간</p>
-          <ul className="text-[13px] font-medium text-gray-600 mb-2">
-            <li>월 {data?.time}</li>
-            <li>화 {data?.time}</li>
-            <li>수 {data?.time}</li>
-            <li>목 {data?.time}</li>
-            <li>금 {data?.time}</li>
-            <li>토 {data?.time}</li>
-            <li>일 {data?.time}</li>
-          </ul>
+          <div className="text-[13px] font-medium text-gray-600 mb-2">
+            <p>
+              {data?.time.split("\n").map((line, index) => (
+                <span key={index}>
+                  {line}
+                  <br />
+                </span>
+              ))}
+            </p>
+          </div>
           <span className="text-[13px] font-medium text-gray-600">
             운영시간과 휴장일은 시설 자체 사정에 따라 변동이 될 수 있으니, 유의하여 시설
             이용하시길 바랍니다.
@@ -134,7 +154,17 @@ function FitnessDetails() {
 
         <div className="p-4 flex flex-col gap-1">
           <p className="text-base font-bold">이용 방법</p>
-          <p className="text-[13px] font-medium text-gray-600">{data?.howToUse}</p>
+          <p className="text-[13px] font-medium text-gray-600">
+            {data?.howToUse
+                ?.split(/\. ?/) // `.` 다음에 공백이 있을 수도 있고 없을 수도 있음
+                .filter((sentence) => sentence.trim() !== "") // 공백만 있는 항목 제거
+                .map((sentence, index) => (
+                  <span key={index}>
+                    {sentence.trim()}
+                    <br />
+                  </span>
+                ))}
+          </p>
         </div>
         <div className="border-b-2 w-[340px]"></div>
 
