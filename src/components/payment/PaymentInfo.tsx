@@ -32,7 +32,7 @@ const PaymentInfo = ({ isChecked, setIsChecked }: IPaymentInfoProps) => {
           <label className="w-full flex gap-2 pb-4">
             <input
               type="checkBox"
-              onClick={() => setIsChecked((prev) => !prev)}
+              onChange={() => setIsChecked((prev) => !prev)}
               checked={isChecked}
             />
             <p className="text-14px text-gray-500">

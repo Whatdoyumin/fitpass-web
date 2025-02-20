@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Modal from "../../components/Modal";
 import { TAdminCoinName, TAdminCoins } from "../../types/adminCoint";
-import { useGetAdminCoins, usePutAdminCoins } from "../../hooks/useGetAdminCoins";
+import { useGetCoinInfo, usePutAdminCoins } from "../../hooks/useGetAdminCoins";
 
 const names: TAdminCoinName[] = [
   "1코인",
@@ -25,7 +25,7 @@ function AdminSubscription() {
     }))
   );
 
-  const { data } = useGetAdminCoins();
+  const { data } = useGetCoinInfo();
   const { mutate } = usePutAdminCoins();
 
   useEffect(() => {

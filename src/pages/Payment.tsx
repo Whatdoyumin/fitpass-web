@@ -210,7 +210,7 @@ function Payment({ type }: TPaymentProps) {
         <PaymentDetails type={type} item={selectItem} paymentMethod={selectedPayOption} />
         <PaymentInfo isChecked={isChecked} setIsChecked={setIsChecked} />
       </div>
-      {isSubscribingState ? (
+      {type === "subscribe" && isSubscribingState ? (
         <button
           className={`w-full max-w-content h-navbar py-6 bottom-0 fixed text-white-100 flex justify-center items-center text-[20px] ${
             isChecked ? "bg-blue-500" : "bg-gray-400 pointer-events-none"
