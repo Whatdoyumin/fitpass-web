@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { IcCheckEmpty, IcCheckFull, IcImage, IcSearch } from "../../assets/svg";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Notice, useGetAdminNotice } from "../../apis/adminNotice/quries/useAdminNoticeApi";
 import SvgIcLeftPage from "../../assets/svg/IcLeftPage";
 import SvgIcRightPage from "../../assets/svg/IcRightPage";
@@ -15,14 +15,21 @@ function AdminNotice() {
   const [searchKeyword, setSearchKeyword] = useState<string>("");
 
   const [debouncedSearchKeyword, setDebouncedSearchKeyword] = useState<string>("");
-  const [searchParams, setSearchParams] = useSearchParams();
 
-  const navigate = useNavigate();
-  const [scrollPosition, setScrollPosition] = useState(0);
+  // 검색어 변경 디바운스
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchKeyword(searchKeyword);
+    }, 400); // 400ms 후 업데이트
+
+    return () => {
+      clearTimeout(handler); // 이전 타이머 제거
+    };
+  }, [searchKeyword]); // 검색어 변경될 때
 
   const itemsPerPage = 10;
   const pagesPerGroup = 5;
-  const currentPage = Number(searchParams.get("page")) || 1;
+  const [currentPage, setCurrentPage] = useState(1);
 
   // API 요청 -> debouncedSearchKeyword가 바뀔 때
   const { data, isLoading, error } = useGetAdminNotice(
@@ -31,18 +38,6 @@ function AdminNotice() {
     itemsPerPage
   );
 
-  const handleSearchClick = () => {
-    setDebouncedSearchKeyword(searchKeyword);
-    setSearchParams({ page: "1" });
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      setDebouncedSearchKeyword(searchKeyword);
-      setSearchParams({ page: "1" });
-    }
-  };
-
   const totalPages = data?.result?.totalElements
     ? Math.ceil(data.result.totalElements / itemsPerPage)
     : 0;
@@ -50,16 +45,13 @@ function AdminNotice() {
   const startPage = (currentGroup - 1) * pagesPerGroup + 1;
   const endPage = Math.min(startPage + pagesPerGroup - 1, totalPages);
 
-  // 페이지 변경 시 URL 업데이트
   const handlePageChange = (page: number) => {
-    setScrollPosition(window.scrollY);
-    setSearchParams({ page: page.toString() });
+    setCurrentPage(page);
   };
 
-  useEffect(() => {
-    window.scrollTo({ top: scrollPosition, behavior: "instant" });
-  }, [data, scrollPosition]);
+  const navigate = useNavigate();
 
+  // usePatchHomeSlideCheck 훅 사용
   const { mutate: patchHomeSlideCheck } = usePatchHomeSlideCheck();
 
   const handleCheckboxChange = (id: number, isChecked: boolean) => {
@@ -116,37 +108,35 @@ function AdminNotice() {
               className="w-full h-12 pl-4 pr-12 border border-gray-450 rounded-md bg-white focus:outline-none"
               value={searchKeyword}
               onChange={(e) => setSearchKeyword(e.target.value)}
-              onKeyDown={handleKeyDown}
             />
             <IcSearch
               width="24px"
               className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer"
-              onClick={handleSearchClick}
             />
           </div>
         </div>
 
         {/* 공지사항 목록 테이블 */}
         <div className="mt-[26px] min-h-[550px] whitespace-nowrap">
-          <table className="w-full table-fixed border border-gray-450">
+          <table className="w-full table-auto border border-gray-450">
             <thead className="bg-blue-100 border-b border-gray-450">
               <tr className="h-[50px] text-[13px] text-black-700">
-                <th className="pr-4 pl-10 py-2 w-[80px] text-center">순번</th>
-                <th className="px-4 py-2 w-[60px] text-center">이미지</th>
-                <th className="px-4 py-2 w-[260px] text-left">제목</th>
-                <th className="px-4 py-2 w-[120px] text-left">카테고리</th>
-                <th className="px-4 py-2 w-[120px] text-left">게시일</th>
-                <th className="px-4 py-2 w-[80px] text-left">상태</th>
-                <th className="px-4 py-2 w-[180px] text-center">홈 슬라이드 게시</th>
+                <th className="pr-4 pl-10 py-2 text-center">순번</th>
+                <th className="px-4 py-2 text-center">이미지</th>
+                <th className="px-4 py-2 text-left">제목</th>
+                <th className="px-4 py-2 text-left">카테고리</th>
+                <th className="px-4 py-2 text-left">게시일</th>
+                <th className="px-4 py-2 text-left">상태</th>
+                <th className="px-4 py-2">홈 슬라이드 게시</th>
               </tr>
             </thead>
 
             <tbody>
               {data?.result.content.map((notice: Notice) => (
                 <tr className="border-b border-gray-450 h-[50px] text-[12px] " key={notice.id}>
-                  <td className="pr-4 pl-10 py-2 text-center">{notice.id}</td>
+                  <td className="pr-4 pl-10 py-2 text-center max-w-[100px]">{notice.id}</td>
                   <td className="px-4 py-2">
-                    <span className="flex justify-center items-center mx-auto">
+                    <span className="flex justify-center max-w-[50px] items-center mx-auto">
                       {notice.imageUrl && notice.imageUrl !== "none" ? (
                         <IcImage width={19.5} />
                       ) : (
@@ -154,13 +144,13 @@ function AdminNotice() {
                       )}
                     </span>
                   </td>
-                  <td className="px-4 py-2 text-left min-w-[260px] overflow-hidden text-ellipsis whitespace-nowrap">
+                  <td className="px-4 py-2 text-left max-w-[260px] min-w-[260px] overflow-hidden text-ellipsis whitespace-nowrap">
                     {notice.title}
                   </td>
-                  <td className="px-4 py-2">{notice.category}</td>
-                  <td className="px-4 py-2">{formatDate(notice.createdAt)}</td>
-                  <td className="px-4 py-2">{notice.status}</td>
-                  <td className="px-4 py-2 text-center border-b border-gray-450">
+                  <td className="px-4 py-2 max-w-[120px]">{notice.category}</td>
+                  <td className="px-4 py-2 max-w-[130px]">{formatDate(notice.createdAt)}</td>
+                  <td className="px-4 py-2 max-w-[90px]">{notice.status}</td>
+                  <td className="px-4 py-2 max-w-[180px] text-center border-b border-gray-450">
                     <span className="flex justify-center items-center cursor-pointer">
                       {notice.isHomeSlide ? (
                         <IcCheckFull
@@ -194,7 +184,7 @@ function AdminNotice() {
         {/* 페이지네이션 */}
         <div className="flex justify-center items-center pt-[14px] gap-[10px] mb-[26px]">
           <button
-            onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
+            onClick={() => currentPage > 1 && setCurrentPage(currentPage - 1)}
             disabled={currentPage === 1}
             className="text-gray-350 focus:outline-none"
           >
@@ -214,7 +204,7 @@ function AdminNotice() {
           ))}
 
           <button
-            onClick={() => currentPage < totalPages && handlePageChange(currentPage + 1)}
+            onClick={() => currentPage < totalPages && setCurrentPage(currentPage + 1)}
             disabled={currentPage === totalPages}
             className="text-gray-350 focus:outline-none"
           >
