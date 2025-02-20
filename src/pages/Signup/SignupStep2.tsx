@@ -28,7 +28,7 @@ function SignupStep2() {
   useEffect(() => {
     const getTokens = async () => {
       try {
-        await axios.get("https://fitpass.co.kr/signup/step2", {
+        await axios.get(`${import.meta.env.VITE_BASE_URL}/signup/step2`, {
           withCredentials: true, // ✅ 쿠키 유지
         });
   
@@ -40,8 +40,6 @@ function SignupStep2() {
         const accessToken = getCookie("accessToken");
         const refreshToken = getCookie("refreshToken");
         const status = getCookie("status");
-  
-        console.log("🔑 [소셜 로그인] 쿠키 데이터:", { accessToken, refreshToken, status });
   
         if (status === "register") {
           setTokens({
