@@ -1,5 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 import { socialLogin } from "../apis/signup/social-login";
 
 interface TSocialSignupData {
@@ -10,6 +11,7 @@ interface TSocialSignupData {
 }
 
 export const useSocialSignup = () => {
+  const navigate = useNavigate();
   const { login } = useAuth();
 
   return useMutation({
@@ -21,8 +23,9 @@ export const useSocialSignup = () => {
       const response = await socialLogin(data);
       return response;
     },
-    onSuccess: (data) => {
-      console.log("✅ 소셜 회원가입 성공", data);
+    onSuccess: () => {
+      navigate("/signin");
+      console.log("✅ 소셜 회원가입 성공");
     },
     onError: (error: Error) => {
       console.error("🚨 소셜 회원가입 실패:", error.message);
