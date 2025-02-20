@@ -15,7 +15,7 @@ const Header = () => {
   };
 
   const isMainHeader = (): boolean =>
-    ["/", "/fitness", "/fitness/:id", "/upload-review/:id", "/my", "/my/pay-history"].some((path) =>
+    ["/", "/fitness", "/fitness/:id", "/upload-review/:id", "/my", "/my/pay-history", "/update-review/:id"].some((path) =>
       matchPath(path, location.pathname)
     );
 

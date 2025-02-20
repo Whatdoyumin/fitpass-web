@@ -130,7 +130,7 @@ function AdminNoticeUpload() {
       );
     }
   };
-  
+
   const contentRef = useRef<HTMLDivElement>(null);
 
   const handleContentChange = () => {
@@ -181,10 +181,17 @@ function AdminNoticeUpload() {
   if (isLoading) {
     return <LoadingSpinner />;
   }
+
+  const handlePaste = (e: React.ClipboardEvent<HTMLDivElement>) => {
+    e.preventDefault(); // 기본 붙여넣기 동작을 방지
+    const text = e.clipboardData.getData("text/plain"); // 순수 텍스트만 가져오기
+    document.execCommand("insertText", false, text); // 텍스트만 삽입
+  };
+
   return (
     <div className="w-full px-[7px]">
       <h1 className="adminTitle">공지사항 → 게시글 작성</h1>
-      <div className="min-w-[1024px] px-[60px] pt-[45px] pb-[20px]">
+      <div className="min-w-[500px] px-[60px] pt-[45px] pb-[20px]">
         {/* 제목 입력 */}
         <div className="mb-[19px] flex items-center gap-[17px] text-14px">
           <label className="min-w-[46px] text-gray-700">제목</label>
@@ -258,8 +265,9 @@ function AdminNoticeUpload() {
             ref={contentRef}
             contentEditable
             className={`w-full h-[200px] resize-none border border-gray-450 px-[19px] py-[22px]
-      focus:outline-none text-12px ${content ? content : ""}`}
+      focus:outline-none text-12px overflow-y-auto ${content ? content : ""}`}
             onInput={handleContentChange} // 내용 입력 시 상태 업데이트
+            onPaste={handlePaste} 
           />
         </div>
 

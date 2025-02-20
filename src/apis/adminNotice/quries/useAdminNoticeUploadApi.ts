@@ -71,8 +71,13 @@ export const usePostAdminDraftNotice = () => {
   >({
     mutationFn: postAdminDraftNotice,
     onError: (error) => {
-      console.error("임시저장 실패: ", error);
-      alert(`${error}`);
+      if (error.code === "ERR_NETWORK") {
+        alert("이미지 파일이 너무 큽니다. 더 작은 파일을 업로드해 주세요.");
+      } else if (error.code === "ERR_BAD_RESPONSE"){
+        alert("제목 또는 내용이 너무 깁니다.");
+      } else {
+        console.error(error);
+      }
     },
   });
 };
