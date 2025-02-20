@@ -28,12 +28,10 @@ function SignupStep2() {
   useEffect(() => {
     const getTokens = async () => {
       try {
-        // ✅ API 요청 (쿠키 포함)
         await axios.get("https://fitpass.co.kr/signup/step2", {
           withCredentials: true, // ✅ 쿠키 유지
         });
   
-        // ✅ 쿠키에서 직접 값 가져오기
         const getCookie = (name: string) => {
           const match = document.cookie.match(new RegExp("(^| )" + name + "=([^;]+)"));
           return match ? match[2] : "";
@@ -110,7 +108,7 @@ function SignupStep2() {
     if (tokens.status === "register") {
       // ✅ 소셜 로그인 회원가입
       socialLoginMutation.mutate(
-        { name, phoneNumber },
+        { name, phoneNumber, accessToken: tokens.accessToken, refreshToken: tokens.refreshToken },
         {
           onError: (error: unknown) => {
             alert(error instanceof Error ? error.message : "소셜 로그인 회원가입 실패");
