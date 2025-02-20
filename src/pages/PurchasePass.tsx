@@ -57,7 +57,7 @@ function PurchasePass() {
   const { data } = usePaymentPass( fitnessId );
 
   return (
-      <div className="bg-white-200 min-h-full flex items-center justify-center">
+      <div className="bg-white-200 h-[calc(100vh-165px)] flex items-center justify-center">
         <div className="flex flex-col justify-center">
           <img src={data?.imageUrl} alt="이미지" className="w-[340px] h-[191px] rounded-t-[7px]" />
           <div className="bg-white-100 w-[340px] h-[495.77px] font-medium text-base rounded-b ">
