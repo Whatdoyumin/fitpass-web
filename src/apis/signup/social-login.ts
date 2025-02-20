@@ -1,6 +1,5 @@
 export interface TSocialLoginData {
     name: string;
-    id: string;
     phoneNumber: string;
   }
   

@@ -110,7 +110,7 @@ function SignupStep2() {
     if (tokens.status === "register") {
       // ✅ 소셜 로그인 회원가입
       socialLoginMutation.mutate(
-        { name, phoneNumber},
+        { name, phoneNumber },
         {
           onError: (error: unknown) => {
             alert(error instanceof Error ? error.message : "소셜 로그인 회원가입 실패");
