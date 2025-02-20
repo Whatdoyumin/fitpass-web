@@ -19,9 +19,11 @@ function Payment({ type }: TPaymentProps) {
   const [isChecked, setIsChecked] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
-  const [searchParams] = useSearchParams();
+  const [isSubscribingState] = useState(localStorage.getItem("isSubscribing") === "true");
   const [isMobile, setIsMobile] = useState(false);
+  const [searchParams] = useSearchParams();
 
+  // pc or mobile 기기 구분
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(
@@ -33,8 +35,7 @@ function Payment({ type }: TPaymentProps) {
   }, []);
 
   const navigate = useNavigate();
-  const isSubscribing = localStorage.getItem("isSubscribing") === "true";
-  const itemName = localStorage.getItem("item_name") || null;
+  const itemName = localStorage.getItem("itemName") || null;
 
   const handleItemChange = (itemId: number) => {
     const items = type === "buy-coins" ? COIN_PRICE : SUBSCRIBE_OPTION;
@@ -70,8 +71,10 @@ function Payment({ type }: TPaymentProps) {
       { planName: selectedPlan },
       {
         onSuccess: () => {
+          setIsCompleted(true);
+          setIsModalOpen(true);
           localStorage.removeItem("isSubscribing");
-          localStorage.removeItem("item_name");
+          localStorage.removeItem("itemName");
         },
       }
     );
@@ -211,7 +214,7 @@ function Payment({ type }: TPaymentProps) {
         <PaymentDetails type={type} item={selectItem} paymentMethod={selectedPayOption} />
         <PaymentInfo isChecked={isChecked} setIsChecked={setIsChecked} />
       </div>
-      {isSubscribing ? (
+      {isSubscribingState ? (
         <button
           className={`w-full max-w-content h-navbar py-6 bottom-0 fixed text-white-100 flex justify-center items-center text-[20px] ${
             isChecked ? "bg-blue-500" : "bg-gray-400 pointer-events-none"
@@ -231,16 +234,26 @@ function Payment({ type }: TPaymentProps) {
         </button>
       )}
 
-      {isModalOpen && (
-        <Modal
-          isOpen={isModalOpen}
-          onClose={handleCloseModal}
-          onSuccess={isCompleted ? handleCloseModal : handleCompletePay}
-          title={isCompleted ? "구매가 완료되었습니다." : "구매하시겠습니까?"}
-          btn1Text={isCompleted ? null : "아니요"}
-          btn2Text={isCompleted ? "확인" : "네, 구매하겠습니다"}
-        />
-      )}
+      {isSubscribingState
+        ? isModalOpen && (
+            <Modal
+              isOpen={isModalOpen}
+              onClose={handleCloseModal}
+              onSuccess={handleCloseModal}
+              title={"플랜 변경이 완료되었습니다."}
+              btn2Text={"확인"}
+            />
+          )
+        : isModalOpen && (
+            <Modal
+              isOpen={isModalOpen}
+              onClose={handleCloseModal}
+              onSuccess={isCompleted ? handleCloseModal : handleCompletePay}
+              title={isCompleted ? "구매가 완료되었습니다." : "구매하시겠습니까?"}
+              btn1Text={isCompleted ? null : "아니요"}
+              btn2Text={isCompleted ? "확인" : "네, 구매하겠습니다"}
+            />
+          )}
     </div>
   );
 }
