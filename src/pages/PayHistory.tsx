@@ -89,7 +89,7 @@ function PayHistory() {
   return (
     <div
       className={`bg-white-200 px-5 pt-6 w-full max-w-content min-h-full absolute ${
-        isSubscribing ? "pb-14" : "pb-6"
+        isSubscribing ? "pb-14" : "pb-navbar"
       }`}
     >
       <div className="w-full flex flex-col gap-6">
