@@ -7,6 +7,8 @@ import config from "../../../apis/config";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { Pagination } from "../../../components/Pagination";
+import { LoadingSpinner } from "../../../components/LoadingSpinner";
+import NotFound from "../../NotFound";
 
 type TListData = {
   fitnessId: number;
@@ -15,8 +17,7 @@ type TListData = {
   totalFee: number;
   phoneNumber: string;
   createdAt: string;
-  editDate?: string;
-  status: boolean;
+  purchasable: boolean;
 }
 
 type FitnessParams = {
@@ -31,6 +32,8 @@ function AdminFitnessList() {
   const [searchTerm, setSearchTerm] = useState("");  // 검색 데이터
   const [selectedFilter, setSelectedFilter] = useState<keyof TListData>("fitnessName");
   const [page, setPage] = useState(0);
+  
+  const navigate = useNavigate();
 
   const dropDownMap: Record<string, keyof TListData> = {
     "업체명": "fitnessName",
@@ -50,14 +53,22 @@ function AdminFitnessList() {
       searchType: selectedFilter,
       keyword: searchTerm
     }
-    const response = await axiosInstance.get(`${config.apiBaseUrl}/admin/fitness`, { params });
+    const response = await axiosInstance.get(`/admin/fitness`, { params });
     return response.data;
   };
 
-  const { data } = useQuery({
+  const { data, isFetching, isError } = useQuery({
     queryKey: ['fitnessList', page, selectedFilter, searchTerm],
     queryFn: fetchFitness,
   })
+
+  if (isFetching) {
+    return <LoadingSpinner />
+  }
+
+  if (isError) {
+    return <NotFound />
+  }
 
   console.log(data);
 
@@ -74,8 +85,6 @@ function AdminFitnessList() {
   
     return value?.toString().toLowerCase().includes(searchTerm.toLowerCase());
   });
-  
-  const navigate = useNavigate();
 
   return (
     <div className="w-full h-full overflow-y-auto">
@@ -102,7 +111,6 @@ function AdminFitnessList() {
               <th className="w-[70px] ">가격</th>
               <th className="w-[115px] ">전화번호</th>
               <th className="w-[114px] ">가입일</th>
-              <th className="w-[114px] ">접속일</th>
               <th className="w-[90px] ">상태</th>
               <th className="w-[20px] "></th>
             </tr>
@@ -117,8 +125,7 @@ function AdminFitnessList() {
                   <td>{item.totalFee}코인</td>
                   <td>{item.phoneNumber}</td>
                   <td>{item.createdAt.split("T")[0]}</td>
-                  <td>{item.editDate}</td>
-                  {item.status ? (<td>구매 가능</td>) : (<td>구매 불가</td>)}
+                  {item.purchasable ? (<td>구매 가능</td>) : (<td>구매 불가</td>)}
                   <td><img src={DotVector} alt="더보기"
                     onClick={() => navigate(`/admin/fitness/upload/${item.fitnessId}`)}
                   /></td>

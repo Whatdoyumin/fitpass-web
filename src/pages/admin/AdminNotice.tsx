@@ -85,7 +85,7 @@ function AdminNotice() {
     const day = date.getDate().toString().padStart(2, "0");
     return `${year}-${month}-${day}`;
   };
-  
+
   useEffect(() => {
     if (error) {
       alert(error.response?.data?.message);
@@ -99,115 +99,119 @@ function AdminNotice() {
   return (
     <div className="w-full px-[7px]">
       <h1 className="adminTitle">공지사항</h1>
+      <div className="min-w-[773px]">
+        {/* 검색 */}
+        <div className="w-[345px] flex flex-col justify-end items-start gap-2 mt-[64px] ml-auto">
+          <label className="text-[12px] text-black-600">검색하기</label>
+          <div className="relative w-full">
+            <input
+              className="w-full h-12 pl-4 pr-12 border border-gray-450 rounded-md bg-white focus:outline-none"
+              value={searchKeyword}
+              onChange={(e) => setSearchKeyword(e.target.value)}
+            />
+            <IcSearch
+              width="24px"
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer"
+            />
+          </div>
+        </div>
 
-      {/* 검색 */}
-      <div className="w-[345px] flex flex-col justify-end items-start gap-2 mt-[64px] ml-auto">
-        <label className="text-[12px] text-black-600">검색하기</label>
-        <div className="relative w-full">
-          <input
-            className="w-full h-12 pl-4 pr-12 border border-gray-450 rounded-md bg-white focus:outline-none"
-            value={searchKeyword}
-            onChange={(e) => setSearchKeyword(e.target.value)}
-          />
-          <IcSearch
-            width="24px"
-            className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer"
-          />
+        {/* 공지사항 목록 테이블 */}
+        <div className="mt-[26px] min-h-[550px] whitespace-nowrap">
+          <table className="w-full table-auto border border-gray-450">
+            <thead className="bg-blue-100 border-b border-gray-450">
+              <tr className="h-[50px] text-[13px] text-black-700">
+                <th className="pr-4 pl-10 py-2 text-center">순번</th>
+                <th className="px-4 py-2 text-center">이미지</th>
+                <th className="px-4 py-2 text-left">제목</th>
+                <th className="px-4 py-2 text-left">카테고리</th>
+                <th className="px-4 py-2 text-left">게시일</th>
+                <th className="px-4 py-2 text-left">상태</th>
+                <th className="px-4 py-2">홈 슬라이드 게시</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {data?.result.content.map((notice: Notice) => (
+                <tr className="border-b border-gray-450 h-[50px] text-[12px] " key={notice.id}>
+                  <td className="pr-4 pl-10 py-2 text-center max-w-[100px]">{notice.id}</td>
+                  <td className="px-4 py-2">
+                    <span className="flex justify-center max-w-[50px] items-center mx-auto">
+                      {notice.imageUrl && notice.imageUrl !== "none" ? (
+                        <IcImage width={19.5} />
+                      ) : (
+                        ""
+                      )}
+                    </span>
+                  </td>
+                  <td className="px-4 py-2 text-left max-w-[260px] min-w-[260px] overflow-hidden text-ellipsis whitespace-nowrap">
+                    {notice.title}
+                  </td>
+                  <td className="px-4 py-2 max-w-[120px]">{notice.category}</td>
+                  <td className="px-4 py-2 max-w-[130px]">{formatDate(notice.createdAt)}</td>
+                  <td className="px-4 py-2 max-w-[90px]">{notice.status}</td>
+                  <td className="px-4 py-2 max-w-[180px] text-center border-b border-gray-450">
+                    <span className="flex justify-center items-center cursor-pointer">
+                      {notice.isHomeSlide ? (
+                        <IcCheckFull
+                          width={24}
+                          onClick={() => handleCheckboxChange(notice.id, true)}
+                        />
+                      ) : (
+                        <IcCheckEmpty
+                          width={24}
+                          onClick={() => handleCheckboxChange(notice.id, false)}
+                        />
+                      )}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* 작성하기 버튼 */}
+        <div className="flex pt-[26px] justify-end">
+          <button
+            className="bg-blue-500 text-white-100 w-[150px] h-[51px] py-[14px] rounded-5 text-[15px]"
+            onClick={() => navigate("/admin/notice/upload")}
+          >
+            작성하기
+          </button>
+        </div>
+
+        {/* 페이지네이션 */}
+        <div className="flex justify-center items-center pt-[14px] gap-[10px] mb-[26px]">
+          <button
+            onClick={() => currentPage > 1 && setCurrentPage(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="text-gray-350 focus:outline-none"
+          >
+            <SvgIcLeftPage width={5} />
+          </button>
+
+          {Array.from({ length: endPage - startPage + 1 }, (_, index) => (
+            <button
+              key={startPage + index}
+              onClick={() => handlePageChange(startPage + index)}
+              className={`text-sm ${
+                currentPage === startPage + index ? "text-gray-600" : "text-gray-350"
+              } focus:outline-none`}
+            >
+              {startPage + index}
+            </button>
+          ))}
+
+          <button
+            onClick={() => currentPage < totalPages && setCurrentPage(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className="text-gray-350 focus:outline-none"
+          >
+            <SvgIcRightPage width={5} />
+          </button>
         </div>
       </div>
-
-      {/* 공지사항 목록 테이블 */}
-      <div className="mt-[26px] min-h-[550px]">
-        <table className="w-full table-auto border border-gray-450">
-          <thead className="bg-blue-100 border-b border-gray-450">
-            <tr className="h-[50px] text-[13px] text-black-700">
-              <th className="px-4 py-2 text-center">순번</th>
-              <th className="px-4 py-2 text-center">이미지</th>
-              <th className="px-4 py-2 text-left">제목</th>
-              <th className="px-4 py-2 text-left">카테고리</th>
-              <th className="px-4 py-2 text-left">게시일</th>
-              <th className="px-4 py-2 text-left">상태</th>
-              <th className="px-4 py-2">홈 슬라이드 게시</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {data?.result.content.map((notice: Notice) => (
-              <tr className="border-b border-gray-450 h-[50px] text-[12px]" key={notice.id}>
-                <td className="px-4 py-2 text-center min-w-[100px]">{notice.id}</td>
-                <td className="px-4 py-2">
-                  <span className="flex justify-center min-w-[50px] items-center">
-                    {notice.imageUrl && notice.imageUrl !== "none" ? <IcImage width={19.5} /> : ""}
-                  </span>
-                </td>
-                <td className="px-4 py-2 text-left max-w-[260px] min-w-[260px] overflow-hidden text-ellipsis whitespace-nowrap">
-                  {notice.title}
-                </td>
-                <td className="px-4 py-2 min-w-[120px]">{notice.category}</td>
-                <td className="px-4 py-2 min-w-[130px]">{formatDate(notice.createdAt)}</td>
-                <td className="px-4 py-2 min-w-[90px]">{notice.status}</td>
-                <td className="px-4 py-2 min-w-[180px] text-center border-b border-gray-450">
-                  <span className="flex justify-center items-center cursor-pointer">
-                    {notice.isHomeSlide ? (
-                      <IcCheckFull
-                        width={24}
-                        onClick={() => handleCheckboxChange(notice.id, true)}
-                      />
-                    ) : (
-                      <IcCheckEmpty
-                        width={24}
-                        onClick={() => handleCheckboxChange(notice.id, false)}
-                      />
-                    )}
-                  </span>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {/* 작성하기 버튼 */}
-      <div className="flex pt-[26px] justify-end pr-[12px]">
-        <button
-          className="bg-blue-500 text-white-100 w-[150px] h-[51px] py-[14px] rounded-5 text-[15px]"
-          onClick={() => navigate("/admin/notice/upload")}
-        >
-          작성하기
-        </button>
-      </div>
-
-      {/* 페이지네이션 */}
-      <div className="flex justify-center items-center pt-[14px] gap-[10px] mb-[26px]">
-        <button
-          onClick={() => currentPage > 1 && setCurrentPage(currentPage - 1)}
-          disabled={currentPage === 1}
-          className="text-gray-350 focus:outline-none"
-        >
-          <SvgIcLeftPage width={5} />
-        </button>
-
-        {Array.from({ length: endPage - startPage + 1 }, (_, index) => (
-          <button
-            key={startPage + index}
-            onClick={() => handlePageChange(startPage + index)}
-            className={`text-sm ${
-              currentPage === startPage + index ? "text-gray-600" : "text-gray-350"
-            } focus:outline-none`}
-          >
-            {startPage + index}
-          </button>
-        ))}
-
-        <button
-          onClick={() => currentPage < totalPages && setCurrentPage(currentPage + 1)}
-          disabled={currentPage === totalPages}
-          className="text-gray-350 focus:outline-none"
-        >
-          <SvgIcRightPage width={5} />
-        </button>
-      </div>
-
       {/* 모달 */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black-700 bg-opacity-50 flex justify-center items-center z-10">

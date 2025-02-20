@@ -84,6 +84,7 @@ function Signup() {
           value={id}
           onChange={(e) => validateId(e.target.value)}
           hasError={!!idError}
+          onEnter={handleNextStep}
         />
         {idError && <span className="text-red-500 text-[13px]">{idError}</span>}
       </div>
@@ -100,6 +101,7 @@ function Signup() {
           value={password}
           onChange={(e) => validatePassword(e.target.value)}
           hasError={!!passwordError}
+          onEnter={handleNextStep}
         />
         {passwordError && <span className="text-red-500 text-[13px]">{passwordError}</span>}
 
@@ -111,6 +113,7 @@ function Signup() {
           value={confirmPassword}
           onChange={(e) => validateConfirmPassword(e.target.value)}
           hasError={!!confirmPasswordError}
+          onEnter={handleNextStep}
         />
         {confirmPasswordError && (
           <span className="text-red-500 text-[13px]">{confirmPasswordError}</span>
