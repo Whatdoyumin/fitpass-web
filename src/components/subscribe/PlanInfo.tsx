@@ -1,12 +1,29 @@
 import { useNavigate } from "react-router-dom";
 import { SUBSCRIBE_OPTION } from "../../constants/price-menu";
 import { IcEmptyDollarGray } from "../../assets/svg";
+import { usePostPlanSidStatus } from "../../hooks/usePostPlan";
 
 const PlanInfo = () => {
   const navigate = useNavigate();
 
+  const { mutate } = usePostPlanSidStatus();
+
+  const handleClickSubsribe = () => {
+    mutate(undefined, {
+      onSuccess: (response) => {
+        localStorage.setItem("isSubscribing", response?.result.available);
+        localStorage.setItem("itemName", response?.result.itemName);
+        navigate("payment");
+      },
+      onError: (error) => {
+        console.log(error.message);
+        alert("다시 시도해주세요.");
+      },
+    });
+  };
+
   return (
-    <div className="w-full h-full bg-white-200 overflow-y-auto py-8">
+    <div className="w-full h-[calc(100vh-165px)] bg-white-200 overflow-y-auto py-4">
       <div className="w-full h-full flex flex-col gap-10 items-center">
         {/* 나에게 딱 맞는 플랜 찾기 */}
         <div className="flex flex-col items-center gap-4">
@@ -124,7 +141,7 @@ const PlanInfo = () => {
         </div>
 
         {/* 구독하러 가기 버튼 */}
-        <button className="w-[340px] blueButton py-3" onClick={() => navigate("payment")}>
+        <button className="w-[340px] blueButton py-3" onClick={handleClickSubsribe}>
           구독하러 가기
         </button>
       </div>

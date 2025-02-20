@@ -2,7 +2,7 @@ import { TAdminCoins } from "../../types/adminCoint";
 import { axiosInstance } from "../axios-instance";
 
 const getAdminCoins = async () => {
-  const { data } = await axiosInstance.get(`/admin/management/coin`);
+  const { data } = await axiosInstance.get(`/management/coin`);
   return data;
 };
 

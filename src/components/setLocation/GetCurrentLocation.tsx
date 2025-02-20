@@ -27,24 +27,33 @@ const GetCurrentLocation = () => {
     }
 
     if (location?.latitude && location.longitude) {
-      mutate(
-        {
-          latitude: location.latitude,
-          longitude: location.longitude,
-        },
-        {
-          onSuccess: () => {
-            navigate("/");
-            localStorage.setItem("latitude", `${location.latitude}`);
-            localStorage.setItem("longitude", `${location.longitude}`);
-          },
-          onError: (error) => {
-            console.log(error.message);
-            alert("위치 설정에 실패했습니다. 다시 시도해주세요.");
-            navigate("/");
-          },
+      const geocoder = new window.kakao.maps.services.Geocoder();
+
+      geocoder.coord2Address(location.longitude, location.latitude, (result, status) => {
+        if (status === window.kakao.maps.services.Status.OK && result[0]) {
+          const address = result[0].road_address?.address_name || result[0].address.address_name;
+
+          mutate(
+            {
+              latitude: location.latitude,
+              longitude: location.longitude,
+            },
+            {
+              onSuccess: () => {
+                localStorage.setItem("latitude", `${location.latitude}`);
+                localStorage.setItem("longitude", `${location.longitude}`);
+                localStorage.setItem("address_name", address);
+                navigate("/");
+              },
+              onError: (error) => {
+                console.log(error.message);
+                alert("위치 설정에 실패했습니다. 다시 시도해주세요.");
+                navigate("/");
+              },
+            }
+          );
         }
-      );
+      });
     }
   }, [isLogin, location, error, mutate, navigate]);
 

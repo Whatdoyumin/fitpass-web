@@ -104,7 +104,7 @@ const MyProfile = ({ profile, updateProfileMutation, deleteProfileMutation }: My
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 bg-gray-700 bg-opacity-60 flex items-center justify-center z-[10]">
+        <div className="fixed inset-0 bg-gray-700 bg-opacity-60 flex items-center justify-center z-50">
           <div
             className={`bg-white-100 rounded-lg ${content === "default" ? "max-w-[315px]" : "max-w-[300px]"} w-full`}
           >

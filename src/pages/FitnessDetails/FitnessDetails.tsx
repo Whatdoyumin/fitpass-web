@@ -16,27 +16,25 @@ import { useQuery } from "@tanstack/react-query";
 import config from "../../apis/config";
 import { LoadingSpinner } from "../../components/LoadingSpinner";
 
-
 interface FetchResponse {
-  fitnessId: number
-  fitnessName: string,
-  address: string,
-  phoneNumber: string,
-  categoryName: string,
-  notice: string,
-  time: string,
-  howToUse: string,
-  etc: string,
-  fee: number,
-  distance: number,
-  imageUrl: string,
-  fitnessLatitude: number,
-  fitnessLongitude: number,
-  additionalImages?: string[],
+  fitnessId: number;
+  fitnessName: string;
+  address: string;
+  phoneNumber: string;
+  categoryName: string;
+  notice: string;
+  time: string;
+  howToUse: string;
+  etc: string;
+  fee: number;
+  distance: number;
+  imageUrl: string;
+  fitnessLatitude: number;
+  fitnessLongitude: number;
+  additionalImages?: string[];
 }
 
 function FitnessDetails() {
-
   const [currentIndex, setCurrentIndex] = useState(0); // 슬라이드 인덱스
 
   const { id } = useParams();
@@ -44,20 +42,18 @@ function FitnessDetails() {
   const navigate = useNavigate();
 
   const handleMoveToPurchasePass = () => {
-    navigate(`/purchase-pass/${id}`)
-  }
+    navigate(`/purchase-pass/${id}`);
+  };
 
   const fetchDetail = async () => {
     const response = await axios.get(`${config.apiBaseUrl}/fitness/${id}`);
     return response.data.result;
-  }
+  };
 
   const { data, isLoading, isError } = useQuery<FetchResponse>({
-    queryKey: ['gym', id],
+    queryKey: ["gym", id],
     queryFn: fetchDetail,
   });
-
-  console.log(data);
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -73,8 +69,6 @@ function FitnessDetails() {
 
   const images = data ? getImageArray(data) : [];
 
-  console.log(images);
-
   const settings: Settings = {
     dots: false,
     infinite: false,
@@ -84,7 +78,7 @@ function FitnessDetails() {
     arrows: false, // 화살표 없애기,
     afterChange: (current: number) => {
       setCurrentIndex(current);
-    }
+    },
   };
 
   return (
@@ -93,7 +87,11 @@ function FitnessDetails() {
         <Slider {...settings} className="w-[340px] h-[191px]">
           {images.map((img, index) => (
             <div key={index} className="relative w-[340px] h-[191px] ">
-              <img src={img} alt={`fitness-${index}`} className="w-[340px] h-[191px] rounded-t-[7px]" />
+              <img
+                src={img}
+                alt={`fitness-${index}`}
+                className="w-[340px] h-[191px] rounded-t-[7px]"
+              />
               <span className="absolute bottom-2 right-4 w-9 h-[19px] px-[10px] py-[3px] bg-black-700/60 text-white-100 rounded-[15px] text-[11px] font-medium flex justify-center items-center">
                 {currentIndex + 1}/{images.length}
               </span>
@@ -120,8 +118,7 @@ function FitnessDetails() {
           </span>
           <span className="flex text-xs font-medium gap-2 items-center">
             <Phonecall className="w-[10px] h-[10px]" />
-            {data?.phoneNumber
-              .replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3")}
+            {data?.phoneNumber.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3")}
           </span>
         </div>
         <div className="border-b-[6px]"></div>
@@ -164,8 +161,8 @@ function FitnessDetails() {
             </p>
           </div>
           <span className="text-[13px] font-medium text-gray-600">
-            운영시간과 휴장일은 시설 자체 사정에 따라 변동이 될 수 있으니, 유의하여 시설
-            이용하시길 바랍니다.
+            운영시간과 휴장일은 시설 자체 사정에 따라 변동이 될 수 있으니, 유의하여 시설 이용하시길
+            바랍니다.
           </span>
         </div>
         <div className="border-b-2"></div>
@@ -174,14 +171,14 @@ function FitnessDetails() {
           <p className="text-base font-bold">이용 방법</p>
           <p className="text-[13px] font-medium text-gray-600">
             {data?.howToUse
-                ?.split(/\. ?/) // `.` 다음에 공백이 있을 수도 있고 없을 수도 있음
-                .filter((sentence) => sentence.trim() !== "") // 공백만 있는 항목 제거
-                .map((sentence, index) => (
-                  <span key={index}>
-                    {sentence.trim()}
-                    <br />
-                  </span>
-                ))}
+              ?.split(/\. ?/) // `.` 다음에 공백이 있을 수도 있고 없을 수도 있음
+              .filter((sentence) => sentence.trim() !== "") // 공백만 있는 항목 제거
+              .map((sentence, index) => (
+                <span key={index}>
+                  {sentence.trim()}
+                  <br />
+                </span>
+              ))}
           </p>
         </div>
         <div className="border-b-2 w-[340px]"></div>
@@ -195,15 +192,22 @@ function FitnessDetails() {
         <div className="p-4 flex flex-col gap-1">
           <span className="text-base font-bold">위치 안내</span>
           {/* 위도 경도 기본값 20 설정 (서울시청) */}
-          <MapContainer data={{ fitnessLatitude: data?.fitnessLatitude || 20, fitnessLongitude: data?.fitnessLongitude || 20 }} />
+          <MapContainer
+            data={{
+              fitnessLatitude: data?.fitnessLatitude || 20,
+              fitnessLongitude: data?.fitnessLongitude || 20,
+            }}
+          />
         </div>
         <div className="border-b-[6px] w-[340px]"></div>
         <div className="p-4 flex flex-col gap-1">
           <ReviewList />
         </div>
         <div className="flex flex-col items-center">
-          <button className="w-[300px] h-[46px] rounded-[5px] bg-blue-500 text-white-100 text-[15px] font-bold my-5"
-            onClick={() => handleMoveToPurchasePass()}>
+          <button
+            className="w-[300px] h-[46px] rounded-[5px] bg-blue-500 text-white-100 text-[15px] font-bold my-5"
+            onClick={() => handleMoveToPurchasePass()}
+          >
             패스 구매하기
           </button>
         </div>
