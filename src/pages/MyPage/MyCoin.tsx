@@ -13,7 +13,7 @@ interface MyProfileProps {
 
 const MyCoin = ({ profile }: MyProfileProps)  => {
   return (
-    <div className="w-full bg-white-100 px-[25px] py-[26px] mt-2 relative">
+    <div className="w-full bg-white-100 px-[25px] py-[26px] mt-2 relative z-[0]">
       <h2 className="text-18px font-bold mb-[15px]" style={{ lineHeight: "21px" }}>
         내 코인
       </h2>

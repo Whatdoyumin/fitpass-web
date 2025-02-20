@@ -99,7 +99,7 @@ function AdminNotice() {
   return (
     <div className="w-full px-[7px]">
       <h1 className="adminTitle">공지사항</h1>
-      <div className="min-w-[773px]">
+      <div className="min-w-[920px]">
         {/* 검색 */}
         <div className="w-[345px] flex flex-col justify-end items-start gap-2 mt-[64px] ml-auto">
           <label className="text-[12px] text-black-600">검색하기</label>
