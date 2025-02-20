@@ -25,10 +25,12 @@ export interface NoticesResponse {
   message: string;
   result: AdminNoticesResponse;
 }
+
 interface ErrorResponse {
   message: string;
 }
 
+// 전체 공지사항 목록 불러오기 
 export const useGetAdminNotice = (keyword: string | null, page: number = 1, size: number = 10) => {
   return useQuery<NoticesResponse, AxiosError<ErrorResponse>>({
     queryKey: ["notices", keyword, page, size], 
@@ -36,6 +38,7 @@ export const useGetAdminNotice = (keyword: string | null, page: number = 1, size
   });
 };
 
+// 홈 배너 이미지 선택 체크박스 
 export const usePatchHomeSlideCheck = () => {
   return useMutation<
     { isSuccess: boolean; code: string; message: string; result: string; },
@@ -57,4 +60,5 @@ export const usePatchHomeSlideCheck = () => {
     },
   });
 };
+
 

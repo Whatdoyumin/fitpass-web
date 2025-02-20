@@ -177,15 +177,11 @@ const Router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <AdminAccount />,
+        element: <AdminDashboard />,
       },
       {
         path: "signin",
         element: <AdminSignin />,
-      },
-      {
-        path: "dashboard",
-        element: <AdminDashboard />,
       },
       {
         path: "user",
