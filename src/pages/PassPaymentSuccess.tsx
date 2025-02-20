@@ -17,7 +17,7 @@ function PassPaymentSuccess() {
   console.log(data);
 
   return (
-    <div className="flex flex-col bg-white-200 h-[736px] items-center justify-center">
+    <div className="flex flex-col bg-white-200 h-[calc(100vh-165px)] items-center justify-center">
       <div className="flex flex-col items-center justify-center gap-[33px]">
         <PassPayment className="w-[95px] h-[95px]" />
         <p className="font-bold text-[22px] mb-5">결제가 완료되었습니다</p>
