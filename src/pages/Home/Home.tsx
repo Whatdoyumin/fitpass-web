@@ -85,7 +85,7 @@ function Home() {
         </Slider>
       </div>
 
-      <div className="flex flex-col w-[390px] rounded-t-[15px] bg-white-200 absolute top-[340px] z-5 ">
+      <div className="flex flex-col w-[390px] rounded-t-[15px] bg-white-200 absolute top-[340px] z-5">
         {/* 추천 운동시설 */}
         {/* <div className="flex-1 w-[390px] pl-4 my-3 overflow-hidden mt-6"> */}
         <div className="w-[390px] pl-4 my-3 overflow-hidden mt-6">
@@ -106,7 +106,7 @@ function Home() {
           <p className="h-[19px] mb-[20px] font-bold text-[16px]"><span className="text-blue-500">최근 본</span> 운동 시설</p>
             {isLogin ?               
             (recentWatched.length > 0 ? (
-                <Slider {...fitSettings} className="h-[143px] mr-[-120px]">
+                <Slider {...fitSettings} className="h-[143px] mr-[-120px] mb-[85px] ">
                 {recentWatched?.map((data: HomeCardData) => (
                   <CardCol key={data.fitnessId} data={data} />
                 ))}

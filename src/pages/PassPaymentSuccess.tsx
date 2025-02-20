@@ -3,7 +3,7 @@ import { PassPayment } from "../assets/svg";
 import { usePaymentPass } from "../hooks/useGetPaymentPass";
 import { useParams } from "react-router-dom";
 
-const PassPaymentSuccess = () => {
+function PassPaymentSuccess() {
   const { id } = useParams<{ id: string }>();
   const fitnessId = id ? parseInt(id, 10) : -1;
 
@@ -13,7 +13,7 @@ const PassPaymentSuccess = () => {
     navigate("/use-pass");
   }
 
-  const { data } = usePaymentPass( fitnessId, 'afterBuyPass' );
+  const { data } = usePaymentPass( fitnessId );
   console.log(data);
 
   return (
