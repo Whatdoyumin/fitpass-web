@@ -24,6 +24,8 @@ export const useSocialSignup = () => {
       const accessToken = getCookie("accessToken");
       if (!accessToken) throw new Error("AccessToken이 존재하지 않습니다.");
 
+      sessionStorage.setItem("accessToken", accessToken);
+
       // ✅ 소셜 회원가입 API 요청
       const response = await axios.post(
         "https://fitpass.co.kr/auth/oauth2/register",
