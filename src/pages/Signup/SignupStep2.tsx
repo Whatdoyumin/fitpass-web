@@ -109,7 +109,7 @@ function SignupStep2() {
   };
 
   return (
-    <div className="w-full max-w-content flex flex-col items-center h-screen relative px-5 pt-[29px]">
+    <div className="w-full max-w-content flex flex-col items-center relative px-5 pt-[29px]">
       {/* 스크롤 가능 영역 */}
       <div className="flex-grow w-full overflow-auto flex flex-col gap-[20px]">
         {/* 이름 입력창 */}
@@ -133,9 +133,9 @@ function SignupStep2() {
       </div>
 
       {/* 약관 동의 섹션 */}
-      <div className="w-full mb-[27px]">
+      <div className="w-full max-w-content flex flex-col items-center justify-center mx-auto fixed bottom-[100px] mb-[27px]">
         {/* 전체 약관 동의 */}
-        <div className="w-full flex items-center gap-[17px] px-[26px] py-[10px]">
+        <div className="w-full flex items-center gap-[17px] px-[45px] py-[10px]">
           <input
             type="checkbox"
             checked={agreements.all}
