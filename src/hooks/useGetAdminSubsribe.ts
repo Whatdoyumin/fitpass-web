@@ -2,7 +2,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { getAdminSubsribe, putAdminSubsribe } from "../apis/adminManagement/adminSubscribe";
 import { TAdminSubsribe } from "../types/adminSubsribe";
 
-function useGetAdminSubsribe() {
+function useGetSubInfo() {
   return useQuery({
     queryKey: ["adminSubscribeManagement"],
     queryFn: () => getAdminSubsribe(),
@@ -16,4 +16,4 @@ function usePutAdminSubscribe() {
   });
 }
 
-export { useGetAdminSubsribe, usePutAdminSubscribe };
+export { useGetSubInfo, usePutAdminSubscribe };
