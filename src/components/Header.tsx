@@ -47,7 +47,11 @@ const MainHeader = () => {
           onClick={() => navigate("/set-location")}
         />
       </div>
-      <SearchBlue width={"26px"} onClick={() => navigate("/search-fitness")} />
+      <SearchBlue
+        width={"26px"}
+        onClick={() => navigate("/search-fitness")}
+        className="cursor-pointer"
+      />
     </div>
   );
 };

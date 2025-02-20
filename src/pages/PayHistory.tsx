@@ -89,7 +89,7 @@ function PayHistory() {
   return (
     <div
       className={`bg-white-200 px-5 pt-6 w-full max-w-content min-h-full absolute ${
-        isSubscribing ? "pb-14" : "pb-navbar"
+        isSubscribing ? "pb-36" : "pb-navbar"
       }`}
     >
       <div className="w-full flex flex-col gap-6">
@@ -137,7 +137,7 @@ function PayHistory() {
       </div>
       {isSubscribing ? (
         <button
-          className="w-[340px] h-[51px] blueButton bottom-navbar left-[7%] fixed"
+          className="w-[340px] h-[51px] blueButton bottom-navbar fixed left-0 right-0 mx-auto"
           onClick={handleModalOpen}
         >
           정기 구독 해지하기
