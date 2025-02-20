@@ -15,13 +15,13 @@ const LogoutModal = ({ isOpen, onClose, onLogout }: LogoutModalProps) => {
         <div className="flex justify-center gap-[10px]">
           <button
             onClick={onClose}
-            className="bg-blue-250 text-white px-4 py-2 rounded-md text-white-100 w-[130px] h-[46px]"
+            className="bg-blue-250 text-white-100 px-4 py-2 rounded-md text-white-100 w-[130px] h-[46px]"
           >
             아니오
           </button>
           <button
             onClick={onLogout}
-            className="bg-blue-500 text-white px-4 py-2 rounded-md text-white-100 w-[130px] h-[46px]"
+            className="bg-blue-500 text-white-100 px-4 py-2 rounded-md text-white-100 w-[130px] h-[46px]"
           >
             네
           </button>
