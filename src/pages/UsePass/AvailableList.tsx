@@ -38,12 +38,12 @@ const AvailableList = ({ passes, updatePassStatus }: AvailableListProps) => {
   // 로컬스토리지에서 남은 시간 계산
   useEffect(() => {
     const storedPass = localStorage.getItem("passUsage");
-  
+
     if (storedPass) {
       const { passId, startTime } = JSON.parse(storedPass);
       const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
       const timeLeft = 60 * 60 - elapsedTime;
-  
+
       if (timeLeft > 0) {
         setRemainingTime(timeLeft);
         setIsButtonActive(true);
@@ -52,7 +52,7 @@ const AvailableList = ({ passes, updatePassStatus }: AvailableListProps) => {
         updatePassStatus(passId, "DONE");
       }
     }
-  }, [updatePassStatus]); 
+  }, [updatePassStatus]);
 
   // 카운트다운
   useEffect(() => {
@@ -82,8 +82,6 @@ const AvailableList = ({ passes, updatePassStatus }: AvailableListProps) => {
         alert("패스가 사용되었습니다!");
         startPassUsage(pass.id);
       }
-    } else {
-      alert("사용 규정에 동의해야 합니다.");
     }
   };
 
@@ -103,7 +101,6 @@ const AvailableList = ({ passes, updatePassStatus }: AvailableListProps) => {
         </div>
       ) : (
         <div className="flex flex-col items-center">
-          {/* {passes.length > 0 && <FitnessCard fitness={passes} />} */}
           {passes.length > 0 && <FitnessCard fitness={passes} limitTime={remainingTime} />}
         </div>
       )}
@@ -178,7 +175,12 @@ const AvailableList = ({ passes, updatePassStatus }: AvailableListProps) => {
             <div className="flex justify-end gap-2 mt-4">
               <button
                 onClick={handlePostPass}
-                className="w-full h-[46px] px-4 py-2 bg-blue-500 text-white-100 rounded-[5px]"
+                disabled={!isAgree}
+                className={`w-full h-[46px] px-4 py-2 rounded-[5px] ${
+                  isAgree
+                    ? "bg-blue-500 text-white-100"
+                    : "bg-blue-250 text-white-100 cursor-not-allowed"
+                }`}
               >
                 사용하시겠습니까?
               </button>
