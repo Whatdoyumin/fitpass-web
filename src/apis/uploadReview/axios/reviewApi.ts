@@ -4,6 +4,7 @@ export const getReviewFitness = async (fitnessId: number) => {
   const response = await axiosInstance.get(`/fitness/${fitnessId}`);
   return response.data.result;
 };
+
 // 특정 패스 ID에 대한 리뷰 작성
 export const postReview = async ({
   passId,

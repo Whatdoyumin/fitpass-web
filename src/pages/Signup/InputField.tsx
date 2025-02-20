@@ -13,6 +13,7 @@ interface InputFieldProps {
   value?: string; // 입력값
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void; // 입력값 변경 핸들러
   hasError?: boolean; // 에러 여부
+  onEnter?: () => void;
 }
 
 function InputField({
@@ -22,6 +23,7 @@ function InputField({
   value,
   onChange,
   hasError = false,
+  onEnter
 }: InputFieldProps) {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false); // 비밀번호 표시 여부
   const [isFocused, setIsFocused] = useState(false); // Focus 상태
@@ -50,6 +52,11 @@ function InputField({
         autoComplete="off"
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && onEnter) {
+            onEnter();
+          }
+        }}
         className={`
           flex-grow
           outline-none
