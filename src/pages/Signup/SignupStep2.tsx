@@ -28,15 +28,18 @@ function SignupStep2() {
   useEffect(() => {
     const getTokens = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/signup/step2`, {
-          withCredentials: true, // ✅ 쿠키 포함 요청
+        await axios.get(`${import.meta.env.VITE_BASE_URL}/signup/step2`, {
+          withCredentials: true, // ✅ 쿠키 유지
         });
   
-        const accessToken = response.headers["authorization"];
-        const refreshToken = response.headers["x-refresh-token"];
-        const status = response.headers["x-status"];
+        const getCookie = (name: string) => {
+          const match = document.cookie.match(new RegExp("(^| )" + name + "=([^;]+)"));
+          return match ? match[2] : "";
+        };
   
-        console.log("🔑 [소셜 로그인] 헤더 정보:", { accessToken, refreshToken, status });
+        const accessToken = getCookie("accessToken");
+        const refreshToken = getCookie("refreshToken");
+        const status = getCookie("status");
   
         if (status === "register") {
           setTokens({
@@ -103,7 +106,7 @@ function SignupStep2() {
     if (tokens.status === "register") {
       // ✅ 소셜 로그인 회원가입
       socialLoginMutation.mutate(
-        { name, phoneNumber, id},
+        { name, phoneNumber, accessToken: tokens.accessToken, refreshToken: tokens.refreshToken },
         {
           onError: (error: unknown) => {
             alert(error instanceof Error ? error.message : "소셜 로그인 회원가입 실패");
