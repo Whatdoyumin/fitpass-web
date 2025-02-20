@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { socialLogin } from "../apis/signup/social-login";
 
 interface TSocialSignupData {
   phoneNumber: string;
@@ -26,19 +26,8 @@ export const useSocialSignup = () => {
 
       sessionStorage.setItem("accessToken", accessToken);
 
-      // ✅ 소셜 회원가입 API 요청
-      const response = await axios.post(
-        "https://fitpass.co.kr/auth/oauth2/register",
-        data,
-        {
-          withCredentials: true, // 쿠키 인증 유지
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      return response.data;
+      const response = await socialLogin(data);
+      return response;
     },
     onSuccess: (data: { result: { accessToken: string; refreshToken: string; memberRole: string } }) => {
       console.log("✅ 소셜 회원가입 성공", data);
