@@ -26,7 +26,6 @@ import {
   LocationDetail,
   SearchLocation,
   PayHistory,
-  AdminAccount,
   AdminDashboard,
   AdminUser,
   AdminFitnessList,
@@ -44,6 +43,7 @@ import NoticeDetail from "../pages/Notice/NoticeDetail";
 import AdminRootLayout from "../layout/AdminRootLayout";
 import AuthHandler from "../components/AuthHandler";
 import ScrollToTop from "../components/ScrollToTop";
+import UpdateReview from "../pages/UpdateReview";
 
 const Router = createBrowserRouter([
   {
@@ -169,6 +169,10 @@ const Router = createBrowserRouter([
       {
         path: "/my/pay-history",
         element: <PayHistory />,
+      },
+      {
+        path: "/update-review/:id",
+        element: <UpdateReview />,
       },
     ],
   },

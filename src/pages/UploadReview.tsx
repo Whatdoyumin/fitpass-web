@@ -5,11 +5,11 @@ import {
   IcLocation,
   IcMiniBlueCoin,
   IcRightArrowDarkgray,
-} from "../../assets/svg";
+} from "../assets/svg";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { useGetReviewFitness, usePostReview } from "../../apis/uploadReview/quries/useReviewApi";
-import { LoadingSpinner } from "../../components/LoadingSpinner";
-import NotFound from "../NotFound";
+import { useGetReviewFitness, usePostReview } from "../apis/uploadReview/quries/useReviewApi";
+import { LoadingSpinner } from "../components/LoadingSpinner";
+import NotFound from "./NotFound";
 
 export default function UploadReview() {
   const [reviewText, setReviewText] = useState(""); // 리뷰 텍스트 상태
@@ -27,7 +27,7 @@ export default function UploadReview() {
   const formattedDate = activeTime ? activeTime.split("T")[0].replace(/-/g, ".") : "";
 
   // fitnessId가 없으면 기본적으로 PassId를 사용 (임시 처리)
-  const fitnessIdNumber = fitnessId ? Number(fitnessId) : Number(passId);
+  const fitnessIdNumber = fitnessId ? Number(fitnessId) : 0;
 
   const { data, error, isLoading } = useGetReviewFitness(fitnessIdNumber);
 
@@ -39,7 +39,7 @@ export default function UploadReview() {
 
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const text = e.target.value;
-    if (text.length <= 300) {
+    if (text.length <= 250) {
       setReviewText(text);
       setCharCount(text.length);
     }
@@ -157,7 +157,7 @@ export default function UploadReview() {
                 value={reviewText}
                 onChange={handleTextChange}
               />
-              <p className="text-right text-gray-400 text-xs">({charCount}/300)</p>
+              <p className="text-right text-gray-400 text-xs">({charCount}/250)</p>
             </div>
 
             {/* 체크박스 */}

@@ -10,7 +10,7 @@ import ExploreFitness from "./ExploreFitness/ExploreFitness";
 import FitnessDetails from "./FitnessDetails/FitnessDetails";
 import PurchasePass from "./PurchasePass";
 import UsePass from "./UsePass/UsePass";
-import UploadReview from "./UploadReview/UploadReview";
+import UploadReview from "./UploadReview";
 import EditProfile from "./EditProfile/EditProfile";
 import ChangePassword from "./EditProfile/ChangePassword";
 import Subscribe from "./Subscribe";
@@ -35,6 +35,7 @@ import AdminSubscribe from "./admin/AdminSubscribe";
 import AdminUser from "./admin/AdminUser";
 import AdminNoticeUpload from "./admin/AdminNoticeUpload";
 import AdminSignin from "./admin/AdminSignin";
+import UpdateReview from "./UpdateReview";
 
 export {
   Home,
@@ -74,4 +75,5 @@ export {
   AdminUser,
   AdminNoticeUpload,
   AdminSignin,
+  UpdateReview,
 };

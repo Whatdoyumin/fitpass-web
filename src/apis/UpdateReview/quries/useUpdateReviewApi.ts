@@ -1,7 +1,8 @@
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
-import { getReviewFitness } from "../axios/reviewApi";
+import { getReviewFitness } from "../axios/updateReviewApi";
 import { useMutation } from "@tanstack/react-query";
-import { postReview } from "../axios/reviewApi";
+import { patchUpdateReview } from "../axios/updateReviewApi";
+import { AxiosError } from "axios";
 
 type FitnessData = {
   fitnessId: number;
@@ -27,8 +28,14 @@ export const useGetReviewFitness = (fitnessId: number): UseQueryResult<FitnessDa
   });
 };
 
-export const usePostReview = () => {
-  return useMutation({
-    mutationFn: postReview,
+// 홈 배너 이미지 선택 체크박스 
+export const usePatchUpdateReview = () => {
+  return useMutation<
+    { isSuccess: boolean; code: string; message: string; result: string; },
+    AxiosError, 
+    { reviewId: number; content:string; score:number; } 
+  >({
+    mutationFn: ({ reviewId, content, score }) => patchUpdateReview(reviewId, content, score),
   });
 };
+
