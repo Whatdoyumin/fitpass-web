@@ -14,12 +14,12 @@ import NotFound from "../NotFound";
 import { useFetchHomeSlide, useFetchRecommendFitness } from "../../hooks/useGetRecommend";
 
 type HomeSlide = {
-  id: number,
-  imageUrl: string,
-}
+  id: number;
+  imageUrl: string;
+};
 
 function Home() {
-  const {isLogin} = useAuth();
+  const { isLogin } = useAuth();
 
   const [recentWatched, setRecentWatched] = useState([]);
   const [fitSettings, setFitSettings] = useState({
@@ -80,7 +80,12 @@ function Home() {
       <div className="flex justify-center w-[390px] h-[280px] bg-black-700 relative ">
         <Slider {...adSettings} className="mb-sideGap w-[390px] h-[230px]">
           {slideImg.map((img: HomeSlide) => (
-            <img key={img.id} src={img.imageUrl} alt={`${img.id}`} className="w-[294px] h-[260px] mx-auto" />
+            <img
+              key={img.id}
+              src={img.imageUrl}
+              alt={`${img.id}`}
+              className="w-[294px] h-[260px] mx-auto"
+            />
           ))}
         </Slider>
       </div>
@@ -102,18 +107,23 @@ function Home() {
         <div className="border-b-4 border-gray-300 py-3 w-[390px]"></div>
         {/* 최근 본 운동 시설 */}
         {/* <div className="flex-1 w-[390px] pl-4 my-7 overflow-hidden"> */}
-        <div className="w-[390px] pl-4 my-7 overflow-hidden">
-          <p className="h-[19px] mb-[20px] font-bold text-[16px]"><span className="text-blue-500">최근 본</span> 운동 시설</p>
-            {isLogin ?               
-            (recentWatched.length > 0 ? (
-                <Slider {...fitSettings} className="h-[143px] mr-[-120px] mb-[85px] ">
+        <div className="w-[390px] pl-4 my-7 overflow-hidden pb-navbar">
+          <p className="h-[19px] mb-[20px] font-bold text-[16px]">
+            <span className="text-blue-500">최근 본</span> 운동 시설
+          </p>
+          {isLogin ? (
+            recentWatched.length > 0 ? (
+              <Slider {...fitSettings} className="h-[143px] mr-[-120px] mb-[85px] ">
                 {recentWatched?.map((data: HomeCardData) => (
                   <CardCol key={data.fitnessId} data={data} />
                 ))}
               </Slider>
-              ) : (
-                <></>
-              )) : (<RequireLogin />)}
+            ) : (
+              <></>
+            )
+          ) : (
+            <RequireLogin />
+          )}
         </div>
       </div>
     </div>

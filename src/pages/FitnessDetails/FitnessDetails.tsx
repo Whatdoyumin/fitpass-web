@@ -15,6 +15,7 @@ import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import config from "../../apis/config";
 import { LoadingSpinner } from "../../components/LoadingSpinner";
+import { useAuth } from "../../context/AuthContext";
 
 interface FetchResponse {
   fitnessId: number;
@@ -38,6 +39,7 @@ function FitnessDetails() {
   const [currentIndex, setCurrentIndex] = useState(0); // 슬라이드 인덱스
 
   const { id } = useParams();
+  const { isLogin } = useAuth();
 
   const navigate = useNavigate();
 
@@ -205,8 +207,11 @@ function FitnessDetails() {
         </div>
         <div className="flex flex-col items-center">
           <button
-            className="w-[300px] h-[46px] rounded-[5px] bg-blue-500 text-white-100 text-[15px] font-bold my-5"
-            onClick={() => handleMoveToPurchasePass()}
+            className={`w-[300px] h-[46px] rounded-[5px] text-white-100 text-[15px] font-bold my-5 ${
+              isLogin ? "bg-blue-500 cursor-pointer" : "bg-gray-400 cursor-not-allowed"
+            }`}
+            onClick={isLogin ? handleMoveToPurchasePass : undefined}
+            disabled={!isLogin}
           >
             패스 구매하기
           </button>
