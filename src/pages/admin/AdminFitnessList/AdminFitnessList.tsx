@@ -3,7 +3,6 @@ import { SearchGray } from "../../../assets/svg";
 import DotVector from "../../../assets/img/Vector.png"
 import Dropdown from "./Dropdown";
 import { axiosInstance } from "../../../apis/axios-instance";
-import config from "../../../apis/config";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { Pagination } from "../../../components/Pagination";

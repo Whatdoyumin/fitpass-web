@@ -43,12 +43,14 @@ import NotFound from "../pages/NotFound";
 import NoticeDetail from "../pages/Notice/NoticeDetail";
 import AdminRootLayout from "../layout/AdminRootLayout";
 import AuthHandler from "../components/AuthHandler";
+import ScrollToTop from "../components/ScrollToTop";
 
 const Router = createBrowserRouter([
   {
     path: "/",
     element: (
       <>
+      <ScrollToTop />
         <AuthHandler /> {/* ✅ 소셜 로그인 후 자동 실행 */}
         <RootLayout />
       </>

@@ -22,3 +22,15 @@ export const useFetchRecommendFitness = () => {
     queryFn: isLogin ? fetchLoginRecommend : fetchNoLoginRecommend,
   })
 };
+
+const fetchHomeSlide =  async () => {
+  const response = await axios.get(`${config.apiBaseUrl}/notice/homeSlide`);
+  return response.data.result;
+}
+
+export const useFetchHomeSlide = () => {
+  return useQuery({
+    queryKey: ['homeSlide'],
+    queryFn: fetchHomeSlide,
+  })
+}

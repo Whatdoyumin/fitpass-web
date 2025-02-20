@@ -16,12 +16,6 @@ export const getAdminDraftNotice = async (): Promise<DraftNoticeResponse> => {
     throw error;
   }
 };
-// async function convertUrlToFile(imageUrl: string, fileName: string): Promise<File> {
-//   const response = await fetch(imageUrl);
-//   const blob = await response.blob();
-//   const file = new File([blob], fileName, { type: blob.type });
-//   return file;
-// }
 
 export const postAdminNotice = async ({
   id,

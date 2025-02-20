@@ -3,7 +3,7 @@ import { PassPayment } from "../assets/svg";
 import { usePaymentPass } from "../hooks/useGetPaymentPass";
 import { useParams } from "react-router-dom";
 
-const PassPaymentSuccess = () => {
+function PassPaymentSuccess() {
   const { id } = useParams<{ id: string }>();
   const fitnessId = id ? parseInt(id, 10) : -1;
 
@@ -13,11 +13,11 @@ const PassPaymentSuccess = () => {
     navigate("/use-pass");
   }
 
-  const { data } = usePaymentPass( fitnessId, 'afterBuyPass' );
+  const { data } = usePaymentPass( fitnessId );
   console.log(data);
 
   return (
-    <div className="flex flex-col bg-white-200 h-[736px] items-center justify-center">
+    <div className="flex flex-col bg-white-200 h-[calc(100vh-165px)] items-center justify-center">
       <div className="flex flex-col items-center justify-center gap-[33px]">
         <PassPayment className="w-[95px] h-[95px]" />
         <p className="font-bold text-[22px] mb-5">결제가 완료되었습니다</p>
