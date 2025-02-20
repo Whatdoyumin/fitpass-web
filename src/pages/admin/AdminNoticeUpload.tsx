@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IcCloseBtn, IcFontBold, IcFontUnderline, IcImage } from "../../assets/svg";
-import { mockDraftNotices, DraftNotice } from "../../mocks/mockNotices";
 import {
+  DraftNotice,
+  useGetAdminNotice,
+  useGetNoticeDetail,
   usePostAdminDraftNotice,
   usePostAdminNotice,
 } from "../../apis/adminNotice/quries/useAdminNoticeUploadApi";
+import { LoadingSpinner } from "../../components/LoadingSpinner";
 
 function AdminNoticeUpload() {
   const [title, setTitle] = useState("");
@@ -13,13 +16,13 @@ function AdminNoticeUpload() {
   const [selectedType, setSelectedType] = useState<"공지" | "이벤트">("공지");
   const [showModal, setShowModal] = useState(false);
   const [showSaveModal, setShowSaveModal] = useState(false);
-  const [selectedNotice, setSelectedNotice] = useState<DraftNotice | null>(null);
   const [content, setContent] = useState<string>("");
 
   const navigate = useNavigate();
 
   const { mutate: postNotice } = usePostAdminNotice();
   const { mutate: saveDraft } = usePostAdminDraftNotice();
+  const { data } = useGetAdminNotice();
 
   // 이미지 추가 함수
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,38 +37,82 @@ function AdminNoticeUpload() {
   };
 
   const toggleSaveModal = () => {
-    setShowSaveModal(!showSaveModal); // Toggle save modal
+    setShowSaveModal(!showSaveModal);
   };
 
   // 게시하기 버튼 활성화 조건
-  const isSubmitDisabled = !(title && image && selectedType && content);
+  const isSubmitDisabled = !(title && selectedType);
 
+  const handleSubmit = () => {
+    if (!(title && image && selectedType && content)) {
+      alert("모든 필드를 입력해주세요.");
+      return;
+    }
+    setShowModal(true);
+  };
+
+  // 제목 있어야 임시저장
   const isDraftSubmitDisabled = !title;
 
-  // 임시저장 상태인 항목만 필터링, 순서를 거꾸로
-  const tempSavedNotices = mockDraftNotices.filter((item) => item.status === "임시저장").reverse();
+  // 임시저장 목록
+  const tempSavedNotices = data?.notices ? [...data.notices] : [];
+  const [selectedNoticeId, setSelectedNoticeId] = useState<number | undefined>();
+
+  const {
+    data: noticeDetail,
+    isLoading,
+    error,
+  } = useGetNoticeDetail(selectedNoticeId ?? undefined);
 
   const handleNoticeClick = (notice: DraftNotice) => {
-    setSelectedNotice(notice);
-    setTitle(notice.title);
-    setImage(notice.image);
-    setSelectedType(notice.category === "공지사항" ? "공지" : "이벤트"); // category에 맞게
+    setShowSaveModal(false);
+    setSelectedNoticeId(notice.id);
+  };
 
-    // 내용도 가져오기
-    const contentElement = document.querySelector("[contenteditable]");
-    if (contentElement) {
-      contentElement.innerHTML = notice.content;
-      setContent(notice.content);
+  // string 이미지를 파일명처럼
+  function getFileNameFromPresignedUrl(url: string | File | undefined): string | undefined {
+    if (url instanceof File) {
+      return url.name;
+    } else if (url === undefined) {
+      return undefined;
     }
 
-    setShowSaveModal(false);
-  };
+    try {
+      const decodedUrl = decodeURIComponent(url); // URL 인코딩된 경우 대비
+      const urlWithoutParams = decodedUrl.split("?")[0]; // 쿼리 스트링 제거
+      const pathSegments = urlWithoutParams.split("/"); // '/' 기준으로 나누기
+      return pathSegments.pop() || "none"; // 마지막 요소 반환
+    } catch (error) {
+      console.error("파일명 추출 실패:", error);
+      return "none";
+    }
+  }
+
+  useEffect(() => {
+    if (selectedNoticeId !== undefined && selectedNoticeId !== null) {
+      if (noticeDetail) {
+        setTitle(noticeDetail.title);
+
+        const contentElement = document.querySelector("[contenteditable]");
+        if (contentElement) {
+          contentElement.innerHTML = noticeDetail.content;
+          setContent(noticeDetail.content);
+        }
+
+        setSelectedType(noticeDetail.category === "ANNOUNCEMENT" ? "공지" : "이벤트");
+
+        const fileName = getFileNameFromPresignedUrl(noticeDetail.imageUrl);
+        setImage(fileName || "");
+      }
+    }
+  }, [selectedNoticeId, noticeDetail]);
 
   // 게시하기 버튼 클릭 시 API 호출
   const handlePostNotice = () => {
-    if (image instanceof File) {
+    if (image instanceof File || typeof image === "string") {
       postNotice(
         {
+          id: selectedNoticeId,
           title,
           content,
           type: selectedType === "공지" ? "ANNOUNCEMENT" : "EVENT",
@@ -76,33 +123,63 @@ function AdminNoticeUpload() {
             setShowModal(false);
             navigate("/admin/notice");
           },
+          onError: (error) => {
+            console.error("게시 실패:", error);
+          },
         }
       );
     }
   };
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  const handleContentChange = () => {
+    if (contentRef.current) {
+      const currentContent = contentRef.current.innerHTML;
+      setContent(currentContent);
+    }
+  };
+
+  useEffect(() => {
+    if (contentRef.current && content !== contentRef.current.innerHTML.trim()) {
+      contentRef.current.innerHTML = content || "";
+    }
+  }, [content]);
 
   const toggleTextStyle = (style: string) => {
     document.execCommand(style, false);
+    handleContentChange();
   };
 
   const handleSaveDraft = () => {
     if (!title) return;
 
-    saveDraft(
-      {
-        title,
-        content: content ? content : "",
-        type: selectedType === "공지" ? "ANNOUNCEMENT" : "EVENT",
-        image: image instanceof File ? image : "none",
-      },
-      {
-        onSuccess: () => {
-          navigate("/admin/notice");
+    if (image instanceof File || typeof image === "string") {
+      saveDraft(
+        {
+          id: selectedNoticeId,
+          title,
+          content: content ? content : "",
+          type: selectedType === "공지" ? "ANNOUNCEMENT" : "EVENT",
+          image,
         },
-      }
-    );
+        {
+          onSuccess: () => {
+            navigate("/admin/notice");
+          },
+        }
+      );
+    }
   };
 
+  useEffect(() => {
+    if (error) {
+      alert(error.response?.data);
+    }
+  }, [error]);
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
   return (
     <div className="w-full px-[7px]">
       <h1 className="adminTitle">공지사항 → 게시글 작성</h1>
@@ -112,7 +189,7 @@ function AdminNoticeUpload() {
           <label className="min-w-[46px] text-gray-700">제목</label>
           <input
             type="text"
-            value={title || selectedNotice?.title || ""}
+            value={title || ""}
             onChange={(e) => setTitle(e.target.value)}
             className="h-[40px] border border-gray-450 rounded-[3px] p-2 flex-grow focus:outline-none"
           />
@@ -144,7 +221,7 @@ function AdminNoticeUpload() {
           <div className="relative w-full">
             <input
               type="text"
-              value={image instanceof File ? image.name : image || ""}
+              value={image === "none" ? "" : typeof image === "string" ? image : image?.name || ""}
               readOnly
               className="w-full h-[40px] border border-gray-450 rounded-[3px] p-2 pr-[50px] focus:outline-none overflow-hidden text-ellipsis whitespace-nowrap"
             />
@@ -177,13 +254,11 @@ function AdminNoticeUpload() {
         {/* 내용 입력 */}
         <div className="mb-[35px]">
           <div
+            ref={contentRef}
             contentEditable
-            className="w-full min-h-[460px] border border-gray-450 p-4 focus:outline-none text-12px text-black-700 placeholder-black-700"
-            style={{
-              resize: "none",
-            }}
-            onInput={(e) => setContent(e.currentTarget.innerHTML)} // 내용 업데이트
-            dangerouslySetInnerHTML={{ __html: selectedNotice?.content || "" }}
+            className={`w-full h-[200px] resize-none border border-gray-450 px-[19px] py-[22px]
+      focus:outline-none text-12px ${content ? content : ""}`}
+            onInput={handleContentChange} // 내용 입력 시 상태 업데이트
           />
         </div>
 
@@ -191,20 +266,20 @@ function AdminNoticeUpload() {
         <div className="flex justify-end gap-[23px]">
           <button
             onClick={toggleSaveModal} // 저장 목록 모달 열기
-            className="w-[150px] h-[51px] py-2 bg-white-100 text-blue-500 border border-blue-500 rounded-md"
+            className="min-w-[150px] h-[51px] py-2 bg-white-100 text-blue-500 border border-blue-500 rounded-md"
           >
             저장 목록 ({tempSavedNotices.length})
           </button>
           <button
             onClick={handleSaveDraft} // 임시저장 함수 호출
-            className="w-[150px] h-[51px] py-2 bg-white-100 text-blue-500 border border-blue-500 rounded-md"
+            className="min-w-[150px] h-[51px] py-2 bg-white-100 text-blue-500 border border-blue-500 rounded-md"
             disabled={isDraftSubmitDisabled} // 제목 없으면 비활성화
           >
             임시 저장
           </button>
           <button
-            onClick={() => setShowModal(true)}
-            className={`w-[150px] h-[51px] py-2 bg-blue-500 text-white-100 border rounded-md`}
+            onClick={handleSubmit}
+            className={`min-w-[150px] h-[51px] py-2 bg-blue-500 text-white-100 border rounded-md`}
             disabled={isSubmitDisabled}
           >
             게시하기
@@ -244,7 +319,7 @@ function AdminNoticeUpload() {
                 {tempSavedNotices.map((notice, index) => (
                   <li
                     key={notice.id}
-                    className={`text-16px py-[20px] ${
+                    className={`text-16px py-[20px] overflow-hidden whitespace-nowrap text-ellipsis ${
                       index < tempSavedNotices.length - 1 ? "border-b border-gray-300" : ""
                     }`}
                     onClick={() => handleNoticeClick(notice)}

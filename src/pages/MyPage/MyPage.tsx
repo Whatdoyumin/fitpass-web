@@ -1,5 +1,5 @@
-import { JSX, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { JSX, useState, useEffect } from "react";
 
 import MyCoin from "../MyPage/MyCoin";
 import MyProfile from "../MyPage/MyProfile";
@@ -18,10 +18,11 @@ import { useGetProfile } from "../../apis/mypage/quries/useProfileApi";
 import { LoadingSpinner } from "../../components/LoadingSpinner";
 import NotFound from "../NotFound";
 
+import { useUpdateProfile, useDeleteProfile } from "../../apis/mypage/quries/useProfileApi"; // 훅 임포트
+
 const handleLogout = () => {
   sessionStorage.removeItem("accessToken");
   sessionStorage.removeItem("refreshToken");
-
   sessionStorage.clear();
 };
 
@@ -51,6 +52,8 @@ const MyPage = () => {
   }, [navigate]);
 
   const { data: profile, isLoading, isError } = useGetProfile();
+  const { mutate: updateProfileMutation } = useUpdateProfile();
+  const { mutate: deleteProfileMutation } = useDeleteProfile();
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -83,7 +86,13 @@ const MyPage = () => {
 
   return (
     <div className="w-full min-h-[893px] bg-white-200">
-      {profile && <MyProfile profile={profile} />}
+      {profile && (
+        <MyProfile
+          profile={profile}
+          updateProfileMutation={updateProfileMutation} // 훅을 props로 전달
+          deleteProfileMutation={deleteProfileMutation} // 훅을 props로 전달
+        />
+      )}
       {profile && <MyCoin profile={profile} />}
       <SectionComponent title="결제" items={paymentItems} />
       <SectionComponent title="고객센터 및 설정" items={settingsItems} />
