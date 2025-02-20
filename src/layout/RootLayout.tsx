@@ -6,9 +6,7 @@ function RootLayout() {
   return (
     <div className="h-full flex flex-col">
       <Header />
-      <div className="w-full h-full z-20">
-        <Outlet />
-      </div>
+      <Outlet />
       <Navbar />
     </div>
   );

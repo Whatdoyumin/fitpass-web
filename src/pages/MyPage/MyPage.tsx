@@ -85,7 +85,7 @@ const MyPage = () => {
   ];
 
   return (
-    <div className="w-full min-h-[893px] bg-white-200">
+    <div className="w-full min-h-[calc(100vh-165px)] bg-white-200">
       {profile && (
         <MyProfile
           profile={profile}

@@ -92,7 +92,7 @@ function FitnessDetails() {
       <div className="relative w-[340px] h-[191px]">
         <Slider {...settings} className="w-[340px] h-[191px]">
           {images.map((img, index) => (
-            <div className="relative w-[340px] h-[191px] ">
+            <div key={index} className="relative w-[340px] h-[191px] ">
               <img src={img} alt={`fitness-${index}`} className="w-[340px] h-[191px] rounded-t-[7px]" />
               <span className="absolute bottom-2 right-4 w-9 h-[19px] px-[10px] py-[3px] bg-black-700/60 text-white-100 rounded-[15px] text-[11px] font-medium flex justify-center items-center">
                 {currentIndex + 1}/{images.length}

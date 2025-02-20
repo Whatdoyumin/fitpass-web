@@ -30,7 +30,7 @@ const AdminNav = () => {
               } ${!item.children && "cursor-pointer"}`}
               onClick={() => item.path && navigate(item.path)}
             >
-              <div className="flex gap-4">
+              <div className="flex gap-4 items-center">
                 {item.icon}
                 <p className="text-12px">{item.name}</p>
               </div>

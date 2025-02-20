@@ -7,6 +7,11 @@ type postRequestBody = {
   agree: boolean
 }
 
+interface CustomError {
+  code: string,
+  message: string,
+}
+
 const postPass = async (data: postRequestBody) => {
   const response = await axiosInstance.post("/fitness/pass", data);
   return response.data;
@@ -20,13 +25,24 @@ export const usePostPass = (navigate: ReturnType<typeof useNavigate>) => {
 
       const id = variables.fitnessId;
       navigate(`/purchase-pass/${id}/done`);
-      // navigate(`/purchase-pass/${data.result.memberFitnessId}/done`);
     },
-    onError: (error) => {
+    onError: (error: CustomError) => {
       console.log("패스 구매 실패: ", error);
-      alert("결제에 실패했습니다.");
+      if (isCustomError(error)) {
+        console.log(error.code)
+        if (error.code === "ERR_BAD_REQUEST") {
+          alert("이미 구매한 패스가 존재합니다.");
+        } else {
+          alert(`결제에 실패했습니다. (${error.message})`);
+        }
+      } else {
+        alert("결제 중 알 수 없는 오류가 발생했습니다.");
+      }
     }
   });
 };
 
-// 내가 구매한 패스 get to it 피트니스 memberfitnessid === 49
+// 타입 가드 함수
+function isCustomError(error: unknown): error is CustomError {
+  return typeof error === "object" && error !== null && "code" in error && "message" in error;
+}

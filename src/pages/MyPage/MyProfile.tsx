@@ -25,7 +25,11 @@ const MyProfile = ({ profile, updateProfileMutation, deleteProfileMutation }: My
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    setIsMobile(window.innerWidth <= 768);
+    const checkMobile = () => {
+      setIsMobile('ontouchstart' in window || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent));
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
   }, []);
 
   const handleCameraClick = () => {
@@ -100,7 +104,7 @@ const MyProfile = ({ profile, updateProfileMutation, deleteProfileMutation }: My
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 bg-gray-700 bg-opacity-60 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-gray-700 bg-opacity-60 flex items-center justify-center z-[10]">
           <div
             className={`bg-white-100 rounded-lg ${content === "default" ? "max-w-[315px]" : "max-w-[300px]"} w-full`}
           >

@@ -90,7 +90,7 @@ function UsePass() {
   };
 
   return (
-    <div className="bg-gray-300 h-[calc(100vh-165px)] item-center">
+    <div className="bg-gray-300 min-h-[calc(100vh-165px)] item-center">
       {hasAvailablePass || hasCompletedPass ? (
         <>
           <AvailableList passes={availablePasses} updatePassStatus={updatePassStatus} />
@@ -99,7 +99,7 @@ function UsePass() {
           )}
         </>
       ) : (
-        <div className="flex justify-center items-center h-full">
+        <div className="flex justify-center items-center  min-h-[calc(100vh-165px)]">
           <IcNoUsePass width="158px" height="calc(100vh - 165px)" />
         </div>
       )}
