@@ -8,14 +8,15 @@ import CardCol from "./CardCol";
 import RequireLogin from "../../components/RequireLogin";
 import { HomeCardData } from "../../types/HomeCardData";
 
-import Ad1 from "../../assets/img/ad1.jpeg";
-import Ad2 from "../../assets/img/ad2.jpg";
-import Ad3 from "../../assets/img/ad3.jpg";
-
 import { useAuth } from "../../context/AuthContext";
 import { LoadingSpinner } from "../../components/LoadingSpinner";
 import NotFound from "../NotFound";
-import { useFetchRecommendFitness } from "../../hooks/useGetRecommend";
+import { useFetchHomeSlide, useFetchRecommendFitness } from "../../hooks/useGetRecommend";
+
+type HomeSlide = {
+  id: number,
+  imageUrl: string,
+}
 
 function Home() {
   const {isLogin} = useAuth();
@@ -40,6 +41,8 @@ function Home() {
       slidesToShow: Math.min(stored.length, 3),
     }));
   }, []);
+
+  const { data: slideImg } = useFetchHomeSlide();
 
   const { data: datas, isPending, isError } = useFetchRecommendFitness();
 
@@ -76,15 +79,9 @@ function Home() {
     <div className="bg-white-200 w-full h-[calc(100vh-165px)] overflow-y-auto flex flex-col">
       <div className="flex justify-center w-[390px] h-[280px] bg-black-700 relative ">
         <Slider {...adSettings} className="mb-sideGap w-[390px] h-[230px]">
-          <div>
-            <img src={Ad1} alt="광고 이미지1" className="w-[294px] h-[260px] mx-auto" />
-          </div>
-          <div>
-            <img src={Ad2} alt="광고 이미지2" className="w-[294px] h-[260px] mx-auto" />
-          </div>
-          <div>
-            <img src={Ad3} alt="광고 이미지3" className="w-[294px] h-[260px] mx-auto" />
-          </div>
+          {slideImg.map((img: HomeSlide) => (
+            <img key={img.id} src={img.imageUrl} alt={`${img.id}`} className="w-[294px] h-[260px] mx-auto" />
+          ))}
         </Slider>
       </div>
 
