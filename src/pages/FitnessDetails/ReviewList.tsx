@@ -42,8 +42,6 @@ function ReviewList() {
     queryFn: fetchReview,
   });
 
-  console.log(data);
-
   const totalPages: number = data?.result?.totalPages ?? 0;
 
   const sortReviews = (options: "score" | "date") => {
@@ -56,41 +54,39 @@ function ReviewList() {
       <p className="text-base font-bold">이용 후기</p>
       <div>
         {data?.result.totalPages === 0 ? (
-        <div className="w-full flex justify-center items-center">
-          <p className="font-medium text-gray-600">리뷰가 없습니다.</p>
-        </div>) : (
+          <div className="w-full flex justify-center items-center">
+            <p className="font-medium text-gray-600">리뷰가 없습니다.</p>
+          </div>
+        ) : (
           <>
-              {/* 정렬 방식 */}
-              <div className="w-[74px] h-[14px] flex items-center my-[5px] ">
-                <button
-                  className={`font-medium text-[12px] ${
-                    sortOption === "score" ? "text-black-700" : "text-gray-350"
-                  }`}
-                  onClick={() => sortReviews("score")}
-                >
-                  별점순
-                </button>
-                <div className="border-r border-black-700 h-[8px] mx-[3px] "></div>
-                <button
-                  className={`font-medium text-[12px] ${
-                    sortOption === "date" ? "text-black-700" : "text-gray-350"
-                  }`}
-                  onClick={() => sortReviews("date")}
-                >
-                  최신순
-                </button>
-              </div>
-              <div className="flex flex-col gap-[15px]">
-                {data?.result?.reviews &&
-                  data?.result?.reviews.map((review) => (
-                    <ReviewItem key={review.id} review={review} refetch={refetch} />
-                  ))}
-              </div>
-              {/* pagination */}
-              <Pagination
-                totalPages={totalPages}
-                currentPage={page}
-                onPageChange={setPage} />
+            {/* 정렬 방식 */}
+            <div className="w-[74px] h-[14px] flex items-center my-[5px] ">
+              <button
+                className={`font-medium text-[12px] ${
+                  sortOption === "score" ? "text-black-700" : "text-gray-350"
+                }`}
+                onClick={() => sortReviews("score")}
+              >
+                별점순
+              </button>
+              <div className="border-r border-black-700 h-[8px] mx-[3px] "></div>
+              <button
+                className={`font-medium text-[12px] ${
+                  sortOption === "date" ? "text-black-700" : "text-gray-350"
+                }`}
+                onClick={() => sortReviews("date")}
+              >
+                최신순
+              </button>
+            </div>
+            <div className="flex flex-col gap-[15px]">
+              {data?.result?.reviews &&
+                data?.result?.reviews.map((review) => (
+                  <ReviewItem key={review.id} review={review} refetch={refetch} />
+                ))}
+            </div>
+            {/* pagination */}
+            <Pagination totalPages={totalPages} currentPage={page} onPageChange={setPage} />
           </>
         )}
       </div>

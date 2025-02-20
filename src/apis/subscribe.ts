@@ -1,4 +1,5 @@
 import { TKakaoPayBody, TPayCoinSuccess } from "../types/buyCoin";
+import { TChangeSub } from "../types/payment";
 import { axiosInstance } from "./axios-instance";
 
 const postSubscibe = async ({ itemName, totalAmount, methodName }: TKakaoPayBody) => {
@@ -15,4 +16,14 @@ const postPayPlanSuccess = async ({ pgToken }: TPayCoinSuccess) => {
   return data;
 };
 
-export { postSubscibe, postPayPlanSuccess };
+const postPlanSidStatus = async () => {
+  const { data } = await axiosInstance.post(`/plan/pay/sid-status`);
+  return data;
+};
+
+const postPlanChange = async (body: TChangeSub) => {
+  const { data } = await axiosInstance.post(`/plan/pay/change`, body);
+  return data;
+};
+
+export { postSubscibe, postPayPlanSuccess, postPlanSidStatus, postPlanChange };

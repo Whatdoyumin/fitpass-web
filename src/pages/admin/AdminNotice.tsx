@@ -25,7 +25,7 @@ function AdminNotice() {
   const currentPage = Number(searchParams.get("page")) || 1;
 
   // API 요청 -> debouncedSearchKeyword가 바뀔 때
-  const { data, isLoading, error } = useGetAdminNotice(
+  const { data, isLoading, error, refetch } = useGetAdminNotice(
     debouncedSearchKeyword || null,
     currentPage,
     itemsPerPage
@@ -60,7 +60,7 @@ function AdminNotice() {
     window.scrollTo({ top: scrollPosition, behavior: "instant" });
   }, [data, scrollPosition]);
 
-  const { mutate: patchHomeSlideCheck } = usePatchHomeSlideCheck();
+  const { mutate: patchHomeSlideCheck } = usePatchHomeSlideCheck(refetch);
 
   const handleCheckboxChange = (id: number, isChecked: boolean) => {
     setModalNoticeId(id);
@@ -68,23 +68,33 @@ function AdminNotice() {
     setIsModalOpen(true);
   };
 
-  const handleModalAction = (confirm: boolean) => {
+  const handleModalAction = async (confirm: boolean) => {
     if (confirm && modalNoticeId !== null) {
       const updatedCheckedCount = checkedCount + (modalType === "add" ? 1 : -1);
       setCheckedCount(updatedCheckedCount);
+  
+      try {
+        // 체크박스 상태 변경 (await로 요청 완료를 기다림)
+        if (modalType === "add") {
+          await patchHomeSlideCheck({ noticeId: modalNoticeId, isHomeSlide: true });
+          await refetch();
 
-      // 체크박스 상태 변경을 위한 API 호출
-      if (modalType === "add") {
-        patchHomeSlideCheck({ noticeId: modalNoticeId, isHomeSlide: true });
-      } else if (modalType === "remove") {
-        patchHomeSlideCheck({ noticeId: modalNoticeId, isHomeSlide: false });
+        } else if (modalType === "remove") {
+          await patchHomeSlideCheck({ noticeId: modalNoticeId, isHomeSlide: false });
+          await refetch();
+
+        }
+        } catch (error) {
+        console.error("API 요청 중 오류 발생:", error);
       }
     }
-
+  
+    // 모달 닫기
     setIsModalOpen(false);
     setModalNoticeId(null);
     setModalType(null);
   };
+  
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -105,9 +115,9 @@ function AdminNotice() {
   }
 
   return (
-    <div className="w-full px-[7px]">
+    <div className="w-full pl-[7px]">
       <h1 className="adminTitle">공지사항</h1>
-      <div className="min-w-[920px]">
+      <div className="pr-[7px] min-w-[920px]">
         {/* 검색 */}
         <div className="w-[345px] flex flex-col justify-end items-start gap-2 mt-[64px] ml-auto">
           <label className="text-[12px] text-black-600">검색하기</label>
@@ -131,13 +141,13 @@ function AdminNotice() {
           <table className="w-full table-fixed border border-gray-450">
             <thead className="bg-blue-100 border-b border-gray-450">
               <tr className="h-[50px] text-[13px] text-black-700">
-                <th className="pr-4 pl-10 py-2 w-[80px] text-center">순번</th>
+                <th className="pr-4 pl-10 py-2 w-[60px] text-center">순번</th>
                 <th className="px-4 py-2 w-[60px] text-center">이미지</th>
-                <th className="px-4 py-2 w-[260px] text-left">제목</th>
-                <th className="px-4 py-2 w-[120px] text-left">카테고리</th>
-                <th className="px-4 py-2 w-[120px] text-left">게시일</th>
-                <th className="px-4 py-2 w-[80px] text-left">상태</th>
-                <th className="px-4 py-2 w-[180px] text-center">홈 슬라이드 게시</th>
+                <th className="px-4 py-2 w-[180px] text-left">제목</th>
+                <th className="px-4 py-2 w-[70px] text-left">카테고리</th>
+                <th className="px-4 py-2 w-[80px] text-left">게시일</th>
+                <th className="px-4 py-2 w-[70px] text-left">상태</th>
+                <th className="px-4 pr-10 py-2 w-[100px] text-center">홈 슬라이드 게시</th>
               </tr>
             </thead>
 
@@ -160,7 +170,7 @@ function AdminNotice() {
                   <td className="px-4 py-2">{notice.category}</td>
                   <td className="px-4 py-2">{formatDate(notice.createdAt)}</td>
                   <td className="px-4 py-2">{notice.status}</td>
-                  <td className="px-4 py-2 text-center border-b border-gray-450">
+                  <td className="px-4 pr-10 py-2 text-center border-b border-gray-450">
                     <span className="flex justify-center items-center cursor-pointer">
                       {notice.isHomeSlide ? (
                         <IcCheckFull

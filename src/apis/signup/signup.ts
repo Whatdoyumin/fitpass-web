@@ -9,8 +9,8 @@ export interface TCheckIDData {
   id: string;
 }
 
-import axios from 'axios';
-import config from '../config';
+import axios from "axios";
+import config from "../config";
 
 export const signUp = async ({ name, id, password, phoneNumber }: TSignUpData) => {
   try {
@@ -26,13 +26,12 @@ export const signUp = async ({ name, id, password, phoneNumber }: TSignUpData) =
       marketingAgreed: true,
     });
 
-    console.log(response.data);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      throw new Error(error.response?.data?.message || '회원가입에 실패했습니다.');
+      throw new Error(error.response?.data?.message || "회원가입에 실패했습니다.");
     } else {
-      throw new Error('회원가입에 실패했습니다.');
+      throw new Error("회원가입에 실패했습니다.");
     }
   }
 };
@@ -48,9 +47,9 @@ export const checkID = async ({ id }: TCheckIDData) => {
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      throw new Error(error.response?.data?.message || '아이디 중복 확인에 실패했습니다.');
+      throw new Error(error.response?.data?.message || "아이디 중복 확인에 실패했습니다.");
     } else {
-      throw new Error('아이디 중복 확인에 실패했습니다.');
+      throw new Error("아이디 중복 확인에 실패했습니다.");
     }
   }
 };

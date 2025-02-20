@@ -39,26 +39,21 @@ export const useGetAdminNotice = (keyword: string | null, page: number = 1, size
 };
 
 // 홈 배너 이미지 선택 체크박스 
-export const usePatchHomeSlideCheck = () => {
+export const usePatchHomeSlideCheck = (refetch: () => void) => {
   return useMutation<
-    { isSuccess: boolean; code: string; message: string; result: string; },
-    AxiosError<ErrorResponse>, 
-    { noticeId: number; isHomeSlide: boolean; } 
+    { isSuccess: boolean; code: string; message: string; result: string },
+    AxiosError<ErrorResponse>,
+    { noticeId: number; isHomeSlide: boolean }
   >({
     mutationFn: ({ noticeId, isHomeSlide }) => patchHomeSlideCheck(noticeId, isHomeSlide),
     onError: (error: AxiosError<ErrorResponse>) => {
-      console.error("오류:", error.response?.data?.message);
       alert(`${error.response?.data?.message}`);
     },
-    onSuccess: (data: { isSuccess: boolean; code: string; message: string; result: string }) => {
+    onSuccess: async (data: { isSuccess: boolean; code: string; message: string; result: string }) => {
       if (data.isSuccess) {
         console.log("홈슬라이드 변경 성공");
-        window.location.reload();
-      } else {
-        console.log(`홈슬라이드 변경 실패: ${data.message}`);
+        refetch(); // 성공 후 데이터 리패칭
       }
     },
   });
 };
-
-

@@ -27,4 +27,5 @@ export interface TSocialLoginData {
         throw new Error('소셜 회원가입에 실패했습니다.');
       }
     }
-  };
+  }
+};

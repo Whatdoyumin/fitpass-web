@@ -2,7 +2,7 @@ import { TAdminSubsribe } from "../../types/adminSubsribe";
 import { axiosInstance } from "../axios-instance";
 
 const getAdminSubsribe = async () => {
-  const { data } = await axiosInstance.get(`/admin/management/plan`);
+  const { data } = await axiosInstance.get(`/management/plan`);
   return data;
 };
 

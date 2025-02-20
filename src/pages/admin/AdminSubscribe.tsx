@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Modal from "../../components/Modal";
 import { ManagementInput } from "../../components/adminCommon/ManagementInput";
-import { useGetAdminSubsribe, usePutAdminSubscribe } from "../../hooks/useGetAdminSubsribe";
+import { useGetSubInfo, usePutAdminSubscribe } from "../../hooks/useGetAdminSubsribe";
 import { TAdminPlanType, TAdminSubsribe } from "../../types/adminSubsribe";
 
 const plans: TAdminPlanType[] = ["BASIC", "STANDARD", "PRO"];
@@ -18,7 +18,7 @@ function AdminSubscription() {
     }))
   );
 
-  const { data } = useGetAdminSubsribe();
+  const { data } = useGetSubInfo();
   const { mutate } = usePutAdminSubscribe();
 
   useEffect(() => {
