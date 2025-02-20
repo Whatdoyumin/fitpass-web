@@ -44,6 +44,7 @@ function LocationDetail() {
           navigate("/");
           localStorage.setItem("latitude", `${lat}`);
           localStorage.setItem("longitude", `${lng}`);
+          localStorage.setItem("address_name", address);
         },
         onError: (error) => {
           console.log(error.message);

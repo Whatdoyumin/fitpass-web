@@ -38,12 +38,12 @@ const MainHeader = () => {
   return (
     <div className="w-full flex justify-center gap-6 border-b-2 border-gray-300 pb-4">
       <Logo width={"47px"} onClick={() => navigate("/")} />
-      <div className="w-[219px] h-10 bg-gray-200 flex gap-4 rounded-5 px-3 py-2">
+      <div className="w-[219px] h-10 bg-gray-200 flex gap-2 rounded-5 px-3 py-2">
         <Location width={"16px"} />
         <input
           type="text"
-          className="w-full bg-transparent text-14px text-gray-500"
-          placeholder="중구 필동로 123번지"
+          className="w-full bg-transparent text-13px text-gray-500"
+          placeholder={localStorage.getItem("address_name") || "중구 필동로 123번지"}
           onClick={() => navigate("/set-location")}
         />
       </div>
