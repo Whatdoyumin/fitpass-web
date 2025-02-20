@@ -65,6 +65,24 @@ declare global {
           ZERO_RESULT = "ZERO_RESULT",
           ERROR = "ERROR",
         }
+
+        class Geocoder {
+          constructor();
+          coord2Address(
+            lng: number,
+            lat: number,
+            callback: (result: AddressResult[], status: Status) => void
+          ): void;
+        }
+
+        interface AddressResult {
+          road_address?: {
+            address_name: string;
+          };
+          address: {
+            address_name: string;
+          };
+        }
       }
     }
   }

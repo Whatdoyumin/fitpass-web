@@ -33,7 +33,6 @@ export const postAdminNotice = async ({
   const formData = new FormData();
 
   formData.append("request", JSON.stringify({ id, title, content, type }));
-  console.log(image);
 
   if (image instanceof File) {
     formData.append("image", image);

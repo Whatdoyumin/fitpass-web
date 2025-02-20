@@ -17,7 +17,6 @@ export default function UpdateReview() {
 
   const { fitnessId, score, content } = location.state || {};
 
-
   const [reviewText, setReviewText] = useState(content); // 리뷰 텍스트 상태
   const [charCount, setCharCount] = useState(content ? content.length : 0); // 글자 수
   const [rating, setRating] = useState(score); // 평점 상태
@@ -73,7 +72,6 @@ export default function UpdateReview() {
         },
         onError: (error) => {
           alert(`리뷰 수정 실패: ${error.message}`);
-          console.log(reviewId);
         },
       }
     );
@@ -174,7 +172,7 @@ export default function UpdateReview() {
                 className="w-full bg-blue-500 text-white-100 py-[14px] rounded-[5px] text-[15px] font-bold"
                 onClick={handleSubmitReview}
               >
-                리뷰 등록하기
+                리뷰 수정하기
               </button>
             </div>
 
