@@ -12,14 +12,14 @@ export const ADMIN_NAV_MENU = [
     id: 1,
     icon: null,
     name: "접속 아이디",
-    path: "/admin",
+    path: null,
     children: null,
   },
   {
     id: 2,
     icon: <IcAdminDashboard width={"24px"} />,
     name: "대시보드",
-    path: "dashboard",
+    path: "/admin",
     children: null,
   },
   {

@@ -15,9 +15,10 @@ interface InputFieldProps {
   placeholder: string;
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onEnter?: () => void;
 }
 
-function InputField({ type, placeholder, value, onChange }: InputFieldProps) {
+function InputField({ type, placeholder, value, onChange, onEnter }: InputFieldProps) {
   const [inputType, setInputType] = useState(type === "password" ? "password" : "text");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
@@ -60,6 +61,11 @@ function InputField({ type, placeholder, value, onChange }: InputFieldProps) {
         autoComplete="off"
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && onEnter) {
+            onEnter(); // ✅ Enter 키 입력 시 실행
+          }
+        }}
         className= {`flex-grow outline-none text-[15px] font-medium leading-[30px] placeholder-gray-400 tracking-[-0.3px] ${isFocused ? "text-gray-500" : "text-gray-400"}`}
       />
 

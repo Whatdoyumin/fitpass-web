@@ -31,8 +31,8 @@ function AdminSignin() {
       <div className="w-full h-full overflow-y-auto flex flex-col items-center pt-[200px]">
         <FitpassLogo width={"173px"} height={"48px"} className="cursor-pointer" />
         <div className="flex flex-col gap-[19px] mb-[17px] pt-[40px]">
-        <InputField type="id" placeholder="아이디 입력" value={id} onChange={(e) => setId(e.target.value)} />
-        <InputField type="password" placeholder="비밀번호 입력" value={password} onChange={(e) => setPassword(e.target.value)} />
+        <InputField type="id" placeholder="아이디 입력" value={id} onChange={(e) => setId(e.target.value)} onEnter={handleSignin} />
+        <InputField type="password" placeholder="비밀번호 입력" value={password} onChange={(e) => setPassword(e.target.value)} onEnter={handleSignin} />
       </div>
 
       {signinError ? (
