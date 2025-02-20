@@ -28,9 +28,8 @@ const MyProfile = ({ profile, updateProfileMutation, deleteProfileMutation }: My
     const checkMobile = () => {
       setIsMobile('ontouchstart' in window || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent));
     };
-    checkMobile(); // 처음 실행
-    window.addEventListener("resize", checkMobile); // 화면 크기 변경 시 재확인
-    console.log(navigator.userAgent);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
   }, []);
 
   const handleCameraClick = () => {
