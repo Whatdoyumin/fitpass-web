@@ -76,7 +76,6 @@ export default function UploadReview() {
         },
         onError: (error) => {
           alert(`리뷰 등록 실패: ${error.message}`);
-          console.log(passId);
         },
       }
     );

@@ -72,7 +72,6 @@ export default function UpdateReview() {
         },
         onError: (error) => {
           alert(`리뷰 수정 실패: ${error.message}`);
-          console.log(reviewId);
         },
       }
     );

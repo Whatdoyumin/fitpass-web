@@ -148,8 +148,6 @@ function Payment({ type }: TPaymentProps) {
     isRequestSent.current = true;
 
     if (type === "buy-coins") {
-      console.log("코인 mutate 실행");
-
       mutatePaySuccess(
         { pgToken },
         {
@@ -159,8 +157,6 @@ function Payment({ type }: TPaymentProps) {
         }
       );
     } else if (type === "subscribe") {
-      console.log("구독 mutate 실행");
-
       mutatePlanSuccess(
         { pgToken },
         {

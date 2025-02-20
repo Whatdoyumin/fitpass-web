@@ -6,7 +6,7 @@ import SelectStatus from "./SelectStatus";
 import SetLocationModal from "./SetLocationModal";
 import TimeInput from "./TimeInput";
 import Modal from "../../../components/Modal";
-import { IcFontBold, IcFontUnderline } from "../../../assets/svg"
+import { IcFontBold, IcFontUnderline } from "../../../assets/svg";
 import { useAdminFitnessUpload } from "../../../apis/postAdminFitness/quries/useAdminFitnessUpload";
 
 function AdminFitnessUpload() {
@@ -49,7 +49,7 @@ function AdminFitnessUpload() {
     setAddress(add);
     setLatitude(lat);
     setLongitude(lng);
-  }
+  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -57,12 +57,23 @@ function AdminFitnessUpload() {
   };
 
   const submitForm = () => {
-
-  if (!fitnessName || !mainImg || !address || !fee || !phoneNumber || !totalFee || !notice || !etc || !howToUse || !time || !selectedCategory.length) {
-    alert("모든 필수 항목을 입력해주세요.");
-    setSubmitModal(false);
-    return;
-  }
+    if (
+      !fitnessName ||
+      !mainImg ||
+      !address ||
+      !fee ||
+      !phoneNumber ||
+      !totalFee ||
+      !notice ||
+      !etc ||
+      !howToUse ||
+      !time ||
+      !selectedCategory.length
+    ) {
+      alert("모든 필수 항목을 입력해주세요.");
+      setSubmitModal(false);
+      return;
+    }
 
     const formData = new FormData();
     formData.append("mainImage", mainImg);
@@ -70,29 +81,30 @@ function AdminFitnessUpload() {
       formData.append("additionalImages", file);
     });
 
-    formData.append("request", JSON.stringify({
-      totalFee: totalFee,
-      fee: fee,
-      latitude: latitude,
-      time: time,
-      longitude: longitude,
-      fitnessName: fitnessName,
-      etc: etc,
-      isPurchasable: String(selectedStatus),
-      address: address,
-      phoneNumber: phoneNumber,
-      notice: notice,
-      howToUse: howToUse,
-      categoryList: selectedCategory,
-    }));
-    
+    formData.append(
+      "request",
+      JSON.stringify({
+        totalFee: totalFee,
+        fee: fee,
+        latitude: latitude,
+        time: time,
+        longitude: longitude,
+        fitnessName: fitnessName,
+        etc: etc,
+        isPurchasable: String(selectedStatus),
+        address: address,
+        phoneNumber: phoneNumber,
+        notice: notice,
+        howToUse: howToUse,
+        categoryList: selectedCategory,
+      })
+    );
+
     setSubmitModal(false);
     document.querySelector("form")?.dispatchEvent(new Event("submit"));
 
     uploadFitness(formData);
-
-    console.log(formData);
-  }
+  };
 
   // 주소 검색 모달
   const handleAddressModalOpen = () => {
@@ -121,7 +133,7 @@ function AdminFitnessUpload() {
         setNotice(""); // 내용이 없으면 빈 문자열로 설정
       }
     }
-  }
+  };
 
   return (
     <div className="w-full h-full overflow-y-auto">
@@ -224,18 +236,22 @@ function AdminFitnessUpload() {
 
         {/* 스타일 토글 버튼 */}
         <div className="flex h-[40px] gap-[51px] bg-blue-100 border-t border-x border-gray-450 ">
-          <button 
+          <button
             onMouseDown={(e) => {
               e.preventDefault(); // 버튼 클릭 시 포커스가 contentEditable에서 벗어나는 걸 방지
             }}
-            onClick={() => toggleTextStyle("bold")} className="pl-[30px] focus:outline-none">
+            onClick={() => toggleTextStyle("bold")}
+            className="pl-[30px] focus:outline-none"
+          >
             <IcFontBold width={28} />
           </button>
-          <button 
+          <button
             onMouseDown={(e) => {
               e.preventDefault(); // 버튼 클릭 시 포커스가 contentEditable에서 벗어나는 걸 방지
             }}
-          onClick={() => toggleTextStyle("underline")} className="focus:outline-none">
+            onClick={() => toggleTextStyle("underline")}
+            className="focus:outline-none"
+          >
             <IcFontUnderline width={28} />
           </button>
         </div>
@@ -290,11 +306,9 @@ function AdminFitnessUpload() {
         </div>
       </form>
       {/* 주소 등록 모달 */}
-      {addressModal && 
-        <SetLocationModal 
-          onClose={handleAddressModalClose} 
-          onSetLocation={handleLocation}
-        />}
+      {addressModal && (
+        <SetLocationModal onClose={handleAddressModalClose} onSetLocation={handleLocation} />
+      )}
 
       {/* 등록하기 모달 */}
       {submitModal && (

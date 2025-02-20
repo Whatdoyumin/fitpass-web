@@ -56,8 +56,7 @@ function SetLocationModal({ onClose, onSetLocation }: ModalProps) {
     // localStorage.setItem("address_name", address_name);
     // localStorage.setItem("latitude", y);
     // localStorage.setItem("longitude", x);
-    console.log(typeof x);
-  
+
     onSetLocation(address_name, y, x);
 
     onClose();
