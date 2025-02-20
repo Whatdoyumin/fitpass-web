@@ -49,8 +49,8 @@ declare global {
           address_name: string;
           road_address_name?: string;
           phone?: string;
-          x: string;
-          y: string;
+          x: number;
+          y: number;
         }
 
         interface Pagination {

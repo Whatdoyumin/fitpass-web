@@ -73,7 +73,7 @@ function Home() {
   };
 
   return (
-    <div className="w-full h-full overflow-y-auto flex flex-col">
+    <div className="bg-white-200 w-full h-[calc(100vh-165px)] overflow-y-auto flex flex-col">
       <div className="flex justify-center w-[390px] h-[280px] bg-black-700 relative ">
         <Slider {...adSettings} className="mb-sideGap w-[390px] h-[230px]">
           <div>
@@ -88,10 +88,10 @@ function Home() {
         </Slider>
       </div>
 
-      <div className="w-[390px] h-[550px] rounded-t-[15px] bg-white-200 absolute top-[340px] z-5 ">
+      <div className="flex flex-col w-[390px] rounded-t-[15px] bg-white-200 absolute top-[340px] z-5 ">
         {/* 추천 운동시설 */}
-        <div className="w-[390px] h-[200px] pl-4 my-3 overflow-hidden mt-6">
-          {/* <div className="overflow-hidden pl-3 rounded-t-[15px] absolute"> */}
+        {/* <div className="flex-1 w-[390px] pl-4 my-3 overflow-hidden mt-6"> */}
+        <div className="w-[390px] pl-4 my-3 overflow-hidden mt-6">
           <p className="h-[19px] mt-[10px] mb-[20px] font-bold text-[16px]">
             <span className="text-blue-500">추천</span> 운동 시설
           </p>
@@ -104,7 +104,8 @@ function Home() {
         {/* 구분선 */}
         <div className="border-b-4 border-gray-300 py-3 w-[390px]"></div>
         {/* 최근 본 운동 시설 */}
-        <div className="w-[390px] h-[220px] pl-4 my-7 overflow-hidden">
+        {/* <div className="flex-1 w-[390px] pl-4 my-7 overflow-hidden"> */}
+        <div className="w-[390px] pl-4 my-7 overflow-hidden">
           <p className="h-[19px] mb-[20px] font-bold text-[16px]"><span className="text-blue-500">최근 본</span> 운동 시설</p>
             {isLogin ?               
             (recentWatched.length > 0 ? (

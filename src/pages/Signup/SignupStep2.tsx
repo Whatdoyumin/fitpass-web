@@ -3,7 +3,9 @@ import InputField from "./InputField";
 import { useLocation } from "react-router-dom";
 import { MoreTerms } from "../../assets/svg";
 import { useSignUpMutation } from "../../hooks/useSignup";
+import { useSocialSignup } from "../../hooks/useSocialSignup";
 import PhoneVerification from "../../components/PhoneVerification";
+import axios from "axios";
 
 interface Agreements {
   all: boolean;
@@ -24,19 +26,18 @@ function SignupStep2() {
   });
 
   useEffect(() => {
-    const fetchTokens = async () => {
+    const getTokens = async () => {
       try {
-        const response = await fetch("https://fitpass.co.kr/signup/step2", {
-          method: "GET",
-          credentials: "include", // ✅ 쿠키 사용 시 필요
+        const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/signup/step2`, {
+          withCredentials: true, // ✅ 쿠키 포함 요청
         });
-
-        const accessToken = response.headers.get("Authorization");
-        const refreshToken = response.headers.get("X-Refresh-Token");
-        const status = response.headers.get("X-Status");
-
+  
+        const accessToken = response.headers["authorization"];
+        const refreshToken = response.headers["x-refresh-token"];
+        const status = response.headers["x-status"];
+  
         console.log("🔑 [소셜 로그인] 헤더 정보:", { accessToken, refreshToken, status });
-
+  
         if (status === "register") {
           setTokens({
             accessToken: accessToken || "",
@@ -48,9 +49,10 @@ function SignupStep2() {
         console.error("헤더 데이터 가져오기 실패:", error);
       }
     };
-
-    fetchTokens();
+  
+    getTokens();
   }, []);
+  
 
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -94,9 +96,21 @@ function SignupStep2() {
     agreements.thirdParty;
 
   const signUpMutation = useSignUpMutation();
+  const socialLoginMutation = useSocialSignup();
 
   const handleNextStep = () => {
-    if (isFormValid) {
+    if (!isFormValid) return;
+    if (tokens.status === "register") {
+      // ✅ 소셜 로그인 회원가입
+      socialLoginMutation.mutate(
+        { name, phoneNumber, id},
+        {
+          onError: (error: unknown) => {
+            alert(error instanceof Error ? error.message : "소셜 로그인 회원가입 실패");
+          },
+        }
+      );
+    } else {
       signUpMutation.mutate(
         { name, id, password, phoneNumber },
         {
@@ -109,7 +123,7 @@ function SignupStep2() {
   };
 
   return (
-    <div className="w-full max-w-content flex flex-col items-center h-screen relative px-5 pt-[29px]">
+    <div className="w-full max-w-content flex flex-col items-center relative px-5 pt-[29px]">
       {/* 스크롤 가능 영역 */}
       <div className="flex-grow w-full overflow-auto flex flex-col gap-[20px]">
         {/* 이름 입력창 */}
@@ -133,9 +147,9 @@ function SignupStep2() {
       </div>
 
       {/* 약관 동의 섹션 */}
-      <div className="w-full mb-[27px]">
+      <div className="w-full max-w-content flex flex-col items-center justify-center mx-auto fixed bottom-[100px] mb-[27px]">
         {/* 전체 약관 동의 */}
-        <div className="w-full flex items-center gap-[17px] px-[26px] py-[10px]">
+        <div className="w-full flex items-center gap-[17px] px-[45px] py-[10px]">
           <input
             type="checkbox"
             checked={agreements.all}

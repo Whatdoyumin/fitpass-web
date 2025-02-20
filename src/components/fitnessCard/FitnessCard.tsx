@@ -100,7 +100,7 @@ const FitnessCard = ({ fitness, limitTime }: FitnessCardProps) => {
               />
             ) : (
               <img
-                className="w-[117px] rounded-l"
+                className="w-[117px] rounded-l object-cover"
                 src={item.imageUrl}
                 alt="이미지"
                 style={{
