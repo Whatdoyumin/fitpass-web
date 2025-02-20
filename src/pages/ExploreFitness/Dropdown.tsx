@@ -26,7 +26,7 @@ function Dropdown({ dropdown, onSortChange }: DropdownProps) {
       <button className={`flex w-[75px] h-[30px] border p-[5px] pl-[10px] rounded-3xl ${showDropdown ? "bg-white-100" : "bg-gray-200"} border-gray-300 items-center space-x-2`} onClick={handleDropdownOpen}>
         <div className="flex w-full h-full justify-between">
         <span className="w-[35px] h-[19px] text-[13px]">{selectedItem}</span>
-        {showDropdown ? <ArrowDropUp /> : <ArrowDropDown />}
+        {showDropdown ? <ArrowDropUp className="w-[20px] h-[20px]" /> : <ArrowDropDown className="w-[20px] h-[20px]" />}
         </div>
       </button>
       {showDropdown ? (

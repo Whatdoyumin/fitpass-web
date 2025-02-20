@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import MainImgUpload from "./MainImgUpload";
 import SelectCategory from "./SelectCategory";
 import SubImgUpload from "./SubImgUpload";
