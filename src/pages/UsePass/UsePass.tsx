@@ -90,7 +90,7 @@ function UsePass() {
   };
 
   return (
-    <div className="bg-gray-300 h-full item-center">
+    <div className="bg-gray-300 h-[calc(100vh-165px)] item-center">
       {hasAvailablePass || hasCompletedPass ? (
         <>
           <AvailableList passes={availablePasses} updatePassStatus={updatePassStatus} />
