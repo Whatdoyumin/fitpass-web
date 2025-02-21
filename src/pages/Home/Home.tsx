@@ -112,28 +112,28 @@ function Home() {
             <span className="text-blue-500">최근 본</span> 운동 시설
           </p>
           {isLogin ? (
-  recentWatched.length > 0 ? (
-    recentWatched.length === 1 ? (
-      <CardCol key={recentWatched[0]} data={recentWatched[0]} />
-    ) : recentWatched.length === 2 ? (
-      <div className="flex gap-4">
-        {recentWatched.map((data, index) => (
-          <CardCol key={index} data={data} />
-        ))}
-      </div>
-    ) : (
-      <Slider {...fitSettings} className="h-[143px] mr-[-120px] mb-[85px]">
-        {recentWatched.map((data, index) => (
-          <CardCol key={index} data={data} />
-        ))}
-      </Slider>
-    )
-  ) : (
-    <></>
-  )
-) : (
-  <RequireLogin />
-)}
+            recentWatched.length > 0 ? (
+              recentWatched.length === 1 ? (
+                <CardCol key={recentWatched[0]} data={recentWatched[0]} />
+              ) : recentWatched.length === 2 ? (
+                <div className="flex gap-4">
+                  {recentWatched.map((data, index) => (
+                    <CardCol key={index} data={data} />
+                  ))}
+                </div>
+              ) : (
+                <Slider {...fitSettings} className="h-[143px] mb-sideGap mr-[-120px] mb-[85px]">
+                  {recentWatched.map((data, index) => (
+                    <CardCol key={index} data={data} />
+                  ))}
+                </Slider>
+              )
+            ) : (
+              <></>
+            )
+          ) : (
+            <RequireLogin />
+          )}
 
         </div>
       </div>
