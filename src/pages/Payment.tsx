@@ -151,6 +151,10 @@ function Payment({ type }: TPaymentProps) {
       mutatePaySuccess(
         { pgToken },
         {
+          onSuccess: () => {
+            setIsModalOpen(true);
+            setIsCompleted(true);
+          },
           onError: (error) => {
             console.error("결제 실패:", error);
           },
@@ -230,26 +234,26 @@ function Payment({ type }: TPaymentProps) {
         </button>
       )}
 
-      {isSubscribingState
-        ? isModalOpen && (
-            <Modal
-              isOpen={isModalOpen}
-              onClose={handleCloseModal}
-              onSuccess={handleCloseModal}
-              title={"플랜 변경이 완료되었습니다."}
-              btn2Text={"확인"}
-            />
-          )
-        : isModalOpen && (
-            <Modal
-              isOpen={isModalOpen}
-              onClose={handleCloseModal}
-              onSuccess={isCompleted ? handleCloseModal : handleCompletePay}
-              title={isCompleted ? "구매가 완료되었습니다." : "구매하시겠습니까?"}
-              btn1Text={isCompleted ? null : "아니요"}
-              btn2Text={isCompleted ? "확인" : "네, 구매하겠습니다"}
-            />
-          )}
+      {isSubscribingState && type === "subscribe" && isModalOpen && (
+        <Modal
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          onSuccess={handleCloseModal}
+          title={"플랜 변경이 완료되었습니다."}
+          btn2Text={"확인"}
+        />
+      )}
+
+      {isModalOpen && (
+        <Modal
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          onSuccess={isCompleted ? handleCloseModal : handleCompletePay}
+          title={isCompleted ? "구매가 완료되었습니다." : "구매하시겠습니까?"}
+          btn1Text={isCompleted ? null : "아니요"}
+          btn2Text={isCompleted ? "확인" : "네, 구매하겠습니다"}
+        />
+      )}
     </div>
   );
 }
