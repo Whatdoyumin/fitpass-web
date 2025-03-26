@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Hamburger, Location, Logo } from "../../assets/svg";
 import { HamburgerMenu } from "./HamburgerMenu";
@@ -7,6 +7,14 @@ export const MainHeader = () => {
   const navigate = useNavigate();
   const [openMenu, setOpenMenu] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
+
+  useEffect(() => {
+    if (openMenu) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+  }, [openMenu]);
 
   const toggleHambugerMenu = () => {
     if (openMenu) {
