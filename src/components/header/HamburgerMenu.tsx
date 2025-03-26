@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { CloseIcon, SearchBlue } from "../../assets/svg";
 
 interface IMenuProps {
@@ -38,13 +38,19 @@ export const HamburgerMenu = ({ onClick }: IMenuProps) => {
           </ul>
           <ul className="w-full text-16px whitespace-nowrap font-semibold">
             <li className="w-full h-20 px-5 py-4 flex justify-between items-center border-b border-b-white-200">
-              <p className="cursor-pointer">이용 약관</p>
+              <Link to="/terms" className="cursor-pointer">
+                이용 약관
+              </Link>
             </li>
             <li className="w-full h-20 px-5 py-4 flex justify-between items-center border-b border-b-white-200">
-              <p className="cursor-pointer">개인정보 처리방침</p>
+              <Link to="/privacy" className="cursor-pointer">
+                개인정보 처리방침
+              </Link>
             </li>
             <li className="w-full h-20 px-5 py-4 flex justify-between items-center border-b border-b-white-200">
-              <p className="cursor-pointer">환불 정책</p>
+              <Link to="/refund-policy" className="cursor-pointer">
+                환불 정책
+              </Link>
             </li>
           </ul>
           <div className="w-full h-[100px] bg-gray-200 p-4 flex flex-col gap-1 text-gray-500 text-9px">
