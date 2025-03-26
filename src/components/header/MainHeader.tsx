@@ -6,9 +6,18 @@ import { HamburgerMenu } from "./HamburgerMenu";
 export const MainHeader = () => {
   const navigate = useNavigate();
   const [openMenu, setOpenMenu] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
 
   const toggleHambugerMenu = () => {
-    setOpenMenu((prev) => !prev);
+    if (openMenu) {
+      setIsClosing(true);
+      setTimeout(() => {
+        setOpenMenu(false);
+        setIsClosing(false);
+      }, 300);
+    } else {
+      setOpenMenu(true);
+    }
   };
 
   return (
@@ -26,7 +35,7 @@ export const MainHeader = () => {
       <Hamburger width={"26px"} onClick={toggleHambugerMenu} className="cursor-pointer" />
 
       {/* 햄버거 메뉴 전체 div */}
-      {openMenu && <HamburgerMenu onClick={toggleHambugerMenu} />}
+      {openMenu && <HamburgerMenu onClick={toggleHambugerMenu} isClosing={isClosing} />}
     </div>
   );
 };

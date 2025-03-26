@@ -3,9 +3,10 @@ import { CloseIcon, SearchBlue } from "../../assets/svg";
 
 interface IMenuProps {
   onClick: React.MouseEventHandler<HTMLButtonElement | SVGSVGElement>;
+  isClosing: boolean;
 }
 
-export const HamburgerMenu = ({ onClick }: IMenuProps) => {
+export const HamburgerMenu = ({ onClick, isClosing }: IMenuProps) => {
   const navigate = useNavigate();
 
   const handleRouteSearchFit = () => {
@@ -13,9 +14,13 @@ export const HamburgerMenu = ({ onClick }: IMenuProps) => {
   };
 
   return (
-    <div className="w-full h-screen z-50 absolute bg-black-700 bg-opacity-50">
-      {/* 펼쳐진 햄버거 메뉴 */}
-      <div className="w-72 h-full bg-white-100 float-end">
+    <div className="w-full h-screen z-50 absolute top-0 left-0 bg-black-700 bg-opacity-50">
+      <div
+        className={`
+          w-72 h-full bg-white-100 absolute right-0
+          ${isClosing ? "animate-slide-out" : "animate-slide-in"}
+        `}
+      >
         <nav className="w-full h-full flex flex-col justify-center">
           <ul className="w-full h-full text-16px whitespace-nowrap font-semibold">
             <li className="h-20 p-5">
