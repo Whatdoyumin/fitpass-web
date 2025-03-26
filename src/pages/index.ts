@@ -36,6 +36,9 @@ import AdminUser from "./admin/AdminUser";
 import AdminNoticeUpload from "./admin/AdminNoticeUpload";
 import AdminSignin from "./admin/AdminSignin";
 import UpdateReview from "./UpdateReview";
+import TermsPage from "./Policies/TermsPage";
+import RefundPolicyPage from "./Policies/RefundPolicyPage";
+import PrivacyPolicyPage from "./Policies/PrivacyPolicyPage";
 
 export {
   Home,
@@ -76,4 +79,7 @@ export {
   AdminNoticeUpload,
   AdminSignin,
   UpdateReview,
+  TermsPage,
+  RefundPolicyPage,
+  PrivacyPolicyPage,
 };

@@ -37,6 +37,9 @@ import {
   AdminSettings,
   AdminNoticeUpload,
   AdminSignin,
+  TermsPage,
+  PrivacyPolicyPage,
+  RefundPolicyPage,
 } from "../pages/index";
 import NotFound from "../pages/NotFound";
 import NoticeDetail from "../pages/Notice/NoticeDetail";
@@ -50,7 +53,7 @@ const Router = createBrowserRouter([
     path: "/",
     element: (
       <>
-      <ScrollToTop />
+        <ScrollToTop />
         <AuthHandler /> {/* ✅ 소셜 로그인 후 자동 실행 */}
         <RootLayout />
       </>
@@ -173,6 +176,21 @@ const Router = createBrowserRouter([
       {
         path: "/update-review/:id",
         element: <UpdateReview />,
+      },
+      // 이용 약관 페이지
+      {
+        path: "/terms",
+        element: <TermsPage />,
+      },
+      // 개인정보 처리방침 페이지
+      {
+        path: "/privacy",
+        element: <PrivacyPolicyPage />,
+      },
+      // 환불 정책 페이지
+      {
+        path: "refund-policy",
+        element: <RefundPolicyPage />,
       },
     ],
   },
