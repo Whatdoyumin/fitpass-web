@@ -17,7 +17,7 @@ export const HamburgerMenu = ({ onClick, isClosing }: IMenuProps) => {
     <div className="w-full h-screen z-50 absolute top-0 left-0 bg-black-700 bg-opacity-50">
       <div
         className={`
-          w-72 h-full bg-white-100 absolute right-0
+          w-72 h-full bg-white-100 absolute right-0 overflow-y-auto
           ${isClosing ? "animate-slide-out" : "animate-slide-in"}
         `}
       >
