@@ -13,6 +13,7 @@ export { default as FillStar } from "./FillStar";
 export { default as Fitness } from "./Fitness";
 export { default as FitnessFilled } from "./FitnessFilled";
 export { default as FitpassLogo } from "./FitpassLogo";
+export { default as Hamburger } from "./Hamburger";
 export { default as Home } from "./Home";
 export { default as HomeFilled } from "./HomeFilled";
 export { default as IcAdminDashboard } from "./IcAdminDashboard";
