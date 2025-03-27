@@ -89,3 +89,41 @@ export const REFUND_POLICY = [
 환불이 필요하신 경우 고객센터로 문의해 주세요.`,
   },
 ];
+
+export const THIRD_PARTY_POLICY = [
+  {title: "1. 제공 대상", content: `· 제공 대상: 제휴 피트니스 센터, 결제 대행사 등`},
+  {title: "2. 제공 항목", content: `· 제공 항목: 이름, 전화번호, 서비스 이용 내역(구매한 패스, 이용 시간 등)`},
+  {title: "3. 제공 목적", content: `· 제공 목적: 시설 입장 확인, 고객 서비스 대응, 정산 및 영수증 처리`},
+  {title: "4. 보유 기간", content: `· 보유 기간: 제휴 종료 시 또는 목적 달성 시까지`},
+];
+
+export const LOCATION_POLICY = [
+  {title: "1. 수집 항목", content: `· 실시간 기기 위치`},
+  {title: "2. 수집 목적", content: `· 내 주변 시설 추천, 거리 기반 정렬, 맞춤형 콘텐츠 제공`},
+  {title: "3. 보유 기간", content: `· 회원 탈퇴 시 또는 위치 기능 비활성화 시까지`},
+  {title: "4. 동의 거부권", content: `· 거부하더라도 서비스 이용은 가능하나, 위치 기반 기능은 제한될 수 있습니다.`},
+]
+
+export const MARKETING_POLICY = [
+  {
+    title: "1. 수집 항목",
+    content: `· 이름, 전화번호, 이메일, 푸시 토큰`
+  },
+  {
+    title: "2. 수신 목적",
+    content: `· 할인 혜택, 신규 시설 안내, 개인 맞춤형 콘텐츠 발송`
+  },
+  {
+    title: "3. 수신 채널",
+    content: `· SMS, 이메일, 앱 푸시, 카카오톡 등`
+  },
+  {
+    title: "4. 보유 기간",
+    content: `· 수신 동의 철회 시 또는 회원 탈퇴 시까지`
+  },
+  {
+    title: "5. 수신 거부 방법",
+    content: `· 고객센터 통해 가능
+    · 이메일: sslee@fitpass.co.kr`
+  }
+]
