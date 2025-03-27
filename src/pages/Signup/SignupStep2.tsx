@@ -7,6 +7,7 @@ import { useSocialSignup } from "../../hooks/useSocialSignup";
 import PhoneVerification from "../../components/PhoneVerification";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Modal from "../../components/Modal";
 
 interface Agreements {
   all: boolean;
@@ -63,6 +64,8 @@ function SignupStep2() {
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isCodeConfirmed, setIsCodeConfirmed] = useState(false);
+  const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
+  const [locationDeclinedOnce, setLocationDeclinedOnce] = useState(false);
 
   const [agreements, setAgreements] = useState<Agreements>({
     all: false,
@@ -108,6 +111,13 @@ function SignupStep2() {
 
   const handleNextStep = () => {
     if (!isFormValid) return;
+
+    // 위치 정보 동의 모달 
+  if (!agreements.location && !locationDeclinedOnce) {
+    setIsLocationModalOpen(true);
+    return;
+  }
+
     if (tokens.status === "register") {
       // ✅ 소셜 로그인 회원가입
       socialLoginMutation.mutate(
@@ -120,7 +130,7 @@ function SignupStep2() {
       );
     } else {
       signUpMutation.mutate(
-        { name, id, password, phoneNumber },
+        { name, id, password, phoneNumber, agreements, agree: agreements.all },
         {
           onError: (error: unknown) => {
             alert(error instanceof Error ? error.message : "회원가입에 실패했습니다.");
@@ -132,9 +142,7 @@ function SignupStep2() {
 
   return (
     <div className="w-full max-w-content flex flex-col items-center relative px-5 pt-[29px]">
-      {/* 스크롤 가능 영역 */}
       <div className="flex-grow w-full overflow-auto flex flex-col gap-[20px]">
-        {/* 이름 입력창 */}
         <div className="w-full flex flex-col gap-[10px]">
           <label htmlFor="name" className="text-[16px] font-medium text-black-700">
             이름
@@ -231,6 +239,25 @@ function SignupStep2() {
       >
         동의하고 가입하기
       </button>
+
+      {/* 위치 정보 이용 동의 모달 */}
+      <Modal
+        isOpen={isLocationModalOpen}
+        onClose={() => {
+          setIsLocationModalOpen(false);
+          setLocationDeclinedOnce(true);
+        }}
+        onSuccess={() => {
+          setAgreements((prev) => ({ ...prev, location: true }));
+          setIsLocationModalOpen(false);
+        }}
+        title="위치 정보 이용 동의"
+        subTitle="위치 정보 이용 동의를 하지 않을 경우 서비스 기능
+일부분이 작동하지 않아 이용에 불편이 생길 수 있습니다."
+        btn1Text="동의하지 않습니다"
+        btn2Text="동의합니다"
+      />
+
     </div>
   );
 }
