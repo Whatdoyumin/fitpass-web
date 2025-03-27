@@ -4,6 +4,7 @@ import { IcNoAvailPass, IcUnderArrow, IcUpperArrow } from "../../assets/svg";
 import FitnessCard from "../../components/fitnessCard/FitnessCard";
 import { TFitness } from "../../types/fitnessCard";
 import { usePostPass } from "../../apis/usepass/quries/useUsepassApi";
+import { PAYMENT_POLICY } from "../../constants/policies";
 
 type AvailableListProps = {
   passes: TFitness[];
@@ -168,7 +169,9 @@ const AvailableList = ({ passes, updatePassStatus }: AvailableListProps) => {
                   fontSize: "14px",
                 }}
               >
-                <p>여기 사용 규정 내용이 들어갑니다. 자세한 내용은 약관을 확인해주세요.</p>
+                <p className="whitespace-pre-line text-gray-500 text-12px">
+                  {PAYMENT_POLICY[2].content}
+                </p>
               </div>
             )}
 
