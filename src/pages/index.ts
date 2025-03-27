@@ -39,6 +39,9 @@ import UpdateReview from "./UpdateReview";
 import TermsPage from "./Policies/TermsPage";
 import RefundPolicyPage from "./Policies/RefundPolicyPage";
 import PrivacyPolicyPage from "./Policies/PrivacyPolicyPage";
+import ThirdPartyPolicyPolicyPage from "./Policies/ThirdPartyPolicy";
+import LocationPolicyPage from "./Policies/LocationPolicy";
+import MarketingPolicyPage from "./Policies/MarketingPolicy";
 
 export {
   Home,
@@ -82,4 +85,7 @@ export {
   TermsPage,
   RefundPolicyPage,
   PrivacyPolicyPage,
+  ThirdPartyPolicyPolicyPage,
+  LocationPolicyPage,
+  MarketingPolicyPage,
 };
