@@ -30,10 +30,12 @@ function Home() {
   useEffect(() => {
     if (isLogin && locationAgreed === false && !hasShownModal) {
       setIsLocationModalOpen(true);
-      setHasShownModal(true); // 한 번만 실행되도록
+      setHasShownModal(true);
       sessionStorage.setItem("hasShownLocationModal", "true");
     }
-  }, [isLogin, locationAgreed, hasShownModal]);
+  }, [isLogin, locationAgreed, hasShownModal]);  
+
+  console.log("isLogin", isLogin);
   
   const [recentWatched, setRecentWatched] = useState([]);
   const [fitSettings, setFitSettings] = useState({

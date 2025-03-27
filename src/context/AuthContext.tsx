@@ -15,7 +15,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     const token = sessionStorage.getItem("accessToken");
-    const agreed = sessionStorage.getItem("locationAgreed") === "false";
+    const agreed = sessionStorage.getItem("locationAgreed") === "true";
   
     setIsLogin(!!token);
     setLocationAgreed(agreed);
@@ -34,6 +34,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     sessionStorage.removeItem("accessToken");
     sessionStorage.removeItem("refreshToken");
     sessionStorage.removeItem("locationAgreed");
+    sessionStorage.removeItem("hasShownLocationModal");
+    setLocationAgreed(false);
     setIsLogin(false);
   };
 
