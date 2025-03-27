@@ -20,7 +20,6 @@ import NotFound from "../NotFound";
 
 import { useUpdateProfile, useDeleteProfile } from "../../apis/mypage/quries/useProfileApi"; // 훅 임포트
 import { useAuth } from "../../context/AuthContext";
-import { log } from "console";
 
 interface MyPageItem {
   id: number;
