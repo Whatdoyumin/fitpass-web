@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 interface Agreements {
   all: boolean;
   terms: boolean;
+  privacy: boolean;
   location: boolean;
   thirdParty: boolean;
   marketing: boolean;
@@ -66,6 +67,7 @@ function SignupStep2() {
   const [agreements, setAgreements] = useState<Agreements>({
     all: false,
     terms: false,
+    privacy: false,
     location: false,
     thirdParty: false,
     marketing: false,
@@ -77,6 +79,7 @@ function SignupStep2() {
     setAgreements({
       all: newState,
       terms: newState,
+      privacy: newState,
       location: newState,
       thirdParty: newState,
       marketing: newState,
@@ -97,7 +100,7 @@ function SignupStep2() {
     phoneNumber.trim() !== "" &&
     isCodeConfirmed &&
     agreements.terms &&
-    agreements.location &&
+    agreements.privacy &&
     agreements.thirdParty;
 
   const signUpMutation = useSignUpMutation();
@@ -187,29 +190,30 @@ function SignupStep2() {
             font-['Inter']
           "
         >
-          {[
-            { key: "terms", label: "[필수] 이용 약관 동의" },
-            { key: "privacy", label: "[필수] 개인정보 수집 및 이용 동의"},
-            { key: "third-party", label: "[필수] 제3자 정보 제공 동의" },
-            { key: "location-policy", label: "[선택] 위치 정보 서비스 이용약관 동의" },
-            { key: "marketing-policy", label: "[선택] 마케팅 정보 제공 동의" },
-          ].map((item) => (
-            <label key={item.key} className="flex items-center">
-              <div className="flex items-center gap-[17px]">
-                <input
-                  type="checkbox"
-                  checked={agreements[item.key as keyof Agreements]}
-                  onChange={() => handleAgreementChange(item.key as keyof typeof agreements)}
-                  className="w-[15px] h-[15px]"
-                />
-                {item.label}
-              </div>
-              <MoreTerms
-                className="h-[11px] pl-[10px] cursor-pointer"
-                onClick={() => navigate(`/${item.key}`)}
+        {[
+          { agreementKey: "terms", pathKey: "terms", label: "[필수] 이용 약관 동의" },
+          { agreementKey: "privacy", pathKey: "privacy", label: "[필수] 개인정보 수집 및 이용 동의" },
+          { agreementKey: "thirdParty", pathKey: "third-party", label: "[필수] 제3자 정보 제공 동의" },
+          { agreementKey: "location", pathKey: "location-policy", label: "[선택] 위치 정보 서비스 이용약관 동의" },
+          { agreementKey: "marketing", pathKey: "marketing-policy", label: "[선택] 마케팅 정보 제공 동의" },
+        ].map((item) => (
+          <label key={item.pathKey} className="flex items-center">
+            <div className="flex items-center gap-[17px]">
+              <input
+                type="checkbox"
+                checked={agreements[item.agreementKey as keyof Agreements]}
+                onChange={() => handleAgreementChange(item.agreementKey as keyof Agreements)}
+                className="w-[15px] h-[15px]"
               />
-            </label>
-          ))}
+              {item.label}
+            </div>
+            <MoreTerms
+              className="h-[11px] pl-[10px] cursor-pointer"
+              onClick={() => navigate(`/${item.pathKey}`)}
+            />
+          </label>
+        ))}
+
         </div>
       </div>
 
