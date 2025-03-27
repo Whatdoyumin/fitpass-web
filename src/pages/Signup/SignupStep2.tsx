@@ -6,16 +6,20 @@ import { useSignUpMutation } from "../../hooks/useSignup";
 import { useSocialSignup } from "../../hooks/useSocialSignup";
 import PhoneVerification from "../../components/PhoneVerification";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import Modal from "../../components/Modal";
 
 interface Agreements {
   all: boolean;
   terms: boolean;
+  privacy: boolean;
   location: boolean;
   thirdParty: boolean;
   marketing: boolean;
 }
 
 function SignupStep2() {
+  const navigate = useNavigate();
   const location = useLocation();
   const { id, password } = location.state || {};
 
@@ -60,10 +64,13 @@ function SignupStep2() {
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isCodeConfirmed, setIsCodeConfirmed] = useState(false);
+  const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
+  const [locationDeclinedOnce, setLocationDeclinedOnce] = useState(false);
 
   const [agreements, setAgreements] = useState<Agreements>({
     all: false,
     terms: false,
+    privacy: false,
     location: false,
     thirdParty: false,
     marketing: false,
@@ -75,6 +82,7 @@ function SignupStep2() {
     setAgreements({
       all: newState,
       terms: newState,
+      privacy: newState,
       location: newState,
       thirdParty: newState,
       marketing: newState,
@@ -95,7 +103,7 @@ function SignupStep2() {
     phoneNumber.trim() !== "" &&
     isCodeConfirmed &&
     agreements.terms &&
-    agreements.location &&
+    agreements.privacy &&
     agreements.thirdParty;
 
   const signUpMutation = useSignUpMutation();
@@ -103,6 +111,13 @@ function SignupStep2() {
 
   const handleNextStep = () => {
     if (!isFormValid) return;
+
+    // 위치 정보 동의 모달 
+  if (!agreements.location && !locationDeclinedOnce) {
+    setIsLocationModalOpen(true);
+    return;
+  }
+
     if (tokens.status === "register") {
       // ✅ 소셜 로그인 회원가입
       socialLoginMutation.mutate(
@@ -115,7 +130,7 @@ function SignupStep2() {
       );
     } else {
       signUpMutation.mutate(
-        { name, id, password, phoneNumber },
+        { name, id, password, phoneNumber, agreements, agree: agreements.all },
         {
           onError: (error: unknown) => {
             alert(error instanceof Error ? error.message : "회원가입에 실패했습니다.");
@@ -127,9 +142,7 @@ function SignupStep2() {
 
   return (
     <div className="w-full max-w-content flex flex-col items-center relative px-5 pt-[29px]">
-      {/* 스크롤 가능 영역 */}
       <div className="flex-grow w-full overflow-auto flex flex-col gap-[20px]">
-        {/* 이름 입력창 */}
         <div className="w-full flex flex-col gap-[10px]">
           <label htmlFor="name" className="text-[16px] font-medium text-black-700">
             이름
@@ -185,25 +198,30 @@ function SignupStep2() {
             font-['Inter']
           "
         >
-          {[
-            { key: "terms", label: "[필수] 이용 약관 동의" },
-            { key: "location", label: "[필수] 위치 정보 서비스 이용약관 동의" },
-            { key: "thirdParty", label: "[필수] 제3자 정보 제공 동의" },
-            { key: "marketing", label: "[선택] 마케팅 정보 제공 동의" },
-          ].map((item) => (
-            <label key={item.key} className="flex items-center">
-              <div className="flex items-center gap-[17px]">
-                <input
-                  type="checkbox"
-                  checked={agreements[item.key as keyof Agreements]}
-                  onChange={() => handleAgreementChange(item.key as keyof typeof agreements)}
-                  className="w-[15px] h-[15px]"
-                />
-                {item.label}
-              </div>
-              <MoreTerms className="h-[9px] ml-[10px]" />
-            </label>
-          ))}
+        {[
+          { agreementKey: "terms", pathKey: "terms", label: "[필수] 이용 약관 동의" },
+          { agreementKey: "privacy", pathKey: "privacy", label: "[필수] 개인정보 수집 및 이용 동의" },
+          { agreementKey: "thirdParty", pathKey: "third-party", label: "[필수] 제3자 정보 제공 동의" },
+          { agreementKey: "location", pathKey: "location-policy", label: "[선택] 위치 정보 서비스 이용약관 동의" },
+          { agreementKey: "marketing", pathKey: "marketing-policy", label: "[선택] 마케팅 정보 제공 동의" },
+        ].map((item) => (
+          <label key={item.pathKey} className="flex items-center">
+            <div className="flex items-center gap-[17px]">
+              <input
+                type="checkbox"
+                checked={agreements[item.agreementKey as keyof Agreements]}
+                onChange={() => handleAgreementChange(item.agreementKey as keyof Agreements)}
+                className="w-[15px] h-[15px]"
+              />
+              {item.label}
+            </div>
+            <MoreTerms
+              className="h-[11px] pl-[10px] cursor-pointer"
+              onClick={() => navigate(`/${item.pathKey}`)}
+            />
+          </label>
+        ))}
+
         </div>
       </div>
 
@@ -221,6 +239,25 @@ function SignupStep2() {
       >
         동의하고 가입하기
       </button>
+
+      {/* 위치 정보 이용 동의 모달 */}
+      <Modal
+        isOpen={isLocationModalOpen}
+        onClose={() => {
+          setIsLocationModalOpen(false);
+          setLocationDeclinedOnce(true);
+        }}
+        onSuccess={() => {
+          setAgreements((prev) => ({ ...prev, location: true }));
+          setIsLocationModalOpen(false);
+        }}
+        title="위치 정보 이용 동의"
+        subTitle="위치 정보 이용 동의를 하지 않을 경우 서비스 기능
+일부분이 작동하지 않아 이용에 불편이 생길 수 있습니다."
+        btn1Text="동의하지 않습니다"
+        btn2Text="동의합니다"
+      />
+
     </div>
   );
 }
