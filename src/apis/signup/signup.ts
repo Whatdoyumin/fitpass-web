@@ -3,6 +3,13 @@ export interface TSignUpData {
   id: string;
   password: string;
   phoneNumber: string;
+  agreements: {
+    terms: boolean;
+    privacy: boolean;
+    location: boolean;
+    thirdParty: boolean;
+    marketing: boolean;
+  };
 }
 
 export interface TCheckIDData {
@@ -12,18 +19,25 @@ export interface TCheckIDData {
 import axios from "axios";
 import config from "../config";
 
-export const signUp = async ({ name, id, password, phoneNumber }: TSignUpData) => {
+export const signUp = async ({
+  name,
+  id,
+  password,
+  phoneNumber,
+  agreements,
+}: TSignUpData) => {
   try {
     const response = await axios.post(`${config.apiBaseUrl}/auth/register`, {
       loginId: id,
       password,
       phoneNumber,
       name,
-      agree: true,
-      termsAgreed: true,
-      locationAgreed: true,
-      thirdPartyAgreed: true,
-      marketingAgreed: true,
+      agree: true, // 필수 약관만 동의해도 true
+      termsAgreed: agreements.terms,
+      privacyAgreed: agreements.privacy,
+      thirdPartyAgreed: agreements.thirdParty,
+      locationAgreed: agreements.location,
+      marketingAgreed: agreements.marketing,
     });
 
     return response.data;
