@@ -9,7 +9,10 @@ const Navbar = () => {
     location.pathname === "/signup" ||
     location.pathname === "/signup/step2" ||
     location.pathname === "/buy-coins/payment" ||
-    location.pathname === "/subscribe/payment"
+    location.pathname === "/subscribe/payment" ||
+    location.pathname === "/terms" ||
+    location.pathname === "/privacy" ||
+    location.pathname === "/refund-policy"
   ) {
     return null;
   }

@@ -19,12 +19,7 @@ import { LoadingSpinner } from "../../components/LoadingSpinner";
 import NotFound from "../NotFound";
 
 import { useUpdateProfile, useDeleteProfile } from "../../apis/mypage/quries/useProfileApi"; // 훅 임포트
-
-const handleLogout = () => {
-  sessionStorage.removeItem("accessToken");
-  sessionStorage.removeItem("refreshToken");
-  sessionStorage.clear();
-};
+import { useAuth } from "../../context/AuthContext";
 
 interface MyPageItem {
   id: number;
@@ -43,6 +38,7 @@ const paymentItems: MyPageItem[] = [
 const MyPage = () => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { logout } = useAuth();
 
   useEffect(() => {
     const authToken = sessionStorage.getItem("accessToken");
@@ -68,7 +64,7 @@ const MyPage = () => {
   const closeLogoutModal = () => setIsModalOpen(false);
 
   const handleLogoutAndNavigate = () => {
-    handleLogout();
+    logout()
     navigate("/");
   };
 

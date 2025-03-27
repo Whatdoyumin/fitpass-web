@@ -28,6 +28,13 @@ export const PATH_NAMES = new Map<string, string>([
   ["/my/notices", "공지사항"],
   ["/my/notices/:id", "공지사항"],
   ["/location-detail", " "],
+  // 법적 정보 페이지
+  ["/terms", "이용 약관"],
+  ["/privacy", "개인정보 처리방침"],
+  ["/refund-policy", "환불 정책"],
+  ["/third-party", "제3자 정보 제공 동의"],
+  ["/location-policy", "위치정보 수집 및 이용 동의"],
+  ["/marketing-policy", "마케팅 정보 수신 동의"],
 ]);
 
 export const NAV_MENU = [
