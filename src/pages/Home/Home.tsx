@@ -12,6 +12,7 @@ import { useAuth } from "../../context/AuthContext";
 import { LoadingSpinner } from "../../components/LoadingSpinner";
 import NotFound from "../NotFound";
 import { useFetchHomeSlide, useFetchRecommendFitness } from "../../hooks/useGetRecommend";
+import Modal from "../../components/Modal";
 
 type HomeSlide = {
   id: number;
@@ -19,8 +20,21 @@ type HomeSlide = {
 };
 
 function Home() {
-  const { isLogin } = useAuth();
+  const { isLogin, locationAgreed } = useAuth();
 
+  const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
+  const [hasShownModal, setHasShownModal] = useState(() => {
+    return sessionStorage.getItem("hasShownLocationModal") === "true";
+  });  
+
+  useEffect(() => {
+    if (isLogin && locationAgreed === false && !hasShownModal) {
+      setIsLocationModalOpen(true);
+      setHasShownModal(true); // 한 번만 실행되도록
+      sessionStorage.setItem("hasShownLocationModal", "true");
+    }
+  }, [isLogin, locationAgreed, hasShownModal]);
+  
   const [recentWatched, setRecentWatched] = useState([]);
   const [fitSettings, setFitSettings] = useState({
     dots: false,
@@ -126,6 +140,20 @@ function Home() {
           )}
         </div>
       </div>
+
+            {/* 위치 정보 이용 동의 모달 */}
+            <Modal
+        isOpen={isLocationModalOpen}
+        onClose={() => {}}
+        onSuccess={() => {
+          setIsLocationModalOpen(false);
+        }}
+        title="위치 정보 이용 동의"
+        subTitle="위치 정보 이용 동의를 하지 않을 경우 서비스 기능
+일부분이 작동하지 않아 이용에 불편이 생길 수 있습니다."
+        btn1Text="동의하지 않습니다"
+        btn2Text="동의합니다"
+      />
     </div>
   );
 }

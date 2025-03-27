@@ -10,6 +10,7 @@ export interface TSignUpData {
     thirdParty: boolean;
     marketing: boolean;
   };
+  agree: boolean;
 }
 
 export interface TCheckIDData {
@@ -25,6 +26,7 @@ export const signUp = async ({
   password,
   phoneNumber,
   agreements,
+  agree,
 }: TSignUpData) => {
   try {
     const response = await axios.post(`${config.apiBaseUrl}/auth/register`, {
@@ -32,9 +34,9 @@ export const signUp = async ({
       password,
       phoneNumber,
       name,
-      agree: true, // 필수 약관만 동의해도 true
+      agree,
       termsAgreed: agreements.terms,
-      privacyAgreed: agreements.privacy,
+      personalInformationAgreed: agreements.privacy,
       thirdPartyAgreed: agreements.thirdParty,
       locationAgreed: agreements.location,
       marketingAgreed: agreements.marketing,

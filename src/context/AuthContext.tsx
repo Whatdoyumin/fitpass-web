@@ -2,7 +2,8 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 
 interface AuthContextType {
   isLogin: boolean;
-  login: (accessToken: string, refreshToken: string) => void;
+  locationAgreed: boolean;
+  login: (accessToken: string, refreshToken: string, locationAgreed: boolean) => void;
   logout: () => void;
 }
 
@@ -10,24 +11,33 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isLogin, setIsLogin] = useState(!!sessionStorage.getItem("accessToken"));
+  const [locationAgreed, setLocationAgreed] = useState(false);
 
   useEffect(() => {
-    setIsLogin(!!sessionStorage.getItem("accessToken"));
+    const token = sessionStorage.getItem("accessToken");
+    const agreed = sessionStorage.getItem("locationAgreed") === "false";
+  
+    setIsLogin(!!token);
+    setLocationAgreed(agreed);
   }, []);
+  
 
-  const login = (accessToken: string, refreshToken: string) => {
+  const login = (accessToken: string, refreshToken: string, locationAgreed: boolean) => {
     sessionStorage.setItem("accessToken", accessToken);
     sessionStorage.setItem("refreshToken", refreshToken);
+    sessionStorage.setItem("locationAgreed", locationAgreed ? "true" : "false");
+    setLocationAgreed(locationAgreed);
     setIsLogin(true);
   };
 
   const logout = () => {
     sessionStorage.removeItem("accessToken");
     sessionStorage.removeItem("refreshToken");
+    sessionStorage.removeItem("locationAgreed");
     setIsLogin(false);
   };
 
-  return <AuthContext.Provider value={{ isLogin, login, logout }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ isLogin, locationAgreed, login, logout }}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => {
