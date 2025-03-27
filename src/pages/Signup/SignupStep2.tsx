@@ -6,6 +6,7 @@ import { useSignUpMutation } from "../../hooks/useSignup";
 import { useSocialSignup } from "../../hooks/useSocialSignup";
 import PhoneVerification from "../../components/PhoneVerification";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 interface Agreements {
   all: boolean;
@@ -16,6 +17,7 @@ interface Agreements {
 }
 
 function SignupStep2() {
+  const navigate = useNavigate();
   const location = useLocation();
   const { id, password } = location.state || {};
 
@@ -187,8 +189,9 @@ function SignupStep2() {
         >
           {[
             { key: "terms", label: "[필수] 이용 약관 동의" },
+            { key: "privacy", label: "[필수] 개인정보 수집 및 이용 동의"},
+            { key: "third-party", label: "[필수] 제3자 정보 제공 동의" },
             { key: "location", label: "[필수] 위치 정보 서비스 이용약관 동의" },
-            { key: "thirdParty", label: "[필수] 제3자 정보 제공 동의" },
             { key: "marketing", label: "[선택] 마케팅 정보 제공 동의" },
           ].map((item) => (
             <label key={item.key} className="flex items-center">
@@ -201,7 +204,10 @@ function SignupStep2() {
                 />
                 {item.label}
               </div>
-              <MoreTerms className="h-[9px] ml-[10px]" />
+              <MoreTerms
+                className="h-[11px] pl-[10px] cursor-pointer"
+                onClick={() => navigate(`/${item.key}`)}
+              />
             </label>
           ))}
         </div>

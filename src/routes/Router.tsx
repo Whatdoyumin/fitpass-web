@@ -40,6 +40,9 @@ import {
   TermsPage,
   PrivacyPolicyPage,
   RefundPolicyPage,
+  ThirdPartyPolicyPolicyPage,
+  LocationPolicyPage,
+  MarketingPolicyPage,
 } from "../pages/index";
 import NotFound from "../pages/NotFound";
 import NoticeDetail from "../pages/Notice/NoticeDetail";
@@ -192,6 +195,21 @@ const Router = createBrowserRouter([
         path: "refund-policy",
         element: <RefundPolicyPage />,
       },
+      // 제3자 제공 동의 페이지
+      {
+        path: "/third-party",
+        element: <ThirdPartyPolicyPolicyPage />,
+      },
+      // 위치 정보 이용 동의
+      {
+        path: "/location",
+        element: <LocationPolicyPage />
+      },
+      // 마케팅 정보 제공 동의
+      {
+        path: "/marketing",
+        element: <MarketingPolicyPage />
+      }
     ],
   },
   {
