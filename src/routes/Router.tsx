@@ -202,12 +202,12 @@ const Router = createBrowserRouter([
       },
       // 위치 정보 이용 동의
       {
-        path: "/location",
+        path: "/location-policy",
         element: <LocationPolicyPage />
       },
       // 마케팅 정보 제공 동의
       {
-        path: "/marketing",
+        path: "/marketing-policy",
         element: <MarketingPolicyPage />
       }
     ],

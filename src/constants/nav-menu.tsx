@@ -33,8 +33,8 @@ export const PATH_NAMES = new Map<string, string>([
   ["/privacy", "개인정보 처리방침"],
   ["/refund-policy", "환불 정책"],
   ["/third-party", "제3자 정보 제공 동의"],
-  ["/location", "위치 정보 이용 동의"],
-  ["/marketing", "마케팅 정보 제공 동의"],
+  ["/location-policy", "위치 정보 이용 동의"],
+  ["/marketing-policy", "마케팅 정보 제공 동의"],
 ]);
 
 export const NAV_MENU = [
