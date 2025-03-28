@@ -14,7 +14,7 @@ export const HamburgerMenu = ({ onClick, isClosing }: IMenuProps) => {
   };
 
   return (
-    <div className="w-full h-screen z-50 absolute top-0 left-0 bg-black-700 bg-opacity-50">
+    <div className="w-full min-h-screen z-50 absolute top-0 left-0 bg-black-700 bg-opacity-50">
       <div
         className={`
           w-72 h-full bg-white-100 absolute right-0 overflow-y-auto
@@ -58,7 +58,8 @@ export const HamburgerMenu = ({ onClick, isClosing }: IMenuProps) => {
               </Link>
             </li>
           </ul>
-          <div className="w-full h-[100px] bg-gray-200 p-4 flex flex-col gap-1 text-gray-500 text-9px">
+          <div className="w-full h-[140px] bg-gray-200 p-4 flex flex-col gap-1 text-gray-500 text-9px">
+            <p>상호명: 핏패스</p>
             <p>사업자번호 : 705-53-01056 </p>
             <p>대표자명 : 이수성</p>
             <p>주소 : 서울특별시 성북구 길음로 11 101동 3402</p>
