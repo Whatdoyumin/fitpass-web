@@ -12,6 +12,9 @@ import {
   OwnerNotices,
   SettlementHistory,
   UsageHistory,
+  OwnerSignupStep1,
+  OwnerSignupStep2,
+  OwnerSignupStep3,
 } from "../pages";
 
 // 사장님(owner) 페이지 라우터
@@ -61,6 +64,19 @@ const ownerRoutes: RouteObject = {
       path: "register/step3",
       element: <FacilitiesRegisterStep3 />,
     },
+    {
+      path: "signup/step1",
+      element: <OwnerSignupStep1 />,
+    },
+    {
+      path: "signup/step2",
+      element: <OwnerSignupStep2 />,
+    },
+    {
+      path: "signup/step3",
+      element: <OwnerSignupStep3 />,
+    },
+
   ],
 };
 

@@ -1,9 +1,9 @@
 import { useState } from "react";
-import InputField from "./InputField";
+import InputField from "../../Signup/InputField";
 import { useNavigate } from "react-router-dom";
-import { useCheckIDMutation } from "../../hooks/useSignup";
+import { useCheckIDMutation } from "../../../hooks/useSignup";
 
-function SignupStep1() {
+function OwnerSignupStep1() {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -59,7 +59,7 @@ function SignupStep1() {
         { id },
         {
           onSuccess: () => {
-            navigate("/signup/step2", { state: { id, password } });
+            navigate("/owner/signup/step2", { state: { id, password } });
           },
           onError: (error: unknown) => {
             setIdError(error instanceof Error ? error.message : "알 수 없는 오류가 발생했습니다.");
@@ -119,7 +119,7 @@ function SignupStep1() {
       <button
         onClick={handleNextStep}
         disabled={!isFormValid}
-        className={`fixed bottom-0 w-full max-w-content h-[86px] text-[20px] font-medium text-white-100 ${
+        className={`z-50 fixed bottom-0 w-full max-w-content h-[86px] text-[20px] font-medium text-white-100 ${
           isFormValid ? "bg-blue-500 hover:bg-blue-400" : "bg-gray-400"
         }`}
         style={{
@@ -128,10 +128,10 @@ function SignupStep1() {
           height: "86px",
         }}
       >
-        입력하기 (1/2)
+        입력하기 (1/3)
       </button>
     </div>
   );
 }
 
-export default SignupStep1;
+export default OwnerSignupStep1;

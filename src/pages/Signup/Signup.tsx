@@ -1,9 +1,7 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IcSignupUser, IcSignupOwner } from "../../assets/svg";
 
 function Signup() {
-
   const navigate = useNavigate();
 
   const handleUserSignup = () => {
@@ -11,7 +9,7 @@ function Signup() {
   };
 
   const handleOwnerSignup = () => {
-    //navigate("/");
+    navigate("/owner/signup/step1");
   };
 
   return (
