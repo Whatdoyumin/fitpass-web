@@ -56,6 +56,8 @@ export { default as IcRightArrow } from "./IcRightArrow";
 export { default as IcRightArrowDarkgray } from "./IcRightArrowDarkgray";
 export { default as IcRightPage } from "./IcRightPage";
 export { default as IcSearch } from "./IcSearch";
+export { default as IcSignupOwner } from "./IcSignupOwner";
+export { default as IcSignupUser } from "./IcSignupUser";
 export { default as IcSubscribe } from "./IcSubscribe";
 export { default as IcUpperArrow } from "./IcUpperArrow";
 export { default as IcUser } from "./IcUser";

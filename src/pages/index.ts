@@ -1,6 +1,7 @@
 import Home from "./Home/Home";
 import Signin from "./Signin/Signin";
 import Signup from "./Signup/Signup";
+import SignupStep1 from "./Signup/SignupStep1";
 import SignupStep2 from "./Signup/SignupStep2";
 import FindId from "./FindId";
 import FindPassword from "./FindPassword/FindPassword";
@@ -47,6 +48,7 @@ export {
   Home,
   Signin,
   Signup,
+  SignupStep1,
   SignupStep2,
   FindId,
   FindPassword,

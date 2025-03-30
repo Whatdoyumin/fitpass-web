@@ -11,6 +11,7 @@ import {
 
 export const PATH_NAMES = new Map<string, string>([
   ["signup", "회원가입"],
+  ["signup/step1", "회원가입"],  
   ["signup/step2", "회원가입"],
   ["/find-id", "아이디 찾기"],
   ["/find-password", "비밀번호 찾기"],
