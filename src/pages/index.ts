@@ -42,6 +42,15 @@ import PrivacyPolicyPage from "./Policies/PrivacyPolicyPage";
 import ThirdPartyPolicyPolicyPage from "./Policies/ThirdPartyPolicy";
 import LocationPolicyPage from "./Policies/LocationPolicy";
 import MarketingPolicyPage from "./Policies/MarketingPolicy";
+import FacilitiesMain from "./owner/facilities/FacilitiesMain";
+import OwnerDashboard from "./owner/dashboard/OwnerDashboard";
+import FacilitiesRegisterStep1 from "./owner/facilitiesRegister/Step1";
+import FacilitiesRegisterStep2 from "./owner/facilitiesRegister/Step2";
+import FacilitiesRegisterStep3 from "./owner/facilitiesRegister/Step3";
+import SettlementHistory from "./owner/history/SettlementHistory";
+import UsageHistory from "./owner/history/UsageHistory";
+import OwnerNotices from "./owner/notice/Notices";
+import OwnerNoticeDetails from "./owner/notice/NoticeDetails";
 
 export {
   Home,
@@ -88,4 +97,13 @@ export {
   ThirdPartyPolicyPolicyPage,
   LocationPolicyPage,
   MarketingPolicyPage,
+  FacilitiesMain,
+  OwnerDashboard,
+  FacilitiesRegisterStep1,
+  FacilitiesRegisterStep2,
+  FacilitiesRegisterStep3,
+  SettlementHistory,
+  UsageHistory,
+  OwnerNotices,
+  OwnerNoticeDetails,
 };
