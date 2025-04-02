@@ -1,5 +1,5 @@
 import { useState } from "react";
-import InputField from "../../Signup/InputField";
+import InputField from "../../../components/InputField";
 import { useLocation } from "react-router-dom";
 import PhoneVerification from "../../../components/PhoneVerification";
 import { useNavigate } from "react-router-dom";

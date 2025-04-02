@@ -1,5 +1,5 @@
 import { useState } from "react";
-import InputField from "./InputField";
+import InputField from "../../components/InputField";
 import { useNavigate } from "react-router-dom";
 import { useCheckIDMutation } from "../../hooks/useSignup";
 

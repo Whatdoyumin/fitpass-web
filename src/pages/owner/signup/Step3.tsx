@@ -1,9 +1,9 @@
 import { useState } from "react";
-import InputField from "../../Signup/InputField";
+import InputField from "../../../components/InputField";
 import { useLocation } from "react-router-dom";
-import PhoneVerification from "../../../components/PhoneVerification";
 import { useNavigate } from "react-router-dom";
 import { MoreTerms } from "../../../assets/svg";
+import FileUploadField from "../../../components/FileUploadField";
 
 interface Agreements {
   all: boolean;
@@ -17,10 +17,25 @@ function OwnerSignupStep3() {
   const navigate = useNavigate();
   const location = useLocation();
   const { id, password } = location.state || {};
+
+  const inputFields: { label: string; placeholder: string; key: keyof typeof formData }[] = [
+      { label: "상호 (법인명)", placeholder: "상호를 입력해주세요", key: "companyName" },
+      { label: "사업자등록번호", placeholder: "000-00-00000", key: "registrationNumber" },
+      { label: "은행명", placeholder: "은행명을 입력해주세요", key: "bankName" },
+      { label: "예금주명", placeholder: "예금주 명과 사업자 명이 동일해야 합니다", key: "accountHolder" },
+      { label: "사업자계좌번호", placeholder: "000-00-00000", key: "accountNumber" },
+    ];
   
-  const [name, setName] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [isCodeConfirmed, setIsCodeConfirmed] = useState(false);
+  const [formData, setFormData] = useState({
+    companyName: "",
+    registrationNumber: "",
+    bankName: "",
+    accountHolder: "",
+    accountNumber: "",
+  });
+  
+  const [businessFile, setBusinessFile] = useState<File | null>(null);
+  const [bankbookFile, setBankbookFile] = useState<File | null>(null);
 
   const [agreements, setAgreements] = useState<Agreements>({
     all: false,
@@ -52,9 +67,6 @@ function OwnerSignupStep3() {
   };
 
   const isFormValid =
-    name.trim() !== "" &&
-    phoneNumber.trim() !== "" &&
-    isCodeConfirmed &&
     agreements.terms &&
     agreements.privacy &&
     agreements.thirdParty;
@@ -67,29 +79,38 @@ function OwnerSignupStep3() {
   return (
     <div className="w-full max-w-content flex flex-col items-center relative px-5 pt-[29px]">
       <div className="flex-grow w-full overflow-auto flex flex-col gap-[20px]">
-        <div className="w-full flex flex-col gap-[10px]">
-          <label htmlFor="name" className="text-[16px] font-medium text-black-700">
-            이름
-          </label>
-          <InputField
-            type="text"
-            placeholder="이름을 입력해주세요"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </div>
+        {inputFields.map((field) => (
+          <div key={field.key} className="w-full flex flex-col gap-[10px]">
+            <label className="text-[16px] font-medium text-black-700">
+              {field.label}
+            </label>
+            <InputField
+              type="text"
+              placeholder={field.placeholder}
+              value={formData[field.key]}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, [field.key]: e.target.value }))
+              }
+            />
+          </div>
+        ))}
 
-        <PhoneVerification
-          phoneNumber={phoneNumber}
-          setPhoneNumber={setPhoneNumber}
-          onVerifySuccess={() => setIsCodeConfirmed(true)}
-        />
+      <FileUploadField
+        label="사업자 등록증을 업로드해주세요"
+        file={businessFile}
+        onChange={setBusinessFile}
+      />
+      <FileUploadField
+        label="사업자 통장 사본을 업로드해주세요"
+        file={bankbookFile}
+        onChange={setBankbookFile}
+      />
       </div>
 
-            {/* 약관 동의 섹션 */}
-            <div className="w-full max-w-content flex flex-col items-center justify-center mx-auto fixed bottom-[100px] mb-[27px]">
+        {/* 약관 동의 섹션 */}
+        <div className="w-full max-w-content flex flex-col items-center justify-center mx-auto mt-[46px] mb-[36px]">
         {/* 전체 약관 동의 */}
-        <div className="w-full flex items-center gap-[17px] px-[45px] py-[10px]">
+        <div className="w-full flex items-center gap-[17px] px-[25px] py-[10px]">
           <input
             type="checkbox"
             checked={agreements.all}

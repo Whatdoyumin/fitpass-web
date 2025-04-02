@@ -1,6 +1,6 @@
 import type React from "react";
 import { useState } from "react";
-import InputField from "../Signup/InputField";
+import InputField from "../../components/InputField";
 import { useNavigate } from "react-router-dom";
 import { resetPw } from "../../apis/findpw/findpw";
 import { AxiosError } from "axios";

@@ -4,7 +4,7 @@ import {
   PasswordEyeView,
   PasswordEyeFocus,
   PasswordEyeViewFocus,
-} from "../../assets/svg";
+} from "../assets/svg";
 
 interface InputFieldProps {
   type: string;
