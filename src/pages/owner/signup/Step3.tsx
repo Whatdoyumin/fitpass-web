@@ -67,9 +67,10 @@ function OwnerSignupStep3() {
   };
 
   const isFormValid =
-    agreements.terms &&
-    agreements.privacy &&
-    agreements.thirdParty;
+  inputFields.every((field) => formData[field.key].trim() !== "") &&
+  agreements.terms &&
+  agreements.privacy &&
+  agreements.thirdParty;
 
   const handleNextStep = () => {
     if (!isFormValid) return;
