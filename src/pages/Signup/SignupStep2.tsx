@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import InputField from "./InputField";
+import InputField from "../../components/InputField";
 import { useLocation } from "react-router-dom";
 import { MoreTerms } from "../../assets/svg";
 import { useSignUpMutation } from "../../hooks/useSignup";

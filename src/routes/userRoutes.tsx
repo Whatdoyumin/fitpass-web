@@ -29,6 +29,7 @@ import {
   SetLocation,
   Signin,
   Signup,
+  SignupStep1,
   SignupStep2,
   Subscribe,
   TermsPage,
@@ -44,7 +45,7 @@ const userRoutes: RouteObject = {
   element: (
     <>
       <ScrollToTop />
-      <AuthHandler /> {/* ✅ 소셜 로그인 후 자동 실행 */}
+      <AuthHandler /> {/* 소셜 로그인 후 자동 실행 */}
       <RootLayout />
     </>
   ),
@@ -59,10 +60,14 @@ const userRoutes: RouteObject = {
       element: <Signup />,
     },
     {
+      path: "/signup/step1",
+      element: <SignupStep1 />,
+    },
+    {
       path: "/signup/step2",
       element: (
         <>
-          <AuthHandler /> {/* ✅ 소셜 로그인 후 자동 실행 */}
+          <AuthHandler />
           <SignupStep2 />
         </>
       ),

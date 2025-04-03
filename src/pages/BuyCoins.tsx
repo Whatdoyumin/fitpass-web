@@ -33,7 +33,7 @@ function BuyCoins() {
             );
           })}
         </div>
-        <button className="w-[340px] blueButton py-3" onClick={() => navigate("payment")}>
+        <button className="w-[340px] blueButton py-3 mb-10" onClick={() => navigate("payment")}>
           코인 구매하기
         </button>
       </div>

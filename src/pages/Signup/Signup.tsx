@@ -1,140 +1,38 @@
-import { useState } from "react";
-import InputField from "./InputField";
 import { useNavigate } from "react-router-dom";
-import { useCheckIDMutation } from "../../hooks/useSignup";
+import { IcSignupUser, IcSignupOwner } from "../../assets/svg";
 
 function Signup() {
-  const [id, setId] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-
-  const [idError, setIdError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  const [confirmPasswordError, setConfirmPasswordError] = useState("");
-
   const navigate = useNavigate();
 
-  // 유효성 검사 함수
-  const validateId = (value: string) => {
-    const regex = /^[a-zA-Z0-9]{4,12}$/;
-    if (!regex.test(value)) {
-      setIdError("영어와 숫자를 사용하여 4-12자의 아이디를 입력해주세요.");
-    } else {
-      setIdError("");
-    }
-    setId(value);
+  const handleUserSignup = () => {
+    navigate("/signup/step1");
   };
 
-  const validatePassword = (value: string) => {
-    const regex = /^[a-zA-Z0-9]{8,20}$/;
-    if (!regex.test(value)) {
-      setPasswordError("영어와 숫자를 사용하여 8-20자로 입력해주세요.");
-    } else {
-      setPasswordError("");
-    }
-    setPassword(value);
-  };
-
-  const validateConfirmPassword = (value: string) => {
-    if (value !== password) {
-      setConfirmPasswordError("비밀번호가 일치하지 않습니다.");
-    } else {
-      setConfirmPasswordError("");
-    }
-    setConfirmPassword(value);
-  };
-
-  const isFormValid =
-    idError === "" &&
-    passwordError === "" &&
-    confirmPasswordError === "" &&
-    id.trim() !== "" &&
-    password.trim() !== "" &&
-    confirmPassword.trim() !== "";
-
-  const checkIDMutation = useCheckIDMutation();
-
-  /** 다음 단계 이동 함수 */
-  const handleNextStep = () => {
-    if (isFormValid) {
-      checkIDMutation.mutate(
-        { id },
-        {
-          onSuccess: () => {
-            navigate("/signup/step2", { state: { id, password } });
-          },
-          onError: (error: unknown) => {
-            setIdError(error instanceof Error ? error.message : "알 수 없는 오류가 발생했습니다.");
-          },
-        }
-      );
-    }
+  const handleOwnerSignup = () => {
+    navigate("/owner/signup/step1");
   };
 
   return (
-    <div className="w-full max-w-content flex flex-col items-center gap-[25px] relative px-5 pt-[29px]">
-      {/* 아이디 입력창 */}
-      <div className="w-full flex flex-col gap-[10px]">
-        <label htmlFor="id" className="text-[16px] font-medium text-black-700">
-          아이디
-        </label>
-        <InputField
-          type="text"
-          placeholder="아이디를 입력해주세요"
-          value={id}
-          onChange={(e) => validateId(e.target.value)}
-          hasError={!!idError}
-          onEnter={handleNextStep}
-        />
-        {idError && <span className="text-red-500 text-[13px]">{idError}</span>}
+    <div className="pt-[25px] bg-white-200 w-full max-w-content flex flex-col items-center gap-[20px] relative px-5 h-[calc(100vh-165px)]">
+
+      <div className="w-[340px] flex flex-col items-center px-[20px] py-[26px] bg-white-100 rounded-[7px]">
+        <IcSignupUser className="w-[80px] h-[80px] mx-auto" />
+        <p className="font-bold text-[18px] mt-[18px] mb-[36px]">이용 회원이신가요?</p>
+        <button className="w-[310px] h-[51px] bg-blue-500 rounded-5 text-[15px] text-white-100"
+          onClick={handleUserSignup}>
+          가입하기
+        </button>
       </div>
 
-      {/* 비밀번호 입력창 */}
-      <div className="w-full flex flex-col gap-[10px]">
-        <label htmlFor="password" className="text-[16px] font-medium text-black-700">
-          비밀번호
-        </label>
-        <InputField
-          type="password"
-          placeholder="비밀번호를 입력해주세요"
-          isPassword={true}
-          value={password}
-          onChange={(e) => validatePassword(e.target.value)}
-          hasError={!!passwordError}
-          onEnter={handleNextStep}
-        />
-        {passwordError && <span className="text-red-500 text-[13px]">{passwordError}</span>}
-
-        {/* 비밀번호 확인 입력창 */}
-        <InputField
-          type="password"
-          placeholder="비밀번호를 재확인해주세요"
-          isPassword={true}
-          value={confirmPassword}
-          onChange={(e) => validateConfirmPassword(e.target.value)}
-          hasError={!!confirmPasswordError}
-          onEnter={handleNextStep}
-        />
-        {confirmPasswordError && (
-          <span className="text-red-500 text-[13px]">{confirmPasswordError}</span>
-        )}
+      <div className="w-[340px] flex flex-col items-center px-[20px] py-[26px] bg-white-100 rounded-[7px]">
+        <IcSignupOwner className="w-[80px] h-[80px] mx-auto" />
+        <p className="font-bold text-[18px] mt-[18px] mb-[36px]">시설 관리자이신가요?</p>
+        <button className="w-[310px] h-[51px] bg-blue-500 rounded-5 text-[15px] text-white-100"
+          onClick={handleOwnerSignup}>
+          가입하기
+        </button>
       </div>
 
-      {/* 다음 단계 버튼 */}
-      <button
-        onClick={handleNextStep}
-        disabled={!isFormValid}
-        className={`fixed bottom-0 w-full max-w-content h-[86px] text-[20px] font-medium text-white-100 ${
-          isFormValid ? "bg-blue-500 hover:bg-blue-400" : "bg-gray-400"
-        }`}
-        style={{
-          paddingTop: "17px",
-          paddingBottom: "39px",
-          height: "86px",
-        }}
-      >
-        입력하기 (1/2)
-      </button>
     </div>
   );
 }

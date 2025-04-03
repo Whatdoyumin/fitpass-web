@@ -34,8 +34,6 @@ function Home() {
       sessionStorage.setItem("hasShownLocationModal", "true");
     }
   }, [isLogin, locationAgreed, hasShownModal]);  
-
-  console.log("isLogin", isLogin);
   
   const [recentWatched, setRecentWatched] = useState([]);
   const [fitSettings, setFitSettings] = useState({
@@ -129,17 +127,28 @@ function Home() {
           </p>
           {isLogin ? (
             recentWatched.length > 0 ? (
-              <Slider {...fitSettings} className="h-[143px] mr-[-120px] mb-[85px] ">
-                {recentWatched?.map((data: HomeCardData) => (
-                  <CardCol key={data.fitnessId} data={data} />
-                ))}
-              </Slider>
+              recentWatched.length === 1 ? (
+                <CardCol key={recentWatched[0]} data={recentWatched[0]} />
+              ) : recentWatched.length === 2 ? (
+                <div className="flex gap-4">
+                  {recentWatched.map((data, index) => (
+                    <CardCol key={index} data={data} />
+                  ))}
+                </div>
+              ) : (
+                <Slider {...fitSettings} className="h-[143px] mb-sideGap mr-[-120px] mb-[85px]">
+                  {recentWatched.map((data, index) => (
+                    <CardCol key={index} data={data} />
+                  ))}
+                </Slider>
+              )
             ) : (
               <></>
             )
           ) : (
             <RequireLogin />
           )}
+
         </div>
       </div>
 

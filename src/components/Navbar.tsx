@@ -6,7 +6,7 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   if (
-    location.pathname === "/signup" ||
+    location.pathname === "/signup/step1" ||
     location.pathname === "/signup/step2" ||
     location.pathname === "/buy-coins/payment" ||
     location.pathname === "/subscribe/payment" ||
