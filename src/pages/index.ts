@@ -1,6 +1,7 @@
 import Home from "./Home/Home";
 import Signin from "./Signin/Signin";
 import Signup from "./Signup/Signup";
+import SignupStep1 from "./Signup/SignupStep1";
 import SignupStep2 from "./Signup/SignupStep2";
 import FindId from "./FindId";
 import FindPassword from "./FindPassword/FindPassword";
@@ -42,11 +43,24 @@ import PrivacyPolicyPage from "./Policies/PrivacyPolicyPage";
 import ThirdPartyPolicyPolicyPage from "./Policies/ThirdPartyPolicy";
 import LocationPolicyPage from "./Policies/LocationPolicy";
 import MarketingPolicyPage from "./Policies/MarketingPolicy";
+import FacilitiesMain from "./owner/facilities/FacilitiesMain";
+import OwnerDashboard from "./owner/dashboard/OwnerDashboard";
+import FacilitiesRegisterStep1 from "./owner/facilitiesRegister/Step1";
+import FacilitiesRegisterStep2 from "./owner/facilitiesRegister/Step2";
+import FacilitiesRegisterStep3 from "./owner/facilitiesRegister/Step3";
+import SettlementHistory from "./owner/history/SettlementHistory";
+import UsageHistory from "./owner/history/UsageHistory";
+import OwnerNotices from "./owner/notice/Notices";
+import OwnerNoticeDetails from "./owner/notice/NoticeDetails";
+import OwnerSignupStep1 from "./owner/signup/Step1";
+import OwnerSignupStep2 from "./owner/signup/step2";
+import OwnerSignupStep3 from "./owner/signup/Step3";
 
 export {
   Home,
   Signin,
   Signup,
+  SignupStep1,
   SignupStep2,
   FindId,
   FindPassword,
@@ -88,4 +102,16 @@ export {
   ThirdPartyPolicyPolicyPage,
   LocationPolicyPage,
   MarketingPolicyPage,
+  FacilitiesMain,
+  OwnerDashboard,
+  FacilitiesRegisterStep1,
+  FacilitiesRegisterStep2,
+  FacilitiesRegisterStep3,
+  SettlementHistory,
+  UsageHistory,
+  OwnerNotices,
+  OwnerNoticeDetails,
+  OwnerSignupStep1,
+  OwnerSignupStep2,
+  OwnerSignupStep3,
 };

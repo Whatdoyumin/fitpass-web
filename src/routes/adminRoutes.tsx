@@ -1,0 +1,74 @@
+import { RouteObject } from "react-router-dom";
+import AdminRootLayout from "../layout/AdminRootLayout";
+import NotFound from "../pages/NotFound";
+import {
+  AdminCoin,
+  AdminDashboard,
+  AdminFitnessList,
+  AdminFitnessUpload,
+  AdminNotice,
+  AdminNoticeUpload,
+  AdminPayHistory,
+  AdminSettings,
+  AdminSignin,
+  AdminSubscribe,
+  AdminUser,
+} from "../pages";
+
+const adminRoutes: RouteObject = {
+  path: "/admin",
+  element: <AdminRootLayout />,
+  errorElement: <NotFound />,
+  children: [
+    {
+      index: true,
+      element: <AdminDashboard />,
+    },
+    {
+      path: "signin",
+      element: <AdminSignin />,
+    },
+    {
+      path: "user",
+      element: <AdminUser />,
+    },
+    {
+      path: "fitness/list",
+      element: <AdminFitnessList />,
+    },
+    {
+      path: "fitness/upload",
+      element: <AdminFitnessUpload />,
+    },
+    {
+      path: "fitness/upload/:id",
+      element: <AdminFitnessUpload />,
+    },
+    {
+      path: "pay",
+      element: <AdminPayHistory />,
+    },
+    {
+      path: "pay/subscribe",
+      element: <AdminSubscribe />,
+    },
+    {
+      path: "pay/coin",
+      element: <AdminCoin />,
+    },
+    {
+      path: "notice",
+      element: <AdminNotice />,
+    },
+    {
+      path: "notice/upload",
+      element: <AdminNoticeUpload />,
+    },
+    {
+      path: "settings",
+      element: <AdminSettings />,
+    },
+  ],
+};
+
+export default adminRoutes;
