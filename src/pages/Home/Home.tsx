@@ -34,8 +34,6 @@ function Home() {
       sessionStorage.setItem("hasShownLocationModal", "true");
     }
   }, [isLogin, locationAgreed, hasShownModal]);  
-
-  console.log("isLogin", isLogin);
   
   const [recentWatched, setRecentWatched] = useState([]);
   const [fitSettings, setFitSettings] = useState({

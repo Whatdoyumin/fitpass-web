@@ -1,5 +1,5 @@
 import { useState } from "react";
-import InputField from "../Signup/InputField";
+import InputField from "../../components/InputField";
 import PhoneVerification from "../../components/PhoneVerification";
 
 interface FindPasswordFormProps {
