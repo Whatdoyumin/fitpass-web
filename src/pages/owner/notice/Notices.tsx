@@ -37,7 +37,7 @@ const OwnerNotices = () => {
           <li
             key={notice.id}
             className="border-b px-6 py-3 flex min-w-[375px] cursor-pointer"
-            onClick={() => navigate(`/my/notices/${notice.id}`)}
+            onClick={() => navigate(`/owner/notices/${notice.id}`)}
           >
             <span
               className={`font-medium whitespace-nowrap ${
