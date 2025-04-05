@@ -9,7 +9,7 @@ function OwnerDashboard() {
 
     <div className="w-full flex flex-col relative gap-[15px] bg-white-100 rounded-[7px] pb-[20px]">
       <div className="w-full flex items-center justify-end gap-[14px] px-[20px] pt-[15px] cursor-pointer"
-      onClick={() => navigate("/my/notices")}
+      onClick={() => navigate("/owner/notices")}
       >
         <p className="text-[16px] text-gray-400">공지사항</p>
         <IcRightArrow className="h-[13px]" />
