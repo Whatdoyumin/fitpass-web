@@ -6,13 +6,16 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   if (
-    location.pathname === "/signup/step1" ||
-    location.pathname === "/signup/step2" ||
+    location.pathname.startsWith("/signup") ||
     location.pathname === "/buy-coins/payment" ||
     location.pathname === "/subscribe/payment" ||
     location.pathname === "/terms" ||
     location.pathname === "/privacy" ||
-    location.pathname === "/refund-policy"
+    location.pathname === "/refund-policy" ||
+    location.pathname === "/third-party" ||
+    location.pathname === "/location-policy" ||
+    location.pathname === "/marketing-policy" ||
+    location.pathname.startsWith("/owner")
   ) {
     return null;
   }
