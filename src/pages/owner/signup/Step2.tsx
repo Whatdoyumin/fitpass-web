@@ -15,11 +15,11 @@ function OwnerSignupStep2() {
 
   const isFormValid =
     name.trim() !== "" &&
-    phoneNumber.trim() !== "" &&
-    isCodeConfirmed;
+    phoneNumber.trim() !== "" //&&
+    //isCodeConfirmed;
 
   const handleNextStep = () => {
-    //if (!isFormValid) return;
+    if (!isFormValid) return;
     navigate("/owner/signup/step3", {
       state: { id, password, name, phoneNumber },
     });

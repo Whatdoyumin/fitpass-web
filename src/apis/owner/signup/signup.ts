@@ -2,7 +2,7 @@ import axios from "axios";
 import config from "../../config";
 import { TOwnerSignUpData } from "../../../types/ownerSignup";
 
-export const signUp = async ({
+export const ownerSignUp = async ({
   name,
   id,
   password,
@@ -37,8 +37,10 @@ export const signUp = async ({
         bankCopyUrl,
     });
 
+    console.log("회원가입 응답:", response.data); // 응답 데이터 확인
     return response.data;
   } catch (error) {
+    console.error("회원가입 오류:", error); // 오류 로그 추가
     if (axios.isAxiosError(error)) {
       throw new Error(error.response?.data?.message || "회원가입에 실패했습니다.");
     } else {
