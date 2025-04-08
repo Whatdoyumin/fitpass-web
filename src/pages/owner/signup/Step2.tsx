@@ -19,7 +19,7 @@ function OwnerSignupStep2() {
     isCodeConfirmed;
 
   const handleNextStep = () => {
-    if (!isFormValid) return;
+    //if (!isFormValid) return;
     navigate("/owner/signup/step3", {
       state: { id, password, name, phoneNumber },
     });

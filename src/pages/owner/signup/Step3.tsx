@@ -16,7 +16,7 @@ interface Agreements {
 function OwnerSignupStep3() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { id, password } = location.state || {};
+  const { id, password, name, phoneNumber } = location.state || {};
 
   const inputFields: { label: string; placeholder: string; key: keyof typeof formData }[] = [
       { label: "상호 (법인명)", placeholder: "상호를 입력해주세요", key: "companyName" },
@@ -74,6 +74,9 @@ function OwnerSignupStep3() {
 
   const handleNextStep = () => {
     if (!isFormValid) return;
+
+    // 여기서 회원가입 API 호출
+    
     navigate("/owner")
   };
 
