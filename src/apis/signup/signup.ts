@@ -29,7 +29,7 @@ export const signUp = async ({
   agree,
 }: TSignUpData) => {
   try {
-    const response = await axios.post(`${config.apiBaseUrl}/auth/register`, {
+    const response = await axios.post(`${config.apiBaseUrl}/auth/member/register`, {
       loginId: id,
       password,
       phoneNumber,

@@ -19,7 +19,7 @@ export const patchChangePassword = async ({
   password: string;
   newPassword: string;
 }) => {
-  const response = await axiosPasswordInstance.patch("/auth/change/password", {
+  const response = await axiosPasswordInstance.patch("/auth/member/change/password", {
     password,
     newPassword,
   });
@@ -37,7 +37,7 @@ export const patchChangePhoneNumber = async ({
   password: string;
   newPhoneNumber: string;
 }) => {
-  const response = await axiosInstance.patch("/auth/change/phone-number", {
+  const response = await axiosInstance.patch("/auth/member/change/phone-number", {
     name,
     password,
     newPhoneNumber,
