@@ -11,6 +11,8 @@ export interface TSignUpData {
     marketing: boolean;
   };
   agree: boolean;
+  isWork: boolean;
+  company_name?: string;
 }
 
 export interface TCheckIDData {
@@ -27,9 +29,11 @@ export const signUp = async ({
   phoneNumber,
   agreements,
   agree,
+  isWork,
+  company_name,
 }: TSignUpData) => {
   try {
-    const response = await axios.post(`${config.apiBaseUrl}/auth/register`, {
+    const response = await axios.post(`${config.apiBaseUrl}/auth/member/register`, {
       loginId: id,
       password,
       phoneNumber,
@@ -40,6 +44,8 @@ export const signUp = async ({
       thirdPartyAgreed: agreements.thirdParty,
       locationAgreed: agreements.location,
       marketingAgreed: agreements.marketing,
+      isWork,
+      company_name
     });
 
     return response.data;

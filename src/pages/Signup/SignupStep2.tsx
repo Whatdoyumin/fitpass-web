@@ -8,6 +8,7 @@ import PhoneVerification from "../../components/PhoneVerification";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Modal from "../../components/Modal";
+import Toggle from "../../components/Toggle";
 
 interface Agreements {
   all: boolean;
@@ -66,6 +67,9 @@ function SignupStep2() {
   const [isCodeConfirmed, setIsCodeConfirmed] = useState(false);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [locationDeclinedOnce, setLocationDeclinedOnce] = useState(false);
+
+  const [hasJob, setHasJob] = useState(false);
+  const [companyName, setCompanyName] = useState("");
 
   const [agreements, setAgreements] = useState<Agreements>({
     all: false,
@@ -130,7 +134,7 @@ function SignupStep2() {
       );
     } else {
       signUpMutation.mutate(
-        { name, id, password, phoneNumber, agreements, agree: agreements.all },
+        { name, id, password, phoneNumber, agreements, agree: agreements.all, isWork: hasJob, company_name: companyName },
         {
           onError: (error: unknown) => {
             alert(error instanceof Error ? error.message : "회원가입에 실패했습니다.");
@@ -141,10 +145,10 @@ function SignupStep2() {
   };
 
   return (
-    <div className="w-full max-w-content flex flex-col items-center relative px-5 pt-[29px]">
+    <div className="w-full max-w-content flex flex-col items-center relative px-5 pt-[29px] text-[16px]">
       <div className="flex-grow w-full overflow-auto flex flex-col gap-[20px]">
         <div className="w-full flex flex-col gap-[10px]">
-          <label htmlFor="name" className="text-[16px] font-medium text-black-700">
+          <label htmlFor="name">
             이름
           </label>
           <InputField
@@ -161,6 +165,27 @@ function SignupStep2() {
           onVerifySuccess={() => setIsCodeConfirmed(true)}
         />
       </div>
+
+      {/* 직장 여부 토글 */}
+      <div className="flex w-full items-center justify-between mt-[32px]">
+        <p>
+          현재 직장에 다니고 계신가요?
+        </p>
+        <Toggle
+         isOn={hasJob} onToggle={() => setHasJob(!hasJob)} />
+      </div>
+
+      {/* 직장명 입력 */}
+      {hasJob && (
+        <div className="w-full flex flex-col mt-[10px]">
+          <InputField
+            type="text"
+            placeholder="직장명을 입력해주세요"
+            value={companyName}
+            onChange={(e) => setCompanyName(e.target.value)}
+          />
+        </div>
+      )}
 
       {/* 약관 동의 섹션 */}
       <div className="w-full max-w-content flex flex-col items-center justify-center mx-auto fixed bottom-[100px] mb-[27px]">

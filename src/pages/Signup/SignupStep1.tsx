@@ -70,10 +70,10 @@ function SignupStep1() {
   };
 
   return (
-    <div className="w-full max-w-content flex flex-col items-center gap-[25px] relative px-5 pt-[29px]">
+    <div className="w-full max-w-content flex flex-col items-center gap-[25px] relative px-5 pt-[29px] text-[16px]">
 
       <div className="w-full flex flex-col gap-[10px]">
-        <label htmlFor="id" className="text-[16px] font-medium text-black-700">
+        <label htmlFor="id">
           아이디
         </label>
         <InputField
@@ -88,7 +88,7 @@ function SignupStep1() {
       </div>
 
       <div className="w-full flex flex-col gap-[10px]">
-        <label htmlFor="password" className="text-[16px] font-medium text-black-700">
+        <label htmlFor="password">
           비밀번호
         </label>
         <InputField
