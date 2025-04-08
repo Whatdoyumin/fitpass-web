@@ -134,7 +134,7 @@ function SignupStep2() {
       );
     } else {
       signUpMutation.mutate(
-        { name, id, password, phoneNumber, agreements, agree: agreements.all },
+        { name, id, password, phoneNumber, agreements, agree: agreements.all, isWork: hasJob, company_name: companyName },
         {
           onError: (error: unknown) => {
             alert(error instanceof Error ? error.message : "회원가입에 실패했습니다.");
