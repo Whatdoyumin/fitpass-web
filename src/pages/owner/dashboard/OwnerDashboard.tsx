@@ -27,7 +27,7 @@ interface Usage {
 
 function OwnerDashboard() {
   const navigate = useNavigate();
-  const fitnessId = "1"; // TODO: replace with actual ID from context/store
+  const fitnessId = sessionStorage.getItem("fitnessIds") || "0"
 
   const [noticesRes, settlementRes, usagesRes] = [
     useGetOwnerDashboardNotices(),
@@ -38,7 +38,7 @@ function OwnerDashboard() {
   const notices: Notice[] = noticesRes.data?.content || [];
   const settlement: Settlement[] = settlementRes.data?.revenueHistoryDetailDTOS || [];
   const usages: Usage[] = usagesRes.data?.fitnessUsageDetailDTOS || [];
-  
+
   const isLoading = noticesRes.isLoading || settlementRes.isLoading || usagesRes.isLoading;
   const isError = noticesRes.isError || settlementRes.isError || usagesRes.isError;
 

@@ -16,7 +16,7 @@ function maskLoginId(id: string) {
 }
 
 function UsageHistory() {
-  const fitnessId = "1"; // TODO: replace with real fitnessId from store/context
+  const fitnessId = sessionStorage.getItem("fitnessIds") || "0"
 
   const [searchParams, setSearchParams] = useSearchParams();
   const currentPage = Number(searchParams.get("page")) || 1;
