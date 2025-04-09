@@ -16,7 +16,6 @@ export const getOwnerNotices = async (page: number = 0, size: number = 10): Prom
         content: response.data.result, 
       };
     }
-    
     throw new Error(response.data.message);
   } catch (error) {
     console.error('Failed to fetch notices:', error);
