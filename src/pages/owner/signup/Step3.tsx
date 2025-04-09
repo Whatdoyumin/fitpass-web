@@ -1,4 +1,3 @@
-// OwnerSignupStep3.tsx
 import { useState } from "react";
 import InputField from "../../../components/InputField";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -77,16 +76,18 @@ function OwnerSignupStep3() {
   const handleNextStep = async () => {
     if (!isFormValid || !businessFile || !bankbookFile) return;
 
-    try {
-      // 파일 업로드 1: 사업자등록증
+    try { 
+      // 사업자등록증 파일 업로드
       const { preSignedUrl: businessUrl, key: businessKey } = await getBusinessRegistrationPresignedUrl(businessFile.name);
       await uploadToS3(businessUrl, businessFile);
 
-      // 파일 업로드 2: 통장 사본
+      // 통장 사본
       const { preSignedUrl: bankUrl, key: bankKey } = await getBankCopyPresignedUrl(bankbookFile.name);
       await uploadToS3(bankUrl, bankbookFile);
 
-      // 회원가입 API 호출
+      console.log(formData.bankName)
+
+      // 회원가입 API
       await ownerSignUp({
         name,
         id,
@@ -103,7 +104,7 @@ function OwnerSignupStep3() {
         agree: agreements.all,
       });
 
-      navigate("/owner");
+      navigate("/signin");
     } catch (error) {
       alert(error instanceof Error ? error.message : "회원가입에 실패했습니다.");
     }

@@ -20,21 +20,15 @@ export const getBankCopyPresignedUrl = async (filename: string): Promise<Presign
   return response.data.result;
 };
 
-export const uploadToS3 = async (preSignedUrl: string, file: File) => {
-    const res = await fetch(preSignedUrl, {
-      method: "PUT",
-      headers: {
-        "Content-Type": file.type,
-      },
-      body: file,
-    });
-  
-    if (!res.ok) {
-      const text = await res.text();
-      console.error("Fetch 업로드 실패", res.status, text);
-      throw new Error("업로드 실패");
+export const uploadToS3 = async (preSignedUrl: string, file: File): Promise<void> => {
+    try {
+      await axios.put(preSignedUrl, file, {
+        headers: {
+          "Content-Type": file.type
+        },
+      });
+    } catch (error) {
+      console.error("파일 업로드 실패:", error);
+      throw new Error("파일 업로드 중 오류가 발생했습니다.");
     }
-  
-    console.log("✅ Fetch 업로드 성공");
   };
-  
