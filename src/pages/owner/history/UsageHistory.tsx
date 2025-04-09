@@ -24,10 +24,18 @@ function UsageHistory() {
 
   const { data, isLoading, isError } = useGetUsageHistory(fitnessId, currentPage - 1, itemsPerPage);
 
+  type UsageDetail = {
+    memberName: string;
+    loginId: string;
+    activeTime: string;
+    totalFee: number;
+  };
+
+  const usageData: UsageDetail[] = data?.fitnessUsageDetailDTOS ?? [];
+
   if (isLoading) return <LoadingSpinner />;
   if (isError) return <NotFound />;
 
-  const usageData = data?.fitnessUsageDetailDTOS ?? [];
   const totalPages = data?.totalPage ?? 1;
 
   const handlePageChange = (page: number) => {

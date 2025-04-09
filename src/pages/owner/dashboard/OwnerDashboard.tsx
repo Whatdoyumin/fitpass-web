@@ -9,6 +9,22 @@ import { LoadingSpinner } from "../../../components/LoadingSpinner";
 import NotFound from "../../NotFound";
 import { formatDate } from "../../../utils/formatDate";
 
+interface Notice {
+  id: string;
+  category: string;
+  title: string;
+}
+
+interface Settlement {
+  description: string;
+  totalPrice: number;
+}
+interface Usage {
+  loginId: string;
+  activeTime: string;
+  totalFee: number;
+}
+
 function OwnerDashboard() {
   const navigate = useNavigate();
   const fitnessId = "1"; // TODO: replace with actual ID from context/store
@@ -19,15 +35,15 @@ function OwnerDashboard() {
     useGetOwnerDashboardUsages(fitnessId),
   ];
 
+  const notices: Notice[] = noticesRes.data?.content || [];
+  const settlement: Settlement[] = settlementRes.data?.revenueHistoryDetailDTOS || [];
+  const usages: Usage[] = usagesRes.data?.fitnessUsageDetailDTOS || [];
+  
   const isLoading = noticesRes.isLoading || settlementRes.isLoading || usagesRes.isLoading;
   const isError = noticesRes.isError || settlementRes.isError || usagesRes.isError;
 
   if (isLoading) return <LoadingSpinner />;
   if (isError) return <NotFound />;
-
-  const notices = noticesRes.data?.content || [];
-  const settlement = settlementRes.data?.revenueHistoryDetailDTOS || [];
-  const usages = usagesRes.data?.fitnessUsageDetailDTOS || [];
 
   return (
     <div className="w-full max-w-content flex flex-col items-center gap-[22px] relative px-5 pt-[29px] pb-[40px] bg-white-200">

@@ -17,7 +17,13 @@ function SettlementHistory() {
   if (isLoading) return <LoadingSpinner />;
   if (isError) return <NotFound />;
 
-  const settlements = data?.revenueHistoryDetailDTOS ?? [];
+  interface Settlement {
+    description: string;
+    time: string;
+    totalPrice: number;
+  }
+
+  const settlements: Settlement[] = data?.revenueHistoryDetailDTOS ?? [];
   const totalPages = data?.totalPage ?? 1;
 
   const handlePageChange = (page: number) => {
