@@ -49,7 +49,7 @@ function OwnerDashboard() {
       <Section title="전체 정산 내역 보기" onClick={() => navigate("/owner/settlement-history")}>
         {settlement.length ? (
           <p className="text-[20px] leading-[28px]">
-            3월 현재까지 정산 금액은<br />
+            {Number(settlement[0].description)}월 현재까지 정산 금액은<br />
             <span className="font-bold">{settlement[0].totalPrice.toLocaleString()}원</span>입니다
           </p>
         ) : (
