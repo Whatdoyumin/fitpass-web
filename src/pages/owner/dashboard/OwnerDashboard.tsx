@@ -4,9 +4,10 @@ import {
   useGetOwnerDashboardNotices,
   useGetOwnerDashboardSettlements,
   useGetOwnerDashboardUsages,
-} from "../../../hooks/useOwnerDashboardQueries";
+} from "../../../hooks/useGetOwnerDashboardQueries";
 import { LoadingSpinner } from "../../../components/LoadingSpinner";
 import NotFound from "../../NotFound";
+import { formatDate } from "../../../utils/formatDate";
 
 function OwnerDashboard() {
   const navigate = useNavigate();
@@ -96,14 +97,5 @@ const Section = ({ title, children, onClick }: { title: string; children: React.
     <div className="flex flex-col gap-[15px] px-[20px]">{children}</div>
   </div>
 );
-
-const formatDate = (time: string) => {
-  const date = new Date(time);
-  return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, "0")}.${String(
-    date.getDate()
-  ).padStart(2, "0")} ${String(date.getHours()).padStart(2, "0")}:${String(
-    date.getMinutes()
-  ).padStart(2, "0")}`;
-};
 
 export default OwnerDashboard;

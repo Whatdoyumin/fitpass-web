@@ -57,7 +57,7 @@ const OwnerNotices = () => {
 
       <Pagination
         totalPages={totalPages}
-        currentPage={currentPage}
+        currentPage={currentPage - 1}
         onPageChange={handlePageChange}
       />
     </div>

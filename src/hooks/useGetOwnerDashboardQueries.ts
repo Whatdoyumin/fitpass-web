@@ -1,9 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import {
-  getOwnerDashboardNotices,
-  getOwnerDashboardSettlements,
-  getOwnerDashboardUsages,
-} from "../apis/owner/dashboard";
+import { getOwnerDashboardNotices, getOwnerDashboardSettlements, getOwnerDashboardUsages } from "../apis/owner/dashboard";
 
 // 공지사항 3개 불러오기
 export const useGetOwnerDashboardNotices = () => {
