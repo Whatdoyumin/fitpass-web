@@ -1,5 +1,5 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useGetNotices } from "../../apis/mypage/quries/useNoticeApi"; 
+import { useGetNotices } from "../../hooks/useNoticeApi"; 
 import { LoadingSpinner } from "../../components/LoadingSpinner";
 import NotFound from "../NotFound";
 import { Pagination } from "../../components/Pagination";
