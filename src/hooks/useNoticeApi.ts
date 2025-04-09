@@ -41,4 +41,10 @@ export const useGetOwnerNotices = (page: number = 0, size: number = 10) => {
   });
 };
 
-
+// 사장님 특정 공지사항 조회 훅
+export const useGetOwnerNoticeById = (noticeId: number) => {
+  return useQuery<Notice, AxiosError>({
+    queryKey: ["ownerNotice", noticeId],
+    queryFn: () => getOwnerNoticeById(noticeId),
+  });
+}
