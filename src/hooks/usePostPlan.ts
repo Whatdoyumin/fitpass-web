@@ -5,7 +5,7 @@ import {
   postPlanChange,
   postPlanSidStatus,
   postSubscibe,
-} from "../apis/subscribe";
+} from "../apis/payment/subscribe";
 import { TChangeSub } from "../types/payment";
 
 function usePostPlan() {
