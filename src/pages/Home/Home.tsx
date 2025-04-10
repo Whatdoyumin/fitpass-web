@@ -25,7 +25,7 @@ function Home() {
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [hasShownModal, setHasShownModal] = useState(() => {
     return sessionStorage.getItem("hasShownLocationModal") === "true";
-  });  
+  });
 
   useEffect(() => {
     if (isLogin && locationAgreed === false && !hasShownModal) {
@@ -33,8 +33,8 @@ function Home() {
       setHasShownModal(true);
       sessionStorage.setItem("hasShownLocationModal", "true");
     }
-  }, [isLogin, locationAgreed, hasShownModal]);  
-  
+  }, [isLogin, locationAgreed, hasShownModal]);
+
   const [recentWatched, setRecentWatched] = useState([]);
   const [fitSettings, setFitSettings] = useState({
     dots: false,
@@ -98,7 +98,7 @@ function Home() {
               key={img.id}
               src={img.imageUrl}
               alt={`${img.id}`}
-              className="w-[294px] h-[260px] mx-auto"
+              className="w-[294px] h-[260px] mx-auto object-cover bg-no-repeat"
             />
           ))}
         </Slider>
@@ -148,12 +148,11 @@ function Home() {
           ) : (
             <RequireLogin />
           )}
-
         </div>
       </div>
 
-            {/* 위치 정보 이용 동의 모달 */}
-            <Modal
+      {/* 위치 정보 이용 동의 모달 */}
+      <Modal
         isOpen={isLocationModalOpen}
         onClose={() => {}}
         onSuccess={() => {

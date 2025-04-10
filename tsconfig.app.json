@@ -26,6 +26,14 @@
     "outDir": "./dist",
     "declaration": true
   },
-  "include": ["src", "src/assets/lottie/**/*.json", "src/**/*"],
+  "include": [
+    "src",
+    "src/assets/lottie/**/*.json",
+    "src/**/*",
+    "src/types",
+    "custom.d.ts",
+    "global.d.ts",
+    "src/mocks/*.json"
+  ],
   "exclude": ["node_modules", "dist"]
 }

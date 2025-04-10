@@ -53,6 +53,9 @@ const ownerRoutes: RouteObject = {
       element: <FacilitiesMain />,
     },
     {
+      path: "facilities/:id",
+    },
+    {
       path: "register/step1",
       element: <FacilitiesRegisterStep1 />,
     },
@@ -76,7 +79,6 @@ const ownerRoutes: RouteObject = {
       path: "signup/step3",
       element: <OwnerSignupStep3 />,
     },
-
   ],
 };
 
