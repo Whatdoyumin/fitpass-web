@@ -8,7 +8,7 @@ import { axiosInstance } from "../axios-instance";
 
 export const socialLogin = async ({ name, phoneNumber }: TSocialLoginData) => {
   try {
-    const response = await axiosInstance.post(`/auth/oauth2/register`, {
+    const response = await axiosInstance.post(`/auth/member/oauth2/register`, {
       phoneNumber,
       name,
       agree: true,
