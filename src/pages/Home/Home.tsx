@@ -154,7 +154,7 @@ function Home() {
       {/* 위치 정보 이용 동의 모달 */}
       <Modal
         isOpen={isLocationModalOpen}
-        onClose={() => {}}
+        onClose={() => setIsLocationModalOpen(false)}
         onSuccess={() => {
           setIsLocationModalOpen(false);
         }}

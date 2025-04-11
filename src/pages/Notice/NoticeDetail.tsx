@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useGetNoticeById } from "../../apis/mypage/quries/useNoticeApi";
+import { useGetNoticeById } from "../../hooks/useNoticeApi";
 import IcViewers from "../../assets/svg/IcViewers";
 import { LoadingSpinner } from "../../components/LoadingSpinner";
 
