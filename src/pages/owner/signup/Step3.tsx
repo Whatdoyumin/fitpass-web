@@ -84,9 +84,7 @@ function OwnerSignupStep3() {
       // 통장 사본
       const { preSignedUrl: bankUrl, key: bankKey } = await getBankCopyPresignedUrl(bankbookFile.name);
       await uploadToS3(bankUrl, bankbookFile);
-
-      console.log(formData.bankName)
-
+      
       // 회원가입 API
       await ownerSignUp({
         name,
