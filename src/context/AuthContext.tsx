@@ -3,6 +3,7 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 interface AuthContextType {
   isLogin: boolean;
   locationAgreed: boolean;
+  isInitialized: boolean;
   login: (accessToken: string, refreshToken: string, locationAgreed: boolean) => void;
   logout: () => void;
 }
@@ -12,6 +13,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isLogin, setIsLogin] = useState(!!sessionStorage.getItem("accessToken"));
   const [locationAgreed, setLocationAgreed] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
     const token = sessionStorage.getItem("accessToken");
@@ -19,6 +21,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   
     setIsLogin(!!token);
     setLocationAgreed(agreed);
+    setIsInitialized(true);
   }, []);
   
 
@@ -39,7 +42,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setIsLogin(false);
   };
 
-  return <AuthContext.Provider value={{ isLogin, locationAgreed, login, logout }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ isLogin, locationAgreed, login, logout, isInitialized }}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => {
