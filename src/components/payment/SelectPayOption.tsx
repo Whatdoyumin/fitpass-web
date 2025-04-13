@@ -1,7 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowDown, ArrowUp, KakaoPay, NaverPay } from "../../assets/svg";
 import { TPayOption } from "../../types/payment";
 import BigDropdown from "./BigDropdown";
+import { KpnPaymentButton } from "./kpnPaymentButton";
+import { useGetRegisteredCard } from "../../hooks/useKpnPayment";
+import { TRegisteredCard } from "../../types/kpnPayment";
 
 interface TSelectPayOptionProps {
   selectedOption: string | null;
@@ -15,6 +18,17 @@ const SelectPayOption = ({
   onPayOptionSelect,
 }: TSelectPayOptionProps) => {
   const [isOpen, setIsOpen] = useState(true);
+  const [registeredCardList, setRegisteredCardList] = useState<string[]>([]);
+  const { data } = useGetRegisteredCard();
+
+  useEffect(() => {
+    if (data?.result?.items) {
+      const formatted = data.result.items.map((item: TRegisteredCard) => {
+        return `${item.bank} ${item.type}(${item.number})`;
+      });
+      setRegisteredCardList(formatted);
+    }
+  }, [data]);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -49,14 +63,11 @@ const SelectPayOption = ({
             >
               등록된 카드
             </button>
-            <button
-              className={`payOptionButton ${
-                selectedOption === "creditCard" ? "selectedPayOption" : "unSelectedPayOption"
-              }`}
+            <KpnPaymentButton
+              selectedOption={selectedOption}
+              myOption="creditCard"
               onClick={() => handleButtonClick("creditCard")}
-            >
-              신용/체크카드 등록
-            </button>
+            />
             <button
               className={`payOptionButton ${
                 selectedOption === "naverPay" ? "selectedPayOption" : "unSelectedPayOption"
@@ -77,7 +88,11 @@ const SelectPayOption = ({
           {/* 등록된 카드 목록 표시 */}
           {selectedOption === "registeredCard" && (
             <div className="w-full h-full pb-4">
-              <BigDropdown options={RegisteredCardList} onOptionSelect={() => ""} />
+              {registeredCardList.length > 0 ? (
+                <BigDropdown options={registeredCardList} onOptionSelect={() => ""} />
+              ) : (
+                <p className="text-center text-sm text-gray-500">등록된 카드가 없습니다.</p>
+              )}
             </div>
           )}
         </>
@@ -85,7 +100,5 @@ const SelectPayOption = ({
     </div>
   );
 };
-
-const RegisteredCardList = ["우리은행 가나다라카드(123*)", "국민은행 나라사랑카드(456*)"];
 
 export default SelectPayOption;
