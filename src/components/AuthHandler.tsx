@@ -15,10 +15,12 @@ const AuthHandler = () => {
     const accessToken = getCookie("accessToken");
     const refreshToken = getCookie("refreshToken");
     const locationAgreed = sessionStorage.getItem("locationAgreed") === "true";
+    const rawUserId = sessionStorage.getItem("userId");
+    const userId = rawUserId ? Number(rawUserId) : null;
 
-    if (accessToken && refreshToken) {
+    if (accessToken && refreshToken && userId !== null) {
       // ✅ 토큰 저장 후 로그인 상태 유지
-      login(accessToken, refreshToken, locationAgreed);
+      login(accessToken, refreshToken, locationAgreed, userId);
     }
   }, [login]);
 

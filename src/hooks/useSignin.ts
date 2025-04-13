@@ -13,13 +13,24 @@ export const useSignin = () => {
       const response = await signIn(data);
       return response;
     },
-    onSuccess: (data: { result: { accessToken: string; refreshToken: string, role: string, locationAgreed: boolean } }) => {
+    onSuccess: (data: {
+      result: {
+        accessToken: string;
+        refreshToken: string;
+        role: string;
+        locationAgreed: boolean;
+        userId: number;
+      };
+    }) => {
       console.log("로그인 성공");
-      login(data.result.accessToken, data.result.refreshToken, data.result.locationAgreed);
-      if (data.result.role === "ADMIN")
-        navigate("/admin")
-      else
-        navigate("/");
+      login(
+        data.result.accessToken,
+        data.result.refreshToken,
+        data.result.locationAgreed,
+        data.result.userId
+      );
+      if (data.result.role === "ADMIN") navigate("/admin");
+      else navigate("/");
     },
     onError: (error: Error) => {
       console.error("로그인 실패:", error.message);
