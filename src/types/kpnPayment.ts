@@ -12,8 +12,14 @@ export interface IKpnBillingRequest {
 }
 
 export type TRegisteredCard = {
-  billingKey: "string";
-  bank: "string";
-  type: "string";
-  number: "string";
+  billingKey: string;
+  bank: string;
+  type: string;
+  number: string;
+};
+
+export type TPayBillingKeyRequest = {
+  billingKey: string;
+  orderName: string;
+  amount: number;
 };
