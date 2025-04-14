@@ -9,24 +9,23 @@ import { TRegisteredCard } from "../../types/kpnPayment";
 interface TSelectPayOptionProps {
   selectedOption: string | null;
   setSelectedOption: React.Dispatch<React.SetStateAction<string | null>>;
+  setSelectedCard: React.Dispatch<React.SetStateAction<string | null | undefined>>;
   onPayOptionSelect: (selectedOption: TPayOption | null) => void;
 }
 
 const SelectPayOption = ({
   selectedOption,
   setSelectedOption,
+  setSelectedCard,
   onPayOptionSelect,
 }: TSelectPayOptionProps) => {
   const [isOpen, setIsOpen] = useState(true);
-  const [registeredCardList, setRegisteredCardList] = useState<string[]>([]);
+  const [cardData, setCardData] = useState<TRegisteredCard[]>([]);
   const { data } = useGetRegisteredCard();
 
   useEffect(() => {
     if (data?.result?.items) {
-      const formatted = data.result.items.map((item: TRegisteredCard) => {
-        return `${item.bank} ${item.type}(${item.number})`;
-      });
-      setRegisteredCardList(formatted);
+      setCardData(data.result.items);
     }
   }, [data]);
 
@@ -40,9 +39,17 @@ const SelectPayOption = ({
     onPayOptionSelect(newSelection);
   };
 
+  const handleCardSelect = (label: string) => {
+    const selected = cardData.find((card) => `${card.bank} ${card.type}(${card.number})` === label);
+    if (selected) {
+      setSelectedCard(selected.billingKey);
+    }
+  };
+
+  const formattedCardLabels = cardData.map((card) => `${card.bank} ${card.type}(${card.number})`);
+
   return (
     <div className="w-full min-h-14 bg-white-100 px-[25px] gap-3 border-t-8 border-white-200">
-      {/* 접히기 제어 상단 부분 */}
       <div
         className="w-full h-14 py-[26px] flex justify-between items-center cursor-pointer"
         onClick={toggleDropdown}
@@ -51,7 +58,6 @@ const SelectPayOption = ({
         {isOpen ? <ArrowUp width={"15px"} /> : <ArrowDown width={"15px"} />}
       </div>
 
-      {/* 결제 옵션 */}
       {isOpen && (
         <>
           <div className="w-full py-[26px] grid grid-cols-2 gap-2 border-t-2 border-white-200">
@@ -85,11 +91,11 @@ const SelectPayOption = ({
               <KakaoPay width={"64px"} />
             </button>
           </div>
-          {/* 등록된 카드 목록 표시 */}
+
           {selectedOption === "registeredCard" && (
             <div className="w-full h-full pb-4">
-              {registeredCardList.length > 0 ? (
-                <BigDropdown options={registeredCardList} onOptionSelect={() => ""} />
+              {formattedCardLabels.length > 0 ? (
+                <BigDropdown options={formattedCardLabels} onOptionSelect={handleCardSelect} />
               ) : (
                 <p className="text-center text-sm text-gray-500">등록된 카드가 없습니다.</p>
               )}
