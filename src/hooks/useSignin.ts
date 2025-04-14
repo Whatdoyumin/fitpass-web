@@ -20,6 +20,7 @@ export const useSignin = () => {
         role: string;
         locationAgreed: boolean;
         memberId: number;
+        fitnessIds: string[];
       };
     }) => {
       console.log("로그인 성공");
@@ -30,7 +31,12 @@ export const useSignin = () => {
         data.result.memberId
       );
       if (data.result.role === "ADMIN") navigate("/admin");
-      else navigate("/");
+      else if (data.result.role === "OWNER") {
+        navigate("/owner")
+        sessionStorage.setItem("fitnessIds", data.result.fitnessIds[0])
+      }
+      else 
+        navigate("/");
     },
     onError: (error: Error) => {
       console.error("로그인 실패:", error.message);

@@ -4,6 +4,7 @@ interface AuthContextType {
   isLogin: boolean;
   locationAgreed: boolean;
   memberId: number | null;
+  isInitialized: boolean;
   login: (
     accessToken: string,
     refreshToken: string,
@@ -18,6 +19,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isLogin, setIsLogin] = useState<boolean>(!!sessionStorage.getItem("accessToken"));
   const [locationAgreed, setLocationAgreed] = useState<boolean>(false);
+  const [isInitialized, setIsInitialized] = useState<boolean>(false);
   const [memberId, setmemberId] = useState<number | null>(() => {
     const stored = sessionStorage.getItem("memberId");
     return stored ? Number(stored) : null;
@@ -30,6 +32,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     setIsLogin(!!token);
     setLocationAgreed(agreed);
+    setIsInitialized(true);
     setmemberId(storedmemberId ? Number(storedmemberId) : null);
   }, []);
 
@@ -62,7 +65,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <AuthContext.Provider value={{ isLogin, locationAgreed, memberId, login, logout }}>
+    <AuthContext.Provider value={{ isLogin, locationAgreed, memberId, login, logout, isInitialized }}>
       {children}
     </AuthContext.Provider>
   );
