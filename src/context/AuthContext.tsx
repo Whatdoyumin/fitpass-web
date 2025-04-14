@@ -3,12 +3,12 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 interface AuthContextType {
   isLogin: boolean;
   locationAgreed: boolean;
-  userId: number | null;
+  memberId: number | null;
   login: (
     accessToken: string,
     refreshToken: string,
     locationAgreed: boolean,
-    userId: number
+    memberId: number
   ) => void;
   logout: () => void;
 }
@@ -18,51 +18,51 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isLogin, setIsLogin] = useState<boolean>(!!sessionStorage.getItem("accessToken"));
   const [locationAgreed, setLocationAgreed] = useState<boolean>(false);
-  const [userId, setUserId] = useState<number | null>(() => {
-    const stored = sessionStorage.getItem("userId");
+  const [memberId, setmemberId] = useState<number | null>(() => {
+    const stored = sessionStorage.getItem("memberId");
     return stored ? Number(stored) : null;
   });
 
   useEffect(() => {
     const token = sessionStorage.getItem("accessToken");
     const agreed = sessionStorage.getItem("locationAgreed") === "true";
-    const storedUserId = sessionStorage.getItem("userId");
+    const storedmemberId = sessionStorage.getItem("memberId");
 
     setIsLogin(!!token);
     setLocationAgreed(agreed);
-    setUserId(storedUserId ? Number(storedUserId) : null);
+    setmemberId(storedmemberId ? Number(storedmemberId) : null);
   }, []);
 
   const login = (
     accessToken: string,
     refreshToken: string,
     locationAgreed: boolean,
-    userId: number
+    memberId: number
   ) => {
     sessionStorage.setItem("accessToken", accessToken);
     sessionStorage.setItem("refreshToken", refreshToken);
     sessionStorage.setItem("locationAgreed", locationAgreed ? "true" : "false");
-    sessionStorage.setItem("userId", userId.toString());
+    sessionStorage.setItem("memberId", memberId.toString());
 
     setLocationAgreed(locationAgreed);
     setIsLogin(true);
-    setUserId(userId);
+    setmemberId(memberId);
   };
 
   const logout = () => {
     sessionStorage.removeItem("accessToken");
     sessionStorage.removeItem("refreshToken");
     sessionStorage.removeItem("locationAgreed");
-    sessionStorage.removeItem("userId");
+    sessionStorage.removeItem("memberId");
     sessionStorage.removeItem("hasShownLocationModal");
 
     setLocationAgreed(false);
     setIsLogin(false);
-    setUserId(null);
+    setmemberId(null);
   };
 
   return (
-    <AuthContext.Provider value={{ isLogin, locationAgreed, userId, login, logout }}>
+    <AuthContext.Provider value={{ isLogin, locationAgreed, memberId, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

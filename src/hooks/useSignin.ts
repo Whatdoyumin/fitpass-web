@@ -19,7 +19,7 @@ export const useSignin = () => {
         refreshToken: string;
         role: string;
         locationAgreed: boolean;
-        userId: number;
+        memberId: number;
       };
     }) => {
       console.log("로그인 성공");
@@ -27,7 +27,7 @@ export const useSignin = () => {
         data.result.accessToken,
         data.result.refreshToken,
         data.result.locationAgreed,
-        data.result.userId
+        data.result.memberId
       );
       if (data.result.role === "ADMIN") navigate("/admin");
       else navigate("/");
