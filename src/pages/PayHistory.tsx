@@ -161,7 +161,7 @@ function PayHistory() {
 const CoinTitle = ({ text }: { text: number }) => (
   <div className="w-full flex justify-center items-center gap-1">
     <IcEmptyDollarBlue className="w-[17px] h-[17px]" />
-    <p>{text} 코인</p>
+    <span>{text} 코인</span>
   </div>
 );
 

@@ -9,7 +9,7 @@ interface PaginationProps {
 
 const Pagination = ({ totalPages, currentPage, onPageChange }: PaginationProps) => {
   return (
-    <div className="w-full flex justify-center items-center pt-[40px] gap-[10px]">
+    <div className="w-full flex justify-center items-center pt-[25px] gap-[10px]">
       <button
         onClick={() => currentPage > 0 && onPageChange(currentPage - 1)}
         disabled={currentPage === 0}

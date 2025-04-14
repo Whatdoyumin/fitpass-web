@@ -11,7 +11,7 @@ import {
 
 export const PATH_NAMES = new Map<string, string>([
   ["signup", "회원가입"],
-  ["signup/step1", "회원가입"],  
+  ["signup/step1", "회원가입"],
   ["signup/step2", "회원가입"],
   ["/find-id", "아이디 찾기"],
   ["/find-password", "비밀번호 찾기"],
@@ -36,6 +36,19 @@ export const PATH_NAMES = new Map<string, string>([
   ["/third-party", "제3자 정보 제공 동의"],
   ["/location-policy", "위치정보 수집 및 이용 동의"],
   ["/marketing-policy", "마케팅 정보 수신 동의"],
+  // 업체 관련 페이지
+  ["/owner", "대시보드"],
+  ["/owner/notices", "공지사항"],
+  ["/owner/notices/:id", "공지사항"],
+  ["/owner/settlement-history", "정산 내역"],
+  ["/owner/usage-history", "이용 내역"],
+  ["/owner/facilities", "시설 관리"],
+  ["/owner/register/step1", "시설 등록"],
+  ["/owner/register/step2", "시설 등록"],
+  ["/owner/register/step3", "시설 등록"],
+  ["/owner/signup/step1", "회원가입"],
+  ["/owner/signup/step2", "회원가입"],
+  ["/owner/signup/step3", "회원가입"],
 ]);
 
 export const NAV_MENU = [

@@ -1,20 +1,33 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowDown, ArrowUp, KakaoPay, NaverPay } from "../../assets/svg";
 import { TPayOption } from "../../types/payment";
 import BigDropdown from "./BigDropdown";
+import { KpnPaymentButton } from "./kpnPaymentButton";
+import { useGetRegisteredCard } from "../../hooks/useKpnPayment";
+import { TRegisteredCard } from "../../types/kpnPayment";
 
 interface TSelectPayOptionProps {
   selectedOption: string | null;
   setSelectedOption: React.Dispatch<React.SetStateAction<string | null>>;
+  setSelectedCard: React.Dispatch<React.SetStateAction<string | null | undefined>>;
   onPayOptionSelect: (selectedOption: TPayOption | null) => void;
 }
 
 const SelectPayOption = ({
   selectedOption,
   setSelectedOption,
+  setSelectedCard,
   onPayOptionSelect,
 }: TSelectPayOptionProps) => {
   const [isOpen, setIsOpen] = useState(true);
+  const [cardData, setCardData] = useState<TRegisteredCard[]>([]);
+  const { data, refetch } = useGetRegisteredCard();
+
+  useEffect(() => {
+    if (data?.result?.items) {
+      setCardData(data.result.items);
+    }
+  }, [data]);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -26,9 +39,17 @@ const SelectPayOption = ({
     onPayOptionSelect(newSelection);
   };
 
+  const handleCardSelect = (label: string) => {
+    const selected = cardData.find((card) => `${card.bank} ${card.type}(${card.number})` === label);
+    if (selected) {
+      setSelectedCard(selected.billingKey);
+    }
+  };
+
+  const formattedCardLabels = cardData.map((card) => `${card.bank} ${card.type}(${card.number})`);
+
   return (
     <div className="w-full min-h-14 bg-white-100 px-[25px] gap-3 border-t-8 border-white-200">
-      {/* 접히기 제어 상단 부분 */}
       <div
         className="w-full h-14 py-[26px] flex justify-between items-center cursor-pointer"
         onClick={toggleDropdown}
@@ -37,7 +58,6 @@ const SelectPayOption = ({
         {isOpen ? <ArrowUp width={"15px"} /> : <ArrowDown width={"15px"} />}
       </div>
 
-      {/* 결제 옵션 */}
       {isOpen && (
         <>
           <div className="w-full py-[26px] grid grid-cols-2 gap-2 border-t-2 border-white-200">
@@ -49,14 +69,12 @@ const SelectPayOption = ({
             >
               등록된 카드
             </button>
-            <button
-              className={`payOptionButton ${
-                selectedOption === "creditCard" ? "selectedPayOption" : "unSelectedPayOption"
-              }`}
+            <KpnPaymentButton
+              selectedOption={selectedOption}
+              myOption="creditCard"
               onClick={() => handleButtonClick("creditCard")}
-            >
-              신용/체크카드 등록
-            </button>
+              onRegisterSuccess={refetch}
+            />
             <button
               className={`payOptionButton ${
                 selectedOption === "naverPay" ? "selectedPayOption" : "unSelectedPayOption"
@@ -74,10 +92,14 @@ const SelectPayOption = ({
               <KakaoPay width={"64px"} />
             </button>
           </div>
-          {/* 등록된 카드 목록 표시 */}
+
           {selectedOption === "registeredCard" && (
             <div className="w-full h-full pb-4">
-              <BigDropdown options={RegisteredCardList} onOptionSelect={() => ""} />
+              {formattedCardLabels.length > 0 ? (
+                <BigDropdown options={formattedCardLabels} onOptionSelect={handleCardSelect} />
+              ) : (
+                <p className="text-center text-sm text-gray-500">등록된 카드가 없습니다.</p>
+              )}
             </div>
           )}
         </>
@@ -85,7 +107,5 @@ const SelectPayOption = ({
     </div>
   );
 };
-
-const RegisteredCardList = ["우리은행 가나다라카드(123*)", "국민은행 나라사랑카드(456*)"];
 
 export default SelectPayOption;

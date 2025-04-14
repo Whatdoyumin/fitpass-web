@@ -38,9 +38,15 @@ const PhoneVerification: React.FC<PhoneVerificationProps> = ({
     };
   }, [isTimerRunning, timer]);
 
+  useEffect(() => {
+    if (timer === 0 && isCodeSent && !isCodeConfirmed) {
+      setCodeError("인증 시간이 만료되었습니다. 다시 시도해주세요.");
+    }
+  }, [timer, isCodeSent, isCodeConfirmed]);  
+
   /** 휴대폰 번호 확인 */
   const validatePhoneNumber = () => {
-    const regex = /^01[0-9]{8,9}$/; // 01로 시작하는 10-11자리 숫자
+    const regex = /^01[0-9]{8,9}$/;
     return regex.test(phoneNumber);
   };
 
@@ -119,7 +125,7 @@ const PhoneVerification: React.FC<PhoneVerificationProps> = ({
           </div>
           <button
             onClick={handleVerifyCode}
-            disabled={certificationCode.length !== 6}
+            disabled={certificationCode.length !== 6 || timer <= 0}
             className={`h-[50px] px-[20px] rounded-[5px] text-[15px] font-medium ${
               certificationCode.length === 6
                 ? "bg-blue-500 text-white-100 hover:bg-blue-400"
