@@ -14,11 +14,13 @@ const AuthHandler = () => {
     // ✅ 쿠키에서 토큰 값 가져오기
     const accessToken = getCookie("accessToken");
     const refreshToken = getCookie("refreshToken");
-    const status = getCookie("status");
+    const locationAgreed = sessionStorage.getItem("locationAgreed") === "true";
+    const rawmemberId = sessionStorage.getItem("memberId");
+    const memberId = rawmemberId ? Number(rawmemberId) : null;
 
-    if (accessToken && refreshToken) {
+    if (accessToken && refreshToken && memberId !== null) {
       // ✅ 토큰 저장 후 로그인 상태 유지
-      login(accessToken, refreshToken);
+      login(accessToken, refreshToken, locationAgreed, memberId);
     }
   }, [login]);
 

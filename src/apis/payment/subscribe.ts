@@ -1,6 +1,6 @@
-import { TKakaoPayBody, TPayCoinSuccess } from "../types/buyCoin";
-import { TChangeSub } from "../types/payment";
-import { axiosInstance } from "./axios-instance";
+import { TKakaoPayBody, TPayCoinSuccess } from "../../types/buyCoin";
+import { TChangeSub } from "../../types/payment";
+import { axiosInstance } from "../axios-instance";
 
 const postSubscibe = async ({ itemName, totalAmount, methodName }: TKakaoPayBody) => {
   const { data } = await axiosInstance.post("/plan/pay/first-request", {

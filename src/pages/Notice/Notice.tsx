@@ -1,9 +1,8 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useGetNotices } from "../../apis/mypage/quries/useNoticeApi"; 
-import SvgIcLeftPage from "../../assets/svg/IcLeftPage";
-import SvgIcRightPage from "../../assets/svg/IcRightPage";
+import { useGetNotices } from "../../hooks/useNoticeApi"; 
 import { LoadingSpinner } from "../../components/LoadingSpinner";
 import NotFound from "../NotFound";
+import { Pagination } from "../../components/Pagination";
 
 const NoticeList = () => {
   const navigate = useNavigate();
@@ -25,33 +24,28 @@ const NoticeList = () => {
   const notices = noticesData?.content?.content ?? [];
   const totalPages = noticesData?.content?.totalPages ?? 1;
 
-  // 페이지 그룹 계산
-  const pagesPerGroup = 5;
-  const currentGroup = Math.ceil(currentPage / pagesPerGroup);
-  const startPage = (currentGroup - 1) * pagesPerGroup + 1;
-  const endPage = Math.min(startPage + pagesPerGroup - 1, totalPages);
-
-  // 페이지 변경 시 URL 업데이트
-  const handlePageChange = (page: number) => {
-    setSearchParams({ page: page.toString() }); // URL 업데이트
+  const handlePageChange = (pageIndex: number) => {
+    setSearchParams({ page: (pageIndex + 1).toString() });
   };
 
   return (
-    <div className="relative flex flex-col min-h-[calc(100vh-165px)] overflow-y-auto">
+    <div className="relative flex flex-col min-h-[calc(100vh-165px)] overflow-y-auto pb-[26px]">
       <ul className="flex-grow">
         {notices.map((notice) => (
           <li
             key={notice.id}
-            className="border-b px-6 py-3 flex min-w-[375px]"
+            className="border-b px-6 py-3 flex min-w-[375px] cursor-pointer"
             onClick={() => navigate(`/my/notices/${notice.id}`)}
           >
-            <span className={`font-medium whitespace-nowrap ${
+            <span
+              className={`font-medium whitespace-nowrap ${
                 notice.noticeType === "공지사항"
                   ? "text-blue-500"
                   : notice.noticeType === "이벤트"
                   ? "text-red-600"
                   : "text-gray-500"
-              }`}>
+              }`}
+            >
               [{notice.noticeType === "공지사항" ? "공지" : notice.noticeType}]&nbsp;
             </span>
             <span className="text-gray-700 overflow-hidden whitespace-nowrap text-ellipsis">
@@ -61,34 +55,11 @@ const NoticeList = () => {
         ))}
       </ul>
 
-      {/* 페이지네이션 */}
-      <div className="flex justify-center items-center pt-[14px] gap-[10px] mb-[26px]">
-        <button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-          className="text-gray-350 focus:outline-none"
-        >
-          <SvgIcLeftPage width={5} />
-        </button>
-
-        {Array.from({ length: endPage - startPage + 1 }, (_, index) => (
-          <button
-            key={startPage + index}
-            onClick={() => handlePageChange(startPage + index)}
-            className={`text-sm ${currentPage === startPage + index ? "text-gray-600" : "text-gray-350"} focus:outline-none`}
-          >
-            {startPage + index}
-          </button>
-        ))}
-
-        <button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
-          className="text-gray-350 focus:outline-none"
-        >
-          <SvgIcRightPage width={5} />
-        </button>
-      </div>
+      <Pagination
+        totalPages={totalPages}
+        currentPage={currentPage - 1}
+        onPageChange={handlePageChange}
+      />
     </div>
   );
 };

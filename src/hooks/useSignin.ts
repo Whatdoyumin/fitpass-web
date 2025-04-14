@@ -13,12 +13,29 @@ export const useSignin = () => {
       const response = await signIn(data);
       return response;
     },
-    onSuccess: (data: { result: { accessToken: string; refreshToken: string, role: string, locationAgreed: boolean } }) => {
+    onSuccess: (data: {
+      result: {
+        accessToken: string;
+        refreshToken: string;
+        role: string;
+        locationAgreed: boolean;
+        memberId: number | null;
+        fitnessIds: string[];
+      };
+    }) => {
       console.log("로그인 성공");
-      login(data.result.accessToken, data.result.refreshToken, data.result.locationAgreed);
-      if (data.result.role === "ADMIN")
-        navigate("/admin")
-      else
+      login(
+        data.result.accessToken,
+        data.result.refreshToken,
+        data.result.locationAgreed,
+        data.result.memberId ?? 0
+      );
+      if (data.result.role === "ADMIN") navigate("/admin");
+      else if (data.result.role === "OWNER") {
+        navigate("/owner")
+        sessionStorage.setItem("fitnessIds", data.result.fitnessIds[0])
+      }
+      else 
         navigate("/");
     },
     onError: (error: Error) => {

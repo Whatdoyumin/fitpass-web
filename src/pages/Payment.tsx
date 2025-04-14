@@ -9,6 +9,7 @@ import Modal from "../components/Modal";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { usePostPayCoin, usePostPayCoinSuccess } from "../hooks/usePostPayCoin";
 import { usePostChangeSub, usePostPlan, usePostPlanSuccess } from "../hooks/usePostPlan";
+import { usePostPayBillingKey, usePostPayPlanBillingKey } from "../hooks/useKpnPayment";
 
 function Payment({ type }: TPaymentProps) {
   const [selectItem, setSelectItem] = useState<TCoinBody | TSubscribeBody>(
@@ -16,12 +17,24 @@ function Payment({ type }: TPaymentProps) {
   );
   const [selectedPlan, setSelectedPlan] = useState<string | undefined>();
   const [selectedPayOption, setSelectedPayOption] = useState<string | null>(null);
+  const [selectedCard, setSelectedCard] = useState<string | null | undefined>(null);
   const [isChecked, setIsChecked] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
   const [isSubscribingState] = useState(localStorage.getItem("isSubscribing") === "true");
   const [isMobile, setIsMobile] = useState(false);
   const [searchParams] = useSearchParams();
+
+  const { mutate: changeSubMutate } = usePostChangeSub();
+  const { mutate } = usePostPayCoin();
+  const { mutate: planMutate } = usePostPlan();
+  const { mutate: mutatePaySuccess } = usePostPayCoinSuccess();
+  const { mutate: mutatePlanSuccess } = usePostPlanSuccess();
+  const { mutate: mutateKpnPayCoin } = usePostPayBillingKey();
+  const { mutate: mutateKpnPayPlan } = usePostPayPlanBillingKey();
+
+  const navigate = useNavigate();
+  const itemName = localStorage.getItem("itemName") || null;
 
   // pc or mobile 기기 구분
   useEffect(() => {
@@ -33,9 +46,6 @@ function Payment({ type }: TPaymentProps) {
     checkMobile();
     window.addEventListener("resize", checkMobile);
   }, []);
-
-  const navigate = useNavigate();
-  const itemName = localStorage.getItem("itemName") || null;
 
   const handleItemChange = (itemId: number) => {
     const items = type === "buy-coins" ? COIN_PRICE : SUBSCRIBE_OPTION;
@@ -61,7 +71,6 @@ function Payment({ type }: TPaymentProps) {
   };
 
   // 구독 상태 변경
-  const { mutate: changeSubMutate } = usePostChangeSub();
   const hadnleModifySub = () => {
     if (!selectedPlan) {
       alert("플랜을 선택해주세요.");
@@ -80,65 +89,108 @@ function Payment({ type }: TPaymentProps) {
     );
   };
 
-  const { mutate } = usePostPayCoin();
-  const { mutate: planMutate } = usePostPlan();
-
   // 결제 요청
   const handleCompletePay = () => {
-    // 코인 결제
-    if (type === "buy-coins") {
-      mutate(
-        {
-          itemName: `${selectItem.coinAmount} 코인`,
-          quantity: selectItem.coinAmount,
-          totalAmount: Number(selectItem.price),
-          methodName: `${selectedPayOption}`,
-        },
-        {
-          onSuccess: (response) => {
-            if (isMobile && response?.result?.next_redirect_mobile_url) {
-              window.location.href = response.result.next_redirect_mobile_url;
-            } else if (response?.result?.next_redirect_pc_url) {
-              window.location.href = response.result.next_redirect_pc_url;
-            }
-          },
-          onError: (error) => {
-            console.log(error.message);
-            setIsModalOpen(false);
-          },
-        }
-      );
-      // 구독 결제
-    } else {
-      if ("option_en" in selectItem) {
-        planMutate(
+    if (!selectedPayOption) {
+      alert("결제 수단을 선택해주세요.");
+      return;
+    }
+
+    // KakaoPay 결제 로직
+    if (selectedPayOption === "kakaoPay") {
+      if (type === "buy-coins") {
+        mutate(
           {
-            itemName: selectItem.option_ko,
+            itemName: `${selectItem.coinAmount} 코인`,
+            quantity: selectItem.coinAmount,
             totalAmount: Number(selectItem.price),
-            methodName: `${selectedPayOption}`,
+            methodName: selectedPayOption,
           },
           {
             onSuccess: (response) => {
-              if (isMobile && response?.result?.next_redirect_mobile_url) {
-                window.location.href = response.result.next_redirect_mobile_url;
-              } else if (!isMobile && response?.result?.next_redirect_pc_url) {
-                window.location.href = response.result.next_redirect_pc_url;
-              }
+              const url = isMobile
+                ? response?.result?.next_redirect_mobile_url
+                : response?.result?.next_redirect_pc_url;
+
+              if (url) window.location.href = url;
             },
             onError: (error) => {
-              console.log(error.message);
+              console.error(error.message);
               setIsModalOpen(false);
             },
           }
         );
-      } else {
-        console.error("결제에 실패했습니다.");
+      } else if (type === "subscribe" && "option_en" in selectItem) {
+        planMutate(
+          {
+            itemName: selectItem.option_ko,
+            totalAmount: Number(selectItem.price),
+            methodName: selectedPayOption,
+          },
+          {
+            onSuccess: (response) => {
+              const url = isMobile
+                ? response?.result?.next_redirect_mobile_url
+                : response?.result?.next_redirect_pc_url;
+
+              if (url) window.location.href = url;
+            },
+            onError: (error) => {
+              console.error(error.message);
+              setIsModalOpen(false);
+            },
+          }
+        );
+      }
+    }
+
+    // KPN 카드 등록 결제 로직
+    if (selectedPayOption === "registeredCard") {
+      if (!selectedCard) {
+        alert("카드를 선택해주세요.");
+        return;
+      }
+
+      if (type === "buy-coins") {
+        mutateKpnPayCoin(
+          {
+            billingKey: selectedCard,
+            orderName: `${selectItem.coinAmount} 코인`,
+            amount: Number(selectItem.price),
+          },
+          {
+            onSuccess: () => {
+              setIsCompleted(true);
+              setIsModalOpen(true);
+            },
+            onError: (error) => {
+              console.error(error.message);
+              setIsModalOpen(false);
+            },
+          }
+        );
+      } else if (type === "subscribe" && "option_en" in selectItem) {
+        mutateKpnPayPlan(
+          {
+            billingKey: selectedCard,
+            orderName: selectItem.option_ko,
+            amount: Number(selectItem.price),
+          },
+          {
+            onSuccess: () => {
+              setIsCompleted(true);
+              setIsModalOpen(true);
+            },
+            onError: (error) => {
+              console.error(error.message);
+              setIsModalOpen(false);
+            },
+          }
+        );
       }
     }
   };
 
-  const { mutate: mutatePaySuccess } = usePostPayCoinSuccess();
-  const { mutate: mutatePlanSuccess } = usePostPlanSuccess();
   const pgToken = searchParams.get("pg_token");
   const isRequestSent = useRef(false);
 
@@ -209,6 +261,7 @@ function Payment({ type }: TPaymentProps) {
         <SelectPayOption
           selectedOption={selectedPayOption}
           setSelectedOption={setSelectedPayOption}
+          setSelectedCard={setSelectedCard}
           onPayOptionSelect={handlePayOptionChange}
         />
         <PaymentDetails type={type} item={selectItem} paymentMethod={selectedPayOption} />

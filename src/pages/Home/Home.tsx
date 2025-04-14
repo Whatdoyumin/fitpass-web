@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
-
 import Slider, { Settings } from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-
 import CardCol from "./CardCol";
 import RequireLogin from "../../components/RequireLogin";
 import { HomeCardData } from "../../types/HomeCardData";
@@ -13,6 +11,7 @@ import { LoadingSpinner } from "../../components/LoadingSpinner";
 import NotFound from "../NotFound";
 import { useFetchHomeSlide, useFetchRecommendFitness } from "../../hooks/useGetRecommend";
 import Modal from "../../components/Modal";
+import { patchLocationAgree } from "../../apis/locationAgree";
 
 type HomeSlide = {
   id: number;
@@ -20,21 +19,21 @@ type HomeSlide = {
 };
 
 function Home() {
-  const { isLogin, locationAgreed } = useAuth();
+  const { isLogin, locationAgreed, isInitialized } = useAuth();
 
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [hasShownModal, setHasShownModal] = useState(() => {
     return sessionStorage.getItem("hasShownLocationModal") === "true";
-  });  
+  });
 
   useEffect(() => {
-    if (isLogin && locationAgreed === false && !hasShownModal) {
+    if (isInitialized && isLogin && !locationAgreed && !hasShownModal) {
       setIsLocationModalOpen(true);
       setHasShownModal(true);
       sessionStorage.setItem("hasShownLocationModal", "true");
     }
-  }, [isLogin, locationAgreed, hasShownModal]);  
-  
+  }, [isInitialized, isLogin, locationAgreed, hasShownModal]);
+
   const [recentWatched, setRecentWatched] = useState([]);
   const [fitSettings, setFitSettings] = useState({
     dots: false,
@@ -88,6 +87,18 @@ function Home() {
     slidesToScroll: 1,
     arrows: false, // 화살표 없애기
   };
+  
+  // 위치 정보 동의
+  const handleLocationAgree = async () => {
+    try {
+      await patchLocationAgree();
+      setIsLocationModalOpen(false);
+    } catch (error) {
+      console.error("위치 동의 실패:", error);
+    }
+  };
+  
+  if (!isInitialized) return null;
 
   return (
     <div className="bg-white-200 w-full h-[calc(100vh-165px)] overflow-y-auto flex flex-col">
@@ -98,7 +109,7 @@ function Home() {
               key={img.id}
               src={img.imageUrl}
               alt={`${img.id}`}
-              className="w-[294px] h-[260px] mx-auto"
+              className="w-[294px] h-[260px] mx-auto object-cover bg-no-repeat"
             />
           ))}
         </Slider>
@@ -148,17 +159,14 @@ function Home() {
           ) : (
             <RequireLogin />
           )}
-
         </div>
       </div>
 
-            {/* 위치 정보 이용 동의 모달 */}
-            <Modal
+      {/* 위치 정보 이용 동의 모달 */}
+      <Modal
         isOpen={isLocationModalOpen}
-        onClose={() => {}}
-        onSuccess={() => {
-          setIsLocationModalOpen(false);
-        }}
+        onClose={() => setIsLocationModalOpen(false)}
+        onSuccess={handleLocationAgree}
         title="위치 정보 이용 동의"
         subTitle="위치 정보 이용 동의를 하지 않을 경우 서비스 기능
 일부분이 작동하지 않아 이용에 불편이 생길 수 있습니다."
