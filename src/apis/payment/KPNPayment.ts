@@ -6,7 +6,11 @@ import type {
   IssueBillingKeyResponse,
 } from "@portone/browser-sdk/v2";
 
-import { IKpnPaymentRequest, IKpnBillingRequest } from "../../types/kpnPayment";
+import {
+  IKpnPaymentRequest,
+  IKpnBillingRequest,
+  TPayBillingKeyRequest,
+} from "../../types/kpnPayment";
 import { axiosInstance } from "../axios-instance";
 
 const storeId = import.meta.env.VITE_STORE_ID;
@@ -73,4 +77,32 @@ const getRegisteredCard = async () => {
   return data;
 };
 
-export { requestKpnBillingKey, requestKpnPayment, getRegisteredCard };
+// 등록된 카드로 코인 단건 결제
+const postPayBillingKey = async ({ billingKey, orderName, amount }: TPayBillingKeyRequest) => {
+  const { data } = await axiosInstance.post("/coin/pay/pg/billing-keys", {
+    billingKey,
+    orderName,
+    amount,
+  });
+
+  return data;
+};
+
+// 등록된 카드로 정기 결제
+const postPayPlanBillingKey = async ({ billingKey, orderName, amount }: TPayBillingKeyRequest) => {
+  const { data } = await axiosInstance.post("/plan/pay/pg/billing-keys", {
+    billingKey,
+    orderName,
+    amount,
+  });
+
+  return data;
+};
+
+export {
+  requestKpnBillingKey,
+  requestKpnPayment,
+  getRegisteredCard,
+  postPayBillingKey,
+  postPayPlanBillingKey,
+};
