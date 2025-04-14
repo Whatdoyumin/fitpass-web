@@ -21,7 +21,7 @@ const SelectPayOption = ({
 }: TSelectPayOptionProps) => {
   const [isOpen, setIsOpen] = useState(true);
   const [cardData, setCardData] = useState<TRegisteredCard[]>([]);
-  const { data } = useGetRegisteredCard();
+  const { data, refetch } = useGetRegisteredCard();
 
   useEffect(() => {
     if (data?.result?.items) {
@@ -73,6 +73,7 @@ const SelectPayOption = ({
               selectedOption={selectedOption}
               myOption="creditCard"
               onClick={() => handleButtonClick("creditCard")}
+              onRegisterSuccess={refetch}
             />
             <button
               className={`payOptionButton ${
