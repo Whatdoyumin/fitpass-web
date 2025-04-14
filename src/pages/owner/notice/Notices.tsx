@@ -1,29 +1,37 @@
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Pagination } from "../../../components/Pagination";
-
-const mockNotices = Array.from({ length: 28 }, (_, i) => ({
-  id: i + 1,
-  title: `${i + 1}번 테스트`,
-  noticeType: i % 3 === 0 ? "이벤트" : "공지사항",
-}));
-
-const itemsPerPage = 10;
+import { useGetOwnerNotices } from "../../../hooks/useNoticeApi";
+import { LoadingSpinner } from "../../../components/LoadingSpinner";
+import NotFound from "../../NotFound";
 
 const OwnerNotices = () => {
   const navigate = useNavigate();
-  const [currentPage, setCurrentPage] = useState(0); 
-  const totalPages = Math.ceil(mockNotices.length / itemsPerPage);
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const currentNotices = mockNotices.slice(
-    currentPage * itemsPerPage,
-    (currentPage + 1) * itemsPerPage
-  );
+  // URL에서 현재 페이지 번호 가져오기 (없으면 1로 기본값 설정)
+  const currentPage = Number(searchParams.get("page")) || 1;
+  const itemsPerPage = 10;
+
+  const { data, error, isLoading } = useGetOwnerNotices(currentPage - 1, itemsPerPage);
+
+  if (isLoading) return <LoadingSpinner />;
+  if (error instanceof Error) {
+    console.log(error.message);
+    return <NotFound />;
+  }
+
+  const noticesData = data;
+  const notices = noticesData?.content?.content ?? [];
+  const totalPages = noticesData?.content?.totalPages ?? 1;
+
+  const handlePageChange = (pageIndex: number) => {
+    setSearchParams({ page: (pageIndex + 1).toString() });
+  };
 
   return (
     <div className="relative flex flex-col min-h-[calc(100vh-165px)] overflow-y-auto">
       <ul className="flex-grow">
-        {currentNotices.map((notice) => (
+      {notices.map((notice) => (
           <li
             key={notice.id}
             className="border-b px-6 py-3 flex min-w-[375px] cursor-pointer"
@@ -33,7 +41,9 @@ const OwnerNotices = () => {
               className={`font-medium whitespace-nowrap ${
                 notice.noticeType === "공지사항"
                   ? "text-blue-500"
-                  : "text-red-600"
+                  : notice.noticeType === "이벤트"
+                  ? "text-red-600"
+                  : "text-gray-500"
               }`}
             >
               [{notice.noticeType === "공지사항" ? "공지" : notice.noticeType}]&nbsp;
@@ -47,8 +57,8 @@ const OwnerNotices = () => {
 
       <Pagination
         totalPages={totalPages}
-        currentPage={currentPage}
-        onPageChange={setCurrentPage}
+        currentPage={currentPage - 1}
+        onPageChange={handlePageChange}
       />
     </div>
   );

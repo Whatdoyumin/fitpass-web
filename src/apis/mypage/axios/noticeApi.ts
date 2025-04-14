@@ -1,4 +1,4 @@
-import { NoticesResponse } from "../../mypage/quries/useNoticeApi";
+import { NoticesResponse } from "../../../hooks/useNoticeApi";
 import { axiosInstance } from '../../axios-instance';
 
 // 공지사항 목록 조회 함수
