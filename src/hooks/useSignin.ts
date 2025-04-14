@@ -19,7 +19,7 @@ export const useSignin = () => {
         refreshToken: string;
         role: string;
         locationAgreed: boolean;
-        memberId: number;
+        memberId: number | null;
         fitnessIds: string[];
       };
     }) => {
@@ -28,7 +28,7 @@ export const useSignin = () => {
         data.result.accessToken,
         data.result.refreshToken,
         data.result.locationAgreed,
-        data.result.memberId
+        data.result.memberId ?? 0
       );
       if (data.result.role === "ADMIN") navigate("/admin");
       else if (data.result.role === "OWNER") {
