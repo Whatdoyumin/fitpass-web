@@ -1,5 +1,5 @@
 import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
-import { getPayHistory, postPayDeactivate } from "../apis/payHistory";
+import { getPayHistory, postPayDeactivate } from "../apis/payment/payHistory";
 import { TPayQuery } from "../types/payHistory";
 
 function useGetPayHistory(query: TPayQuery) {

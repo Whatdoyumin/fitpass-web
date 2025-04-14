@@ -1,5 +1,5 @@
-import { TKakaoPayBody, TPayCoinSuccess } from "../types/buyCoin";
-import { axiosInstance } from "./axios-instance";
+import { TKakaoPayBody, TPayCoinSuccess } from "../../types/buyCoin";
+import { axiosInstance } from "../axios-instance";
 
 const postPayCoin = async ({ itemName, quantity, totalAmount, methodName }: TKakaoPayBody) => {
   const { data } = await axiosInstance.post("/coin/pay/request", {

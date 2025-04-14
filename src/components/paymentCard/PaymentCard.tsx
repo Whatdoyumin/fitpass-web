@@ -10,7 +10,7 @@ const PaymentCard = ({ bgColor, color, title, content }: IPaymentCard) => {
     <div
       className={`w-full h-[70px] rounded-[5px] relative shadow-sm ${
         color === "blue"
-          ? "bg-blue-500 text-white-100 "
+          ? "bg-blue-500 text-white-100"
           : color === "skyBlue"
           ? "bg-blue-100 text-blue-500"
           : "bg-white-100 text-blue-500"
@@ -22,7 +22,12 @@ const PaymentCard = ({ bgColor, color, title, content }: IPaymentCard) => {
             bgColor === "white" ? "border-r-white-100" : "border-r-white-200"
           }`}
         >
-          <p className="w-full text-center">{title}</p>
+          {typeof title === "string" ? (
+            <p className="w-full text-center">{title}</p>
+          ) : (
+            <div className="w-full text-center">{title}</div>
+          )}
+
           <div
             className={`absolute -top-[4px] left-[101%] -translate-x-1/2 w-2 h-2 rounded-full ${
               bgColor === "gray" ? "bg-white-100" : "bg-white-200"
