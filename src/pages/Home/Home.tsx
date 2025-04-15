@@ -87,7 +87,7 @@ function Home() {
     slidesToScroll: 1,
     arrows: false, // 화살표 없애기
   };
-  
+
   // 위치 정보 동의
   const handleLocationAgree = async () => {
     try {
@@ -97,21 +97,22 @@ function Home() {
       console.error("위치 동의 실패:", error);
     }
   };
-  
+
   if (!isInitialized) return null;
 
   return (
     <div className="bg-white-200 w-full h-[calc(100vh-165px)] overflow-y-auto flex flex-col">
       <div className="flex justify-center w-[390px] h-[280px] bg-black-700 relative ">
         <Slider {...adSettings} className="mb-sideGap w-[390px] h-[230px]">
-          {slideImg.map((img: HomeSlide) => (
-            <img
-              key={img.id}
-              src={img.imageUrl}
-              alt={`${img.id}`}
-              className="w-[294px] h-[260px] mx-auto object-cover bg-no-repeat"
-            />
-          ))}
+          {slideImg &&
+            slideImg.map((img: HomeSlide) => (
+              <img
+                key={img.id}
+                src={img.imageUrl}
+                alt={`${img.id}`}
+                className="w-[294px] h-[260px] mx-auto object-cover bg-no-repeat"
+              />
+            ))}
         </Slider>
       </div>
 
@@ -122,11 +123,17 @@ function Home() {
           <p className="h-[19px] mt-[10px] mb-[20px] font-bold text-[16px]">
             <span className="text-blue-500">추천</span> 운동 시설
           </p>
-          <Slider {...reSettings} className="h-[143px] mr-[-120px]">
-            {datas?.map((data: HomeCardData) => (
-              <CardCol key={data.fitnessId} data={data} />
-            ))}
-          </Slider>
+          {datas && datas.length > 0 ? (
+            <Slider {...reSettings} className="h-[143px] mr-[-120px]">
+              {datas.map((data: HomeCardData) => (
+                <CardCol key={data.fitnessId} data={data} />
+              ))}
+            </Slider>
+          ) : (
+            <div className="h-[143px] flex items-center justify-center">
+              <p className="text-center text-gray-500">등록된 업체가 존재하지 않습니다.</p>
+            </div>
+          )}
         </div>
         {/* 구분선 */}
         <div className="border-b-4 border-gray-300 py-3 w-[390px]"></div>
@@ -147,7 +154,7 @@ function Home() {
                   ))}
                 </div>
               ) : (
-                <Slider {...fitSettings} className="h-[143px] mb-sideGap mr-[-120px] mb-[85px]">
+                <Slider {...fitSettings} className="h-[143px] mb-sideGap mr-[-120px]">
                   {recentWatched.map((data, index) => (
                     <CardCol key={index} data={data} />
                   ))}

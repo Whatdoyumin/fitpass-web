@@ -58,13 +58,17 @@ function ExploreFitness() {
               <SkeletonFitnessCard />
             </div>
           ))
-        ) : (
+        ) : fitness.length > 0 ? (
           <>
             <FitnessCard fitness={fitness} />
             <div ref={observerRef} className="h-10 w-full text-center">
               {isFetchingNextPage && <LoadingSpinner />}
             </div>
           </>
+        ) : (
+          <div className="h-[150px] flex items-center justify-center">
+            <p className="text-gray-500 text-center">등록된 업체가 존재하지 않습니다.</p>
+          </div>
         )}
       </div>
     </div>
