@@ -6,13 +6,14 @@ import { formatDate } from "../../../utils/formatDate";
 import { Pagination } from "../../../components/Pagination";
 
 function SettlementHistory() {
-  const fitnessId = sessionStorage.getItem("fitnessIds") || "0"
+  const fitnessId = sessionStorage.getItem("fitnessIds");
+  const safeFitnessId = fitnessId && fitnessId !== "undefined" ? fitnessId : null;
 
   const [searchParams, setSearchParams] = useSearchParams();
   const currentPage = Number(searchParams.get("page")) || 1;
   const itemsPerPage = 10;
 
-  const { data, isLoading, isError } = useGetMonthHistory(fitnessId, currentPage - 1, itemsPerPage);
+  const { data, isLoading, isError } = useGetMonthHistory(safeFitnessId, currentPage - 1, itemsPerPage);
 
   if (isLoading) return <LoadingSpinner />;
   if (isError) return <NotFound />;
