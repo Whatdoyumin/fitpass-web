@@ -52,7 +52,7 @@ function FacilitiesRegister() {
 
   return (
     <>
-      <div className="py-6 px-3 pb-[90px] absolute">
+      <div className="w-full py-6 px-3 pb-[90px] absolute">
         {step === 1 && <RegisterStep1 formState={formState} setFormState={setFormState} />}
         {step === 2 && <RegisterStep2 formState={formState} setFormState={setFormState} />}
         {step === 3 && <RegisterStep3 formState={formState} setFormState={setFormState} />}
