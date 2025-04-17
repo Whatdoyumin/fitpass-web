@@ -15,6 +15,7 @@ import {
   AdminUser,
   AdminFitnessUser,
   AdminFitnessRequest,
+  AdminReview,
 } from "../pages";
 
 const adminRoutes: RouteObject = {
@@ -53,6 +54,10 @@ const adminRoutes: RouteObject = {
     {
       path: "fitness/upload/:id",
       element: <AdminFitnessUpload />,
+    },
+    {
+      path: "fitness/review",
+      element: <AdminReview />,
     },
     {
       path: "pay",
