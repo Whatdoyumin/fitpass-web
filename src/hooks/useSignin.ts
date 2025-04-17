@@ -28,15 +28,18 @@ export const useSignin = () => {
         data.result.accessToken,
         data.result.refreshToken,
         data.result.locationAgreed,
-        data.result.memberId ?? 0
+        data.result.memberId ?? 0,
+        data.result.role
       );
-      if (data.result.role === "ADMIN") navigate("/admin");
-      else if (data.result.role === "OWNER") {
-        navigate("/owner")
-        sessionStorage.setItem("fitnessIds", data.result.fitnessIds[0])
-      }
-      else 
+
+      if (data.result.role === "ADMIN") {
+        navigate("/admin");
+      } else if (data.result.role === "OWNER") {
+        sessionStorage.setItem("fitnessIds", data.result.fitnessIds[0]);
+        navigate("/owner");
+      } else {
         navigate("/");
+      }
     },
     onError: (error: Error) => {
       console.error("로그인 실패:", error.message);

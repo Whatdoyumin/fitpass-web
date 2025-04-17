@@ -33,6 +33,16 @@ export const ADMIN_NAV_MENU = [
         name: "회원 정보",
         path: "user",
       },
+      {
+        id: 2,
+        name: "시설 회원 정보",
+        path: "fitnessUser",
+      },
+      {
+        id: 3,
+        name: "시설 승인 요청",
+        path: "fitnessRequest",
+      }
     ],
   },
   {
@@ -51,6 +61,11 @@ export const ADMIN_NAV_MENU = [
         name: "시설 등록",
         path: "fitness/upload",
       },
+      {
+        id: 3,
+        name: "시설 리뷰 관리",
+        path: "fitness/review",
+      }
     ],
   },
   {
