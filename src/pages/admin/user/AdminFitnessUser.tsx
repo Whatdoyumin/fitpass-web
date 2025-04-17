@@ -28,7 +28,7 @@ import NotFound from "../../NotFound";
   
   function AdminFitnessUser() {
     const [searchTerm, setSearchTerm] = useState("");
-    const [searchType, setSearchType] = useState("name");
+    const [searchType, setSearchType] = useState("corporation");
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(0);
     const itemsPerPage = 10;
@@ -74,14 +74,14 @@ import NotFound from "../../NotFound";
               className="h-[48px] w-[89px] bg-gray-200 border border-gray-300 flex items-center justify-between p-[5px] pl-[10px] rounded-md text-[12px] text-black-600"
               onClick={() => setDropdownOpen(!dropdownOpen)}
             >
-              {searchType === "name" ? "회원명" : searchType === "loginId" ? "계정" : "전화번호"}
+              {searchType === "status" ? "상태" : searchType === "corporation" ? "업체명" : "전화번호"}
               <SvgArrowDropDown width={16} />
             </button>
   
             {dropdownOpen && (
               <ul className="absolute top-[50px] left-0 w-[89px] bg-white-100 shadow-lg rounded-md border border-gray-300 z-[50] text-black-600">
-                <li className="p-3 text-[12px] cursor-pointer hover:bg-gray-100" onClick={() => { setSearchType("name"); setDropdownOpen(false); }}>회원명</li>
-                <li className="p-3 text-[12px] cursor-pointer hover:bg-gray-100" onClick={() => { setSearchType("loginId"); setDropdownOpen(false); }}>계정</li>
+                <li className="p-3 text-[12px] cursor-pointer hover:bg-gray-100" onClick={() => { setSearchType("corporation"); setDropdownOpen(false); }}>업체명</li>
+                <li className="p-3 text-[12px] cursor-pointer hover:bg-gray-100" onClick={() => { setSearchType("status"); setDropdownOpen(false); }}>상태</li>
                 <li className="p-3 text-[12px] cursor-pointer hover:bg-gray-100" onClick={() => { setSearchType("phoneNumber"); setDropdownOpen(false); }}>전화번호</li>
               </ul>
             )}
