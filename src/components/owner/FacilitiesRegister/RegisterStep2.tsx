@@ -1,5 +1,6 @@
 import InputField from "../../InputField";
 import { IFacilitiesRegisterState } from "../../../types/ownerFacilities";
+import TimeInput from "../../common/TimeInput";
 
 const RegisterStep2 = ({ formState, setFormState }: IFacilitiesRegisterState) => {
   return (
@@ -26,18 +27,21 @@ const RegisterStep2 = ({ formState, setFormState }: IFacilitiesRegisterState) =>
       {/* 영업 시간 */}
       <div className="w-full flex flex-col gap-[10px]">
         <label className="text-16px font-medium text-black-700">영업 시간</label>
-        <InputField
-          type="textarea"
-          placeholder={`예)\n월 09:00~24:00\n화 00:00~24:00\n수 00:00~24:00\n목 00:00~24:00\n금 00:00~24:00\n토 00:00~24:00\n일 휴무일\n법정 공유일은 9:00~ 18:00으로 단축 운영합니다.`}
-          value={formState.formData.howToUse}
-          onChange={(e) =>
-            setFormState((prev) => ({
-              ...prev,
-              formData: {
-                ...prev.formData,
-                howToUse: e.target.value,
-              },
-            }))
+        <TimeInput
+          initialTime={formState.formData.time}
+          setTime={(updatedTime) =>
+            setFormState((prev) => {
+              const nextTime =
+                typeof updatedTime === "function" ? updatedTime(prev.formData.time) : updatedTime;
+
+              return {
+                ...prev,
+                formData: {
+                  ...prev.formData,
+                  time: nextTime,
+                },
+              };
+            })
           }
         />
       </div>

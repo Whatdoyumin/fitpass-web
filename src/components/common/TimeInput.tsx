@@ -1,52 +1,95 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface TimeInputProps {
-  setTime: React.Dispatch<React.SetStateAction<{ [key: string]: string }>>
+  setTime: React.Dispatch<React.SetStateAction<{ [key: string]: string }>>;
+  initialTime: { [key: string]: string };
 }
 
-function TimeInput({ setTime }: TimeInputProps) {
+function TimeInput({ setTime, initialTime }: TimeInputProps) {
+  const days = ["월", "화", "수", "목", "금", "토", "일"];
 
-  const days: string[] = ["월", "화", "수", "목", "금", "토", "일"];
-  const [localTime, setLocalTime] = useState<{ [key: string]: string | "휴무" }>(
-    Object.fromEntries(days.map((day) => [day, ": ~ :"]))
+  const [localTime, setLocalTime] = useState<{ [key: string]: string }>(
+    Object.fromEntries(days.map((day) => [day, ""]))
+  );
+  const [holidayDays, setHolidayDays] = useState<{ [key: string]: boolean }>(
+    Object.fromEntries(days.map((day) => [day, false]))
   );
 
+  useEffect(() => {
+    setLocalTime(initialTime);
+    const updatedHoliday: { [key: string]: boolean } = {};
+    days.forEach((day) => {
+      updatedHoliday[day] = initialTime[day] === "휴무";
+    });
+    setHolidayDays(updatedHoliday);
+  }, [initialTime]);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, day: string) => {
-    let value = e.target.value;
+    let digits = e.target.value.replace(/\D/g, ""); // 숫자만 추출
+    let formatted = "";
 
-    if (value === "휴무") {
-      setLocalTime((prev) => ({ ...prev, [day]: "휴무" }));
-      setTime((prev) => ({ ...prev, [day]: "휴무" }));
-      return;
+    if (digits.length <= 2) {
+      formatted = digits;
+    } else if (digits.length === 3) {
+      formatted = digits.replace(/(\d{2})(\d{1})/, "$1:$2");
+    } else if (digits.length === 4) {
+      formatted = digits.replace(/(\d{2})(\d{2})/, "$1:$2 ~ ");
+    } else if (digits.length === 5) {
+      formatted = digits.replace(/(\d{2})(\d{2})(\d{1})/, "$1:$2 ~ $3");
+    } else if (digits.length === 6) {
+      formatted = digits.replace(/(\d{2})(\d{2})(\d{2})/, "$1:$2 ~ $3:");
+    } else if (digits.length >= 7 && digits.length <= 8) {
+      digits = digits.slice(0, 8);
+      formatted = digits.replace(/(\d{2})(\d{2})(\d{2})(\d{1,2})/, "$1:$2 ~ $3:$4");
     }
 
-    if (value.length <= 2) {
-      value = value.replace(/(\d{2})/, "$1:"); // 2자리 숫자 뒤에 : 붙임
-    } else if (value.length <= 4) {
-      value = value.replace(/(\d{2})(\d{2})/, "$1:$2"); // 4자리 숫자 형식
-    } else if (value.length <= 6) {
-      value = value.replace(/(\d{2})(\d{2})(\d{2})/, "$1:$2 ~ $3"); // 6자리 숫자 형식
-    } else {
-      value = value.replace(/(\d{2})(\d{2})(\d{2})(\d{2})/, "$1:$2 ~ $3:$4"); // 8자리 숫자 형식
-    }
+    setLocalTime((prev) => ({ ...prev, [day]: formatted }));
+    setTime((prev) => ({ ...prev, [day]: formatted }));
+  };
 
-    setLocalTime((prev) => ({...prev, [day]: value}) );
-    setTime((prev) => ({...prev, [day]: value}) );
-  }
+  const toggleHoliday = (day: string) => {
+    setHolidayDays((prev) => {
+      const isHoliday = !prev[day];
 
-  return(
-    <div className="flex gap-[10px] mt-[-10px]">
+      const newHolidayState = { ...prev, [day]: isHoliday };
+      setLocalTime((prevTime) => ({
+        ...prevTime,
+        [day]: isHoliday ? "휴무" : "",
+      }));
+      setTime((prev) => ({
+        ...prev,
+        [day]: isHoliday ? "휴무" : "",
+      }));
+
+      return newHolidayState;
+    });
+  };
+
+  return (
+    <div className="flex flex-wrap gap-[10px] mt-[-10px]">
       {days.map((day) => (
-        <div key={day} className="flex flex-col ">
-          <label>{day}</label>
+        <div key={day} className="flex flex-col items-center">
+          <label className="mb-[4px] font-medium text-[14px]">{day}</label>
           <input
             type="text"
             maxLength={13}
-            value={localTime[day]}
+            value={localTime[day] ?? ""}
             placeholder="09:00 ~ 21:00"
             onChange={(e) => handleInputChange(e, day)}
-            className="w-full h-[30px] border border-gray-450 rounded-[3px] text-center focus:outline-none"
+            disabled={holidayDays[day]}
+            className={`w-[120px] h-[30px] border rounded-[3px] text-center focus:outline-none ${
+              holidayDays[day] ? "bg-gray-200 text-gray-400" : "border-gray-450"
+            }`}
+          />
+          <label className="text-[12px] mt-1">
+            <input
+              type="checkbox"
+              checked={holidayDays[day]}
+              onChange={() => toggleHoliday(day)}
+              className="mr-1"
             />
+            휴무
+          </label>
         </div>
       ))}
     </div>
