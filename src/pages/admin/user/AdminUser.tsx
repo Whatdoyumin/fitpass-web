@@ -107,7 +107,7 @@ function AdminUser() {
         <table className="w-full border-collapse border border-gray-450">
           <thead className="bg-blue-100 text-[13px] h-[49px] border-b border-gray-450">
             <tr>
-              <th className="w-[44px] font-medium text-center">순번</th>
+              <th className="w-[80px] font-medium text-center">순번</th>
               <th className="w-[90px] font-medium text-left">회원명</th>
               <th className="w-[89px] font-medium text-left">회원 유형</th>
               <th className="w-[183px] font-medium text-left">계정</th>

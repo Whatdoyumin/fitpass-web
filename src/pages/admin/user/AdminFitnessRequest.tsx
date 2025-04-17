@@ -107,30 +107,43 @@
           {/* 사용자 정보 테이블 */}
           <div className="min-h-[580px] pt-[26px]">
             <table className="w-full border-collapse border border-gray-450">
-              <thead className="bg-blue-100 text-[13px] h-[49px] border-b border-gray-450">
-                <tr>
-                  <th className="w-[44px] font-medium text-center">순번</th>
-                  <th className="w-[90px] font-medium text-left">회원명</th>
-                  <th className="w-[89px] font-medium text-left">업체명 (상호)</th>
-                  <th className="w-[115px] font-medium text-left">전화번호</th>
-                  <th className="w-[183px] font-medium text-left">사업자 등록증</th>
-                  <th className="w-[183px] font-medium text-left">통장 사본</th>
-                  <th className="w-[100px] font-medium text-left">가입 요청일</th>
-                </tr>
-              </thead>
-              <tbody className="text-[12px]">
-                {users.map((user: TOwnerData) => (
-                  <tr key={user.id} className="h-[50px] border-b border-gray-450">
-                    <td className="text-center">{user.id}</td>
-                    <td>{user.name}</td>
-                    <td>{user.corporation}</td>
-                    <td>{user.phoneNumber}</td>
-                    <td>파일</td>
-                    <td>파일</td>
-                    <td>{user.createdAt}</td>
-                  </tr>
-                ))}
-              </tbody>
+            <thead className="bg-blue-100 text-[13px] h-[49px] border-b border-gray-450">
+  <tr>
+    <th className="w-[80px] font-medium text-center">순번</th>
+    <th className="w-[90px] font-medium text-left">회원명</th>
+    <th className="w-[89px] font-medium text-left">업체명 (상호)</th>
+    <th className="w-[115px] font-medium text-left">전화번호</th>
+    <th className="w-[90px] font-medium text-left">사업자 등록증</th>
+    <th className="w-[50px] font-medium text-left">통장 사본</th>
+    <th className="w-[100px] font-medium text-left">가입 요청일</th>
+    <th className="w-[135px]" /> {/* 버튼 칼럼*/}
+  </tr>
+</thead>
+
+<tbody className="text-[12px]">
+  {users.map((user: TOwnerData) => (
+    <tr key={user.id} className="h-[50px] border-b border-gray-450">
+      <td className="text-center">{user.id}</td>
+      <td>{user.name}</td>
+      <td>{user.corporation}</td>
+      <td>{user.phoneNumber}</td>
+      <td>파일</td>
+      <td>파일</td>
+      <td>{user.createdAt}</td>
+      <td>
+        <div className="flex gap-[13px] text-[14px]">
+          <button className="w-[60px] h-[40px] text-white-100 bg-blue-500 rounded-md hover:bg-blue-400">
+            승인하기
+          </button>
+          <button className="w-[60px] h-[40px] text-white-100 bg-gray-400 rounded-md hover:bg-gray-500">
+            반려하기
+          </button>
+        </div>
+      </td>
+    </tr>
+  ))}
+</tbody>
+
             </table>
           </div>
     
