@@ -13,6 +13,8 @@ import {
   AdminSignin,
   AdminSubscribe,
   AdminUser,
+  AdminFitnessUser,
+  AdminFitnessRequest,
 } from "../pages";
 
 const adminRoutes: RouteObject = {
@@ -31,6 +33,14 @@ const adminRoutes: RouteObject = {
     {
       path: "user",
       element: <AdminUser />,
+    },
+    {
+      path: "fitnessUser",
+      element: <AdminFitnessUser />,
+    },
+    {
+      path: "fitnessRequest",
+      element: <AdminFitnessRequest />,
     },
     {
       path: "fitness/list",

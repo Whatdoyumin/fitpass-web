@@ -33,7 +33,9 @@ import AdminNotice from "./admin/AdminNotice";
 import AdminPayHistory from "./admin/AdminPayHistory";
 import AdminSettings from "./admin/AdminSettings";
 import AdminSubscribe from "./admin/AdminSubscribe";
-import AdminUser from "./admin/AdminUser";
+import AdminUser from "./admin/user/AdminUser";
+import AdminFitnessUser from "./admin/user/AdminFitnessUser";
+import AdminFitnessRequest from "./admin/user/AdminFitnessRequest";
 import AdminNoticeUpload from "./admin/AdminNoticeUpload";
 import AdminSignin from "./admin/AdminSignin";
 import UpdateReview from "./UpdateReview";
@@ -93,6 +95,8 @@ export {
   AdminSettings,
   AdminSubscribe,
   AdminUser,
+  AdminFitnessUser,
+  AdminFitnessRequest,
   AdminNoticeUpload,
   AdminSignin,
   UpdateReview,
