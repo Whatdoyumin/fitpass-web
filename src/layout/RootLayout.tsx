@@ -6,11 +6,11 @@ import RoleRouteGuard from "../routes/guard/RoleRouteGuard";
 function RootLayout() {
   return (
     <RoleRouteGuard>
-    <div className="h-full flex flex-col">
-      <Header />
-      <Outlet />
-      <Navbar />
-    </div>
+      <div className="w-full h-full flex flex-col">
+        <Header />
+        <Outlet />
+        <Navbar />
+      </div>
     </RoleRouteGuard>
   );
 }
