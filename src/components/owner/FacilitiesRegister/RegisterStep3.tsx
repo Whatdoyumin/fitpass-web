@@ -28,7 +28,7 @@ const RegisterStep3 = ({ formState, setFormState }: IFacilitiesRegisterState) =>
       <div className="w-full flex flex-col gap-[6px]">
         <ImageUploader
           label="업체 대표 사진을 추가해주세요"
-          subLabel="10MB 미만의 파일만 업로드 가능합니다. (JPEG, PNG)"
+          subLabel="10MB 미만의 파일만 업로드 가능합니다. (PDF, JPEG, PNG)"
           images={formState.mainImage}
           setImages={(file) => setFormState((prev) => ({ ...prev, mainImage: file as File }))}
           multiple={false}
@@ -38,7 +38,7 @@ const RegisterStep3 = ({ formState, setFormState }: IFacilitiesRegisterState) =>
       {/* 추가 이미지 */}
       <ImageUploader
         label="대표 제외 업체 사진을 추가해주세요"
-        subLabel="10MB 미만의 파일만 업로드 가능합니다. (JPEG, PNG)"
+        subLabel="10MB 미만의 파일만 업로드 가능합니다. (PDF, JPEG, PNG)"
         images={formState.additionalImages}
         setImages={(files) =>
           setFormState((prev) => ({ ...prev, additionalImages: files as File[] }))
