@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { TFacilities } from "../../types/ownerFacilities";
+import { TFacilities } from "../../../types/ownerFacilities";
 
 const OwnerFitnessCard = ({ id, img, name, address }: TFacilities) => {
   const navigate = useNavigate();
