@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { axiosInstance } from "../../apis/axios-instance";
-import config from "../../apis/config";
-import SvgArrowDropDown from "../../assets/svg/ArrowDropDown";
-import { IcSearch } from "../../assets/svg";
-import useDebounce from "../../hooks/useDebounce";
-import { Pagination } from "../../components/Pagination";
-import { LoadingSpinner } from "../../components/LoadingSpinner";
-import NotFound from "../NotFound";
+import { axiosInstance } from "../../../apis/axios-instance";
+import config from "../../../apis/config";
+import SvgArrowDropDown from "../../../assets/svg/ArrowDropDown";
+import { IcSearch } from "../../../assets/svg";
+import useDebounce from "../../../hooks/useDebounce";
+import { Pagination } from "../../../components/Pagination";
+import { LoadingSpinner } from "../../../components/LoadingSpinner";
+import NotFound from "../../NotFound";
 
 type TUserData = {
   id: number;
