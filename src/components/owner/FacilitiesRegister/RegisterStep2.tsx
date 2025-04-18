@@ -3,6 +3,21 @@ import { IFacilitiesRegisterState } from "../../../types/ownerFacilities";
 import TimeInput from "../../common/TimeInput";
 
 const RegisterStep2 = ({ formState, setFormState }: IFacilitiesRegisterState) => {
+  const handleSetTime = (updatedTime: React.SetStateAction<{ [key: string]: string }>) => {
+    setFormState((prev) => {
+      const nextTime =
+        typeof updatedTime === "function" ? updatedTime(prev.formData.time) : updatedTime;
+
+      return {
+        ...prev,
+        formData: {
+          ...prev.formData,
+          time: nextTime,
+        },
+      };
+    });
+  };
+
   return (
     <div className="w-full flex flex-col justify-center items-center gap-4 px-2">
       {/* 시설 소개 */}
@@ -27,23 +42,7 @@ const RegisterStep2 = ({ formState, setFormState }: IFacilitiesRegisterState) =>
       {/* 영업 시간 */}
       <div className="w-full flex flex-col gap-[10px]">
         <label className="text-16px font-medium text-black-700">영업 시간</label>
-        <TimeInput
-          initialTime={formState.formData.time}
-          setTime={(updatedTime) =>
-            setFormState((prev) => {
-              const nextTime =
-                typeof updatedTime === "function" ? updatedTime(prev.formData.time) : updatedTime;
-
-              return {
-                ...prev,
-                formData: {
-                  ...prev.formData,
-                  time: nextTime,
-                },
-              };
-            })
-          }
-        />
+        <TimeInput initialTime={formState.formData.time} setTime={handleSetTime} />
       </div>
     </div>
   );

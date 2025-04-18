@@ -69,7 +69,18 @@ function TimeInput({ setTime, initialTime }: TimeInputProps) {
     <div className="flex flex-wrap gap-[10px] mt-[-10px]">
       {days.map((day) => (
         <div key={day} className="flex flex-col items-center">
-          <label className="mb-[4px] font-medium text-[14px]">{day}</label>
+          <div className="w-full flex items-center justify-between">
+            <label className="mb-[4px] font-medium text-[14px]">{day}</label>
+            <label className="text-[12px] mt-1">
+              <input
+                type="checkbox"
+                checked={holidayDays[day]}
+                onChange={() => toggleHoliday(day)}
+                className="mr-1"
+              />
+              휴무
+            </label>
+          </div>
           <input
             type="text"
             maxLength={13}
@@ -81,15 +92,6 @@ function TimeInput({ setTime, initialTime }: TimeInputProps) {
               holidayDays[day] ? "bg-gray-200 text-gray-400" : "border-gray-450"
             }`}
           />
-          <label className="text-[12px] mt-1">
-            <input
-              type="checkbox"
-              checked={holidayDays[day]}
-              onChange={() => toggleHoliday(day)}
-              className="mr-1"
-            />
-            휴무
-          </label>
         </div>
       ))}
     </div>
