@@ -1,30 +1,12 @@
   import { useState } from "react";
-  import { useQuery } from "@tanstack/react-query";
-  import { axiosInstance } from "../../../apis/axios-instance";
-  import config from "../../../apis/config";
   import SvgArrowDropDown from "../../../assets/svg/ArrowDropDown";
   import { IcSearch } from "../../../assets/svg";
   import useDebounce from "../../../hooks/useDebounce";
   import { Pagination } from "../../../components/Pagination";
   import { LoadingSpinner } from "../../../components/LoadingSpinner";
   import NotFound from "../../NotFound";
-    
-    type TOwnerData = {
-      id: number;
-      name: string;
-      corporation: string;
-      loginId: string;
-      phoneNumber: string;
-      createdAt: string;
-    };
+import { useGetAdminFitnessUsers, TFitnessUserData } from "../../../hooks/useGetAdminUser";
 
-    type OwnersParams = {
-      page?: number;
-      size?: number;
-      searchType?: string;
-      keyword?: string;
-    };
-    
     function AdminFitnessRequest() {
       const [searchTerm, setSearchTerm] = useState("");
       const [searchType, setSearchType] = useState("corporation");
@@ -34,26 +16,9 @@
     
       const debouncedSearchTerm = useDebounce(searchTerm, 1000);
     
-      // API 요청 함수
-      const fetchUsers = async ({ queryKey }: { queryKey: [string, number, string, string] }) => {
-        const [, page, searchType, keyword] = queryKey;
-        const params: OwnersParams = {
-          page: page,
-          size: itemsPerPage,
-          searchType,
-          keyword: keyword || "",
-        };
-        const response = await axiosInstance.get(`/admin/owner/request`, { params });
-        return response.data;
-      };
-    
-      const { data, isLoading, isError } = useQuery({
-        queryKey: ["users", currentPage, searchType, debouncedSearchTerm],
-        queryFn: fetchUsers,
-      });
-    
-      const users = data?.result?.ownersApprovals || [];
-      const totalPages = data?.result?.totalPages || 1;
+      const { data, isLoading, isError } = useGetAdminFitnessUsers(currentPage, itemsPerPage, searchType, debouncedSearchTerm);
+      const users = data?.content?.ownersApprovals || [];
+      const totalPages = data?.content?.totalPages || 1;
     
       if (isLoading) return <LoadingSpinner />;
       if (isError) return <NotFound />;
@@ -116,7 +81,7 @@
 </thead>
 
 <tbody className="text-[12px]">
-  {users.map((user: TOwnerData) => (
+  {users.map((user: TFitnessUserData) => (
     <tr key={user.id} className="h-[50px] border-b border-gray-450">
       <td className="text-center">{user.id}</td>
       <td>{user.name}</td>

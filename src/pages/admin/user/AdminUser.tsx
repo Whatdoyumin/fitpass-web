@@ -5,17 +5,7 @@ import useDebounce from "../../../hooks/useDebounce";
 import { Pagination } from "../../../components/Pagination";
 import { LoadingSpinner } from "../../../components/LoadingSpinner";
 import NotFound from "../../NotFound";
-import { useGetAdminUsers } from "../../../hooks/useGetAdminUser";
-
-type TUserData = {
-  id: number;
-  name: string;
-  registerType: string;
-  loginId: string;
-  phoneNumber: string;
-  createdAt: string;
-  lastLoginAt: string;
-};
+import { useGetAdminUsers, TAdminUserData } from "../../../hooks/useGetAdminUser";
 
 function AdminUser() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -30,8 +20,6 @@ function AdminUser() {
   const { data, isLoading, isError } = useGetAdminUsers(currentPage, itemsPerPage, searchType, debouncedSearchTerm);
   const users = data?.content.membersInfo || [];
   const totalPages = data?.content.totalPages || 1;
-  console.log("debouncedSearchTerm", debouncedSearchTerm);
-  console.log("QueryKey", ["adminUsers", currentPage, itemsPerPage, searchType, debouncedSearchTerm]);
   
   if (isLoading) return <LoadingSpinner />;
   if (isError) return <NotFound />;
@@ -93,7 +81,7 @@ function AdminUser() {
             </tr>
           </thead>
           <tbody className="text-[12px]">
-            {users.map((user: TUserData) => (
+            {users.map((user: TAdminUserData) => (
               <tr key={user.id} className="h-[50px] border-b border-gray-450">
                 <td className="text-center">{user.id}</td>
                 <td>{user.name}</td>

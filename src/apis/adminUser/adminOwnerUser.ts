@@ -1,13 +1,13 @@
 import { axiosInstance } from "../axios-instance";
-  
-  export const getAdminUsers = async (
+
+  export const getAdminOwnerUsers = async (
     page: number = 0,
     size: number = 10,
     searchType: string="",
     keyword: string=""
   ) => {
     try {
-      const response = await axiosInstance.get("/admin/members", {
+      const response = await axiosInstance.get("/admin/owner/info", {
         params: {
           page,
           size,
