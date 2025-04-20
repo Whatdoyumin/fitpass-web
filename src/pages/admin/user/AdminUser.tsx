@@ -1,13 +1,11 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { axiosInstance } from "../../../apis/axios-instance";
-import config from "../../../apis/config";
 import SvgArrowDropDown from "../../../assets/svg/ArrowDropDown";
 import { IcSearch } from "../../../assets/svg";
 import useDebounce from "../../../hooks/useDebounce";
 import { Pagination } from "../../../components/Pagination";
 import { LoadingSpinner } from "../../../components/LoadingSpinner";
 import NotFound from "../../NotFound";
+import { useGetAdminUsers } from "../../../hooks/useGetAdminUser";
 
 type TUserData = {
   id: number;
@@ -17,13 +15,6 @@ type TUserData = {
   phoneNumber: string;
   createdAt: string;
   lastLoginAt: string;
-};
-
-type UsersParams = {
-  page?: number;
-  size?: number;
-  searchType?: string;
-  keyword?: string;
 };
 
 function AdminUser() {
@@ -36,27 +27,12 @@ function AdminUser() {
   // 🔄 검색어 디바운스
   const debouncedSearchTerm = useDebounce(searchTerm, 1000);
 
-  // API 요청 함수
-  const fetchUsers = async ({ queryKey }: { queryKey: [string, number, string, string] }) => {
-    const [, page, searchType, keyword] = queryKey;
-    const params: UsersParams = {
-      page: page,
-      size: itemsPerPage,
-      searchType,
-      keyword: keyword || "",
-    };
-    const response = await axiosInstance.get(`${config.apiBaseUrl}/admin/members`, { params });
-    return response.data;
-  };
-
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["users", currentPage, searchType, debouncedSearchTerm],
-    queryFn: fetchUsers,
-  });
-
-  const users = data?.result?.membersInfo || [];
-  const totalPages = data?.result?.totalPages || 1;
-
+  const { data, isLoading, isError } = useGetAdminUsers(currentPage, itemsPerPage, searchType, debouncedSearchTerm);
+  const users = data?.content.membersInfo || [];
+  const totalPages = data?.content.totalPages || 1;
+  console.log("debouncedSearchTerm", debouncedSearchTerm);
+  console.log("QueryKey", ["adminUsers", currentPage, itemsPerPage, searchType, debouncedSearchTerm]);
+  
   if (isLoading) return <LoadingSpinner />;
   if (isError) return <NotFound />;
 
@@ -75,7 +51,7 @@ function AdminUser() {
             className="h-[48px] w-[89px] bg-gray-200 border border-gray-300 flex items-center justify-between p-[5px] pl-[10px] rounded-md text-[12px] text-black-600"
             onClick={() => setDropdownOpen(!dropdownOpen)}
           >
-            {searchType === "name" ? "회원명" : searchType === "loginId" ? "계정" : "전화번호"}
+            {searchType === "phoneNumber" ? "전화번호" : searchType === "loginId" ? "계정" : "회원명"}
             <SvgArrowDropDown width={16} />
           </button>
 

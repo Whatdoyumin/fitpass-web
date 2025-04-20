@@ -17,12 +17,7 @@
       phoneNumber: string;
       createdAt: string;
     };
-    /*
-    {
-      "businessRegistrationUrl": "owner/businessRegistration/5d898cd3-7e92-43b3-9d27-a6ef0e536ed4/cat.png",
-      "bankCopyUrl": "owner/bankCopy/749dfaf1-6748-4e5a-a67a-dff1013857cd/bank.jpg"
-    },
-  */
+
     type OwnersParams = {
       page?: number;
       size?: number;
@@ -48,7 +43,7 @@
           searchType,
           keyword: keyword || "",
         };
-        const response = await axiosInstance.get(`${config.apiBaseUrl}/admin/owner/request`, { params });
+        const response = await axiosInstance.get(`/admin/owner/request`, { params });
         return response.data;
       };
     
