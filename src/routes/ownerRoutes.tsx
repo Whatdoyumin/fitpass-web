@@ -4,9 +4,7 @@ import RootLayout from "../layout/RootLayout";
 import NotFound from "../pages/NotFound";
 import {
   FacilitiesMain,
-  FacilitiesRegisterStep1,
-  FacilitiesRegisterStep2,
-  FacilitiesRegisterStep3,
+  FacilitiesRegister,
   OwnerDashboard,
   OwnerNoticeDetails,
   OwnerNotices,
@@ -57,15 +55,15 @@ const ownerRoutes: RouteObject = {
     },
     {
       path: "register/step1",
-      element: <FacilitiesRegisterStep1 />,
+      element: <FacilitiesRegister />,
     },
     {
       path: "register/step2",
-      element: <FacilitiesRegisterStep2 />,
+      element: <FacilitiesRegister />,
     },
     {
       path: "register/step3",
-      element: <FacilitiesRegisterStep3 />,
+      element: <FacilitiesRegister />,
     },
     {
       path: "signup/step1",

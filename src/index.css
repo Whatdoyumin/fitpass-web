@@ -41,6 +41,14 @@
   button {
     @apply cursor-pointer text-inherit border-0 bg-transparent;
   }
+
+  input,
+  input:focus,
+  textarea,
+  textarea:focus {
+    outline: none !important;
+    box-shadow: none !important;
+  }
 }
 
 @layer components {
