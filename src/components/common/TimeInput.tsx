@@ -11,10 +11,12 @@ function TimeInput({ setTime, initialTime }: TimeInputProps) {
   const [localTime, setLocalTime] = useState<{ [key: string]: string }>(
     Object.fromEntries(days.map((day) => [day, ""]))
   );
+
   const [holidayDays, setHolidayDays] = useState<{ [key: string]: boolean }>(
     Object.fromEntries(days.map((day) => [day, false]))
   );
 
+  // 초기값 적용
   useEffect(() => {
     setLocalTime(initialTime);
     const updatedHoliday: { [key: string]: boolean } = {};
@@ -52,13 +54,16 @@ function TimeInput({ setTime, initialTime }: TimeInputProps) {
       const isHoliday = !prev[day];
 
       const newHolidayState = { ...prev, [day]: isHoliday };
+      const newTimeValue = isHoliday ? "휴무" : "";
+
       setLocalTime((prevTime) => ({
         ...prevTime,
-        [day]: isHoliday ? "휴무" : "",
+        [day]: newTimeValue,
       }));
+
       setTime((prev) => ({
         ...prev,
-        [day]: isHoliday ? "휴무" : "",
+        [day]: newTimeValue,
       }));
 
       return newHolidayState;
