@@ -96,11 +96,10 @@
 
   .slick-list,
   .slick-track {
-    height: 260px !important;
-    overflow: hidden !important;
+    @apply h-[260px] overflow-hidden;
   }
 
-  .test-css {
-    bottom: 20px !important;
+  .slick-dots {
+    @apply bottom-[20px];
   }
 }
