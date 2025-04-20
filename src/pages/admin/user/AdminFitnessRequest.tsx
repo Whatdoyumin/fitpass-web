@@ -6,6 +6,7 @@
   import { LoadingSpinner } from "../../../components/LoadingSpinner";
   import NotFound from "../../NotFound";
 import { useGetAdminFitnessUsers, TFitnessUserData } from "../../../hooks/useGetAdminUser";
+import { patchAdminOwnerRequest } from "../../../apis/adminUser/adminOwnerRequest";
 
     function AdminFitnessRequest() {
       const [searchTerm, setSearchTerm] = useState("");
@@ -23,6 +24,14 @@ import { useGetAdminFitnessUsers, TFitnessUserData } from "../../../hooks/useGet
       if (isLoading) return <LoadingSpinner />;
       if (isError) return <NotFound />;
     
+      const handleApproval = async (loginId: string, isApproval: boolean) => {
+        try {
+          await patchAdminOwnerRequest(loginId, isApproval);
+        } catch (error) {
+          alert("요청 처리에 실패했습니다.");
+        }
+      };
+
       return (
         <div className="w-full px-[7px] h-full flex flex-col relative">
           <h1 className="adminTitle">시설 승인 요청</h1>
@@ -68,41 +77,47 @@ import { useGetAdminFitnessUsers, TFitnessUserData } from "../../../hooks/useGet
           <div className="min-h-[580px] pt-[26px]">
             <table className="w-full border-collapse border border-gray-450">
             <thead className="bg-blue-100 text-[13px] h-[49px] border-b border-gray-450">
-  <tr>
-    <th className="w-[80px] font-medium text-center">순번</th>
-    <th className="w-[90px] font-medium text-left">회원명</th>
-    <th className="w-[89px] font-medium text-left">업체명 (상호)</th>
-    <th className="w-[115px] font-medium text-left">전화번호</th>
-    <th className="w-[90px] font-medium text-left">사업자 등록증</th>
-    <th className="w-[50px] font-medium text-left">통장 사본</th>
-    <th className="w-[100px] font-medium text-left">가입 요청일</th>
-    <th className="w-[135px]" /> {/* 버튼 칼럼*/}
-  </tr>
-</thead>
+            <tr>
+              <th className="w-[80px] font-medium text-center">순번</th>
+              <th className="w-[90px] font-medium text-left">회원명</th>
+              <th className="w-[89px] font-medium text-left">업체명 (상호)</th>
+              <th className="w-[115px] font-medium text-left">전화번호</th>
+              <th className="w-[90px] font-medium text-left">사업자 등록증</th>
+              <th className="w-[50px] font-medium text-left">통장 사본</th>
+              <th className="w-[100px] font-medium text-left">가입 요청일</th>
+              <th className="w-[135px]" /> {/* 버튼 칼럼*/}
+            </tr>
+          </thead>
 
-<tbody className="text-[12px]">
-  {users.map((user: TFitnessUserData) => (
-    <tr key={user.id} className="h-[50px] border-b border-gray-450">
-      <td className="text-center">{user.id}</td>
-      <td>{user.name}</td>
-      <td>{user.corporation}</td>
-      <td>{user.phoneNumber}</td>
-      <td>파일</td>
-      <td>파일</td>
-      <td>{user.createdAt}</td>
-      <td>
-        <div className="flex gap-[13px] text-[14px]">
-          <button className="w-[60px] h-[40px] text-white-100 bg-blue-500 rounded-md hover:bg-blue-400">
-            승인하기
-          </button>
-          <button className="w-[60px] h-[40px] text-white-100 bg-gray-400 rounded-md hover:bg-gray-500">
-            반려하기
-          </button>
-        </div>
-      </td>
-    </tr>
-  ))}
-</tbody>
+          <tbody className="text-[12px]">
+            {users.map((user: TFitnessUserData) => (
+              <tr key={user.id} className="h-[50px] border-b border-gray-450">
+                <td className="text-center">{user.id}</td>
+                <td>{user.name}</td>
+                <td>{user.corporation}</td>
+                <td>{user.phoneNumber}</td>
+                <td>파일</td>
+                <td>파일</td>
+                <td>{user.createdAt}</td>
+                <td>
+                  <div className="flex gap-[13px] text-[14px]">
+                  <button
+                    className="w-[60px] h-[40px] text-white-100 bg-blue-500 rounded-md hover:bg-blue-400"
+                    onClick={() => handleApproval(user.loginId, true)}
+                  >
+                    승인하기
+                  </button>
+                  <button
+                    className="w-[60px] h-[40px] text-white-100 bg-gray-400 rounded-md hover:bg-gray-500"
+                    onClick={() => handleApproval(user.loginId, false)}
+                  >
+                    반려하기
+                  </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
 
             </table>
           </div>
