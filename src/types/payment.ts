@@ -12,6 +12,14 @@ export type TCoinBody = {
   isBgBlue: boolean;
 };
 
+export type TSubscribe = {
+  planType: string;
+  price: number;
+  coinQuantity: number;
+  coinAddition: number;
+  expirationPeriod: number;
+};
+
 export type TSubscribeBody = {
   id: number;
   option_ko: string;
