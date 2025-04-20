@@ -139,7 +139,7 @@ function Home() {
         <div className="border-b-4 border-gray-300 py-3 w-full"></div>
         {/* 최근 본 운동 시설 */}
         {/* <div className="flex-1 w-[390px] pl-4 my-7 overflow-hidden"> */}
-        <div className="w-full pl-4 my-7 overflow-hidden pb-navbar">
+        <div className="w-full h-[250px] pl-4 my-7 overflow-hidden pb-navbar">
           <p className="h-[19px] mb-[20px] font-bold text-[16px]">
             <span className="text-blue-500">최근 본</span> 운동 시설
           </p>
