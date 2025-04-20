@@ -18,6 +18,7 @@ export { default as NaverPay } from "./NaverPay";
 export { default as PlatformGoogle } from "./PlatformGoogle";
 export { default as PlatformKaKao } from "./PlatformKaKao";
 export { default as PlatformNaver } from "./PlatformNaver";
+export { default as UploadImg } from "./UploadImg";
 export { default as ArrowDropDown } from "./ArrowDropDown";
 export { default as ArrowDropUp } from "./ArrowDropUp";
 export { default as BackIcon } from "./BackIcon";

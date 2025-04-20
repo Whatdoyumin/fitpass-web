@@ -4,7 +4,7 @@ import SelectCategory from "./SelectCategory";
 import SubImgUpload from "./SubImgUpload";
 import SelectStatus from "./SelectStatus";
 import SetLocationModal from "./SetLocationModal";
-import TimeInput from "./TimeInput";
+import TimeInput from "../../../components/common/TimeInput";
 import Modal from "../../../components/Modal";
 import { IcFontBold, IcFontUnderline } from "../../../assets/svg";
 import { useAdminFitnessUpload } from "../../../apis/postAdminFitness/quries/useAdminFitnessUpload";

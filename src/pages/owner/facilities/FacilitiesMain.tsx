@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Ifacilities } from "../../../assets/svg";
-import { OwnerFitnessCard } from "../../../components/ownerFitnessCard/OwnerFitnessCard";
+import { OwnerFitnessCard } from "../../../components/owner/ownerFitnessCard/OwnerFitnessCard";
 import Facilities from "../../../mocks/Facilities.json";
 
 function FacilitiesMain() {

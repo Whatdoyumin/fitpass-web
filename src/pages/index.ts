@@ -48,9 +48,7 @@ import LocationPolicyPage from "./Policies/LocationPolicy";
 import MarketingPolicyPage from "./Policies/MarketingPolicy";
 import FacilitiesMain from "./owner/facilities/FacilitiesMain";
 import OwnerDashboard from "./owner/dashboard/OwnerDashboard";
-import FacilitiesRegisterStep1 from "./owner/facilitiesRegister/Step1";
-import FacilitiesRegisterStep2 from "./owner/facilitiesRegister/Step2";
-import FacilitiesRegisterStep3 from "./owner/facilitiesRegister/Step3";
+import FacilitiesRegister from "./owner/facilitiesRegister/FacilitiesRegister";
 import SettlementHistory from "./owner/history/SettlementHistory";
 import UsageHistory from "./owner/history/UsageHistory";
 import OwnerNotices from "./owner/notice/Notices";
@@ -110,9 +108,7 @@ export {
   MarketingPolicyPage,
   FacilitiesMain,
   OwnerDashboard,
-  FacilitiesRegisterStep1,
-  FacilitiesRegisterStep2,
-  FacilitiesRegisterStep3,
+  FacilitiesRegister,
   SettlementHistory,
   UsageHistory,
   OwnerNotices,
