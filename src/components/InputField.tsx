@@ -1,97 +1,188 @@
-import React, { useState, useRef } from "react";
+import { useState, useRef } from "react";
 import {
+  User,
+  UserFocus,
+  Password,
+  PasswordFocus,
   PasswordEye,
   PasswordEyeView,
   PasswordEyeFocus,
   PasswordEyeViewFocus,
 } from "../assets/svg";
 
+type InputType = "id" | "password" | "etc" | "textarea" | "radio" | "number";
+
 interface InputFieldProps {
-  type: string;
-  placeholder: string;
-  isPassword?: boolean; // 비밀번호 입력창 여부
-  value?: string; // 입력값
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void; // 입력값 변경 핸들러
-  hasError?: boolean; // 에러 여부
+  type: InputType;
+  placeholder?: string;
+  value?: string | string[] | number;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   onEnter?: () => void;
+  buttonText?: string;
+  onButtonClick?: () => void;
+  radioOptions?: { label: string; value: string }[];
+  name?: string;
 }
 
 function InputField({
   type,
   placeholder,
-  isPassword = false,
   value,
   onChange,
-  hasError = false,
-  onEnter
+  onEnter,
+  buttonText,
+  onButtonClick,
+  radioOptions,
+  name,
 }: InputFieldProps) {
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false); // 비밀번호 표시 여부
-  const [isFocused, setIsFocused] = useState(false); // Focus 상태
-  const inputRef = useRef<HTMLInputElement>(null); // input 참조
+  const [inputType, setInputType] = useState(type === "password" ? "password" : "text");
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
-  /** 비밀번호 토글 함수 */
   const togglePasswordVisibility = (e: React.MouseEvent) => {
-    e.preventDefault(); // focus 해제 방지
+    e.preventDefault();
     setIsPasswordVisible(!isPasswordVisible);
+    setInputType(isPasswordVisible ? "password" : "text");
     inputRef.current?.focus();
   };
 
+  if (type === "radio" && radioOptions) {
+    const selectedValues = (value || []) as string[];
+
+    const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const selected = e.target.value;
+      const isChecked = selectedValues.includes(selected);
+
+      const fakeEvent = {
+        target: {
+          value: isChecked
+            ? selectedValues.filter((val) => val !== selected)
+            : [...selectedValues, selected],
+        },
+      } as unknown as React.ChangeEvent<HTMLInputElement>;
+
+      onChange?.(fakeEvent);
+    };
+
+    return (
+      <div className="w-full flex gap-2">
+        {radioOptions.map((option) => {
+          const isSelected = selectedValues.includes(option.value);
+          return (
+            <label
+              key={option.value}
+              htmlFor={`${name}-${option.value}`}
+              className={`cursor-pointer px-4 py-2 rounded-md border text-sm min-w-[80px] text-center transition
+              ${
+                isSelected
+                  ? "bg-blue-100 border-blue-400 text-blue-600"
+                  : "border-gray-300 text-gray-500"
+              }`}
+            >
+              <input
+                id={`${name}-${option.value}`}
+                type="checkbox"
+                name={name}
+                value={option.value}
+                checked={isSelected}
+                onChange={handleCheckboxChange}
+                className="hidden"
+              />
+              {option.label}
+            </label>
+          );
+        })}
+      </div>
+    );
+  }
+
   return (
     <div
-      className={`flex items-center h-[50px] px-[20px] py-[13px] gap-[25px] border rounded-[5px] bg-white
-        ${hasError ? "border-red-500" : isFocused ? "border-gray-500" : "border-gray-400"}
-      `}
+      className={`w-full flex min-w-[321px] gap-2 ${
+        type === "textarea" ? "flex-col items-start" : "items-center"
+      }`}
     >
-      {/* 입력 필드 */}
-      <input
-        ref={inputRef}
-        type={isPasswordVisible ? "text" : type}
-        placeholder={placeholder}
-        value={value}
-        onChange={onChange}
-        autoComplete="off"
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" && onEnter) {
-            onEnter();
-          }
-        }}
-        className={`
-          flex-grow
-          outline-none
-          text-[14px]
-          font-medium
-          leading-[30px]
-          placeholder-gray-400
-          tracking-[-0.3px]
-          ${isFocused ? "text-gray-500" : "text-gray-400"}
-        `}
-        style={
-          isPassword && !isPasswordVisible
-            ? ({ WebkitTextSecurity: "disc" } as React.CSSProperties)
-            : ({ WebkitTextSecurity: "none" } as React.CSSProperties)
-        }
-      />
-
-      {/* 오른쪽 아이콘 (비밀번호 표시/숨김 토글) */}
-      {isPassword && (
-        <div
-          className="w-[25px] h-[25px] flex justify-center items-center cursor-pointer"
-          onMouseDown={togglePasswordVisibility}
-        >
-          {isPasswordVisible ? (
-            isFocused ? (
-              <PasswordEyeViewFocus className="w-[19px] h-[20px]" />
+      {/* input 컨테이너 */}
+      <div
+        className={`w-full flex items-center h-[50px] flex-1 py-[10px] px-[15px] border rounded-[5px] gap-[15px] relative ${
+          isFocused ? "border-gray-500" : "border-gray-400"
+        }`}
+      >
+        {/* 왼쪽 아이콘 */}
+        {type === "id" || type === "password" ? (
+          <div className="w-[25px] h-[25px] flex justify-center items-center">
+            {type === "id" ? (
+              isFocused ? (
+                <UserFocus />
+              ) : (
+                <User />
+              )
+            ) : isFocused ? (
+              <PasswordFocus />
             ) : (
-              <PasswordEyeView className="w-[19px] h-[20px]" />
-            )
-          ) : isFocused ? (
-            <PasswordEyeFocus className="w-[19px] h-[20px]" />
-          ) : (
-            <PasswordEye className="w-[19px] h-[20px]" />
-          )}
-        </div>
+              <Password />
+            )}
+          </div>
+        ) : null}
+
+        {/* input 또는 textarea */}
+        {type === "textarea" ? (
+          <textarea
+            value={value as string}
+            onChange={onChange as React.ChangeEventHandler<HTMLTextAreaElement>}
+            placeholder={placeholder}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
+            className="w-full min-h-52 text-14px font-medium  placeholder-gray-400"
+          />
+        ) : (
+          <input
+            ref={inputRef}
+            type={type === "password" ? inputType : type === "number" ? "number" : "text"}
+            value={type === "number" && (value === 0 || value === "0") ? "" : value}
+            placeholder={placeholder}
+            autoComplete="off"
+            onChange={onChange as React.ChangeEventHandler<HTMLInputElement>}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && onEnter) onEnter();
+            }}
+            className="w-full outline-none text-15px font-medium leading-[30px] placeholder-gray-400 tracking-[-0.3px]"
+          />
+        )}
+
+        {/* 비밀번호 보기 토글 */}
+        {type === "password" && (
+          <div
+            className="w-[25px] h-[25px] flex justify-center items-center cursor-pointer absolute right-[15px]"
+            onMouseDown={togglePasswordVisibility}
+          >
+            {isPasswordVisible ? (
+              isFocused ? (
+                <PasswordEyeViewFocus />
+              ) : (
+                <PasswordEyeView />
+              )
+            ) : isFocused ? (
+              <PasswordEyeFocus />
+            ) : (
+              <PasswordEye />
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* 오른쪽 버튼 */}
+      {buttonText && onButtonClick && (
+        <button
+          type="button"
+          className="text-14px px-5 py-[10px] h-[50px] blueButton whitespace-nowrap"
+          onClick={onButtonClick}
+        >
+          {buttonText}
+        </button>
       )}
     </div>
   );

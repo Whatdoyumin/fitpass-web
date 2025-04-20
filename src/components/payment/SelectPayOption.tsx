@@ -5,6 +5,7 @@ import BigDropdown from "./BigDropdown";
 import { KpnPaymentButton } from "./kpnPaymentButton";
 import { useGetRegisteredCard } from "../../hooks/useKpnPayment";
 import { TRegisteredCard } from "../../types/kpnPayment";
+import { CARD_KR_NAME_MAP } from "../../constants/cardNames";
 
 interface TSelectPayOptionProps {
   selectedOption: string | null;
@@ -46,7 +47,10 @@ const SelectPayOption = ({
     }
   };
 
-  const formattedCardLabels = cardData.map((card) => `${card.bank} ${card.type}(${card.number})`);
+  const formattedCardLabels = cardData.map((card) => {
+    const bankName = CARD_KR_NAME_MAP[card.bank] || card.bank;
+    return `${bankName} (${card.number})`;
+  });
 
   return (
     <div className="w-full min-h-14 bg-white-100 px-[25px] gap-3 border-t-8 border-white-200">

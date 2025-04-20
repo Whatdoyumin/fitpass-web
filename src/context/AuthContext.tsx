@@ -5,11 +5,13 @@ interface AuthContextType {
   locationAgreed: boolean;
   memberId: number | null;
   isInitialized: boolean;
+  role: string | null;
   login: (
     accessToken: string,
     refreshToken: string,
     locationAgreed: boolean,
-    memberId: number
+    memberId: number,
+    role: string
   ) => void;
   logout: () => void;
 }
@@ -24,32 +26,40 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const stored = sessionStorage.getItem("memberId");
     return stored ? Number(stored) : null;
   });
+  const [role, setRole] = useState<string | null>(() => {
+    return sessionStorage.getItem("role");
+  });
 
   useEffect(() => {
     const token = sessionStorage.getItem("accessToken");
     const agreed = sessionStorage.getItem("locationAgreed") === "true";
     const storedmemberId = sessionStorage.getItem("memberId");
+    const storedRole = sessionStorage.getItem("role");
 
     setIsLogin(!!token);
     setLocationAgreed(agreed);
     setIsInitialized(true);
     setmemberId(storedmemberId ? Number(storedmemberId) : null);
+    setRole(storedRole);
   }, []);
 
   const login = (
     accessToken: string,
     refreshToken: string,
     locationAgreed: boolean,
-    memberId: number
+    memberId: number,
+    role: string
   ) => {
     sessionStorage.setItem("accessToken", accessToken);
     sessionStorage.setItem("refreshToken", refreshToken);
     sessionStorage.setItem("locationAgreed", locationAgreed ? "true" : "false");
     sessionStorage.setItem("memberId", memberId.toString());
+    sessionStorage.setItem("role", role);
 
     setLocationAgreed(locationAgreed);
     setIsLogin(true);
     setmemberId(memberId);
+    setRole(role);
   };
 
   const logout = () => {
@@ -57,15 +67,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     sessionStorage.removeItem("refreshToken");
     sessionStorage.removeItem("locationAgreed");
     sessionStorage.removeItem("memberId");
+    sessionStorage.removeItem("role");
     sessionStorage.removeItem("hasShownLocationModal");
 
     setLocationAgreed(false);
     setIsLogin(false);
     setmemberId(null);
+    setRole(null);
   };
 
   return (
-    <AuthContext.Provider value={{ isLogin, locationAgreed, memberId, login, logout, isInitialized }}>
+    <AuthContext.Provider value={{ isLogin, locationAgreed, memberId, role, login, logout, isInitialized }}>
       {children}
     </AuthContext.Provider>
   );

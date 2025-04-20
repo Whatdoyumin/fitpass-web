@@ -43,7 +43,7 @@ function ExploreFitness() {
   }
 
   return (
-    <div className="bg-white-200 px-5 pt-6 pb-navbar w-full max-w-content min-h-full absolute">
+    <div className="bg-white-200 px-5 pt-6 pb-navbar w-full max-w-content  min-h-[calc(100vh-165px)] absolute">
       <div className="flex justify-between mb-3 mt-5 px-1">
         <span className="text-[25px] font-extrabold">피트니스 시설</span>
         <div className="relative z-10">
@@ -58,13 +58,17 @@ function ExploreFitness() {
               <SkeletonFitnessCard />
             </div>
           ))
-        ) : (
+        ) : fitness.length > 0 ? (
           <>
             <FitnessCard fitness={fitness} />
             <div ref={observerRef} className="h-10 w-full text-center">
               {isFetchingNextPage && <LoadingSpinner />}
             </div>
           </>
+        ) : (
+          <div className="h-[150px] flex items-center justify-center">
+            <p className="text-gray-500 text-center">등록된 업체가 존재하지 않습니다.</p>
+          </div>
         )}
       </div>
     </div>

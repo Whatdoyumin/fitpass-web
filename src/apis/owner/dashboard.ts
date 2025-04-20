@@ -16,6 +16,7 @@ export const getOwnerDashboardNotices = async() =>{
 
 // 이번달 정산 내역 조회
 export const getOwnerDashboardSettlements = async(fitnessId: string) => {
+    if (!fitnessId) throw new Error("Fitness ID가 없습니다.");
     try {
         const response = await axiosInstance.get(`/owner/dashboard/settlements/month/${fitnessId}`)
         if (response.data.isSuccess) {
@@ -30,6 +31,7 @@ export const getOwnerDashboardSettlements = async(fitnessId: string) => {
 
 // 이용 내역 3개 조회
 export const getOwnerDashboardUsages = async(fitnessId: string) => {
+    if (!fitnessId) throw new Error("Fitness ID가 없습니다.");
     try {
         const response = await axiosInstance.get(`/owner/dashboard/usages/preview/${fitnessId}`)
         if (response.data.isSuccess) {

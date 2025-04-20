@@ -41,6 +41,14 @@
   button {
     @apply cursor-pointer text-inherit border-0 bg-transparent;
   }
+
+  input,
+  input:focus,
+  textarea,
+  textarea:focus {
+    outline: none !important;
+    box-shadow: none !important;
+  }
 }
 
 @layer components {
@@ -84,5 +92,14 @@
 
   .adminTitle {
     @apply text-18px font-extrabold;
+  }
+
+  .slick-list,
+  .slick-track {
+    @apply h-[260px] overflow-hidden;
+  }
+
+  .slick-dots {
+    @apply bottom-[20px];
   }
 }

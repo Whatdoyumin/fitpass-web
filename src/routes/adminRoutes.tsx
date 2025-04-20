@@ -13,6 +13,9 @@ import {
   AdminSignin,
   AdminSubscribe,
   AdminUser,
+  AdminFitnessUser,
+  AdminFitnessRequest,
+  AdminReview,
 } from "../pages";
 
 const adminRoutes: RouteObject = {
@@ -33,6 +36,14 @@ const adminRoutes: RouteObject = {
       element: <AdminUser />,
     },
     {
+      path: "fitnessUser",
+      element: <AdminFitnessUser />,
+    },
+    {
+      path: "fitnessRequest",
+      element: <AdminFitnessRequest />,
+    },
+    {
       path: "fitness/list",
       element: <AdminFitnessList />,
     },
@@ -43,6 +54,10 @@ const adminRoutes: RouteObject = {
     {
       path: "fitness/upload/:id",
       element: <AdminFitnessUpload />,
+    },
+    {
+      path: "fitness/review",
+      element: <AdminReview />,
     },
     {
       path: "pay",
