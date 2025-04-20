@@ -27,12 +27,13 @@ interface Usage {
 
 function OwnerDashboard() {
   const navigate = useNavigate();
-  const fitnessId = sessionStorage.getItem("fitnessIds") || "0"
+  const fitnessId = sessionStorage.getItem("fitnessIds");
+  const safeFitnessId = fitnessId && fitnessId !== "undefined" ? fitnessId : null;
 
   const [noticesRes, settlementRes, usagesRes] = [
     useGetOwnerDashboardNotices(),
-    useGetOwnerDashboardSettlements(fitnessId),
-    useGetOwnerDashboardUsages(fitnessId),
+    useGetOwnerDashboardSettlements(safeFitnessId),
+    useGetOwnerDashboardUsages(safeFitnessId),
   ];
 
   const notices: Notice[] = noticesRes.data?.content || [];
@@ -46,7 +47,7 @@ function OwnerDashboard() {
   if (isError) return <NotFound />;
 
   return (
-    <div className="w-full max-w-content flex flex-col items-center gap-[22px] relative px-5 pt-[29px] pb-[40px] bg-white-200">
+    <div className="w-full h-full max-w-content flex flex-col items-center gap-[22px] relative px-5 pt-[29px] pb-[40px] bg-white-200">
       {/* 공지사항 */}
       <Section title="공지사항" onClick={() => navigate("/owner/notices")}>
         {notices.length ? (
@@ -62,31 +63,46 @@ function OwnerDashboard() {
       </Section>
 
       {/* 정산 내역 */}
-      <Section title="전체 정산 내역 보기" onClick={() => navigate("/owner/settlement-history")}>
-        {settlement.length ? (
-          <p className="text-[20px] leading-[28px]">
-            {Number(settlement[0].description)}월 현재까지 정산 금액은<br />
-            <span className="font-bold">{settlement[0].totalPrice.toLocaleString()}원</span>입니다
-          </p>
-        ) : (
-          <p className="text-gray-400">이번 달 정산 내역이 없습니다.</p>
-        )}
+        <Section
+          title="전체 정산 내역 보기"
+          onClick={() => navigate("/owner/settlement-history")}
+          disabled={!safeFitnessId}
+        >
+          {safeFitnessId ? (
+            settlement.length ? (
+              <p className="text-[20px] leading-[28px]">
+                {Number(settlement[0].description)}월 현재까지 정산 금액은<br />
+                <span className="font-bold">{settlement[0].totalPrice.toLocaleString()}원</span>입니다
+              </p>
+            ) : (
+              <p className="text-gray-400">이번 달 정산 내역이 없습니다.</p>
+            )
+          ) : (
+            <p className="text-gray-400">등록된 업체가 없습니다.</p>
+          )}
       </Section>
 
-      {/* 이용 내역 */}
-      <Section title="전체 이용 내역 보기" onClick={() => navigate("/owner/usage-history")}>
-        {usages.length ? (
-          usages.map(({ loginId, activeTime, totalFee }, idx) => (
-            <div key={idx} className="flex justify-between items-center">
-              <div className="flex flex-col gap-[3px]">
-                <p>{loginId}</p>
-                <p className="text-[12px]">{formatDate(activeTime)}</p>
+      <Section
+        title="전체 이용 내역 보기"
+        onClick={() => navigate("/owner/usage-history")}
+        disabled={!safeFitnessId}
+      >
+        {safeFitnessId ? (
+          usages.length ? (
+            usages.map(({ loginId, activeTime, totalFee }, idx) => (
+              <div key={idx} className="flex justify-between items-center">
+                <div className="flex flex-col gap-[3px]">
+                  <p>{loginId}</p>
+                  <p className="text-[12px]">{formatDate(activeTime)}</p>
+                </div>
+                <p>{totalFee.toLocaleString()}코인</p>
               </div>
-              <p>{totalFee.toLocaleString()}코인</p>
-            </div>
-          ))
+            ))
+          ) : (
+            <p className="text-gray-400">최근 이용 내역이 없습니다.</p>
+          )
         ) : (
-          <p className="text-gray-400">최근 이용 내역이 없습니다.</p>
+          <p className="text-gray-400">등록된 업체가 없습니다.</p>
         )}
       </Section>
 
@@ -100,18 +116,30 @@ function OwnerDashboard() {
   );
 }
 
-const Section = ({ title, children, onClick }: { title: string; children: React.ReactNode; onClick: () => void }) => (
-  <div className="w-full flex flex-col relative gap-[15px] bg-white-100 rounded-[7px] pb-[20px]">
-    <div
-      className="w-full flex items-center justify-end gap-[14px] px-[20px] pt-[15px] cursor-pointer"
-      onClick={onClick}
-    >
-      <p className="text-[16px] text-gray-400">{title}</p>
-      <IcRightArrow className="h-[13px]" />
-    </div>
-    <div className="w-full border-t border-gray-300" />
-    <div className="flex flex-col gap-[15px] px-[20px]">{children}</div>
-  </div>
+      const Section = ({
+        title,
+        children,
+        onClick,
+        disabled = false,
+      }: {
+        title: string;
+        children: React.ReactNode;
+        onClick: () => void;
+        disabled?: boolean;
+      }) => (
+              <div className="w-full flex flex-col relative gap-[15px] bg-white-100 rounded-[7px] pb-[20px]">
+                <div
+                  className={`w-full flex items-center justify-end gap-[14px] px-[20px] pt-[15px] cursor-pointer`}
+                  onClick={() => {
+                    if (!disabled) onClick();
+                  }}
+                >
+                  <p className="text-[16px] text-gray-400">{title}</p>
+                  <IcRightArrow className="h-[13px]" />
+                </div>
+                <div className="w-full border-t border-gray-300" />
+                <div className="flex flex-col gap-[15px] px-[20px]">{children}</div>
+              </div>
 );
 
 export default OwnerDashboard;

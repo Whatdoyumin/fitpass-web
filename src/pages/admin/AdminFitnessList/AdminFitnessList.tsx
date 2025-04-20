@@ -100,7 +100,7 @@ function AdminFitnessList() {
 
       <div className="font-medium text-[13px] mt-[20px] text-black-700">
         <table className="w-full table-fixed">
-          <thead className="w-full h-[50px] border bg-blue-100 border border-gray-450 text-left">
+          <thead className="w-full h-[50px] bg-blue-100 border border-gray-450 text-left">
             <tr>
               <th className="text-center w-[44px]">순번</th>
               <th className="w-[90px] ">업체명</th>

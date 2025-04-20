@@ -64,7 +64,7 @@ const MyPage = () => {
   const closeLogoutModal = () => setIsModalOpen(false);
 
   const handleLogoutAndNavigate = () => {
-    logout()
+    logout();
     navigate("/");
   };
 
@@ -81,7 +81,7 @@ const MyPage = () => {
   ];
 
   return (
-    <div className="w-full min-h-[calc(100vh-165px)] bg-white-200">
+    <div className="w-full min-h-[calc(100vh-165px)] bg-white-200 overflow-y-auto">
       {profile && (
         <MyProfile
           profile={profile}

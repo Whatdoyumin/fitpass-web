@@ -26,12 +26,10 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
     if (error.response?.status === 401) {
-      console.log("🔄 [401 오류] 리프레시 토큰을 사용하여 액세스 토큰 재발급 중...");
 
       const refreshToken = sessionStorage.getItem("refreshToken");
 
       if (!refreshToken) {
-        console.error("🚪 [리프레시 토큰 없음] 로그아웃 필요.");
         sessionStorage.removeItem("accessToken");
         sessionStorage.removeItem("refreshToken");
         return Promise.reject(error);
@@ -49,8 +47,6 @@ axiosInstance.interceptors.response.use(
           const newAccessToken = res.data.result.accessToken;
           const newRefreshToken = res.data.result.refreshToken;
 
-          console.log("✅ [리프레시 성공] 새 액세스 토큰 발급 완료.");
-
           // 🔄 새로운 토큰을 sessionStorage에 저장
           sessionStorage.setItem("accessToken", newAccessToken);
           sessionStorage.setItem("refreshToken", newRefreshToken);
@@ -60,7 +56,6 @@ axiosInstance.interceptors.response.use(
           return axiosInstance(error.config);
         }
       } catch (refreshError) {
-        console.error("🚪 [리프레시 토큰 만료] 로그아웃 처리 필요.");
         sessionStorage.removeItem("accessToken");
         sessionStorage.removeItem("refreshToken");
         return Promise.reject(refreshError);

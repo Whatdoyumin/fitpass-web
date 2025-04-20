@@ -33,7 +33,10 @@ import AdminNotice from "./admin/AdminNotice";
 import AdminPayHistory from "./admin/AdminPayHistory";
 import AdminSettings from "./admin/AdminSettings";
 import AdminSubscribe from "./admin/AdminSubscribe";
-import AdminUser from "./admin/AdminUser";
+import AdminUser from "./admin/user/AdminUser";
+import AdminFitnessUser from "./admin/user/AdminFitnessUser";
+import AdminReview from "./admin/AdminReview";
+import AdminFitnessRequest from "./admin/user/AdminFitnessRequest";
 import AdminNoticeUpload from "./admin/AdminNoticeUpload";
 import AdminSignin from "./admin/AdminSignin";
 import UpdateReview from "./UpdateReview";
@@ -45,9 +48,7 @@ import LocationPolicyPage from "./Policies/LocationPolicy";
 import MarketingPolicyPage from "./Policies/MarketingPolicy";
 import FacilitiesMain from "./owner/facilities/FacilitiesMain";
 import OwnerDashboard from "./owner/dashboard/OwnerDashboard";
-import FacilitiesRegisterStep1 from "./owner/facilitiesRegister/Step1";
-import FacilitiesRegisterStep2 from "./owner/facilitiesRegister/Step2";
-import FacilitiesRegisterStep3 from "./owner/facilitiesRegister/Step3";
+import FacilitiesRegister from "./owner/facilitiesRegister/FacilitiesRegister";
 import SettlementHistory from "./owner/history/SettlementHistory";
 import UsageHistory from "./owner/history/UsageHistory";
 import OwnerNotices from "./owner/notice/Notices";
@@ -93,6 +94,9 @@ export {
   AdminSettings,
   AdminSubscribe,
   AdminUser,
+  AdminFitnessUser,
+  AdminReview,
+  AdminFitnessRequest,
   AdminNoticeUpload,
   AdminSignin,
   UpdateReview,
@@ -104,9 +108,7 @@ export {
   MarketingPolicyPage,
   FacilitiesMain,
   OwnerDashboard,
-  FacilitiesRegisterStep1,
-  FacilitiesRegisterStep2,
-  FacilitiesRegisterStep3,
+  FacilitiesRegister,
   SettlementHistory,
   UsageHistory,
   OwnerNotices,
