@@ -15,7 +15,7 @@ function BuyCoins() {
   const { data } = useGetCoinInfo();
 
   return (
-    <div className="w-full h-[calc(100vh-165px)] bg-white-200 overflow-y-auto py-4">
+    <div className="w-full  min-h-[calc(100vh-165px)] bg-white-200 overflow-y-auto py-4">
       <div className="w-full h-full flex flex-col gap-6 items-center">
         <div className="w-full h-full flex flex-col gap-4 justify-center items-center">
           {data?.result?.map((coin: ICoin) => {
