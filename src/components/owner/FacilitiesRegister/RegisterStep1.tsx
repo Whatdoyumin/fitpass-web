@@ -102,7 +102,7 @@ function RegisterStep1({ formState, setFormState }: IFacilitiesRegisterState) {
       <div className="w-full flex flex-col gap-[10px]">
         <label className="text-16px font-medium text-black-700">가격을 입력해주세요</label>
         <InputField
-          type="etc"
+          type="number"
           placeholder="시설 일일권 가격을 적어주세요"
           value={formState.formData.fee.toString()}
           onChange={(e) =>
@@ -119,7 +119,7 @@ function RegisterStep1({ formState, setFormState }: IFacilitiesRegisterState) {
       <div className="w-full flex flex-col gap-[10px]">
         <label className="text-16px font-medium text-black-700">판매 코인을 입력해주세요</label>
         <InputField
-          type="etc"
+          type="number"
           placeholder="1코인당 1,000원의 가치를 가지고 있습니다."
           value={formState.formData.totalFee.toString()}
           onChange={(e) =>

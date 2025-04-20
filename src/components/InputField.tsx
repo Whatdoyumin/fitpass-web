@@ -10,12 +10,12 @@ import {
   PasswordEyeViewFocus,
 } from "../assets/svg";
 
-type InputType = "id" | "password" | "etc" | "textarea" | "radio";
+type InputType = "id" | "password" | "etc" | "textarea" | "radio" | "number";
 
 interface InputFieldProps {
   type: InputType;
   placeholder?: string;
-  value?: string | string[];
+  value?: string | string[] | number;
   onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   onEnter?: () => void;
   buttonText?: string;
@@ -139,11 +139,11 @@ function InputField({
         ) : (
           <input
             ref={inputRef}
-            value={value as string}
-            onChange={onChange as React.ChangeEventHandler<HTMLInputElement>}
-            type={inputType}
+            type={type === "password" ? inputType : type === "number" ? "number" : "text"}
+            value={type === "number" && (value === 0 || value === "0") ? "" : value}
             placeholder={placeholder}
             autoComplete="off"
+            onChange={onChange as React.ChangeEventHandler<HTMLInputElement>}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
             onKeyDown={(e) => {
