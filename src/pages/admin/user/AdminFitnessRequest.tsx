@@ -7,6 +7,7 @@
   import NotFound from "../../NotFound";
 import { useGetAdminFitnessUsers, TFitnessUserData } from "../../../hooks/useGetAdminUser";
 import { patchAdminOwnerRequest } from "../../../apis/adminUser/adminOwnerRequest";
+import { getOwnerFile } from "../../../apis/adminUser/adminOwnerFile";
 
     function AdminFitnessRequest() {
       const [searchTerm, setSearchTerm] = useState("");
@@ -23,6 +24,15 @@ import { patchAdminOwnerRequest } from "../../../apis/adminUser/adminOwnerReques
     
       if (isLoading) return <LoadingSpinner />;
       if (isError) return <NotFound />;
+
+      const handleDownload = async (loginId: string, name: "businessRegistrationUrl" | "bankCopyUrl") => {
+        try {
+          const url = await getOwnerFile(loginId, name);
+          window.open(url, "_blank"); // 새 탭에서 열기
+        } catch (error) {
+          alert("파일을 불러오는 데 실패했습니다.");
+        }
+      };
     
       const handleApproval = async (loginId: string, isApproval: boolean) => {
         try {
@@ -96,8 +106,8 @@ import { patchAdminOwnerRequest } from "../../../apis/adminUser/adminOwnerReques
                 <td>{user.name}</td>
                 <td>{user.corporation}</td>
                 <td>{user.phoneNumber}</td>
-                <td>파일</td>
-                <td>파일</td>
+                <td onClick={() => handleDownload(user.loginId, "businessRegistrationUrl")} className="cursor-pointer">파일</td>
+                <td onClick={() => handleDownload(user.loginId, "bankCopyUrl")} className="cursor-pointer">파일</td>
                 <td>{user.createdAt}</td>
                 <td>
                   <div className="flex gap-[13px] text-[14px]">
