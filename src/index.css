@@ -93,4 +93,14 @@
   .adminTitle {
     @apply text-18px font-extrabold;
   }
+
+  .slick-list,
+  .slick-track {
+    height: 260px !important;
+    overflow: hidden !important;
+  }
+
+  .test-css {
+    bottom: 20px !important;
+  }
 }
