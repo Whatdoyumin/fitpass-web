@@ -99,7 +99,7 @@ function InputField({
 
   return (
     <div
-      className={`flex w-[321px] gap-2 ${
+      className={`w-full flex min-w-[321px] gap-2 ${
         type === "textarea" ? "flex-col items-start" : "items-center"
       }`}
     >
