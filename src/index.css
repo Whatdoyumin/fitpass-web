@@ -93,4 +93,13 @@
   .adminTitle {
     @apply text-18px font-extrabold;
   }
+
+  .slick-list,
+  .slick-track {
+    @apply h-[260px] overflow-hidden;
+  }
+
+  .slick-dots {
+    @apply bottom-[20px];
+  }
 }
