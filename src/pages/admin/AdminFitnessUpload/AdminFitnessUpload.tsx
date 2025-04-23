@@ -7,7 +7,7 @@ import SetLocationModal from "./SetLocationModal";
 import TimeInput from "../../../components/common/TimeInput";
 import Modal from "../../../components/Modal";
 import { IcFontBold, IcFontUnderline } from "../../../assets/svg";
-import { useAdminFitnessUpload } from "../../../apis/postAdminFitness/quries/useAdminFitnessUpload";
+import { useAdminFitnessUpload } from "../../../hooks/useAdminFitnessUpload";
 
 function AdminFitnessUpload() {
   const category: string[] = ["헬스", "필라테스", "요가", "기타"];
@@ -269,7 +269,7 @@ function AdminFitnessUpload() {
 
         <div className="flex flex-col gap-4 mb-3 flex-1">
           <label htmlFor="time">이용시간</label>
-          <TimeInput setTime={setTime} />
+          <TimeInput setTime={setTime} initialTime={time} />
           <label htmlFor="howToUse">
             이용 방법 안내
             <input
