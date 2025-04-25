@@ -18,21 +18,23 @@ export const getAdminDraftNotice = async (): Promise<DraftNoticeResponse> => {
 };
 
 export const postAdminNotice = async ({
-  id,
   title,
   content,
   type,
   image,
+  memberSlide,
+  ownerSlide,
 }: {
-  id: number | undefined;
   title: string;
   content: string;
   type: "ANNOUNCEMENT" | "EVENT";
   image: File | string | undefined;
+  memberSlide: boolean;
+  ownerSlide: boolean;
 }) => {
   const formData = new FormData();
 
-  formData.append("request", JSON.stringify({ id, title, content, type }));
+  formData.append("request", JSON.stringify({ title, content, type, memberSlide, ownerSlide }));
 
   if (image instanceof File) {
     formData.append("image", image);

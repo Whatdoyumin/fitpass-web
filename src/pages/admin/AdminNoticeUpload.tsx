@@ -112,11 +112,12 @@ function AdminNoticeUpload() {
     if (image instanceof File || typeof image === "string") {
       postNotice(
         {
-          id: selectedNoticeId,
           title,
           content,
           type: selectedType === "공지" ? "ANNOUNCEMENT" : "EVENT",
           image,
+          memberSlide: true,
+          ownerSlide: true,
         },
         {
           onSuccess: () => {

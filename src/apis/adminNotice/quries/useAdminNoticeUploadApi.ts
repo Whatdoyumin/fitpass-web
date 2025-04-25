@@ -41,11 +41,12 @@ export const usePostAdminNotice = () => {
     void,
     AxiosError<ErrorResponse>,
     {
-      id: number | undefined;
       title: string;
       content: string;
       type: "ANNOUNCEMENT" | "EVENT";
       image: File | string | undefined;
+      memberSlide: boolean;
+      ownerSlide: boolean;
     }
   >({
     mutationFn: postAdminNotice,
