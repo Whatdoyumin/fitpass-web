@@ -8,7 +8,10 @@ export interface Notice {
   category: string;
   createdAt: string; 
   status: string; 
-  isHomeSlide: boolean;
+  isMemberHomeSlide: boolean;
+  isOwnerHomeSlide: boolean;
+  isMemberSlide: boolean;
+  isOwnerSlide: boolean;
 }
 
 export interface AdminNoticesResponse {

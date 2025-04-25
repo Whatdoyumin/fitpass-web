@@ -27,7 +27,7 @@ function AdminNotice() {
   // API 요청 -> debouncedSearchKeyword가 바뀔 때
   const { data, isLoading, error, refetch } = useGetAdminNotice(
     debouncedSearchKeyword || null,
-    currentPage,
+    currentPage-1,
     itemsPerPage
   );
 
@@ -76,11 +76,11 @@ function AdminNotice() {
       try {
         // 체크박스 상태 변경 (await로 요청 완료를 기다림)
         if (modalType === "add") {
-          await patchHomeSlideCheck({ noticeId: modalNoticeId, isHomeSlide: true });
+          await patchHomeSlideCheck({ noticeId: modalNoticeId, isMemberSlide: true });
           await refetch();
 
         } else if (modalType === "remove") {
-          await patchHomeSlideCheck({ noticeId: modalNoticeId, isHomeSlide: false });
+          await patchHomeSlideCheck({ noticeId: modalNoticeId, isMemberSlide: false });
           await refetch();
 
         }
@@ -172,7 +172,7 @@ function AdminNotice() {
                   <td className="px-4 py-2">{notice.status}</td>
                   <td className="px-4 pr-10 py-2 text-center border-b border-gray-450">
                     <span className="flex justify-center items-center cursor-pointer">
-                      {notice.isHomeSlide ? (
+                      {notice.isMemberSlide ? (
                         <IcCheckFull
                           width={24}
                           onClick={() => handleCheckboxChange(notice.id, true)}
