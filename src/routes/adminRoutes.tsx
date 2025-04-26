@@ -80,6 +80,10 @@ const adminRoutes: RouteObject = {
       element: <AdminNoticeUpload />,
     },
     {
+      path: "notice/edit/:id",
+      element: <AdminNoticeUpload />,
+    },
+    {
       path: "settings",
       element: <AdminSettings />,
     },
