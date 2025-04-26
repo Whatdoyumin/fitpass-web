@@ -6,19 +6,23 @@ import {
   useGetNoticeDetail,
   usePostAdminDraftNotice,
   usePostAdminNotice,
+  usePatchAdminNotice,
   DraftNotice,
+  FullEditNoticeForm,
+  FullNoticeForm,
 } from "../../apis/adminNotice/quries/useAdminNoticeUploadApi";
 import { LoadingSpinner } from "../../components/LoadingSpinner";
 
 function AdminNoticeUpload() {
   const { id } = useParams();
   const navigate = useNavigate();
-
   const isEditMode = !!id;
 
   const [title, setTitle] = useState("");
   const [image, setImage] = useState<File | string>("");
   const [selectedType, setSelectedType] = useState<"공지" | "이벤트">("공지");
+  const [memberSlide, setMemberSlide] = useState(true);
+  const [ownerSlide, setOwnerSlide] = useState(true);
   const [content, setContent] = useState<string>("");
   const [showModal, setShowModal] = useState(false);
   const [showSaveModal, setShowSaveModal] = useState(false);
@@ -26,14 +30,15 @@ function AdminNoticeUpload() {
   const [selectedNoticeId, setSelectedNoticeId] = useState<number | undefined>();
 
   const { mutate: postNotice } = usePostAdminNotice();
+  const { mutate: editNotice } = usePatchAdminNotice();
   const { mutate: saveDraft } = usePostAdminDraftNotice();
+
   const { data: tempSavedNotices } = useGetAdminNotice();
   const { data: noticeDetail, isLoading, error } = useGetNoticeDetail(
     selectedNoticeId ?? (isEditMode ? Number(id) : undefined)
   );
 
   const contentRef = useRef<HTMLDivElement>(null);
-
   const tempNotices = tempSavedNotices?.notices || [];
 
   useEffect(() => {
@@ -50,7 +55,7 @@ function AdminNoticeUpload() {
       contentRef.current.innerHTML = content;
     }
   }, [content]);
-  
+
   const toggleTextStyle = (style: string) => {
     document.execCommand(style, false);
     handleContentChange();
@@ -78,26 +83,27 @@ function AdminNoticeUpload() {
   };
 
   const handlePostNotice = () => {
-    if (image instanceof File || typeof image === "string") {
-      postNotice(
-        {
-          title,
-          content,
-          type: selectedType === "공지" ? "ANNOUNCEMENT" : "EVENT",
-          image,
-          memberSlide: true,
-          ownerSlide: true,
-        },
-        {
-          onSuccess: () => {
-            setShowModal(false);
-            navigate("/admin/notice");
-          },
-          onError: (error) => {
-            console.error("게시 실패:", error);
-          },
-        }
-      );
+    const payload = {
+      id: isEditMode ? Number(id) : undefined,
+      title,
+      content,
+      type: selectedType === "공지" ? "ANNOUNCEMENT" : "EVENT",
+      image,
+      memberSlide,
+      ownerSlide,
+    };
+
+    const commonOptions = {
+      onSuccess: () => {
+        setShowModal(false);
+        navigate("/admin/notice");
+      },
+    };
+
+    if (isEditMode) {
+      editNotice(payload as FullEditNoticeForm , commonOptions);
+    } else {
+      postNotice(payload as FullNoticeForm, commonOptions);
     }
   };
 
@@ -148,50 +154,61 @@ function AdminNoticeUpload() {
               className="h-[40px] border border-gray-450 rounded-[3px] p-2 flex-grow focus:outline-none"
             />
           </div>
-          {/* 공지/이벤트 카테고리 */}
           <div className="flex gap-[6px]">
             <button
               onClick={() => setSelectedType("공지")}
-              className={`w-[70px] h-[30px] border rounded-full ${
-                selectedType === "공지" ? "bg-blue-100 border-blue-400" : "bg-white border-gray-300"
-              }`}
+              className={`w-[70px] h-[30px] border rounded-full ${selectedType === "공지" ? "bg-blue-100 border-blue-400" : "bg-white border-gray-300"}`}
             >
               공지
             </button>
             <button
               onClick={() => setSelectedType("이벤트")}
-              className={`w-[70px] h-[30px] border rounded-full ${
-                selectedType === "이벤트" ? "bg-blue-100 border-blue-400" : "bg-white border-gray-300"
-              }`}
+              className={`w-[70px] h-[30px] border rounded-full ${selectedType === "이벤트" ? "bg-blue-100 border-blue-400" : "bg-white border-gray-300"}`}
             >
               이벤트
             </button>
           </div>
         </div>
 
-        {/* 이미지 */}
-        <div className="mb-[35px] flex items-center gap-[17px] text-14px">
-          <label className="min-w-[46px] text-gray-700">이미지</label>
-          <div className="relative w-full">
-            <input
-              type="text"
-              value={typeof image === "string" ? image : image?.name || ""}
-              readOnly
-              className="w-full h-[40px] border border-gray-450 rounded-[3px] p-2 pr-[50px] overflow-hidden"
-            />
-            <div
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
-              onClick={() => document.getElementById("imageInput")?.click()}
-            >
-              <IcImage width={24} />
+        {/* 이미지 + 슬라이드 선택 */}
+        <div className="mb-[35px] flex items-center justify-between gap-[20px] text-14px">
+          <div className="flex gap-[17px] flex-grow items-center">
+            <label className="min-w-[46px] text-gray-700">이미지</label>
+            <div className="relative w-full">
+              <input
+                type="text"
+                value={typeof image === "string" ? image : image?.name || ""}
+                readOnly
+                className="w-full h-[40px] border border-gray-450 rounded-[3px] p-2 pr-[50px] overflow-hidden"
+              />
+              <div
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
+                onClick={() => document.getElementById("imageInput")?.click()}
+              >
+                <IcImage width={24} />
+              </div>
+              <input
+                type="file"
+                id="imageInput"
+                className="hidden"
+                accept="image/*"
+                onChange={handleImageChange}
+              />
             </div>
-            <input
-              type="file"
-              id="imageInput"
-              className="hidden"
-              accept="image/*"
-              onChange={handleImageChange}
-            />
+          </div>
+          <div className="flex gap-[6px]">
+            <button
+              onClick={() => setMemberSlide(!memberSlide)}
+              className={`w-[70px] h-[30px] border rounded-full ${memberSlide ? "bg-blue-100 border-blue-400" : "bg-white border-gray-300"}`}
+            >
+              회원
+            </button>
+            <button
+              onClick={() => setOwnerSlide(!ownerSlide)}
+              className={`w-[70px] h-[30px] border rounded-full ${ownerSlide ? "bg-blue-100 border-blue-400" : "bg-white border-gray-300"}`}
+            >
+              시설
+            </button>
           </div>
         </div>
 
@@ -243,7 +260,7 @@ function AdminNoticeUpload() {
         </div>
       </div>
 
-      {/* 게시 모달 */}
+      {/* 모달 */}
       {showModal && (
         <div className="fixed inset-0 bg-black-700 bg-opacity-50 flex justify-center items-center z-10">
           <div className="bg-white-100 p-[30px] pt-[40px] rounded-lg shadow-lg w-[480px]">
