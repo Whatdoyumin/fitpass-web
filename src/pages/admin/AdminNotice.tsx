@@ -159,7 +159,10 @@ function AdminNotice() {
                       {notice.imageUrl && notice.imageUrl !== "none" ? <IcImage width={19.5} /> : ""}
                     </span>
                   </td>
-                  <td className="px-4 py-2 text-left min-w-[260px] overflow-hidden text-ellipsis whitespace-nowrap">
+                  <td
+                    className="px-4 py-2 text-left min-w-[260px] overflow-hidden text-ellipsis whitespace-nowrap cursor-pointer"
+                    onClick={() => navigate(`/admin/notice/edit/${notice.id}`)}
+                  >
                     {notice.title}
                   </td>
                   <td className="px-4 py-2">{notice.category}</td>
