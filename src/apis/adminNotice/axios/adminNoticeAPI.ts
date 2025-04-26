@@ -31,9 +31,9 @@ export const getAdminNotice = async (
   }
 };
 
-export const patchHomeSlideCheck = async (noticeId: number, isHomeSlide: boolean) => {
+export const patchHomeSlideCheck = async (noticeId: number, isMemberSlide: boolean) => {
   const response = await axiosInstance.patch(
-    `/admin/notice/${noticeId}/home-slide-check?isHomeSlide=${isHomeSlide}`,
+    `/admin/notice/${noticeId}/member-slide-check?isMemberSlide=${isMemberSlide}`,
     { noticeId }
   );
 

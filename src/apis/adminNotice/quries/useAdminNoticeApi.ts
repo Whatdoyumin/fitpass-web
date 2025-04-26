@@ -46,9 +46,9 @@ export const usePatchHomeSlideCheck = (refetch: () => void) => {
   return useMutation<
     { isSuccess: boolean; code: string; message: string; result: string },
     AxiosError<ErrorResponse>,
-    { noticeId: number; isHomeSlide: boolean }
+    { noticeId: number; isMemberSlide: boolean }
   >({
-    mutationFn: ({ noticeId, isHomeSlide }) => patchHomeSlideCheck(noticeId, isHomeSlide),
+    mutationFn: ({ noticeId, isMemberSlide }) => patchHomeSlideCheck(noticeId, isMemberSlide),
     onError: (error: AxiosError<ErrorResponse>) => {
       alert(`${error.response?.data?.message}`);
     },

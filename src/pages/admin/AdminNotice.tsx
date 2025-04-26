@@ -147,7 +147,8 @@ function AdminNotice() {
                 <th className="px-4 py-2 w-[70px] text-left">카테고리</th>
                 <th className="px-4 py-2 w-[80px] text-left">게시일</th>
                 <th className="px-4 py-2 w-[70px] text-left">상태</th>
-                <th className="px-4 pr-10 py-2 w-[100px] text-center">홈 슬라이드 게시</th>
+                <th className="px-4 pr-10 py-2 w-[80px] text-center">회원 페이지<br /> 슬라이드 게시</th>
+                <th className="px-4 pr-10 py-2 w-[80px] text-center">시설 페이지<br /> 슬라이드 게시</th>
               </tr>
             </thead>
 
@@ -172,7 +173,22 @@ function AdminNotice() {
                   <td className="px-4 py-2">{notice.status}</td>
                   <td className="px-4 pr-10 py-2 text-center border-b border-gray-450">
                     <span className="flex justify-center items-center cursor-pointer">
-                      {notice.isMemberSlide ? (
+                      {notice.isMemberHomeSlide ? (
+                        <IcCheckFull
+                          width={24}
+                          onClick={() => handleCheckboxChange(notice.id, true)}
+                        />
+                      ) : (
+                        <IcCheckEmpty
+                          width={24}
+                          onClick={() => handleCheckboxChange(notice.id, false)}
+                        />
+                      )}
+                    </span>
+                  </td>
+                  <td className="px-4 pr-10 py-2 text-center border-b border-gray-450">
+                    <span className="flex justify-center items-center cursor-pointer">
+                      {notice.isOwnerHomeSlide ? (
                         <IcCheckFull
                           width={24}
                           onClick={() => handleCheckboxChange(notice.id, true)}
