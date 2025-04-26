@@ -160,8 +160,14 @@ function AdminNotice() {
                     </span>
                   </td>
                   <td
-                    className="px-4 py-2 text-left min-w-[260px] overflow-hidden text-ellipsis whitespace-nowrap cursor-pointer"
-                    onClick={() => navigate(`/admin/notice/edit/${notice.id}`)}
+                    className={`px-4 py-2 text-left min-w-[260px] overflow-hidden text-ellipsis whitespace-nowrap`}
+                    onClick={() => {
+                      if (notice.status !== "임시저장") {
+                        navigate(`/admin/notice/edit/${notice.id}`);
+                      } else {
+                        alert("임시저장 상태의 글은 수정할 수 없습니다.");
+                      }
+                    }}
                   >
                     {notice.title}
                   </td>
