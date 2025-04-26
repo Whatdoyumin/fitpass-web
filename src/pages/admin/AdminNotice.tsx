@@ -4,32 +4,40 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { Notice, useGetAdminNotice } from "../../apis/adminNotice/quries/useAdminNoticeApi";
 import SvgIcLeftPage from "../../assets/svg/IcLeftPage";
 import SvgIcRightPage from "../../assets/svg/IcRightPage";
-import { usePatchHomeSlideCheck } from "../../apis/adminNotice/quries/useAdminNoticeApi";
+import { usePatchMemberSlideCheck, usePatchOwnerSlideCheck } from "../../apis/adminNotice/quries/useAdminNoticeApi";
 import { LoadingSpinner } from "../../components/LoadingSpinner";
 
 function AdminNotice() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState<"add" | "remove" | null>(null);
+  const [modalTarget, setModalTarget] = useState<"member" | "owner" | null>(null); // 추가
   const [modalNoticeId, setModalNoticeId] = useState<number | null>(null);
-  const [checkedCount, setCheckedCount] = useState(0);
   const [searchKeyword, setSearchKeyword] = useState<string>("");
-
   const [debouncedSearchKeyword, setDebouncedSearchKeyword] = useState<string>("");
   const [searchParams, setSearchParams] = useSearchParams();
+  const [scrollPosition, setScrollPosition] = useState(0);
 
   const navigate = useNavigate();
-  const [scrollPosition, setScrollPosition] = useState(0);
 
   const itemsPerPage = 10;
   const pagesPerGroup = 5;
   const currentPage = Number(searchParams.get("page")) || 1;
 
-  // API 요청 -> debouncedSearchKeyword가 바뀔 때
   const { data, isLoading, error, refetch } = useGetAdminNotice(
     debouncedSearchKeyword || null,
-    currentPage-1,
+    currentPage - 1,
     itemsPerPage
   );
+
+  const totalPages = data?.result?.totalElements
+    ? Math.ceil(data.result.totalElements / itemsPerPage)
+    : 0;
+  const currentGroup = Math.ceil(currentPage / pagesPerGroup);
+  const startPage = (currentGroup - 1) * pagesPerGroup + 1;
+  const endPage = Math.min(startPage + pagesPerGroup - 1, totalPages);
+
+  const { mutate: patchMemberSlideCheck } = usePatchMemberSlideCheck(refetch);
+  const { mutate: patchOwnerSlideCheck } = usePatchOwnerSlideCheck(refetch);
 
   const handleSearchClick = () => {
     setDebouncedSearchKeyword(searchKeyword);
@@ -43,14 +51,6 @@ function AdminNotice() {
     }
   };
 
-  const totalPages = data?.result?.totalElements
-    ? Math.ceil(data.result.totalElements / itemsPerPage)
-    : 0;
-  const currentGroup = Math.ceil(currentPage / pagesPerGroup);
-  const startPage = (currentGroup - 1) * pagesPerGroup + 1;
-  const endPage = Math.min(startPage + pagesPerGroup - 1, totalPages);
-
-  // 페이지 변경 시 URL 업데이트
   const handlePageChange = (page: number) => {
     setScrollPosition(window.scrollY);
     setSearchParams({ page: page.toString() });
@@ -60,41 +60,45 @@ function AdminNotice() {
     window.scrollTo({ top: scrollPosition, behavior: "instant" });
   }, [data, scrollPosition]);
 
-  const { mutate: patchHomeSlideCheck } = usePatchHomeSlideCheck(refetch);
+  useEffect(() => {
+    if (error) {
+      alert(error.response?.data?.message);
+    }
+  }, [error]);
 
-  const handleCheckboxChange = (id: number, isChecked: boolean) => {
+  // 체크박스 클릭할 때
+  const handleCheckboxChange = (id: number, isChecked: boolean, target: "member" | "owner") => {
     setModalNoticeId(id);
     setModalType(isChecked ? "remove" : "add");
+    setModalTarget(target);
     setIsModalOpen(true);
   };
 
+  // 모달에서 예/아니요 선택할 때
   const handleModalAction = async (confirm: boolean) => {
-    if (confirm && modalNoticeId !== null) {
-      const updatedCheckedCount = checkedCount + (modalType === "add" ? 1 : -1);
-      setCheckedCount(updatedCheckedCount);
-  
+    if (confirm && modalNoticeId !== null && modalTarget !== null) {
       try {
-        // 체크박스 상태 변경 (await로 요청 완료를 기다림)
-        if (modalType === "add") {
-          await patchHomeSlideCheck({ noticeId: modalNoticeId, isMemberSlide: true });
-          await refetch();
-
-        } else if (modalType === "remove") {
-          await patchHomeSlideCheck({ noticeId: modalNoticeId, isMemberSlide: false });
-          await refetch();
-
+        if (modalTarget === "member") {
+          await patchMemberSlideCheck({
+            noticeId: modalNoticeId,
+            isMemberSlide: modalType === "add",
+          });
+        } else if (modalTarget === "owner") {
+          await patchOwnerSlideCheck({
+            noticeId: modalNoticeId,
+            isOwnerSlide: modalType === "add",
+          });
         }
-        } catch (error) {
+        await refetch();
+      } catch (error) {
         console.error("API 요청 중 오류 발생:", error);
       }
     }
-  
-    // 모달 닫기
     setIsModalOpen(false);
     setModalNoticeId(null);
     setModalType(null);
+    setModalTarget(null);
   };
-  
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -103,12 +107,6 @@ function AdminNotice() {
     const day = date.getDate().toString().padStart(2, "0");
     return `${year}-${month}-${day}`;
   };
-
-  useEffect(() => {
-    if (error) {
-      alert(error.response?.data?.message);
-    }
-  }, [error]);
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -136,7 +134,7 @@ function AdminNotice() {
           </div>
         </div>
 
-        {/* 공지사항 목록 테이블 */}
+        {/* 테이블 */}
         <div className="mt-[26px] min-h-[550px] whitespace-nowrap">
           <table className="w-full table-fixed border border-gray-450">
             <thead className="bg-blue-100 border-b border-gray-450">
@@ -147,22 +145,18 @@ function AdminNotice() {
                 <th className="px-4 py-2 w-[70px] text-left">카테고리</th>
                 <th className="px-4 py-2 w-[80px] text-left">게시일</th>
                 <th className="px-4 py-2 w-[70px] text-left">상태</th>
-                <th className="px-4 pr-10 py-2 w-[80px] text-center">회원 페이지<br /> 슬라이드 게시</th>
-                <th className="px-4 pr-10 py-2 w-[80px] text-center">시설 페이지<br /> 슬라이드 게시</th>
+                <th className="px-4 pr-10 py-2 w-[80px] text-center">회원 페이지<br />슬라이드 게시</th>
+                <th className="px-4 pr-10 py-2 w-[80px] text-center">시설 페이지<br />슬라이드 게시</th>
               </tr>
             </thead>
 
             <tbody>
               {data?.result.content.map((notice: Notice) => (
-                <tr className="border-b border-gray-450 h-[50px] text-[12px] " key={notice.id}>
+                <tr key={notice.id} className="border-b border-gray-450 h-[50px] text-[12px]">
                   <td className="pr-4 pl-10 py-2 text-center">{notice.id}</td>
                   <td className="px-4 py-2">
                     <span className="flex justify-center items-center mx-auto">
-                      {notice.imageUrl && notice.imageUrl !== "none" ? (
-                        <IcImage width={19.5} />
-                      ) : (
-                        ""
-                      )}
+                      {notice.imageUrl && notice.imageUrl !== "none" ? <IcImage width={19.5} /> : ""}
                     </span>
                   </td>
                   <td className="px-4 py-2 text-left min-w-[260px] overflow-hidden text-ellipsis whitespace-nowrap">
@@ -171,33 +165,25 @@ function AdminNotice() {
                   <td className="px-4 py-2">{notice.category}</td>
                   <td className="px-4 py-2">{formatDate(notice.createdAt)}</td>
                   <td className="px-4 py-2">{notice.status}</td>
-                  <td className="px-4 pr-10 py-2 text-center border-b border-gray-450">
+
+                  {/* member 체크박스 */}
+                  <td className="px-4 pr-10 py-2 text-center">
                     <span className="flex justify-center items-center cursor-pointer">
                       {notice.isMemberHomeSlide ? (
-                        <IcCheckFull
-                          width={24}
-                          onClick={() => handleCheckboxChange(notice.id, true)}
-                        />
+                        <IcCheckFull width={24} onClick={() => handleCheckboxChange(notice.id, true, "member")} />
                       ) : (
-                        <IcCheckEmpty
-                          width={24}
-                          onClick={() => handleCheckboxChange(notice.id, false)}
-                        />
+                        <IcCheckEmpty width={24} onClick={() => handleCheckboxChange(notice.id, false, "member")} />
                       )}
                     </span>
                   </td>
-                  <td className="px-4 pr-10 py-2 text-center border-b border-gray-450">
+
+                  {/* owner 체크박스 */}
+                  <td className="px-4 pr-10 py-2 text-center">
                     <span className="flex justify-center items-center cursor-pointer">
                       {notice.isOwnerHomeSlide ? (
-                        <IcCheckFull
-                          width={24}
-                          onClick={() => handleCheckboxChange(notice.id, true)}
-                        />
+                        <IcCheckFull width={24} onClick={() => handleCheckboxChange(notice.id, true, "owner")} />
                       ) : (
-                        <IcCheckEmpty
-                          width={24}
-                          onClick={() => handleCheckboxChange(notice.id, false)}
-                        />
+                        <IcCheckEmpty width={24} onClick={() => handleCheckboxChange(notice.id, false, "owner")} />
                       )}
                     </span>
                   </td>
@@ -219,11 +205,7 @@ function AdminNotice() {
 
         {/* 페이지네이션 */}
         <div className="flex justify-center items-center pt-[14px] gap-[10px] mb-[26px]">
-          <button
-            onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-            className="text-gray-350 focus:outline-none"
-          >
+          <button onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
             <SvgIcLeftPage width={5} />
           </button>
 
@@ -231,9 +213,7 @@ function AdminNotice() {
             <button
               key={startPage + index}
               onClick={() => handlePageChange(startPage + index)}
-              className={`text-sm ${
-                currentPage === startPage + index ? "text-gray-600" : "text-gray-350"
-              } focus:outline-none`}
+              className={`text-sm ${currentPage === startPage + index ? "text-gray-600" : "text-gray-350"}`}
             >
               {startPage + index}
             </button>
@@ -242,20 +222,20 @@ function AdminNotice() {
           <button
             onClick={() => currentPage < totalPages && handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className="text-gray-350 focus:outline-none"
           >
             <SvgIcRightPage width={5} />
           </button>
         </div>
       </div>
+
       {/* 모달 */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black-700 bg-opacity-50 flex justify-center items-center z-10">
           <div className="bg-white-100 p-[30px] pt-[40px] rounded-lg shadow-lg w-[480px]">
             <p className="text-center text-[25px] py-2 font-extrabold">
               {modalType === "add"
-                ? "홈 슬라이드에 게시하겠습니까?"
-                : "홈 슬라이드 게시를 취소하겠습니까?"}
+                ? "슬라이드에 게시하겠습니까?"
+                : "슬라이드 게시를 취소하겠습니까?"}
             </p>
             <div className="flex justify-around mt-[50px] text-18px text-white-100 gap-[20px]">
               <button
