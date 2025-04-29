@@ -21,9 +21,8 @@ function SubImgUpload({ subImg, setSubImg }: SubImgUploadProps) {
   };
 
   return (
-    <div className="flex flex-col">
-      <label htmlFor="subImg"></label>
-      추가 이미지
+    <div className="flex flex-col gap-4">
+      <label htmlFor="subImg">추가 이미지</label>
       <div className="relative">
         <input
           type="text"

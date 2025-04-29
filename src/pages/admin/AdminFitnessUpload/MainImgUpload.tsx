@@ -20,9 +20,8 @@ function MainImgUpload({ mainImg, setMainImg }: MainImgUploadProps) {
   };
 
   return (
-    <div className="flex flex-col">
-      <label htmlFor="mainImg"></label>
-      대표 이미지
+    <div className="flex flex-col gap-4">
+      <label htmlFor="mainImg">대표 이미지</label>
       <div className="relative">
         <input
           type="text"

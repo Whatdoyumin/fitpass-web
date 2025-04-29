@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 type StatusProps = {
   status: boolean;
@@ -6,24 +6,27 @@ type StatusProps = {
 };
 
 function SelectStatus({ status, onStatusChange }: StatusProps) {
-  const [selectedStatus, setSelectedStatus] = useState(true);
+  const [selectedStatus, setSelectedStatus] = useState<boolean>(status);
 
-  const handleStatusClick = (status: boolean) => {
-    if (status === selectedStatus) return;
-
+  useEffect(() => {
     setSelectedStatus(status);
-    onStatusChange(status);
+  }, [status]);
+
+  const handleStatusClick = (newStatus: boolean) => {
+    if (newStatus === selectedStatus) return;
+    setSelectedStatus(newStatus);
+    onStatusChange(newStatus);
   };
 
   return (
-    <div className="w-full h-[50px] flex flex-col">
+    <div className="w-full flex flex-col gap-4">
       <p>판매 상태</p>
       <div className="w-full flex gap-[6px]">
         <button
           type="button"
           className={`w-[70px] h-[30px] border rounded-[20px] text-[13px] font-medium 
             ${
-              selectedStatus === status
+              selectedStatus === true
                 ? "bg-blue-100 border-blue-400"
                 : "bg-white-200 border-gray-300"
             }`}
@@ -35,7 +38,7 @@ function SelectStatus({ status, onStatusChange }: StatusProps) {
           type="button"
           className={`w-[70px] h-[30px] border rounded-[20px] text-[13px] font-medium 
             ${
-              !selectedStatus === status
+              selectedStatus === false
                 ? "bg-blue-100 border-blue-400"
                 : "bg-white-200 border-gray-300"
             }`}
