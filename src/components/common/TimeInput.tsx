@@ -8,26 +8,30 @@ interface TimeInputProps {
 function TimeInput({ setTime, initialTime }: TimeInputProps) {
   const days = ["월", "화", "수", "목", "금", "토", "일"];
 
-  const [localTime, setLocalTime] = useState<{ [key: string]: string }>(
-    Object.fromEntries(days.map((day) => [day, ""]))
-  );
+  const defaultLocalTime = Object.fromEntries(days.map((day) => [day, ""]));
+  const defaultHolidayDays = Object.fromEntries(days.map((day) => [day, false]));
 
-  const [holidayDays, setHolidayDays] = useState<{ [key: string]: boolean }>(
-    Object.fromEntries(days.map((day) => [day, false]))
-  );
+  const [localTime, setLocalTime] = useState<{ [key: string]: string }>(defaultLocalTime);
+  const [holidayDays, setHolidayDays] = useState<{ [key: string]: boolean }>(defaultHolidayDays);
 
-  // 초기값 적용
   useEffect(() => {
-    setLocalTime(initialTime);
-    const updatedHoliday: { [key: string]: boolean } = {};
+    if (!initialTime) return;
+
+    // 여기서 days 배열 기준으로 안전하게 값 넣기
+    const safeLocalTime: { [key: string]: string } = {};
+    const safeHolidayDays: { [key: string]: boolean } = {};
+
     days.forEach((day) => {
-      updatedHoliday[day] = initialTime[day] === "휴무";
+      safeLocalTime[day] = initialTime[day] ?? "";
+      safeHolidayDays[day] = initialTime[day] === "휴무";
     });
-    setHolidayDays(updatedHoliday);
+
+    setLocalTime(safeLocalTime);
+    setHolidayDays(safeHolidayDays);
   }, [initialTime]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, day: string) => {
-    let digits = e.target.value.replace(/\D/g, ""); // 숫자만 추출
+    let digits = e.target.value.replace(/\D/g, "");
     let formatted = "";
 
     if (digits.length <= 2) {

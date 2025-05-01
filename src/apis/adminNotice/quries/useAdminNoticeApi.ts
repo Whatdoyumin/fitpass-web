@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { AxiosError } from 'axios';
-import { getAdminNotice, patchHomeSlideCheck } from '../axios/adminNoticeAPI';
+import { getAdminNotice, patchMemberSlideCheck, patchOwnerSlideCheck } from '../axios/adminNoticeAPI';
 export interface Notice {
   id: number;
   imageUrl: string;
@@ -8,7 +8,10 @@ export interface Notice {
   category: string;
   createdAt: string; 
   status: string; 
-  isHomeSlide: boolean;
+  isMemberHomeSlide: boolean;
+  isOwnerHomeSlide: boolean;
+  isMemberSlide: boolean;
+  isOwnerSlide: boolean;
 }
 
 export interface AdminNoticesResponse {
@@ -38,14 +41,14 @@ export const useGetAdminNotice = (keyword: string | null, page: number = 1, size
   });
 };
 
-// 홈 배너 이미지 선택 체크박스 
-export const usePatchHomeSlideCheck = (refetch: () => void) => {
+// 회원 홈 배너 이미지 선택 체크박스 
+export const usePatchMemberSlideCheck = (refetch: () => void) => {
   return useMutation<
     { isSuccess: boolean; code: string; message: string; result: string },
     AxiosError<ErrorResponse>,
-    { noticeId: number; isHomeSlide: boolean }
+    { noticeId: number; isMemberSlide: boolean }
   >({
-    mutationFn: ({ noticeId, isHomeSlide }) => patchHomeSlideCheck(noticeId, isHomeSlide),
+    mutationFn: ({ noticeId, isMemberSlide }) => patchMemberSlideCheck(noticeId, isMemberSlide),
     onError: (error: AxiosError<ErrorResponse>) => {
       alert(`${error.response?.data?.message}`);
     },
@@ -57,3 +60,22 @@ export const usePatchHomeSlideCheck = (refetch: () => void) => {
     },
   });
 };
+
+// 오너(시설) 홈 배너 이미지 선택 체크박스
+export const usePatchOwnerSlideCheck = (refetch: () => void) => {
+  return useMutation<
+    { isSuccess: boolean; code: string; message: string; result: string },
+    AxiosError<ErrorResponse>,
+    { noticeId: number; isOwnerSlide: boolean }
+  >({
+    mutationFn: ({ noticeId, isOwnerSlide }) => patchOwnerSlideCheck(noticeId, isOwnerSlide),
+    onError: (error: AxiosError<ErrorResponse>) => {
+      alert(`${error.response?.data?.message}`);
+    },
+    onSuccess: async (data: { isSuccess: boolean; code: string; message: string; result: string }) => {
+      if (data.isSuccess) {
+        refetch(); // 성공 후 데이터 리패칭
+      }
+    },
+  });
+}

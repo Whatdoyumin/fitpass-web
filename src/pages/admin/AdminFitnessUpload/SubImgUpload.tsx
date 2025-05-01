@@ -4,12 +4,14 @@ import FileUpload from "../../../assets/img/adminImgFile.png";
 interface SubImgUploadProps {
   subImg: File[];
   setSubImg: React.Dispatch<React.SetStateAction<File[]>>;
+  disabled?: boolean;
 }
 
-function SubImgUpload({ subImg, setSubImg }: SubImgUploadProps) {
+function SubImgUpload({ subImg, setSubImg, disabled = false }: SubImgUploadProps) {
   const subInputRef = useRef<HTMLInputElement>(null);
 
   const handleSubImgChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (disabled) return;
     if (event.target.files) {
       const filesArray = Array.from(event.target.files);
       setSubImg(filesArray);
@@ -17,13 +19,13 @@ function SubImgUpload({ subImg, setSubImg }: SubImgUploadProps) {
   };
 
   const handleClickFileUpload = () => {
+    if (disabled) return;
     subInputRef.current?.click();
   };
 
   return (
-    <div className="flex flex-col">
-      <label htmlFor="subImg"></label>
-      추가 이미지
+    <div className="flex flex-col gap-4">
+      <label htmlFor="subImg">추가 이미지</label>
       <div className="relative">
         <input
           type="text"
@@ -35,7 +37,9 @@ function SubImgUpload({ subImg, setSubImg }: SubImgUploadProps) {
           src={FileUpload}
           alt="파일 업로드"
           onClick={handleClickFileUpload}
-          className="absolute right-2 top-1/2 transform -translate-y-1/2"
+          className={`absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer ${
+            disabled ? "opacity-50 pointer-events-none" : ""
+          }`}
         />
         <input
           type="file"
