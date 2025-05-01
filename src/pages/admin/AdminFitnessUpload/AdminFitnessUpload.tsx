@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import MainImgUpload from "./MainImgUpload";
 import SelectCategory from "./SelectCategory";
 import SubImgUpload from "./SubImgUpload";
@@ -9,11 +9,24 @@ import Modal from "../../../components/Modal";
 import { IcFontBold, IcFontUnderline } from "../../../assets/svg";
 import { useAdminFitnessUpload } from "../../../hooks/useAdminFitnessUpload";
 import { IAdminFitnessUpload } from "../../../types/adminFitnessUpload";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import {
+  useGetAdminFitnessData,
+  usePutAdminFitnessData,
+} from "../../../hooks/useGetAdminFitnessData";
 
 function AdminFitnessUpload() {
   const category = ["헬스", "필라테스", "요가", "기타"];
   const navigate = useNavigate();
+  const { id } = useParams();
+  // 수정의 경우 피트니스 시설 정보 Get 요청
+  const { data: fitnessData } = useGetAdminFitnessData(Number(id), {
+    enabled: !!id,
+  });
+  // 시설 수정 Put 요청
+  const { mutate: editFitness } = usePutAdminFitnessData();
+  // 시설 등록 Post 요청
+  const { mutate: uploadFitness } = useAdminFitnessUpload();
 
   const [formState, setFormState] = useState<IAdminFitnessUpload>({
     totalFee: "",
@@ -34,13 +47,41 @@ function AdminFitnessUpload() {
     purchasable: false,
   });
 
-  const [mainImg, setMainImg] = useState<File | null>(null);
+  useEffect(() => {
+    if (id && fitnessData) {
+      setFormState({
+        ...fitnessData,
+        fee: fitnessData.result.fee ?? "",
+        totalFee: fitnessData.result.totalFee ?? "",
+        latitude: fitnessData.result.latitude ?? 0,
+        longitude: fitnessData.result.longitude ?? 0,
+        time: fitnessData.result.time ?? {},
+        detailAddress: fitnessData.result.detailAddress ?? "",
+        loginId: fitnessData.result.loginId ?? "",
+        fitnessName: fitnessData.result.fitnessName ?? "",
+        isPurchasable: fitnessData.result.isPurchasable ?? true,
+        address: fitnessData.result.address ?? "",
+        phoneNumber: fitnessData.result.phoneNumber ?? "",
+        notice:
+          fitnessData.result.notice ??
+          "패스 구매 전 전화 후 패스 구매하기. 시설에 방문하여 이용 가능 패스 사용 내역 보여주기",
+        howToUse: fitnessData.result.howToUse ?? "",
+        categoryList: fitnessData.result.categoryList ?? [],
+        purchasable: fitnessData.result.purchasable ?? false,
+      });
+    }
+  }, [id, fitnessData]);
+
+  // id, fitnessData가 존재할 경우 수정 모드
+  const isEditMode = !!id && !!fitnessData;
+  const [mainImg, setMainImg] = useState<File | null>(
+    isEditMode ? fitnessData.result.fitnessImage : null
+  );
   const [subImg, setSubImg] = useState<File[]>([]);
   const [addressModal, setAddressModal] = useState(false);
   const [submitModal, setSubmitModal] = useState(false);
 
   const contentRef = useRef<HTMLDivElement>(null);
-  const { mutate: uploadFitness } = useAdminFitnessUpload();
 
   const handleChange = <K extends keyof IAdminFitnessUpload>(
     key: K,
@@ -49,6 +90,7 @@ function AdminFitnessUpload() {
     setFormState((prev) => ({ ...prev, [key]: value }));
   };
 
+  // 위치 설정 함수
   const handleLocation = (add: string, lat: number, lng: number) => {
     setFormState((prev) => ({
       ...prev,
@@ -73,6 +115,7 @@ function AdminFitnessUpload() {
     setSubmitModal(false);
   };
 
+  // 시설 등록 함수
   const submitForm = () => {
     if (!mainImg || subImg.length === 0) {
       alert("이미지를 등록해주세요.");
@@ -96,6 +139,42 @@ function AdminFitnessUpload() {
         setSubmitModal(false);
       },
     });
+  };
+
+  // 시설 수정 함수
+  const editForm = () => {
+    if (!fitnessData?.result?.fitnessImage || !fitnessData?.result?.additionalImages) {
+      alert("기존 이미지 정보가 없습니다.");
+      return;
+    }
+
+    const formData = new FormData();
+
+    // 기존 이미지 URL을 그대로 append
+    formData.append(
+      "mainImage",
+      new Blob([], { type: "text/plain" }),
+      fitnessData.result.fitnessImage
+    );
+    fitnessData.result.additionalImages.forEach((url: string, idx: number) => {
+      formData.append("additionalImages", new Blob([], { type: "text/plain" }), url);
+    });
+
+    formData.append("request", JSON.stringify(formState));
+
+    editFitness(
+      { fitnessId: Number(id), data: formData },
+      {
+        onSuccess: () => {
+          alert("시설이 수정되었습니다.");
+          navigate("/admin/fitness/list");
+        },
+        onError: () => {
+          alert("시설 수정에 실패했습니다.");
+          setSubmitModal(false);
+        },
+      }
+    );
   };
 
   return (
@@ -157,10 +236,10 @@ function AdminFitnessUpload() {
           {/* 중간 */}
           <div className="flex flex-col gap-4 flex-1">
             {/* 대표 이미지 */}
-            <MainImgUpload mainImg={mainImg} setMainImg={setMainImg} />
+            <MainImgUpload mainImg={mainImg} setMainImg={setMainImg} disabled={isEditMode} />
 
             {/* 대표 제외 업체 사진 */}
-            <SubImgUpload subImg={subImg} setSubImg={setSubImg} />
+            <SubImgUpload subImg={subImg} setSubImg={setSubImg} disabled={isEditMode} />
 
             {/* 정가 */}
             <label htmlFor="fee">정가</label>
@@ -203,6 +282,7 @@ function AdminFitnessUpload() {
             {/* 카테고리 */}
             <SelectCategory
               category={category}
+              initialSelected={formState.categoryList}
               onCategoryChange={(list) => handleChange("categoryList", list)}
             />
 
@@ -269,7 +349,7 @@ function AdminFitnessUpload() {
             onClick={() => setSubmitModal(true)}
             className="w-[150px] h-[51px] bg-blue-500 text-white-100 rounded-lg text-[15px] font-bold"
           >
-            등록하기
+            {isEditMode ? "수정하기" : "등록하기"}
           </button>
         </div>
       </form>
@@ -284,8 +364,8 @@ function AdminFitnessUpload() {
         <Modal
           isOpen={submitModal}
           onClose={() => setSubmitModal(false)}
-          onSuccess={submitForm}
-          title="등록하시겠습니까?"
+          onSuccess={isEditMode ? editForm : submitForm}
+          title={isEditMode ? "수정하시겠습니까?" : "등록하시겠습니까?"}
           btn1Text="아니요"
           btn2Text="네"
         />
