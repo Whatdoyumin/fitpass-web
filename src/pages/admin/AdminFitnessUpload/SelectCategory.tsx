@@ -1,12 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type CategoryProps = {
   category: string[];
+  initialSelected: string[];
   onCategoryChange: (category: string[]) => void;
 };
 
-function SelectCategory({ category, onCategoryChange }: CategoryProps) {
+function SelectCategory({ category, initialSelected, onCategoryChange }: CategoryProps) {
   const [selectedCategory, setSelectedCategory] = useState<string[]>([]);
+
+  useEffect(() => {
+    setSelectedCategory(initialSelected);
+  }, [initialSelected.join(",")]);
 
   const handleCategoryClick = (category: string) => {
     let updatedCategory;
@@ -16,6 +21,7 @@ function SelectCategory({ category, onCategoryChange }: CategoryProps) {
     } else {
       updatedCategory = [...selectedCategory, category];
     }
+
     setSelectedCategory(updatedCategory);
     onCategoryChange(updatedCategory);
   };
