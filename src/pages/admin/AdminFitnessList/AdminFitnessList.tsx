@@ -131,6 +131,7 @@ function AdminFitnessList() {
                       src={DotVector}
                       alt="더보기"
                       onClick={() => navigate(`/admin/fitness/upload/${item.fitnessId}`)}
+                      className="cursor-pointer"
                     />
                   </td>
                 </tr>
