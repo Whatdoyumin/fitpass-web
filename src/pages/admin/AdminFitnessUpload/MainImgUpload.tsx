@@ -4,18 +4,21 @@ import FileUpload from "../../../assets/img/adminImgFile.png";
 interface MainImgUploadProps {
   mainImg: File | null;
   setMainImg: React.Dispatch<React.SetStateAction<File | null>>;
+  disabled?: boolean;
 }
 
-function MainImgUpload({ mainImg, setMainImg }: MainImgUploadProps) {
+function MainImgUpload({ mainImg, setMainImg, disabled = false }: MainImgUploadProps) {
   const mainInputRef = useRef<HTMLInputElement>(null);
 
   const handleMainFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (disabled) return;
     if (event.target.files && event.target.files.length > 0) {
       setMainImg(event.target.files[0]);
     }
   };
 
   const handleClickFileUpload = () => {
+    if (disabled) return;
     mainInputRef.current?.click();
   };
 
@@ -33,7 +36,9 @@ function MainImgUpload({ mainImg, setMainImg }: MainImgUploadProps) {
           src={FileUpload}
           alt="파일 업로드"
           onClick={handleClickFileUpload}
-          className="absolute right-2 top-1/2 transform -translate-y-1/2"
+          className={`absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer ${
+            disabled ? "opacity-50 pointer-events-none" : ""
+          }`}
         />
         <input
           type="file"
