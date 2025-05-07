@@ -146,7 +146,7 @@ function Payment({ type }: TPaymentProps) {
 
     // KPN 카드 등록 결제 로직
     if (selectedPayOption === "registeredCard") {
-      if (!selectedCard) {
+      if (!selectedCard?.trim()) {
         alert("카드를 선택해주세요.");
         return;
       }
