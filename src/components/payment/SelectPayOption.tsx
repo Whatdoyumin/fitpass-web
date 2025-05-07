@@ -41,7 +41,10 @@ const SelectPayOption = ({
   };
 
   const handleCardSelect = (label: string) => {
-    const selected = cardData.find((card) => `${card.bank} ${card.type}(${card.number})` === label);
+    const selected = cardData.find((card) => {
+      const bankName = CARD_KR_NAME_MAP[card.bank] || card.bank;
+      return `${bankName} (${card.number})` === label;
+    });
     if (selected) {
       setSelectedCard(selected.billingKey);
     }
