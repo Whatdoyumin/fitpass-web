@@ -8,15 +8,18 @@ interface Profile {
   coinQuantity: number;
 }
 
-export const getProfile = async (): Promise<Profile> => {
+export const getProfile = async (): Promise<Profile | null> => {
+  const token = sessionStorage.getItem("accessToken");
+  if (!token) return null; // 토큰 없으면 요청 안 보냄
+
   try {
     const response = await axiosInstance.get("/auth/member/profile");
     return response.data.result;
-  } catch (error) {
-    console.error("프로필 조회 오류:", error);
-    throw error;
+  } catch {
+    return null;
   }
 };
+
 
 export const updateProfile = async (file: File): Promise<string> => {
   try {
