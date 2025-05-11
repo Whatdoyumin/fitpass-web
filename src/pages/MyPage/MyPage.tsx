@@ -80,6 +80,8 @@ const MyPage = () => {
     },
   ];
 
+  if (!profile) return null;
+
   return (
     <div className="w-full min-h-[calc(100vh-165px)] bg-white-200 overflow-y-auto">
       {profile && (

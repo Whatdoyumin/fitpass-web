@@ -11,9 +11,9 @@ interface Profile {
 }
 
 export const useGetProfile = () => {
-  return useQuery<Profile>({
+  return useQuery<Profile|null>({
     queryKey: ["profile"],
-    queryFn: getProfile,
+    queryFn: () => getProfile(),
   });
 };
 
