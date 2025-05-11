@@ -2,11 +2,11 @@ import { axiosInstance } from "../../axios-instance";
 
 export const getPassInfo = async () => {
   const token = sessionStorage.getItem("accessToken");
-  if (!token) return null; // 토큰 없으면 요청 안 보냄
+  if (!token) return null;
   try {
     const response = await axiosInstance.get("/fitness/pass");
     return response.data.result;
-  } catch (error) {
+  } catch {
     return null;
   }
 };
