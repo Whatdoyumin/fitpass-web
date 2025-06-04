@@ -7,7 +7,7 @@ import { axiosInstance } from "../axios-instance";
     keyword: string=""
   ) => {
     try {
-      const response = await axiosInstance.get("/admin/owner/request", {
+      const response = await axiosInstance.get("/admin/owner/info", {
         params: {
           page,
           size,

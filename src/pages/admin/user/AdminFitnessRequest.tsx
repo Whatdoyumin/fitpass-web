@@ -19,7 +19,8 @@ import { getOwnerFile } from "../../../apis/adminUser/adminOwnerFile";
       const debouncedSearchTerm = useDebounce(searchTerm, 1000);
     
       const { data, isLoading, isError } = useGetAdminFitnessUsers(currentPage, itemsPerPage, searchType, debouncedSearchTerm);
-      const users = data?.content?.ownersApprovals || [];
+      const allUsers = data?.content?.ownersInfo || [];
+      const users = allUsers.filter((user: TFitnessUserData) => user.status === "승인대기");
       const totalPages = data?.content?.totalPages || 1;
     
       if (isLoading) return <LoadingSpinner />;
