@@ -315,12 +315,12 @@ function AdminFitnessUpload() {
             ref={contentRef}
             onBlur={handleNotice}
             contentEditable
-            className="w-full h-[200px] border border-gray-450 rounded-[3px] pl-2 pt-2"
+            className="w-full h-[200px] border border-gray-450 rounded-[3px] pl-2 pt-2 overflow-auto"
             dangerouslySetInnerHTML={{ __html: formState.notice }}
           />
         </div>
 
-        {/* 기타 입력 */}
+        {/* 영업시간 & 이용 방법 입력 */}
         <div className="flex flex-col gap-4 mb-3">
           <label htmlFor="time">영업 시간</label>
           <TimeInput
