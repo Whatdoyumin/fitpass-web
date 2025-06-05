@@ -63,10 +63,11 @@ export interface TFitnessUserData {
     loginId: string;
     phoneNumber: string;
     createdAt: string;
+    status: string;
   };
 
 export interface FitnessUsersResponse {
-    content: { ownersApprovals: TFitnessUserData[]; totalElements: number | undefined; totalPages: number };
+    content: { ownersInfo: TFitnessUserData[]; totalElements: number | undefined; totalPages: number };
     };
 
 export const useGetAdminFitnessUsers = (
