@@ -50,29 +50,6 @@ function AdminFitnessUpload() {
   useEffect(() => {
     if (!fitnessData || !fitnessData.result) return;
 
-    if (!id && location.pathname === "/admin/fitness/upload") {
-      setFormState({
-        totalFee: "",
-        detailAddress: "",
-        loginId: "",
-        fee: "",
-        latitude: 0,
-        time: {},
-        longitude: 0,
-        fitnessName: "",
-        isPurchasable: true,
-        address: "",
-        phoneNumber: "",
-        notice:
-          "패스 구매 전 전화 후 패스 구매하기. 시설에 방문하여 이용 가능 패스 사용 내역 보여주기",
-        howToUse: "",
-        categoryList: [],
-        purchasable: false,
-      });
-      setMainImg(null);
-      setSubImg([]);
-    }
-
     // 수정 모드에서만 formState를 갱신
     if (id) {
       setFormState({
@@ -87,10 +64,10 @@ function AdminFitnessUpload() {
         isPurchasable: fitnessData.result.isPurchasable ?? true,
         address: fitnessData.result.address ?? "",
         phoneNumber: fitnessData.result.phoneNumber ?? "",
-        notice:
-          fitnessData.result.notice ??
+        notice: fitnessData.result.notice ?? "",
+        howToUse:
+          fitnessData.result.howToUse ??
           "패스 구매 전 전화 후 패스 구매하기. 시설에 방문하여 이용 가능 패스 사용 내역 보여주기",
-        howToUse: fitnessData.result.howToUse ?? "",
         categoryList: fitnessData.result.categoryList ?? [],
         purchasable: fitnessData.result.purchasable ?? false,
       });
@@ -118,9 +95,9 @@ function AdminFitnessUpload() {
         isPurchasable: true,
         address: "",
         phoneNumber: "",
-        notice:
+        notice: "",
+        howToUse:
           "패스 구매 전 전화 후 패스 구매하기. 시설에 방문하여 이용 가능 패스 사용 내역 보여주기",
-        howToUse: "",
         categoryList: [],
         purchasable: false,
       });
