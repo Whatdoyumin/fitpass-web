@@ -23,7 +23,7 @@ export const useSignin = () => {
         fitnessIds: string[];
       };
     }) => {
-      console.log("로그인 성공");
+      //console.log("로그인 성공");
       login(
         data.result.accessToken,
         data.result.refreshToken,

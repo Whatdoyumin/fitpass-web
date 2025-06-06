@@ -20,15 +20,7 @@
   }
 
   #root {
-    @apply max-w-content h-full w-full overflow-y-auto m-0 mx-auto;
-    padding-top: calc(theme(spacing.header));
-    padding-bottom: calc(theme(spacing.navbar) + 10px);
-  }
-
-  #admin {
-    @apply w-full min-h-screen absolute z-10 overflow-y-auto;
-    padding-top: calc(theme(spacing.header));
-    padding-left: calc(theme(spacing.sideNavbar));
+    @apply h-full w-full overflow-y-auto m-0 mx-auto;
   }
 
   h1,
