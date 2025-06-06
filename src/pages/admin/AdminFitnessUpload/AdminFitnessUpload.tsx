@@ -9,7 +9,7 @@ import Modal from "../../../components/Modal";
 import { IcFontBold, IcFontUnderline } from "../../../assets/svg";
 import { useAdminFitnessUpload } from "../../../hooks/useAdminFitnessUpload";
 import { IAdminFitnessUpload } from "../../../types/adminFitnessUpload";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
   useGetAdminFitnessData,
   usePutAdminFitnessData,
@@ -48,9 +48,11 @@ function AdminFitnessUpload() {
   });
 
   useEffect(() => {
-    if (id && fitnessData) {
+    if (!fitnessData || !fitnessData.result) return;
+
+    // 수정 모드에서만 formState를 갱신
+    if (id) {
       setFormState({
-        ...fitnessData,
         fee: fitnessData.result.fee ?? "",
         totalFee: fitnessData.result.totalFee ?? "",
         latitude: fitnessData.result.latitude ?? 0,
@@ -62,15 +64,47 @@ function AdminFitnessUpload() {
         isPurchasable: fitnessData.result.isPurchasable ?? true,
         address: fitnessData.result.address ?? "",
         phoneNumber: fitnessData.result.phoneNumber ?? "",
-        notice:
-          fitnessData.result.notice ??
+        notice: fitnessData.result.notice ?? "",
+        howToUse:
+          fitnessData.result.howToUse ??
           "패스 구매 전 전화 후 패스 구매하기. 시설에 방문하여 이용 가능 패스 사용 내역 보여주기",
-        howToUse: fitnessData.result.howToUse ?? "",
         categoryList: fitnessData.result.categoryList ?? [],
         purchasable: fitnessData.result.purchasable ?? false,
       });
+
+      // 대표 이미지 set (File 객체가 아니라면 null로 두고 preview에서 처리)
+      setMainImg(null);
+      setSubImg([]);
     }
-  }, [id, fitnessData]);
+  }, [fitnessData, id]);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    // id가 없고 현재 경로가 등록 페이지일 경우 form 초기화
+    if (!id && location.pathname === "/admin/fitness/upload") {
+      setFormState({
+        totalFee: "",
+        detailAddress: "",
+        loginId: "",
+        fee: "",
+        latitude: 0,
+        time: {},
+        longitude: 0,
+        fitnessName: "",
+        isPurchasable: true,
+        address: "",
+        phoneNumber: "",
+        notice: "",
+        howToUse:
+          "패스 구매 전 전화 후 패스 구매하기. 시설에 방문하여 이용 가능 패스 사용 내역 보여주기",
+        categoryList: [],
+        purchasable: false,
+      });
+      setMainImg(null);
+      setSubImg([]);
+    }
+  }, [location.pathname, id]);
 
   // id, fitnessData가 존재할 경우 수정 모드
   const isEditMode = !!id && !!fitnessData;
@@ -315,12 +349,12 @@ function AdminFitnessUpload() {
             ref={contentRef}
             onBlur={handleNotice}
             contentEditable
-            className="w-full h-[200px] border border-gray-450 rounded-[3px] pl-2 pt-2"
+            className="w-full h-[200px] border border-gray-450 rounded-[3px] pl-2 pt-2 overflow-auto"
             dangerouslySetInnerHTML={{ __html: formState.notice }}
           />
         </div>
 
-        {/* 기타 입력 */}
+        {/* 영업시간 & 이용 방법 입력 */}
         <div className="flex flex-col gap-4 mb-3">
           <label htmlFor="time">영업 시간</label>
           <TimeInput
