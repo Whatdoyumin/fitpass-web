@@ -367,7 +367,7 @@ function AdminFitnessUpload() {
             initialTime={formState.time || {}}
           />
 
-          <label htmlFor="hㅊowToUse">이용 방법 안내</label>
+          <label htmlFor="howToUse">이용 방법 안내</label>
           <input
             id="howToUse"
             value={formState.howToUse}

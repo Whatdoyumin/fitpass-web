@@ -1,28 +1,28 @@
 import { useNavigate } from "react-router-dom";
 import { CoinCard } from "../components/buyCoin/CoinCard";
 import { useGetCoinInfo } from "../hooks/useGetAdminCoins";
-
-interface ICoin {
-  coinType: string;
-  coinQuantity: number;
-  expirationPeriod: number;
-  price: number;
-}
+import { ICoin } from "../types/payment";
+import { useCoinStore } from "../store/coinStore";
+import { useEffect } from "react";
 
 function BuyCoins() {
   const navigate = useNavigate();
   const { data: coinInfoData } = useGetCoinInfo();
+  const setCoinInfo = useCoinStore((state) => state.setCoinInfo);
 
-  const isBgBlueCoin = (quantity: number, period: number) => {
-    return (quantity === 180 && period === 90) || (quantity === 300 && period === 180);
-  };
+  useEffect(() => {
+    if (coinInfoData?.result) {
+      setCoinInfo(coinInfoData.result);
+    }
+  }, [coinInfoData, setCoinInfo]);
 
   return (
     <div className="w-full min-h-[calc(100vh-165px)] bg-white-200 overflow-y-auto py-4">
       <div className="w-full h-full flex flex-col gap-6 items-center">
         <div className="w-full flex flex-col gap-4 justify-center items-center">
-          {coinInfoData?.result?.map((coin: ICoin) => {
-            const isBgBlue = isBgBlueCoin(coin.coinQuantity, coin.expirationPeriod);
+          {coinInfoData?.result?.map((coin: ICoin, index: number) => {
+            const totalCoins = coinInfoData.result.length;
+            const isBgBlue = index >= totalCoins - 2;
 
             return (
               <CoinCard

@@ -1,14 +1,9 @@
 import { useEffect, useState } from "react";
 import { ArrowDown, ArrowUp } from "../../assets/svg";
-import { TPaymentProps } from "../../types/payment";
+import { ICoin, TPaymentProps } from "../../types/payment";
 
 interface IPaymentDetailsProps {
-  item: {
-    coinAmount?: number;
-    price: number;
-    coinExp?: number | undefined;
-    option_ko?: string;
-  };
+  item: ICoin;
   paymentMethod: string | null;
 }
 
@@ -26,8 +21,8 @@ const PaymentDetails = ({ type, item, paymentMethod }: TPaymentProps & IPaymentD
     setPaymentDate(today.toLocaleDateString());
 
     const expiry = new Date();
-    if (type === "buy-coins" && item?.coinExp !== undefined) {
-      expiry.setDate(today.getDate() + item.coinExp);
+    if (type === "buy-coins" && item?.expirationPeriod !== undefined) {
+      expiry.setDate(today.getDate() + item.expirationPeriod);
     } else {
       expiry.setDate(today.getDate() + 30);
     }
@@ -39,7 +34,7 @@ const PaymentDetails = ({ type, item, paymentMethod }: TPaymentProps & IPaymentD
       case "registeredCard":
         return "등록 카드 결제";
       case "creditCard":
-        return "";
+        return "신용/체크카드 결제";
       case "kakaoPay":
         return "카카오페이 간편 결제";
       case "naverPay":
@@ -74,9 +69,7 @@ const PaymentDetails = ({ type, item, paymentMethod }: TPaymentProps & IPaymentD
             </span>
             <span className="w-full flex justify-between items-center">
               <p className="text-16px text-gray-600">플랜</p>
-              <p className="text-16px text-black-700">
-                {type === "buy-coins" ? `${item.coinAmount}코인` : `${item.option_ko}`}
-              </p>
+              <p className="text-16px text-black-700">{`${item.name}`}</p>
             </span>
             <span className="w-full flex justify-between items-center">
               <p className="text-16px text-gray-600">결제일</p>

@@ -32,7 +32,7 @@ const CoinCard = ({ isBgBlue, coinAmount, coinPrice, coinExp }: ICoinCardProps) 
           <span
             className={`flex gap-1 text-15px ${isBgBlue ? " text-white-100" : " text-blue-500"}`}
           >
-            <p>{coinPrice}원</p>
+            <p>{coinPrice.toLocaleString()}원</p>
             <p>(유효기간 {coinExp}일)</p>
           </span>
         </div>

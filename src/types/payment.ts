@@ -5,20 +5,20 @@ export type TPaymentProps = {
 };
 
 export type TCoinBody = {
-  id: number;
+  id: string;
   coinAmount: number;
   price: number;
   coinExp: number;
-  isBgBlue: boolean;
 };
 
-export type TSubscribe = {
-  planType: string;
+export interface ICoin {
+  coinType: string;
+  name: string;
   price: number;
   coinQuantity: number;
   coinAddition: number;
   expirationPeriod: number;
-};
+}
 
 export type TSubscribeBody = {
   id: number;
