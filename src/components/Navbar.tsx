@@ -8,7 +8,6 @@ const Navbar = () => {
   if (
     location.pathname.startsWith("/signup") ||
     location.pathname === "/buy-coins/payment" ||
-    location.pathname === "/subscribe/payment" ||
     location.pathname === "/terms" ||
     location.pathname === "/privacy" ||
     location.pathname === "/refund-policy" ||

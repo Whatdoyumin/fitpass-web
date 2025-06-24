@@ -31,7 +31,6 @@ import {
   Signup,
   SignupStep1,
   SignupStep2,
-  Subscribe,
   TermsPage,
   ThirdPartyPolicyPolicyPage,
   UpdateReview,
@@ -135,14 +134,6 @@ const userRoutes: RouteObject = {
     {
       path: "/my/change-password",
       element: <ChangePassword />,
-    },
-    {
-      path: "/subscribe",
-      element: <Subscribe />,
-    },
-    {
-      path: "/subscribe/payment",
-      element: <Payment type="subscribe" />,
     },
     {
       path: "/buy-coins",

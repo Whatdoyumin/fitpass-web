@@ -14,9 +14,4 @@ const getPayHistory = async ({ query, cursor = 0, size = 7 }: TPayHistory) => {
   };
 };
 
-const postPayDeactivate = async () => {
-  const { data } = await axiosInstance.post(`/plan/pay/deactivate`);
-  return data;
-};
-
-export { getPayHistory, postPayDeactivate };
+export { getPayHistory };

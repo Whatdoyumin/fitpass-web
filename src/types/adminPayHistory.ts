@@ -17,6 +17,5 @@ export type TAdminPayHistoryResponse = {
   price?: number;
   fitnessName?: string;
   coinCount?: number;
-  passStatus?: string;
   activeTime?: string | null;
 };

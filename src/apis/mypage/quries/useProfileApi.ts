@@ -6,12 +6,11 @@ interface Profile {
   id: number;
   pictureUrl: string;
   name: string;
-  planType: string | null;
   coinQuantity: number;
 }
 
 export const useGetProfile = () => {
-  return useQuery<Profile|null>({
+  return useQuery<Profile | null>({
     queryKey: ["profile"],
     queryFn: () => getProfile(),
   });

@@ -4,14 +4,12 @@ import ImgUser from "../../assets/img/ImgUser.png";
 import ProfileCommonModal from "./ProfileCommonModal";
 import Profile from "../../assets/svg/Profile";
 import Camera from "../../assets/svg/Camera";
-import { IcMiniBlueTicket } from "../../assets/svg";
 
 interface MyProfileProps {
   profile: {
     id: number;
     pictureUrl: string;
     name: string;
-    planType: string | null;
     coinQuantity: number;
   };
   updateProfileMutation: (file: File) => void;
@@ -68,27 +66,10 @@ const MyProfile = ({ profile, updateProfileMutation, deleteProfileMutation }: My
     }
   };
 
-  const getPlanText = (planType: string | null) => {
-    switch (planType) {
-      case "BASIC":
-        return "Basic 요금제";
-      case "STANDARD":
-        return "Standard 요금제";
-      case "PRO":
-        return "Pro 요금제";
-      default:
-        return "이용 중인 요금제가 없습니다.";
-    }
-  };
-
   return (
     <div className="w-full h-[127px] px-[25px] flex justify-between items-center bg-white-100 box-border mx-auto">
       <div className="flex flex-col gap-[12px]">
-        <span className="text-22px font-bold">{profile.name}</span>
-        <div className="flex items-center gap-[9px]">
-          <IcMiniBlueTicket width={20} />
-          <p className="text-[14px] text-blue-500">{getPlanText(profile.planType)}</p>
-        </div>
+        <span className="text-22px font-bold">{profile.name} 님</span>
       </div>
       <div className="relative w-[75px] h-[75px]">
         {profileImage === "none" ? (

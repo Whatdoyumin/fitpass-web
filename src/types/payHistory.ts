@@ -1,4 +1,4 @@
-export type TPayQuery = "ALL" | "PLAN" | "COIN";
+export type TPayQuery = "ALL" | "COIN";
 
 export type TPayHistory = {
   query: TPayQuery;
@@ -8,7 +8,6 @@ export type TPayHistory = {
 
 export type TPayHistoryItem = {
   id: number;
-  planType: "NONE" | "BASIC" | "PRO" | "STANDARD";
   isAgree: boolean;
   coinCount: number;
   price: number;

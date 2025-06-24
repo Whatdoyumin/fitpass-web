@@ -13,7 +13,7 @@ const names: TAdminCoinName[] = [
   "300코인",
 ];
 
-function AdminSubscription() {
+function AdminCoin() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [coins, setCoins] = useState<TAdminCoins[]>(
     names.map((name) => ({
@@ -148,4 +148,4 @@ function AdminSubscription() {
   );
 }
 
-export default AdminSubscription;
+export default AdminCoin;

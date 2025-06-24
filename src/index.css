@@ -94,4 +94,13 @@
   .slick-dots {
     @apply bottom-[20px];
   }
+
+  .policy-content {
+    white-space: pre-wrap;
+    padding-left: 2em;
+    text-indent: -1.5em;
+    line-height: 1.6;
+    word-break: keep-all;
+    @apply text-gray-500 text-14px;
+  }
 }

@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { SearchGray } from "../../../assets/svg";
-import DotVector from "../../../assets/img/Vector.png";
 import Dropdown from "./Dropdown";
+import FitnessRowDropdown from "./FitnessRowDropdown";
 import { axiosInstance } from "../../../apis/axios-instance";
-import { useQuery } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Pagination } from "../../../components/Pagination";
 import { LoadingSpinner } from "../../../components/LoadingSpinner";
 import NotFound from "../../NotFound";
@@ -33,7 +32,7 @@ function AdminFitnessList() {
   const [selectedFilter, setSelectedFilter] = useState<keyof TListData>("fitnessName");
   const [page, setPage] = useState(0);
 
-  const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const dropDownMap: Record<string, keyof TListData> = {
     업체명: "fitnessName",
@@ -45,6 +44,10 @@ function AdminFitnessList() {
     setSelectedFilterLabel(label);
     setSelectedFilter(dropDownMap[label]);
     setPage(0);
+  };
+
+  const handleDataChange = () => {
+    queryClient.invalidateQueries({ queryKey: ["fitnessList"] });
   };
 
   // 디바운싱
@@ -106,7 +109,7 @@ function AdminFitnessList() {
         </div>
       </div>
 
-      <div className="font-medium text-[13px] mt-[20px] text-black-700">
+      <div className="min-h-[500px] font-medium text-[13px] mt-[20px] text-black-700">
         <table className="w-full table-fixed">
           <thead className="w-full h-[50px] bg-blue-100 border border-gray-450 text-left">
             <tr>
@@ -133,12 +136,10 @@ function AdminFitnessList() {
                 <td>{item.phoneNumber}</td>
                 <td>{item.createdAt.split("T")[0]}</td>
                 <td>{item.purchasable ? "구매 가능" : "구매 불가"}</td>
-                <td>
-                  <img
-                    src={DotVector}
-                    alt="더보기"
-                    onClick={() => navigate(`/admin/fitness/upload/${item.fitnessId}`)}
-                    className="cursor-pointer"
+                <td className="relative">
+                  <FitnessRowDropdown 
+                    fitnessId={item.fitnessId} 
+                    onDataChange={handleDataChange}
                   />
                 </td>
               </tr>

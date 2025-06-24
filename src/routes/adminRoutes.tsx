@@ -11,7 +11,6 @@ import {
   AdminPayHistory,
   AdminSettings,
   AdminSignin,
-  AdminSubscribe,
   AdminUser,
   AdminFitnessUser,
   AdminFitnessRequest,
@@ -62,10 +61,6 @@ const adminRoutes: RouteObject = {
     {
       path: "pay",
       element: <AdminPayHistory />,
-    },
-    {
-      path: "pay/subscribe",
-      element: <AdminSubscribe />,
     },
     {
       path: "pay/coin",

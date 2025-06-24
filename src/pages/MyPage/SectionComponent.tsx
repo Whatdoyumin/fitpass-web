@@ -14,7 +14,7 @@ interface SectionProps {
 
 const SectionComponent = ({ title, items }: SectionProps) => {
   return (
-    <div className="w-full min-h-[226px] bg-white-100 px-[25px] pt-[26px] pb-[12px] mt-2">
+    <div className="w-full bg-white-100 px-[25px] pt-[26px] pb-[12px] mt-2">
       <h2 className="text-18px font-bold mb-[11px] text-black-700" style={{ lineHeight: "21px" }}>
         {title}
       </h2>

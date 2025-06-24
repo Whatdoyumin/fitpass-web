@@ -125,9 +125,18 @@ function SignupStep2() {
     if (tokens.status === "register") {
       // ✅ 소셜 로그인 회원가입
       socialLoginMutation.mutate(
-        { name, phoneNumber, accessToken: tokens.accessToken, refreshToken: tokens.refreshToken },
+        { 
+          name, 
+          phoneNumber, 
+          agreements, 
+          agree: agreements.all, 
+          isWork: hasJob, 
+          company_name: companyName,
+          accessToken: tokens.accessToken,
+        },
         {
           onError: (error: unknown) => {
+            console.error("🚨 소셜 회원가입 오류:", error);
             alert(error instanceof Error ? error.message : "소셜 로그인 회원가입 실패");
           },
         }
@@ -152,7 +161,7 @@ function SignupStep2() {
             이름
           </label>
           <InputField
-            type="text"
+            type="etc"
             placeholder="이름을 입력해주세요"
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -179,7 +188,7 @@ function SignupStep2() {
       {hasJob && (
         <div className="w-full flex flex-col mt-[10px]">
           <InputField
-            type="text"
+            type="etc"
             placeholder="직장명을 입력해주세요"
             value={companyName}
             onChange={(e) => setCompanyName(e.target.value)}

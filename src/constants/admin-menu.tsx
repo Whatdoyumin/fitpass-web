@@ -42,7 +42,7 @@ export const ADMIN_NAV_MENU = [
         id: 3,
         name: "시설 승인 요청",
         path: "fitnessRequest",
-      }
+      },
     ],
   },
   {
@@ -65,7 +65,7 @@ export const ADMIN_NAV_MENU = [
         id: 3,
         name: "시설 리뷰 관리",
         path: "fitness/review",
-      }
+      },
     ],
   },
   {
@@ -76,16 +76,11 @@ export const ADMIN_NAV_MENU = [
     children: [
       {
         id: 1,
-        name: "구독 상품 관리",
-        path: "pay/subscribe",
-      },
-      {
-        id: 2,
         name: "코인 상품 관리",
         path: "pay/coin",
       },
       {
-        id: 3,
+        id: 2,
         name: "구매 내역",
         path: "pay",
       },

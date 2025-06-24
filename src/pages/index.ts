@@ -14,7 +14,6 @@ import UsePass from "./UsePass/UsePass";
 import UploadReview from "./UploadReview";
 import EditProfile from "./EditProfile/EditProfile";
 import ChangePassword from "./EditProfile/ChangePassword";
-import Subscribe from "./Subscribe";
 import Payment from "./Payment";
 import BuyCoins from "./BuyCoins";
 import MyPage from "./MyPage/MyPage";
@@ -32,7 +31,6 @@ import AdminFitnessList from "./admin/AdminFitnessList/AdminFitnessList";
 import AdminNotice from "./admin/AdminNotice";
 import AdminPayHistory from "./admin/AdminPayHistory";
 import AdminSettings from "./admin/AdminSettings";
-import AdminSubscribe from "./admin/AdminSubscribe";
 import AdminUser from "./admin/user/AdminUser";
 import AdminFitnessUser from "./admin/user/AdminFitnessUser";
 import AdminReview from "./admin/AdminReview";
@@ -76,7 +74,6 @@ export {
   UploadReview,
   EditProfile,
   ChangePassword,
-  Subscribe,
   Payment,
   BuyCoins,
   MyPage,
@@ -92,7 +89,6 @@ export {
   AdminNotice,
   AdminPayHistory,
   AdminSettings,
-  AdminSubscribe,
   AdminUser,
   AdminFitnessUser,
   AdminReview,

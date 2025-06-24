@@ -17,7 +17,7 @@ const useGetAdminFitnessData = (fitnessId: number, options?: { enabled?: boolean
 function usePutAdminFitnessData() {
   return useMutation({
     mutationFn: ({ fitnessId, data }: PutFitnessPayload) => putAdminFitness(fitnessId, data),
-    mutationKey: ["editAdminSubscribe"],
+    mutationKey: ["editFitnessByAdmin"],
   });
 }
 

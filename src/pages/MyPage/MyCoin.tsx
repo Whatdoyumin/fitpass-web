@@ -5,13 +5,11 @@ interface MyProfileProps {
     id: number;
     pictureUrl: string;
     name: string;
-    planType: string | null; // planType null 가능
     coinQuantity: number;
   };
 }
 
-
-const MyCoin = ({ profile }: MyProfileProps)  => {
+const MyCoin = ({ profile }: MyProfileProps) => {
   return (
     <div className="w-full bg-white-100 px-[25px] py-[26px] mt-2 relative z-[0]">
       <h2 className="text-18px font-bold mb-[15px]" style={{ lineHeight: "21px" }}>

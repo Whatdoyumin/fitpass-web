@@ -8,7 +8,6 @@ import SectionComponent from "../MyPage/SectionComponent";
 import IcFillDollar from "../../assets/svg/IcFillDollar";
 import IcNotice from "../../assets/svg/IcNotice";
 import IcMyLogout from "../../assets/svg/IcMyLogout";
-import IcSubscribe from "../../assets/svg/IcSubscribe";
 import IcUser from "../../assets/svg/IcUser";
 
 import LogoutModal from "../MyPage/LogoutModal";
@@ -30,9 +29,8 @@ interface MyPageItem {
 }
 
 const paymentItems: MyPageItem[] = [
-  { id: 1, icon: IcSubscribe, name: "구독하기", path: "/subscribe" },
-  { id: 2, icon: IcFillDollar, name: "코인 구매하기", path: "/buy-coins" },
-  { id: 3, icon: IcPayList, name: "구매 내역", path: "/my/pay-history" },
+  { id: 1, icon: IcFillDollar, name: "코인 구매하기", path: "/buy-coins" },
+  { id: 2, icon: IcPayList, name: "구매 내역", path: "/my/pay-history" },
 ];
 
 const MyPage = () => {

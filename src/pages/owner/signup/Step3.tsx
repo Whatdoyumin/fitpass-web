@@ -109,13 +109,13 @@ function OwnerSignupStep3() {
   };
 
   return (
-    <div className="w-full max-w-content flex flex-col items-center relative px-5 pt-[29px]">
+    <div className="w-full max-w-content flex flex-col items-center relative px-5 pt-[29px] pb-[80px]">
       <div className="flex-grow w-full overflow-auto flex flex-col gap-[20px]">
         {inputFields.map((field) => (
           <div key={field.key} className="w-full flex flex-col gap-[10px]">
             <label className="text-[16px] font-medium text-black-700">{field.label}</label>
             <InputField
-              type="text"
+              type="etc"
               placeholder={field.placeholder}
               value={formData[field.key]}
               onChange={(e) => setFormData((prev) => ({ ...prev, [field.key]: e.target.value }))}
@@ -128,7 +128,7 @@ function OwnerSignupStep3() {
       </div>
 
       <div className="w-full max-w-content flex flex-col items-center justify-center mx-auto mt-[46px] mb-[36px]">
-        <div className="w-full flex items-center gap-[17px] px-[25px] py-[10px]">
+        <div className="w-[350px] flex items-center gap-[17px] px-[25px] py-[10px]">
           <input
             type="checkbox"
             checked={agreements.all}

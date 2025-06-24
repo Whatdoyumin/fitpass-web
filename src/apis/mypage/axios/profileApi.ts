@@ -4,7 +4,6 @@ interface Profile {
   id: number;
   pictureUrl: string;
   name: string;
-  planType: string | null;
   coinQuantity: number;
 }
 
@@ -19,7 +18,6 @@ export const getProfile = async (): Promise<Profile | null> => {
     return null;
   }
 };
-
 
 export const updateProfile = async (file: File): Promise<string> => {
   try {

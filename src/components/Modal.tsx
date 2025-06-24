@@ -6,6 +6,7 @@ interface IModalProps {
   subTitle?: string;
   btn1Text?: string | null;
   btn2Text: string;
+  customWidth?: string;
 }
 
 const Modal = ({
@@ -16,15 +17,17 @@ const Modal = ({
   subTitle,
   btn1Text,
   btn2Text,
+  customWidth,
 }: IModalProps) => {
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 bg-black-700 bg-opacity-50 flex justify-center items-center z-50">
       <div
-        className={`bg-white-100 p-6 rounded-lg w-[300px] text-center px-4 pt-8 pb-5 ${
+        className={`bg-white-100 p-6 rounded-lg text-center px-4 pt-8 pb-5 ${
           subTitle ? "h-[176px]" : "h-[152px]"
         }`}
+        style={{ width: customWidth || '300px' }}
       >
         <div className="w-full h-full flex flex-col justify-between items-center">
           <h2 className="text-[18px] font-medium">{title}</h2>
